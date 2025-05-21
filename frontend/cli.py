@@ -1,7 +1,7 @@
 import cmd
 import os
 import pandas as pd
-from backend.core.matplot import plot_price
+from backend.core.plot import plot_price, plot_lr
 from backend.fetch import api_tiingo as tiingo
 from backend.fetch import api_fmp as fmp
 from frontend.utils import parse_args
@@ -41,7 +41,30 @@ class QemyShell(cmd.Cmd):
         print('Example: price AAPL -p 3M')
         print('D = Day, W = Week, M = Month, Y = Year')
 #==============================================================================#
-    def do_price_plot(self, arg):
+    def do_plot_price(self, arg):
+        def define_args(parser):
+            parser.add_argument('ticker', help='stock ticker symbol')
+            parser.add_argument('-p', '--period', default='1W', help='period (e.g. 5D, 3M, 1Y)')
+        args = parse_args(arg, define_args, prog_name='plot price')
+        if not args:
+            print('For valid syntax, Try: plot_price AAPL -p 3M')
+            return
+        ticker = args.ticker.upper()
+        period = args.period
+
+        print(f"Fetching plot chart for: {ticker} daily closing prices, log scaled...")
+        try:
+            plot_price(ticker=ticker, period=period)
+        except:
+            print('Could not fetch plot chart, please try another ticker.')
+
+    def help_plot_price(self):
+        print('Fetches plot chart of log scaled daily prices for given ticker.')
+        print('Usage: plot_price <TICKER> -p <PERIOD>')
+        print('Example: plot_price AAPL -p 3M')
+        print('D = Day, W = Week, M = Month, Y = Year')
+#==============================================================================#
+    def do_plot_lr(self, arg):
         def define_args(parser):
             parser.add_argument('ticker', help='stock ticker symbol')
             parser.add_argument('-p', '--period', default='1W', help='period (e.g. 5D, 3M, 1Y)')
@@ -54,14 +77,14 @@ class QemyShell(cmd.Cmd):
 
         print(f"Fetching plot chart for: {ticker} daily closing prices...")
         try:
-            plot_price(ticker=ticker, period=period)
+            plot_lr(ticker=ticker, period=period)
         except:
             print('Could not fetch plot chart, please try another ticker.')
 
-    def help_price_plot(self):
-        print('Fetches plot chart of daily prices for given ticker.')
-        print('Usage: price_plot <TICKER> -p <PERIOD>')
-        print('Example: price_plot AAPL -p 3M')
+    def help_plot_lr(self):
+        print('Fetches linear regression beta comparison for given ticker.')
+        print('Usage: plot_lr <TICKER> -p <PERIOD>')
+        print('Example: plot_lr AAPL -p 3M')
         print('D = Day, W = Week, M = Month, Y = Year')
 #==============================================================================#
     def do_dcf(self, arg):
