@@ -56,7 +56,7 @@ API keys available with free plans. Sign up required for both Tiingo and FMP:
 - https://financialmodelingprep.com/
 - https://www.tiingo.com/
 
-IMPORTANT: Read "Usage" below for info related to API request and data limitations.
+IMPORTANT: Read "Usage" below for info related to API usage and data limitations.
 API logic is restricted to respective modules (api_tiingo.py, api_fmp.py), and wrapped in various functions. To replace with alternative data source, simply rewrite those functions while being mindful to keep naming consistent.
 
 Create a .env file in qemy root directory and add API keys like this:
@@ -125,7 +125,8 @@ source ~/path/to/qemyenv/bin/activate
 cd ~/path/to/qemy # path to project root directory
 python -m frontend.cli
 ```
-- This program does not require paying any fees or subscriptions. Paid versions of these APIs are optionally available in order to increase data usage limitation. Be mindful of Tiingo API and FMP API data usage limits. More info and tracking is available on their websites.
+- Users are responsible for complying with the terms of any third-party APIs used.
+- This program does not require paying any fees or subscriptions. Paid versions of FMP and Tiingo APIs are optionally available in order to increase data usage limitation. Be mindful of Tiingo API and FMP API data usage limits. More info and tracking is available on their websites.
 
 ---
 
