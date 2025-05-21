@@ -1,6 +1,7 @@
 import cmd
 import os
 import pandas as pd
+from backend.core.matplot import plot_price
 from backend.fetch import api_tiingo as tiingo
 from backend.fetch import api_fmp as fmp
 from frontend.utils import parse_args
@@ -16,14 +17,13 @@ class QemyShell(cmd.Cmd):
         def define_args(parser):
             parser.add_argument('ticker', help='stock ticker symbol')
             parser.add_argument('-p', '--period', default='1W', help='period (e.g. 5D, 3M, 1Y)')
-
         args = parse_args(arg, define_args, prog_name='price')
         if not args:
             print('For valid syntax, Try: price AAPL -p 3M')
             return
-
         ticker = args.ticker.upper()
         period = args.period
+
         print(f"Fetching price info for: {ticker}...")
         data = tiingo.get_tiingo_prices(ticker=ticker, period=period)
         if data is None:
@@ -41,6 +41,29 @@ class QemyShell(cmd.Cmd):
         print('Example: price AAPL -p 3M')
         print('D = Day, W = Week, M = Month, Y = Year')
 #==============================================================================#
+    def do_price_plot(self, arg):
+        def define_args(parser):
+            parser.add_argument('ticker', help='stock ticker symbol')
+            parser.add_argument('-p', '--period', default='1W', help='period (e.g. 5D, 3M, 1Y)')
+        args = parse_args(arg, define_args, prog_name='plot price')
+        if not args:
+            print('For valid syntax, Try: price_plot AAPL -p 3M')
+            return
+        ticker = args.ticker.upper()
+        period = args.period
+
+        print(f"Fetching plot chart for: {ticker} daily closing prices...")
+        try:
+            plot_price(ticker=ticker, period=period)
+        except:
+            print('Could not fetch plot chart, please try another ticker.')
+
+    def help_price_plot(self):
+        print('Fetches plot chart of daily prices for given ticker.')
+        print('Usage: price_plot <TICKER> -p <PERIOD>')
+        print('Example: price_plot AAPL -p 3M')
+        print('D = Day, W = Week, M = Month, Y = Year')
+#==============================================================================#
     def do_dcf(self, arg):
         ticker = arg.strip().upper()
         print(f"Fetching discounted cash flow for {ticker}...")
@@ -50,6 +73,7 @@ class QemyShell(cmd.Cmd):
             print(df)
         except:
             print('Could not fetch data, please try another ticker.')
+
     def help_dcf(self):
         print('Fetches current discounted cash flow for given ticker.')
         print('Usage: dcf <TICKER>')
@@ -64,6 +88,7 @@ class QemyShell(cmd.Cmd):
             print(df)
         except:
             print('Could not fetch data, please try another ticker.')
+
     def help_profile(self):
         print('Fetches profile for a given ticker. Shows basic info about the company.')
         print('Usage: profile <TICKER>')
@@ -78,6 +103,7 @@ class QemyShell(cmd.Cmd):
             print(df)
         except:
             print('Could not fetch data, please try another ticker.')
+
     def help_ratios(self):
         print('Fetches list of ratios for given ticker.')
         print('Usage: ratios <TICKER>')
@@ -92,6 +118,7 @@ class QemyShell(cmd.Cmd):
             print(df)
         except:
             print('Could not fetch data, please try another ticker.')
+
     def help_balance(self):
         print('Fetches latest balance sheet for given ticker.')
         print('Usage: balance <TICKER>')
@@ -106,6 +133,7 @@ class QemyShell(cmd.Cmd):
             print(df)
         except:
             print('Could not fetch data, please try another ticker.')
+
     def help_metrics(self):
         print('Fetches list of the latest metrics for given ticker.')
         print('Usage: metrics <TICKER>')
@@ -120,6 +148,7 @@ class QemyShell(cmd.Cmd):
             print(df)
         except:
             print('Could not fetch data, please try another ticker.')
+
     def help_cf(self):
         print('Fetches latest cash flow statement for given ticker.')
         print('Usage: cf <TICKER>')
@@ -134,6 +163,7 @@ class QemyShell(cmd.Cmd):
             print(df)
         except:
             print('Could not fetch data, please try another ticker.')
+
     def help_income(self):
         print('Fetches latest income statement for given ticker.')
         print('Usage: income <TICKER>')
@@ -148,6 +178,7 @@ class QemyShell(cmd.Cmd):
             print(df)
         except:
             print('Could not fetch data, please try another ticker.')
+
     def help_52week(self):
         print('Fetches 52-week high and low for given ticker.')
         print('Usage: 52week <TICKER>')
@@ -162,6 +193,7 @@ class QemyShell(cmd.Cmd):
             print(df)
         except:
             print('Could not fetch data, please try another ticker.')
+
     def help_ev(self):
         print('Fetches the enterprise value for given ticker.')
         print('Usage: ev <TICKER>')
