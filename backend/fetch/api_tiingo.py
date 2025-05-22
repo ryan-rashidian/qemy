@@ -1,9 +1,6 @@
-from dotenv import load_dotenv
 import os
 import requests 
 from .utils import parse_period
-
-load_dotenv()
 
 TIINGO_API_KEY = os.getenv('TIINGO_API_KEY')
 TIINGO_HEADERS = {'Content-Type': 'application/json', 'Authorization': f'Token {TIINGO_API_KEY}'}

@@ -8,13 +8,15 @@ Qemy is a prototype financial data engine designed for stock market analysis and
 
 ## Features (* = in progress) (** = planned)
 
-- Fetches stock data from APIs
-- Command line interface
-- Easy integration with financial models or frontends
-- *Charts and Graphs
-- **Stock screening/filtering with score based ranking
-- **User profiles and portfolio tracking
-- **Backtesting and indicators for quant trading strategies
+- Command line interface.
+- Fetches stock data from APIs.
+- *Charting: price history, linear regression, etc.
+- *Sessions: persisting work environments.
+- *QemScore: risk/reward based scoring/ranking system.
+- **Screening: stock filters and portfolio weighing.
+- **Profiles: user accounts and portfolio tracking.
+- **Back-testing engine for trading strategies.
+- **Indicators and signals for quant models. 
 
 ---
 
@@ -49,7 +51,7 @@ pip install -r requirements.txt
 
 ---
 
-## Setup API keys
+## Setup API Keys
 
 API keys available with free plans. Sign up required for both Tiingo and FMP:
 
@@ -59,7 +61,7 @@ API keys available with free plans. Sign up required for both Tiingo and FMP:
 IMPORTANT: Read "Usage" below for info related to API usage and data limitations.
 API logic is restricted to respective modules (api_tiingo.py, api_fmp.py), and wrapped in various functions. To replace with alternative data source, simply rewrite those functions while being mindful to keep naming consistent.
 
-Create a .env file in qemy root directory and add API keys like this:
+Create a .env file in project root directory and add API keys like this:
 ```env
 TIINGO_API_KEY=your_key_here
 FMP_API_KEY=your_key_here
@@ -68,11 +70,22 @@ Make sure .env is included in .gitignore to keep your keys secure.
 
 ---
 
-## Optional: Setup launch script
+## Optional: Build Executable
+
+From the project root directory, create standalone executable with:
+
+```bash
+pyinstaller --onefile frontend/cli.py --name qemycli
+```
+
+---
+## Optional: Setup Launch Script
+
+- Recommended for convenience if you are working with the source code directly.
 
 ### Set path to your venv in the bash script
 
-From the project root directory find the qemy bash script and open it in a text editor:
+From the project root directory, find the qemy bash script and open it in a text editor:
 
 ```bash
 #!/bin/bash

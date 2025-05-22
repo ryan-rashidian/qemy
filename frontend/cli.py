@@ -1,3 +1,5 @@
+from utils.env_setup import setup_wizard
+setup_wizard()
 import cmd
 import os
 import pandas as pd
