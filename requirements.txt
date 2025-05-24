@@ -8,7 +8,8 @@ idna==3.10
 joblib==1.5.0
 kiwisolver==1.4.8
 matplotlib==3.10.3
-numpy==2.2.6
+numpy==2.2.5
+ordered-set==4.1.0
 packaging==25.0
 pandas==2.2.3
 pillow==11.2.1
@@ -19,6 +20,7 @@ pytz==2025.2
 requests==2.32.3
 scikit-learn==1.6.1
 scipy==1.15.3
+setuptools==80.8.0
 six==1.17.0
 SQLAlchemy==2.0.41
 threadpoolctl==3.6.0

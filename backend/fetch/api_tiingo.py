@@ -15,7 +15,7 @@ def get_tiingo_prices(ticker, period='1W', resample='daily', columns='close'):
             'resampleFreq': resample,
             'columns': columns
         }
-        response = requests.get(url, headers=TIINGO_HEADERS, params=params)
+        response = requests.get(url=url, headers=TIINGO_HEADERS, params=params)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.HTTPError as e:

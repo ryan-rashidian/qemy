@@ -9,10 +9,10 @@ Qemy is a prototype financial data engine designed for stock market analysis and
 ## Features (* = in progress) (** = planned)
 
 - Command line interface.
-- Fetches stock data from APIs.
+- Fetches stock market and economic data from APIs.
 - *Charting: price history, linear regression, etc.
 - *Sessions: persisting work environments.
-- *QemScore: risk/reward based scoring/ranking system.
+- *Score: risk/reward based scoring/ranking system.
 - **Screening: stock filters and portfolio weighing.
 - **Profiles: user accounts and portfolio tracking.
 - **Back-testing engine for trading strategies.
@@ -53,15 +53,16 @@ pip install -r requirements.txt
 
 ## Setup API Keys
 
-API keys available with free plans. Sign up required for both Tiingo and FMP:
+API keys available with free plans. Sign up required for Tiingo API and Fred API:
 
-- https://financialmodelingprep.com/
+- https://fred.stlouisfed.org/
 - https://www.tiingo.com/
 
 IMPORTANT: Read "Usage" below for info related to API usage and data limitations.
-API logic is restricted to respective modules (api_tiingo.py, api_fmp.py), and wrapped in various functions. To replace with alternative data source, simply rewrite those functions while being mindful to keep naming consistent.
 
-Create a .env file in project root directory and add API keys like this:
+API key setup wizard included. Run the CLI to receive prompt.
+
+Or manually create a .env file in project root directory and add API keys like this:
 ```env
 TIINGO_API_KEY=your_key_here
 FMP_API_KEY=your_key_here
@@ -138,8 +139,24 @@ source ~/path/to/qemyenv/bin/activate
 cd ~/path/to/qemy # path to project root directory
 python -m frontend.cli
 ```
+
+- This program does not require paying any fees or subscriptions. Paid versions of FMP and Tiingo APIs are optionally available in order to increase data usage limitation. Be mindful of Tiingo, FMP and Fred data usage limits. More info and tracking is available on their websites.
+
+---
+
+## Legal / Attribution
+
 - Users are responsible for complying with the terms of any third-party APIs used.
-- This program does not require paying any fees or subscriptions. Paid versions of FMP and Tiingo APIs are optionally available in order to increase data usage limitation. Be mindful of Tiingo API and FMP API data usage limits. More info and tracking is available on their websites.
+
+- Previously included test usage of FMP API endpoints. These have been removed to comply with their ToS.
+
+### Fred API
+
+- This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.
+
+### Tiingo API
+
+- This software is not owned, managed by, or affiliated with/by Tiingo.
 
 ---
 

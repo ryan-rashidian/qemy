@@ -1,11 +1,14 @@
 from utils.env_setup import setup_wizard
 setup_wizard()
+
 import cmd
 import os
 import pandas as pd
 from backend.core.plot import plot_price, plot_lr
+from backend.core.session import SessionManager
 from backend.fetch import api_tiingo as tiingo
 from backend.fetch import api_fmp as fmp
+from backend.fetch import api_fred as fred
 from frontend.utils import parse_args
 
 pd.set_option('display.max_columns', None)
@@ -14,7 +17,15 @@ pd.set_option('display.max_rows', None)
 class QemyShell(cmd.Cmd):
     intro = "Welcome to Qemy. Type help or ? to list commands.\n"
     prompt = "qemy> "
-#==============================================================================#
+#=============================================================================#
+    def do_fredtest(self, arg):
+        arg = arg
+        fred.fredtest()
+#=============================================================================#
+    def do_session(self, arg):
+        arg = arg
+        SessionManager().run()
+#=============================================================================#
     def do_price(self, arg):
         def define_args(parser):
             parser.add_argument('ticker', help='stock ticker symbol')
@@ -42,7 +53,7 @@ class QemyShell(cmd.Cmd):
         print('Usage: price <TICKER> -p <PERIOD>')
         print('Example: price AAPL -p 3M')
         print('D = Day, W = Week, M = Month, Y = Year')
-#==============================================================================#
+#=============================================================================#
     def do_plot_price(self, arg):
         def define_args(parser):
             parser.add_argument('ticker', help='stock ticker symbol')
@@ -65,7 +76,7 @@ class QemyShell(cmd.Cmd):
         print('Usage: plot_price <TICKER> -p <PERIOD>')
         print('Example: plot_price AAPL -p 3M')
         print('D = Day, W = Week, M = Month, Y = Year')
-#==============================================================================#
+#=============================================================================#
     def do_plot_lr(self, arg):
         def define_args(parser):
             parser.add_argument('ticker', help='stock ticker symbol')
@@ -88,7 +99,7 @@ class QemyShell(cmd.Cmd):
         print('Usage: plot_lr <TICKER> -p <PERIOD>')
         print('Example: plot_lr AAPL -p 3M')
         print('D = Day, W = Week, M = Month, Y = Year')
-#==============================================================================#
+#=============================================================================#
     def do_dcf(self, arg):
         ticker = arg.strip().upper()
         print(f"Fetching discounted cash flow for {ticker}...")
@@ -103,7 +114,7 @@ class QemyShell(cmd.Cmd):
         print('Fetches current discounted cash flow for given ticker.')
         print('Usage: dcf <TICKER>')
         print('Example: dcf AAPL')
-#==============================================================================#
+#=============================================================================#
     def do_profile(self, arg):
         ticker = arg.strip().upper()
         print(f"Fetching profile for {ticker}...")
@@ -118,7 +129,7 @@ class QemyShell(cmd.Cmd):
         print('Fetches profile for a given ticker. Shows basic info about the company.')
         print('Usage: profile <TICKER>')
         print('Example: profile AAPL')
-#==============================================================================#
+#=============================================================================#
     def do_ratios(self, arg):
         ticker = arg.strip().upper()
         print(f"Fetching ratios for {ticker}...")
@@ -133,7 +144,7 @@ class QemyShell(cmd.Cmd):
         print('Fetches list of ratios for given ticker.')
         print('Usage: ratios <TICKER>')
         print('Example: ratios AAPL')
-#==============================================================================#
+#=============================================================================#
     def do_balance(self, arg):
         ticker = arg.strip().upper()
         print(f"Fetching balance sheet for {ticker}...")
@@ -148,7 +159,7 @@ class QemyShell(cmd.Cmd):
         print('Fetches latest balance sheet for given ticker.')
         print('Usage: balance <TICKER>')
         print('Example: balance AAPL')
-#==============================================================================#
+#=============================================================================#
     def do_metrics(self, arg):
         ticker = arg.strip().upper()
         print(f"Fetching metrics for {ticker}...")
@@ -163,7 +174,7 @@ class QemyShell(cmd.Cmd):
         print('Fetches list of the latest metrics for given ticker.')
         print('Usage: metrics <TICKER>')
         print('Example: metrics AAPL')
-#==============================================================================#
+#=============================================================================#
     def do_cf(self, arg):
         ticker = arg.strip().upper()
         print(f"Fetching cash flow statement for {ticker}...")
@@ -178,7 +189,7 @@ class QemyShell(cmd.Cmd):
         print('Fetches latest cash flow statement for given ticker.')
         print('Usage: cf <TICKER>')
         print('Example: cf AAPL')
-#==============================================================================#
+#=============================================================================#
     def do_income(self, arg):
         ticker = arg.strip().upper()
         print(f"Fetching income statement for {ticker}...")
@@ -193,7 +204,7 @@ class QemyShell(cmd.Cmd):
         print('Fetches latest income statement for given ticker.')
         print('Usage: income <TICKER>')
         print('Example: income AAPL')
-#==============================================================================#
+#=============================================================================#
     def do_52week(self, arg):
         ticker = arg.strip().upper()
         print(f"Fetching 52 week high/low for {ticker}...")
@@ -208,7 +219,7 @@ class QemyShell(cmd.Cmd):
         print('Fetches 52-week high and low for given ticker.')
         print('Usage: 52week <TICKER>')
         print('Example: 52week AAPL')
-#==============================================================================#
+#=============================================================================#
     def do_ev(self, arg):
         ticker = arg.strip().upper()
         print(f"Fetching enterprise value for {ticker}...")
@@ -223,15 +234,15 @@ class QemyShell(cmd.Cmd):
         print('Fetches the enterprise value for given ticker.')
         print('Usage: ev <TICKER>')
         print('Example: ev AAPL')
-#==============================================================================#
+#=============================================================================#
     def do_clear(self, arg):
         arg = arg # supress lsp
         os.system('clear')
-#==============================================================================#
+#=============================================================================#
     def do_exit(self, arg):
         arg = arg # supress lsp
         print("Exiting... Goodbye!")
         return True
-#==============================================================================#
+#=============================================================================#
 if __name__ == '__main__':
     QemyShell().cmdloop()
