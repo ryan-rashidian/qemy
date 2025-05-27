@@ -1,0 +1,12 @@
+test.py
+/dist/
+/build/
+*.dist/
+*.build/
+cli.dist/
+cli.build/
+__pycache__/
+*.py[cod]
+*.db
+*.sqlite3
+*.env
