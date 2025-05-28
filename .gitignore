@@ -1,4 +1,5 @@
 test.py
+/exports/
 /dist/
 /build/
 *.dist/

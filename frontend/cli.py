@@ -68,6 +68,7 @@ class QemyShell(cmd.Cmd):
     def do_cpi(self, arg):
         def define_args(parser):
             parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
+            parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
         args = parse_args(arg, define_args, prog_name='cpi')
         if not args:
             print('For valid syntax, Try: cpi -p 1Y')
@@ -317,16 +318,21 @@ class QemyShell(cmd.Cmd):
 #=============================================================================#
     def do_plot_cpi(self, arg):
         def define_args(parser):
-            parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
+            parser.add_argument('-p', '--period', default='1Y', help='period (e.g. -p 5D, --price 3M, -p 1Y)')
+            parser.add_argument('-s', '--save', default='NO', help='save (e.g. -s y, --save yes)')
         args = parse_args(arg, define_args, prog_name='plot cpi')
         if not args:
-            print('For valid syntax, Try: plot_cpi -p 3M')
+            print('For valid syntax, Try: plot_cpi -p 3m -s y')
             return
         period = args.period
+        save_state = args.save.upper() 
 
         print(f"Fetching plot chart for CPI inflation: % Change from Year Ago...")
         try:
-            plot.plot_cpi(period=period)
+            if save_state in ('Y', 'YES'):
+                plot.plot_cpi(period=period, save=True)
+            else:
+                plot.plot_cpi(period=period, save=False)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
 
