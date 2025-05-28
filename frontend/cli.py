@@ -39,7 +39,10 @@ class QemyShell(cmd.Cmd):
         print(f"Fetching latest 10K/10Q filing metrics for {ticker}")
         try:
             df: pd.DataFrame = SEC_Filings(arg).get_metrics() # type: ignore
-            print(df.to_string(justify='left', formatters={'Value': '{:,}'.format}))
+            print(df.to_string(
+                justify='left', 
+                formatters={'Value': lambda x: f"{x:,}" if isinstance(x, (int, float)) else x}
+            ))
         except:
             print('Could not fetch filing metrics, please try another ticker.')
 

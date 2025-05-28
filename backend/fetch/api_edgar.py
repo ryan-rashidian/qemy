@@ -22,6 +22,8 @@ class SEC_Filings:
             print(f"Failed to request cik. Error code:\n{e}")
 
     def get_metrics(self):
+        key_form = None
+        key_filed = None
         key_list_shares = [
             'CommonStockSharesOutstanding',
             'WeightedAverageNumberOfSharesOutstandingBasic',
@@ -29,6 +31,7 @@ class SEC_Filings:
         key_shares = None
         key_list_cash = [
             'CashAndCashEquivalentsAtCarryingValue',
+            'Cash',
         ]
         key_cash = None
         key_list_debt = [
@@ -105,6 +108,8 @@ class SEC_Filings:
                     if key in facts['facts']['us-gaap'].keys():
                         key_shares = key
                         shares_outstanding = facts['facts']['us-gaap'][key_shares]['units']['shares'][-1]
+                        key_form = shares_outstanding['form']
+                        key_filed = shares_outstanding['filed']
                         shares_outstanding = shares_outstanding['val']
                         if shares_outstanding is not None and shares_outstanding > 0:
                             break
@@ -192,6 +197,8 @@ class SEC_Filings:
                     eps = nan
 
                 df = pd.DataFrame([
+                    ['Form', key_form],
+                    ['Filed', key_filed],
                     ['Shares Outstanding', shares_outstanding],
                     ['Cash', cash],
                     ['Debt', debt],
