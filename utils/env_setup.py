@@ -15,10 +15,10 @@ def setup_wizard():
         return
 
     print("\n No .env file found! Please setup your FRED API key, Tiingo API key, and EGDAR API 'User Agent'")
-    fred_key = input("Enter your FRED API key:").strip()
+    fred_key = input("Enter your FRED API key: ").strip()
     tiingo_key = input("Enter your Tiingo API key: ").strip()
     print("Enter a 'User Agent' to identify yourself to EDGAR API")
-    print("- e.g. 'john johndoe@example.com'")
+    print("- e.g. john johndoe@example.com")
     edgar_agent = input("Enter a 'User Agent': ")
     with env_path.open('w') as f:
         f.write(f"FRED_API_KEY={fred_key}\n")

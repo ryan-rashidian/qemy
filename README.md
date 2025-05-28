@@ -28,6 +28,7 @@ Qemy is a prototype financial data engine designed for market/economic analysis 
 ```bash
 git clone https://github.com/ryan-rashidian/qemy.git
 ```
+
 ### Install dependencies:
 
 #### Option 1: Using Python venv:
@@ -67,11 +68,13 @@ IMPORTANT: Read "Legal / Attribution" before using Qemy with any 3rd party API s
 API key setup wizard included. Run the CLI to receive a prompt.
 
 Or manually create a .env file in project root directory and add API keys like this:
+
 ```env
 TIINGO_API_KEY=<your_key_here>
 FRED_API_KEY=<your_key_here>
-EDGAR_USER_AGENT="<your user agent>" # EDGAR_USER_AGENT="john johndoe@example.com"
+EDGAR_USER_AGENT=<your user agent> # EDGAR_USER_AGENT=john johndoe@example.com
 ```
+
 Make sure .env is included in .gitignore to keep your keys secure.
 
 ---
@@ -110,6 +113,7 @@ chmod +x qemy
 ```bash
 nano ~/.bashrc
 ```
+
 Add the following to the bottom of your .bashrc. Replace "path/to/your/project/root" with your own: 
 
 ```bash
@@ -126,9 +130,11 @@ export PATH="$HOME/path/to/your/project/root:$PATH"
 ```bash
 qemy
 ```
+
 from any bash terminal session.
 
 - Alternatively, run the CLI manually with:
+
 ```bash
 source ~/path/to/qemyenv/bin/activate
 # Conda users: change above line to "conda activate qemyenv"
@@ -173,3 +179,4 @@ By using the Qemy application, you agree to the Qemy Terms of Use ("Legal / Attr
 ## License
 
 This project is licensed under the [Apache License 2.0](LICENSE).
+
