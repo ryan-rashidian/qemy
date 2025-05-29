@@ -536,7 +536,13 @@ class QemyShell(cmd.Cmd):
     def do_table(self, arg):
         arg = arg
         print('Filings:')
-        print(self.ticker_df)
+        print(self.ticker_df.to_string(
+            justify='left', 
+            formatters={
+                col: (lambda x: f"{x:,}" if isinstance(x, (int, float)) else x)
+                for col in self.ticker_df.columns
+            }
+        ))
 
     def help_table(self):
         print('Fetches table of current filings')
