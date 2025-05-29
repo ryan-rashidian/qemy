@@ -17,6 +17,16 @@ pd.set_option('display.max_rows', None)
 class QemyShell(cmd.Cmd):
     intro = "Welcome to Qemy. Type help or ? to list commands.\n"
     prompt = "qemy> "
+
+    def __init__(self):
+        metric_index = pd.Index([
+             'Form', 'Filed', 'Shares Outstanding', 'Cash', 'Debt', 'Revenue',
+            'COGS', 'Net Income', 'Assets', 'Liabilities', 'OpEx', 'CapEx', 'EPS'
+        ])
+        super().__init__()
+        self.ticker_list = []
+        self.ticker_df = pd.DataFrame(index=metric_index) 
+        self.ticker_df.index.name = 'Metrics:'
 #=============================================================================#
 ################################# SESSION #####################################
 #=============================================================================#
@@ -39,9 +49,10 @@ class QemyShell(cmd.Cmd):
         print(f"Fetching latest 10K/10Q filing metrics for {ticker}")
         try:
             df: pd.DataFrame = SEC_Filings(arg).get_metrics() # type: ignore
+            self.ticker_df[ticker] = df[ticker]
             print(df.to_string(
                 justify='left', 
-                formatters={'Value': lambda x: f"{x:,}" if isinstance(x, (int, float)) else x}
+                formatters={ticker: lambda x: f"{x:,}" if isinstance(x, (int, float)) else x}
             ))
         except:
             print('Could not fetch filing metrics, please try another ticker.')
@@ -510,14 +521,36 @@ class QemyShell(cmd.Cmd):
         print('Example: plot_comp -p 3M')
         print('D = Day, W = Week, M = Month, Y = Year')
 #=============================================================================#
+################################## CLI ########################################
+#=============================================================================#
+    def do_watchlist(self, arg):
+        arg = arg
+        print('Watchlist:')
+        print(self.ticker_list)
+
+    def help_watchlist(self):
+        print('Fetches current watchlist')
+        print('Usage: watchlist')
+        print('Example: watchlist')
+#=============================================================================#
+    def do_table(self, arg):
+        arg = arg
+        print('Filings:')
+        print(self.ticker_df)
+
+    def help_table(self):
+        print('Fetches table of current filings')
+        print('Usage: table')
+        print('Example: table')
+#=============================================================================#
 ############################## CLI UTILITY ####################################
 #=============================================================================#
     def do_clear(self, arg):
-        arg = arg # supress lsp
+        arg = arg
         os.system('clear')
 #=============================================================================#
     def do_exit(self, arg):
-        arg = arg # supress lsp
+        arg = arg
         print("Exiting... Goodbye!")
         return True
 #=============================================================================#

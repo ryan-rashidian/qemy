@@ -212,7 +212,8 @@ class SEC_Filings:
                     ['EPS', eps],
                 ])
                 df.set_index(0, inplace=True)
-                df.columns = ['Value']
+                df.index.name = 'Metrics:'
+                df.columns = [self.ticker]
                 return df
             else:
                 print(f"Failed to retrieve data. Status code:\n{code}")
