@@ -16,7 +16,7 @@ def parse_period(period_str):
     elif unit == "Y":
         start_date = now - relativedelta(years=value)
     else:
-        raise ValueError("Invalid period format. Use D, W, M, or Y")
+        raise ValueError("Invalid period format.\nUse: D, W, M, or Y")
 
     return start_date.strftime('%Y-%m-%d'), now.strftime('%Y-%m-%d')
 
@@ -29,10 +29,10 @@ def safe_status_get(url, headers=None, params=None):
     except requests.exceptions.HTTPError as e:
         status = response.status_code if response else 'No code'
         body = response.text if response else 'No response'
-        print(f"HTTP error {status}: {body}")
+        print(f"Error code {status}: {body}")
     except requests.exceptions.RequestException as e:
-        print(f"Request failed: {e}")
+        print(f"Request failed:\n{e}")
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        print(f"Error: {e}")
     return None
 

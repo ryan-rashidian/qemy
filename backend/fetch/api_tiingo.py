@@ -1,5 +1,5 @@
 import os
-from .utils import parse_period, safe_status_get
+from .utils_fetch import parse_period, safe_status_get
 
 TIINGO_API_KEY = os.getenv('TIINGO_API_KEY')
 TIINGO_HEADERS = {'Content-Type': 'application/json', 'Authorization': f'Token {TIINGO_API_KEY}'}

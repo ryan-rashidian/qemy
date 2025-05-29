@@ -1,7 +1,7 @@
 import os
 from math import nan
 import pandas as pd
-from .utils import safe_status_get
+from .utils_fetch import safe_status_get
 
 class SEC_Filings:
     def __init__(self, ticker):

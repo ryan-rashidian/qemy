@@ -9,7 +9,7 @@ from backend.core.session import SessionManager
 from backend.fetch import api_tiingo as tiingo
 from backend.fetch import api_fred as fred
 from backend.fetch.api_edgar import SEC_Filings
-from frontend.utils import parse_args
+from .utils_cli import parse_args
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
