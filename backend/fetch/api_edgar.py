@@ -48,9 +48,12 @@ class SEC_Filings:
         ]
         key_debt = None
         key_list_revenue = [
-            'Revenues',
-            'SalesRevenueNet',
             'RevenueFromContractWithCustomerExcludingAssessedTax',
+            'SalesRevenueNet',
+            'Revenues',
+            'TotalRevenues',
+            'NetSales',
+            'SalesRevenueGoodsNet',
             'OperatingIncomeLoss',
         ]
         key_revenue = None
@@ -62,9 +65,25 @@ class SEC_Filings:
             'InterestExpense',
         ]
         key_cogs = None
+        key_list_gross_profit = [
+            'GrossProfit',
+            'GrossProfitLoss',
+            'GrossProfitLossAvailableToCommonStockholders',
+        ]
+        key_gross_profit = None
+        key_list_operating_income = [
+            'OperatingIncomeLoss',
+            'OperatingIncomeLossFromContinuingOperations',
+            'OperatingIncomeLossBeforeOtherIncomeExpense',
+            'OperatingIncomeLossBeforeInterestAndIncomeTaxes',
+            'IncomeLossFromOperations',
+            'IncomeLossFromContinuingOperations',
+        ]
+        key_operating_income = None
         key_list_income = [
             'NetIncomeLossAvailableToCommonStockholdersBasic',
             'NetIncomeLoss',
+            'NetIncomeLossFromContinuingOperationsAvailableToCommonShareholdersBasic',
         ]
         key_income = None
         key_list_assets = [
@@ -93,6 +112,12 @@ class SEC_Filings:
             'PaymentsToAcquireOtherPropertyPlantAndEquipment',
         ]
         key_capex = None
+        key_list_ocf = [
+            'NetCashProvidedByUsedInOperatingActivities',
+            'NetCashProvidedByUsedInOperatingActivitiesContinuingOperations',
+            'NetCashProvidedByUsedInOperatingActivitiesNoncontrollingInterest',
+        ]
+        key_ocf = None
         key_list_eps = [
             'EarningsPerShareDiluted',
             'EarningsPerShareBasic',
@@ -147,6 +172,25 @@ class SEC_Filings:
                         break
                 else:
                     cogs = nan
+                for key in key_list_gross_profit:
+                    if key in facts['facts']['us-gaap'].keys():
+                        key_gross_profit = key
+                        gross_profit = facts['facts']['us-gaap'][key_gross_profit]['units']['USD'][-1]
+                        gross_profit = gross_profit['val']
+                        break
+                else:
+                    try:
+                        gross_profit = revenue - cogs
+                    except:
+                        gross_profit = nan
+                for key in key_list_operating_income:
+                    if key in facts['facts']['us-gaap'].keys():
+                        key_operating_income = key
+                        operating_income = facts['facts']['us-gaap'][key_operating_income]['units']['USD'][-1]
+                        operating_income = operating_income['val']
+                        break
+                else:
+                    operating_income = nan
                 for key in key_list_income:
                     if key in facts['facts']['us-gaap'].keys():
                         key_income = key
@@ -187,6 +231,14 @@ class SEC_Filings:
                         break
                 else:
                     capex = nan
+                for key in key_list_ocf:
+                    if key in facts['facts']['us-gaap'].keys():
+                        key_ocf = key
+                        ocf = facts['facts']['us-gaap'][key_ocf]['units']['USD'][-1]
+                        ocf = ocf['val']
+                        break
+                else:
+                    ocf = nan
                 for key in key_list_eps:
                     if key in facts['facts']['us-gaap'].keys():
                         key_eps = key
@@ -204,11 +256,16 @@ class SEC_Filings:
                     ['Debt', debt],
                     ['Revenue', revenue],
                     ['COGS', cogs],
+                    ['Gross Profit', gross_profit],
+                    ['EBIT', operating_income],
                     ['Net Income', income],
                     ['Assets', assets],
                     ['Liabilities', liability],
+                    ['Equity', assets - liability],
                     ['OpEx', opex],
                     ['CapEx', capex],
+                    ['OCF', ocf],
+                    ['FCF', ocf - capex],
                     ['EPS', eps],
                 ])
                 df.set_index(0, inplace=True)
