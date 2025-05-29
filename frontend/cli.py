@@ -80,7 +80,6 @@ class QemyShell(cmd.Cmd):
     def do_cpi(self, arg):
         def define_args(parser):
             parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
-            parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
         args = parse_args(arg, define_args, prog_name='cpi')
         if not args:
             print('For valid syntax, Try: cpi -p 1Y')

@@ -1,7 +1,7 @@
 import os
 from math import nan
-import requests
 import pandas as pd
+from .utils import safe_status_get
 
 class SEC_Filings:
     def __init__(self, ticker):
@@ -9,15 +9,11 @@ class SEC_Filings:
         self.ticker = ticker.upper().strip()
         try:
             url = 'https://www.sec.gov/files/company_tickers.json'
-            data = requests.get(url=url, headers=self.HEADERS)
-            code = data.status_code
-            data = data.json()
-            if code == 200:
+            data = safe_status_get(url=url, headers=self.HEADERS)
+            if data:
                 for entry in data.values():
                     if entry['ticker'].lower() == ticker.lower():
                         self.cik = str(entry['cik_str']).zfill(10) 
-            else:
-                print(f"Failed to retrieve cik data. Status code:\n{code}")
         except Exception as e:
             print(f"Failed to request cik. Error code:\n{e}")
 
@@ -125,10 +121,8 @@ class SEC_Filings:
         key_eps = None
 
         try:
-            facts = requests.get(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{self.cik}.json", headers=self.HEADERS)
-            code = facts.status_code
-            facts = facts.json()
-            if code == 200:
+            facts = safe_status_get(url=f"https://data.sec.gov/api/xbrl/companyfacts/CIK{self.cik}.json", headers=self.HEADERS)
+            if facts:
                 for key in key_list_shares:
                     if key in facts['facts']['us-gaap'].keys():
                         key_shares = key
@@ -272,8 +266,6 @@ class SEC_Filings:
                 df.index.name = 'Metrics:'
                 df.columns = [self.ticker]
                 return df
-            else:
-                print(f"Failed to retrieve data. Status code:\n{code}")
         except Exception as e:
             print(f"Failed to request company facts:\n{e}")
 
