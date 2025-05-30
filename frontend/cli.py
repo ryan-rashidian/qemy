@@ -9,7 +9,7 @@ from backend.core.session import SessionManager
 from backend.fetch import api_tiingo as tiingo
 from backend.fetch import api_fred as fred
 from backend.fetch.api_edgar import SEC_Filings
-from .utils_cli import parse_args
+from .utils_cli import parse_args, save_to_csv
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -17,7 +17,6 @@ pd.set_option('display.max_rows', None)
 class QemyShell(cmd.Cmd):
     intro = "Welcome to Qemy. Type help or ? to list commands.\n"
     prompt = "qemy> "
-
     def __init__(self):
         metric_index = pd.Index([
             'Form', 'Filed', 'Shares Outstanding', 'Cash', 'Debt', 'Revenue',
@@ -51,10 +50,9 @@ class QemyShell(cmd.Cmd):
         try:
             df: pd.DataFrame = SEC_Filings(arg).get_metrics() # type: ignore
             self.ticker_df[ticker] = df[ticker]
-            print(df.to_string(
-                justify='left', 
-                formatters={ticker: lambda x: f"{x:,}" if isinstance(x, (int, float)) else x}
-            ))
+            print(df.to_string(justify='left', formatters={
+                ticker: lambda x: f"{x:,}" if isinstance(x, (int, float)) else x
+            }))
         except:
             print('Could not fetch filing metrics, please try another ticker.')
 
@@ -356,15 +354,20 @@ class QemyShell(cmd.Cmd):
     def do_plot_gdp(self, arg):
         def define_args(parser):
             parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
+            parser.add_argument('-s', '--save', default='NO', help='save (e.g. -s y, --save yes)')
         args = parse_args(arg, define_args, prog_name='plot gdp')
         if not args:
             print('For valid syntax, Try: plot_gdp -p 3M')
             return
         period = args.period
+        save_state = args.save.upper() 
 
         print(f"Fetching plot chart for GDP: % Change from Year Ago...")
         try:
-            plot.plot_gdp(period=period)
+            if save_state in ('Y', 'YES'):
+                plot.plot_gdp(period=period, save=True)
+            else:
+                plot.plot_gdp(period=period, save=False)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
 
@@ -377,15 +380,20 @@ class QemyShell(cmd.Cmd):
     def do_plot_sent(self, arg):
         def define_args(parser):
             parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
+            parser.add_argument('-s', '--save', default='NO', help='save (e.g. -s y, --save yes)')
         args = parse_args(arg, define_args, prog_name='plot sent')
         if not args:
             print('For valid syntax, Try: plot_sent -p 3M')
             return
         period = args.period
+        save_state = args.save.upper() 
 
         print(f"Fetching plot chart for Sentiment: % Change...")
         try:
-            plot.plot_sentiment(period=period)
+            if save_state in ('Y', 'YES'):
+                plot.plot_sentiment(period=period, save=True)
+            else:
+                plot.plot_sentiment(period=period, save=False)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
 
@@ -398,15 +406,20 @@ class QemyShell(cmd.Cmd):
     def do_plot_nfp(self, arg):
         def define_args(parser):
             parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
+            parser.add_argument('-s', '--save', default='NO', help='save (e.g. -s y, --save yes)')
         args = parse_args(arg, define_args, prog_name='plot nfp')
         if not args:
             print('For valid syntax, Try: plot_nfp -p 3M')
             return
         period = args.period
+        save_state = args.save.upper() 
 
         print(f"Fetching plot chart for Non-Farm Payrolls: % Change from Year Ago...")
         try:
-            plot.plot_nfp(period=period)
+            if save_state in ('Y', 'YES'):
+                plot.plot_nfp(period=period, save=True)
+            else:
+                plot.plot_nfp(period=period, save=False)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
 
@@ -419,15 +432,20 @@ class QemyShell(cmd.Cmd):
     def do_plot_interest(self, arg):
         def define_args(parser):
             parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
+            parser.add_argument('-s', '--save', default='NO', help='save (e.g. -s y, --save yes)')
         args = parse_args(arg, define_args, prog_name='plot interest')
         if not args:
             print('For valid syntax, Try: plot_interest -p 3M')
             return
         period = args.period
+        save_state = args.save.upper() 
 
         print(f"Fetching plot chart for Interest rates: % Change from Year Ago...")
         try:
-            plot.plot_interest(period=period)
+            if save_state in ('Y', 'YES'):
+                plot.plot_interest(period=period, save=True)
+            else:
+                plot.plot_interest(period=period, save=False)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
 
@@ -440,15 +458,20 @@ class QemyShell(cmd.Cmd):
     def do_plot_jobc(self, arg):
         def define_args(parser):
             parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
+            parser.add_argument('-s', '--save', default='NO', help='save (e.g. -s y, --save yes)')
         args = parse_args(arg, define_args, prog_name='plot jobc')
         if not args:
             print('For valid syntax, Try: plot_jobc -p 3M')
             return
         period = args.period
+        save_state = args.save.upper() 
 
         print(f"Fetching plot chart for Jobless Claims: % Change from Year Ago...")
         try:
-            plot.plot_jobc(period=period)
+            if save_state in ('Y', 'YES'):
+                plot.plot_jobc(period=period, save=True)
+            else:
+                plot.plot_jobc(period=period, save=False)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
 
@@ -461,15 +484,20 @@ class QemyShell(cmd.Cmd):
     def do_plot_unem(self, arg):
         def define_args(parser):
             parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
+            parser.add_argument('-s', '--save', default='NO', help='save (e.g. -s y, --save yes)')
         args = parse_args(arg, define_args, prog_name='plot unem')
         if not args:
             print('For valid syntax, Try: plot_unem -p 3M')
             return
         period = args.period
+        save_state = args.save.upper() 
 
         print(f"Fetching plot chart for Unemployment rate: % Change from Year Ago...")
         try:
-            plot.plot_unemployment(period=period)
+            if save_state in ('Y', 'YES'):
+                plot.plot_unemployment(period=period, save=True)
+            else:
+                plot.plot_unemployment(period=period, save=False)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
 
@@ -482,15 +510,20 @@ class QemyShell(cmd.Cmd):
     def do_plot_indp(self, arg):
         def define_args(parser):
             parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
+            parser.add_argument('-s', '--save', default='NO', help='save (e.g. -s y, --save yes)')
         args = parse_args(arg, define_args, prog_name='plot indp')
         if not args:
             print('For valid syntax, Try: plot_indp -p 3M')
             return
         period = args.period
+        save_state = args.save.upper() 
 
         print(f"Fetching plot chart for Industrial Production: % Change from Year Ago...")
         try:
-            plot.plot_ind_prod(period=period)
+            if save_state in ('Y', 'YES'):
+                plot.plot_ind_prod(period=period, save=True)
+            else:
+                plot.plot_ind_prod(period=period, save=False)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
 
@@ -503,15 +536,20 @@ class QemyShell(cmd.Cmd):
     def do_plot_comp(self, arg):
         def define_args(parser):
             parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
+            parser.add_argument('-s', '--save', default='NO', help='save (e.g. -s y, --save yes)')
         args = parse_args(arg, define_args, prog_name='plot comp')
         if not args:
             print('For valid syntax, Try: plot_comp -p 3M')
             return
         period = args.period
+        save_state = args.save.upper() 
 
         print(f"Fetching plot chart for Composite index: % Change from Year Ago...")
         try:
-            plot.plot_composite(period=period)
+            if save_state in ('Y', 'YES'):
+                plot.plot_composite(period=period, save=True)
+            else:
+                plot.plot_composite(period=period, save=False)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
 
@@ -534,15 +572,26 @@ class QemyShell(cmd.Cmd):
         print('Example: watchlist')
 #=============================================================================#
     def do_table(self, arg):
-        arg = arg
-        print('Filings:')
-        print(self.ticker_df.to_string(
-            justify='left', 
-            formatters={
-                col: (lambda x: f"{x:,}" if isinstance(x, (int, float)) else x)
-                for col in self.ticker_df.columns
-            }
-        ))
+        def define_args(parser):
+            parser.add_argument('-s', '--save', default='NO', help='save (e.g. -s y, --save yes)')
+        args = parse_args(arg, define_args, prog_name='table')
+        if not args:
+            print('For valid syntax, Try: table -s yes')
+            return
+        save_state = args.save.upper() 
+
+        try:
+            if save_state in ('Y', 'YES'):
+                save_to_csv(df=self.ticker_df)
+                print('File saved...\n /qemy/exports/tables/')
+            else:
+                print('Filings:')
+                print(self.ticker_df.to_string(justify='left', formatters={
+                    col: (lambda x: f"{x:,}" if isinstance(x, (int, float)) else x)
+                    for col in self.ticker_df.columns
+                }))
+        except Exception as e:
+            print(f"Could not fetch/save table. ERROR:\n{e}")
 
     def help_table(self):
         print('Fetches table of current filings')

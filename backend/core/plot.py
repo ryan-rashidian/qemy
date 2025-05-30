@@ -85,7 +85,7 @@ def plot_cpi(period, save=False):
     else:
         plt.show()
     
-def plot_gdp(period):
+def plot_gdp(period, save=False):
     data = fred.get_gdp(period=period)
     df = pd.DataFrame(data)
 
@@ -97,9 +97,14 @@ def plot_gdp(period):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+    if save == True:
+        output_path =  get_next_path(export_dir, name='gdpchart', ext='png')
+        plt.savefig(output_path)
+        plt.show()
+    else:
+        plt.show()
 
-def plot_sentiment(period):
+def plot_sentiment(period, save=False):
     data = fred.get_sentiment(period=period)
     df = pd.DataFrame(data)
 
@@ -111,9 +116,14 @@ def plot_sentiment(period):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+    if save == True:
+        output_path =  get_next_path(export_dir, name='sentchart', ext='png')
+        plt.savefig(output_path)
+        plt.show()
+    else:
+        plt.show()
 
-def plot_nfp(period):
+def plot_nfp(period, save=False):
     data = fred.get_nf_payrolls(period=period)
     df = pd.DataFrame(data)
 
@@ -125,9 +135,14 @@ def plot_nfp(period):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+    if save == True:
+        output_path =  get_next_path(export_dir, name='nfpchart', ext='png')
+        plt.savefig(output_path)
+        plt.show()
+    else:
+        plt.show()
 
-def plot_interest(period):
+def plot_interest(period, save=False):
     data = fred.get_interest(period=period)
     df = pd.DataFrame(data)
 
@@ -139,9 +154,14 @@ def plot_interest(period):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+    if save == True:
+        output_path =  get_next_path(export_dir, name='interestchart', ext='png')
+        plt.savefig(output_path)
+        plt.show()
+    else:
+        plt.show()
 
-def plot_jobc(period):
+def plot_jobc(period, save=False):
     data = fred.get_jobless_claims(period=period)
     df = pd.DataFrame(data)
 
@@ -153,9 +173,14 @@ def plot_jobc(period):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+    if save == True:
+        output_path =  get_next_path(export_dir, name='jobcchart', ext='png')
+        plt.savefig(output_path)
+        plt.show()
+    else:
+        plt.show()
 
-def plot_unemployment(period):
+def plot_unemployment(period, save=False):
     data = fred.get_unemployment(period=period)
     df = pd.DataFrame(data)
 
@@ -167,9 +192,14 @@ def plot_unemployment(period):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+    if save == True:
+        output_path =  get_next_path(export_dir, name='unemchart', ext='png')
+        plt.savefig(output_path)
+        plt.show()
+    else:
+        plt.show()
 
-def plot_ind_prod(period):
+def plot_ind_prod(period, save=False):
     data = fred.get_ind_prod(period=period)
     df = pd.DataFrame(data)
 
@@ -181,9 +211,14 @@ def plot_ind_prod(period):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+    if save == True:
+        output_path =  get_next_path(export_dir, name='indpchart', ext='png')
+        plt.savefig(output_path)
+        plt.show()
+    else:
+        plt.show()
 
-def plot_composite(period):
+def plot_composite(period, save=False):
     data = fred.get_composite(period=period)
     df = pd.DataFrame(data)
 
@@ -195,5 +230,10 @@ def plot_composite(period):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+    if save == True:
+        output_path =  get_next_path(export_dir, name='compchart', ext='png')
+        plt.savefig(output_path)
+        plt.show()
+    else:
+        plt.show()
 
