@@ -1,18 +1,6 @@
-import shlex
-import argparse
 import pandas as pd
 from pathlib import Path
 from utils.filetools import get_next_path
-
-def parse_args(arg_str, def_args, prog_name='command'):
-    parser = argparse.ArgumentParser(prog=prog_name)
-    def_args(parser)
-    
-    try:
-        args = parser.parse_args(shlex.split(arg_str))
-        return args
-    except SystemExit:
-        return None
 
 def save_to_csv(df: pd.DataFrame):
     project_root = Path(__file__).resolve().parents[1]

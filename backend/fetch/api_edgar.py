@@ -7,6 +7,7 @@ class SEC_Filings:
     def __init__(self, ticker):
         self.HEADERS = {'User-Agent': os.getenv('EDGAR_USER_AGENT')} 
         self.ticker = ticker.upper().strip()
+        self.cik = None
         try:
             url = 'https://www.sec.gov/files/company_tickers.json'
             data = safe_status_get(url=url, headers=self.HEADERS)
@@ -17,7 +18,7 @@ class SEC_Filings:
         except Exception as e:
             print(f"Failed to request cik. Error code:\n{e}")
 
-    def get_metrics(self):
+    def get_metrics(self) -> pd.DataFrame | None:
         key_form = None
         key_filed = None
         key_list_shares = [
@@ -242,7 +243,7 @@ class SEC_Filings:
                 else:
                     eps = nan
 
-                df = pd.DataFrame([
+                df: pd.DataFrame = pd.DataFrame([
                     ['Form', key_form],
                     ['Filed', key_filed],
                     ['Shares Outstanding', shares_outstanding],
@@ -268,4 +269,5 @@ class SEC_Filings:
                 return df
         except Exception as e:
             print(f"Failed to request company facts:\n{e}")
+            return None
 
