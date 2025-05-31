@@ -2,7 +2,12 @@
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
 
-Qemy is a prototype financial data engine designed for market/economic analysis and research. This repository contains the core data pipeline.
+Qemy is a prototype financial data engine designed for market and economic analysis. This repository contains the core data pipeline and command-line interface.
+
+**Work in Progress**
+
+Qemy is in early development. I'm building this as a personal tool first, and refining as I go. Suggestions are welcome!
+Features may change, break, or get replaced as the project evolves.
 
 ---
 
@@ -10,14 +15,14 @@ Qemy is a prototype financial data engine designed for market/economic analysis 
 
 - CLI: Command line interface entry point.
 - Fetch: stock market data from Tiingo API.
-- *Fetch: economic data from FRED API
-- *Fetch: SEC filing data (e.g. 10K/10Q) from SEC EDGAR API.
-- *Charting: price history, linear regression, etc.
-- *Session: persisting work environments.
+- Fetch: SEC filing data (e.g. 10K/10Q) from SEC EDGAR API.
+- Fetch: economic data from FRED API
+- Chart: price history, linear regression, etc.
+- Save: SEC filings and FRED data. 
 - **Filter: metric based stock screening.
-- **Profile: user accounts and portfolio tracking.
 - **Backtest: Monte Carlo and historical simulations.
-- **Cache: SQLite local cache for SEC filings.
+- **Cache: SQLite local cache for SEC filings and FRED data.
+- **Profile: user accounts and portfolio tracking.
 
 ---
 
@@ -65,7 +70,7 @@ IMPORTANT: Read "Legal / Attribution" before using Qemy with any 3rd party API s
 
 - Refer to "Usage" below for info related to API usage and data limitations.
 
-API key setup wizard included. Run the CLI to receive a prompt.
+Run the CLI and Qemy will guide you through an API key setup wizard on first launch.
 
 Or manually create a .env file in project root directory and add API keys like this:
 
@@ -146,12 +151,19 @@ python -m frontend.cli
 
 ---
 
+## Development Notes
+
+// Dev notes will go here in future versions
+
+---
+
 ## Legal / Attribution
 
 By using the Qemy application, you agree to the Qemy Terms of Use ("Legal / Attribution") below and Licensing terms.
 
 - Users are responsible for complying with the terms of any third-party APIs used.
 - Qemy is not affiliated with the SEC or Federal Reserve.
+- Qemy does not collect or transmit any user data, personal information, or API usage statistics.
 - Data may have errors, delays, or be incomplete.
 - 3rd party APIs sign ups must be done through their respective websites. Qemy does not, and will not ever include a automated sign up process for 3rd party APIs.
 
@@ -167,12 +179,6 @@ By using the Qemy application, you agree to the Qemy Terms of Use ("Legal / Attr
 
 - This software integrates with the Tiingo API for stock market data, but does not cache data or redistribute data, API keys or any user data (such as tracking endpoint usage).
 - This software is not owned, managed by, or affiliated with/by Tiingo.
-
----
-
-## Development Notes
-
-// Dev notes will go here in future versions
 
 ---
 
