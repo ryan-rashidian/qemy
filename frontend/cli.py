@@ -72,10 +72,11 @@ class QemyShell(cmd.Cmd):
         print('Usage: rfr')
 #=============================================================================#
     def do_cpi(self, arg):
-        period = parse_arg.parse_arg_p(arg=arg, name='cpi')
+        period, units = parse_arg.parse_arg_p_u(arg=arg, name='cpi')
+        units = 'pc1' if units is None else units
         if isinstance(period, str):
             try:
-                print(fred.get_cpi_inflation(period=period))
+                print(fred.get_cpi_inflation(period=period, units=units))
             except Exception as e:
                 print(f"Could not fetch data ERROR:\n{e}")
         else:
@@ -85,10 +86,11 @@ class QemyShell(cmd.Cmd):
         print('Usage: cpi -p <PERIOD>')
 #=============================================================================#
     def do_gdp(self, arg):
-        period = parse_arg.parse_arg_p(arg=arg, name='gdp')
+        period, units = parse_arg.parse_arg_p_u(arg=arg, name='gdp')
+        units = 'pc1' if units is None else units
         if isinstance(period, str):
             try:
-                print(fred.get_gdp(period=period))
+                print(fred.get_gdp(period=period, units=units))
             except Exception as e:
                 print(f"Could not fetch data ERROR:\n{e}")
         else:
@@ -98,10 +100,11 @@ class QemyShell(cmd.Cmd):
         print('Usage: gdp -p <PERIOD>')
 #=============================================================================#
     def do_sent(self, arg):
-        period = parse_arg.parse_arg_p(arg=arg, name='sent')
+        period, units = parse_arg.parse_arg_p_u(arg=arg, name='sent')
+        units = 'pch' if units is None else units
         if isinstance(period, str):
             try:
-                print(fred.get_sentiment(period=period))
+                print(fred.get_sentiment(period=period, units=units))
             except Exception as e:
                 print(f"Could not fetch data ERROR:\n{e}")
         else:
@@ -111,10 +114,11 @@ class QemyShell(cmd.Cmd):
         print('Usage: sent -p <PERIOD>')
 #=============================================================================#
     def do_nfp(self, arg):
-        period = parse_arg.parse_arg_p(arg=arg, name='nfp')
+        period, units = parse_arg.parse_arg_p_u(arg=arg, name='nfp')
+        units = 'pc1' if units is None else units
         if isinstance(period, str):
             try:
-                print(fred.get_nf_payrolls(period=period))
+                print(fred.get_nf_payrolls(period=period, units=units))
             except Exception as e:
                 print(f"Could not fetch data ERROR:\n{e}")
         else:
@@ -124,10 +128,11 @@ class QemyShell(cmd.Cmd):
         print('Usage: nfp -p <PERIOD>')
 #=============================================================================#
     def do_interest(self, arg):
-        period = parse_arg.parse_arg_p(arg=arg, name='interest')
+        period, units = parse_arg.parse_arg_p_u(arg=arg, name='interest')
+        units = 'pc1' if units is None else units
         if isinstance(period, str):
             try:
-                print(fred.get_interest(period=period))
+                print(fred.get_interest(period=period, units=units))
             except Exception as e:
                 print(f"Could not fetch data ERROR:\n{e}")
         else:
@@ -137,10 +142,11 @@ class QemyShell(cmd.Cmd):
         print('Usage: interest -p <PERIOD>')
 #=============================================================================#
     def do_jobc(self, arg):
-        period = parse_arg.parse_arg_p(arg=arg, name='jobc')
+        period, units = parse_arg.parse_arg_p_u(arg=arg, name='jobc')
+        units = 'pc1' if units is None else units
         if isinstance(period, str):
             try:
-                print(fred.get_jobless_claims(period=period))
+                print(fred.get_jobless_claims(period=period, units=units))
             except Exception as e:
                 print(f"Could not fetch data ERROR:\n{e}")
         else:
@@ -150,10 +156,11 @@ class QemyShell(cmd.Cmd):
         print('Usage: jobc -p <PERIOD>')
 #=============================================================================#
     def do_unem(self, arg):
-        period = parse_arg.parse_arg_p(arg=arg, name='unem')
+        period, units = parse_arg.parse_arg_p_u(arg=arg, name='unem')
+        units = 'pc1' if units is None else units
         if isinstance(period, str):
             try:
-                print(fred.get_unemployment(period=period))
+                print(fred.get_unemployment(period=period, units=units))
             except Exception as e:
                 print(f"Could not fetch data ERROR:\n{e}")
         else:
@@ -163,10 +170,11 @@ class QemyShell(cmd.Cmd):
         print('Usage: unem -p <PERIOD>')
 #=============================================================================#
     def do_indp(self, arg):
-        period = parse_arg.parse_arg_p(arg=arg, name='indp')
+        period, units = parse_arg.parse_arg_p_u(arg=arg, name='indp')
+        units = 'pc1' if units is None else units
         if isinstance(period, str):
             try:
-                print(fred.get_ind_prod(period=period))
+                print(fred.get_ind_prod(period=period, units=units))
             except Exception as e:
                 print(f"Could not fetch data ERROR:\n{e}")
         else:
@@ -176,10 +184,11 @@ class QemyShell(cmd.Cmd):
         print('Usage: indp -p <PERIOD>')
 #=============================================================================#
     def do_netex(self, arg):
-        period = parse_arg.parse_arg_p(arg=arg, name='netex')
-        if isinstance(period, str):
+        period, units = parse_arg.parse_arg_p_u(arg=arg, name='netex')
+        units = 'lin' if units is None else units 
+        if isinstance(period, str) and isinstance(units, str):
             try:
-                print(fred.get_netex(period=period))
+                print(fred.get_netex(period=period, units=units.lower()))
             except Exception as e:
                 print(f"Could not fetch data ERROR:\n{e}")
         else:
@@ -241,7 +250,8 @@ class QemyShell(cmd.Cmd):
         print('Usage: plot_lr <TICKER> -p <PERIOD>')
 #=============================================================================#
     def do_plot_cpi(self, arg):
-        period, save_state = parse_arg.parse_arg_p_s(arg=arg, name='plot_cpi')
+        period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_cpi')
+        units = 'pc1' if units is None else units
         if isinstance(period, str) and isinstance(save_state, str):
             print(f"Fetching plot chart for CPI inflation: % Change from Year Ago...")
             try:
