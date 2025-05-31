@@ -175,18 +175,18 @@ class QemyShell(cmd.Cmd):
         print('Fetches industrial production data.')
         print('Usage: indp -p <PERIOD>')
 #=============================================================================#
-    def do_comp(self, arg):
-        period = parse_arg.parse_arg_p(arg=arg, name='comp')
+    def do_netex(self, arg):
+        period = parse_arg.parse_arg_p(arg=arg, name='netex')
         if isinstance(period, str):
             try:
-                print(fred.get_composite(period=period))
+                print(fred.get_netex(period=period))
             except Exception as e:
                 print(f"Could not fetch data ERROR:\n{e}")
         else:
-            print('For valid syntax, Try: comp -p 1Y')
-    def help_comp(self):
-        print('Fetches composite index data.')
-        print('Usage: comp -p <PERIOD>')
+            print('For valid syntax, Try: netex -p 1Y')
+    def help_netex(self):
+        print('Fetches real net exports of goods and services data.')
+        print('Usage: netex -p <PERIOD>')
 #=============================================================================#
 ################################## PRICE ######################################
 #=============================================================================#
@@ -376,22 +376,22 @@ class QemyShell(cmd.Cmd):
         print('Fetches plot chart for Industrial Production % change from 1-Year ago.')
         print('Usage: plot_indp -p <PERIOD>')
 #=============================================================================#
-    def do_plot_comp(self, arg):
-        period, save_state = parse_arg.parse_arg_p_s(arg=arg, name='plot_comp')
+    def do_plot_netex(self, arg):
+        period, save_state = parse_arg.parse_arg_p_s(arg=arg, name='plot_netex')
         if isinstance(period, str) and isinstance(save_state, str):
-            print(f"Fetching plot chart for Composite index: % Change from Year Ago...")
+            print(f"Fetching plot chart for Real Net Exports of Goods and Services...")
             try:
                 if save_state in ('Y', 'YES'):
-                    plot.plot_composite(period=period, save=True)
+                    plot.plot_netex(period=period, save=True)
                 else:
-                    plot.plot_composite(period=period, save=False)
+                    plot.plot_netex(period=period, save=False)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
-            print('For valid syntax, Try: plot_comp -p 3M -s yes')
-    def help_plot_comp(self):
-        print('Fetches plot chart for Composite index % change from 1-Year ago.')
-        print('Usage: plot_comp -p <PERIOD>')
+            print('For valid syntax, Try: plot_netex -p 3M -s yes')
+    def help_plot_netex(self):
+        print('Fetches plot chart for Real Net Exports of Goods and Services.')
+        print('Usage: plot_netex -p <PERIOD>')
 #=============================================================================#
 ################################## CLI ########################################
 #=============================================================================#

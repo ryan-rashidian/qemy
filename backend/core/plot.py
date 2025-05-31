@@ -218,20 +218,20 @@ def plot_ind_prod(period, save=False):
     else:
         plt.show()
 
-def plot_composite(period, save=False):
-    data = fred.get_composite(period=period)
+def plot_netex(period, save=False):
+    data = fred.get_netex(period=period)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
-    plt.plot(df.index, df['value'], label='composite index', color='green', linewidth=3, marker= 'o', alpha=0.8)
+    plt.plot(df.index, df['value'], label='NetEx', color='green', linewidth=3, marker= 'o', alpha=0.8)
     plt.xlabel('Date')
-    plt.ylabel('Composite index')
-    plt.title('Composite index: % Change from Year Ago')
+    plt.ylabel('NetEx')
+    plt.title('Real Net Exports of Goods and Services')
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
     if save == True:
-        output_path =  get_next_path(export_dir, name='compchart', ext='png')
+        output_path =  get_next_path(export_dir, name='netexchart', ext='png')
         plt.savefig(output_path)
         plt.show()
     else:

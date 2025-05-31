@@ -235,18 +235,18 @@ def get_ind_prod(period='1Y'):
     except Exception as e:
         print(f"Failed to request data. Error code:\n{e}")
 
-def get_composite(period='1Y'): ### BUG
+def get_netex(period='1Y'): ### BUG
     start_date, end_date = parse_period(period)
     url = 'https://api.stlouisfed.org/fred/series/observations'
     params = {
-        'series_id': 'USSLIND',
+        'series_id': 'NETEXC',
         'api_key': FRED_API_KEY,
         'file_type': 'json',
         'sort_order': 'desc',
         'observation_start': start_date,
         'observation_end': end_date,
-        'frequency': 'm',
-        'units': 'pc1'
+        'frequency': 'q',
+        'units': 'lin'
     }
     try:
         data = safe_status_get(url=url, params=params)
