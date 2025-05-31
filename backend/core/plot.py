@@ -66,15 +66,15 @@ def plot_lr(ticker, period):
     plt.tight_layout()
     plt.show()
 
-def plot_cpi(period, save=False):
-    data = fred.get_cpi_inflation(period=period)
+def plot_cpi(period, save=False, units='pc1'):
+    data = fred.get_cpi_inflation(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
     plt.plot(df.index, df['value'], label='CPI Inflation', color='green', linewidth=3, marker= 'o', alpha=0.8)
     plt.xlabel('Date')
     plt.ylabel('Inflation')
-    plt.title('CPI Inflation: % Change from Year Ago')
+    plt.title(f"CPI Inflation: {units}")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -85,15 +85,15 @@ def plot_cpi(period, save=False):
     else:
         plt.show()
     
-def plot_gdp(period, save=False):
-    data = fred.get_gdp(period=period)
+def plot_gdp(period, save=False, units='pc1'):
+    data = fred.get_gdp(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
     plt.plot(df.index, df['value'], label='GDP', color='green', linewidth=3, marker= 'o', alpha=0.8)
     plt.xlabel('Date')
     plt.ylabel('GDP')
-    plt.title('GDP: % Change from Year Ago')
+    plt.title(f"GDP: {units}")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -104,15 +104,15 @@ def plot_gdp(period, save=False):
     else:
         plt.show()
 
-def plot_sentiment(period, save=False):
-    data = fred.get_sentiment(period=period)
+def plot_sentiment(period, save=False, units='pch'):
+    data = fred.get_sentiment(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
     plt.plot(df.index, df['value'], label='Sentiment', color='green', linewidth=3, marker= 'o', alpha=0.8)
     plt.xlabel('Date')
     plt.ylabel('Sentiment')
-    plt.title('Sentiment: % Change')
+    plt.title(f"Sentiment: {units}")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -123,15 +123,15 @@ def plot_sentiment(period, save=False):
     else:
         plt.show()
 
-def plot_nfp(period, save=False):
-    data = fred.get_nf_payrolls(period=period)
+def plot_nfp(period, save=False, units='pc1'):
+    data = fred.get_nf_payrolls(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
     plt.plot(df.index, df['value'], label='NFP', color='green', linewidth=3, marker= 'o', alpha=0.8)
     plt.xlabel('Date')
     plt.ylabel('NFP')
-    plt.title('Non-Farm Payrolls: % Change from Year Ago')
+    plt.title(f"Non-Farm Payrolls: {units}")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -142,15 +142,15 @@ def plot_nfp(period, save=False):
     else:
         plt.show()
 
-def plot_interest(period, save=False):
-    data = fred.get_interest(period=period)
+def plot_interest(period, save=False, units='pc1'):
+    data = fred.get_interest(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
     plt.plot(df.index, df['value'], label='interest', color='green', linewidth=3, marker= 'o', alpha=0.8)
     plt.xlabel('Date')
     plt.ylabel('Interest')
-    plt.title('Interest: % Change from Year Ago')
+    plt.title(f"Interest: {units}")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -161,15 +161,15 @@ def plot_interest(period, save=False):
     else:
         plt.show()
 
-def plot_jobc(period, save=False):
-    data = fred.get_jobless_claims(period=period)
+def plot_jobc(period, save=False, units='pc1'):
+    data = fred.get_jobless_claims(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
     plt.plot(df.index, df['value'], label='jobless claims', color='green', linewidth=3, marker= 'o', alpha=0.8)
     plt.xlabel('Date')
     plt.ylabel('Jobless Claims')
-    plt.title('Jobless Claims: % Change from Year Ago')
+    plt.title(f"Jobless Claims: {units}")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -180,15 +180,15 @@ def plot_jobc(period, save=False):
     else:
         plt.show()
 
-def plot_unemployment(period, save=False):
-    data = fred.get_unemployment(period=period)
+def plot_unemployment(period, save=False, units='pc1'):
+    data = fred.get_unemployment(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
     plt.plot(df.index, df['value'], label='unemployment', color='green', linewidth=3, marker= 'o', alpha=0.8)
     plt.xlabel('Date')
     plt.ylabel('Unemployment rate')
-    plt.title('Unemployment rate: % Change from Year Ago')
+    plt.title(f"Unemployment rate: {units}")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -199,15 +199,15 @@ def plot_unemployment(period, save=False):
     else:
         plt.show()
 
-def plot_ind_prod(period, save=False):
-    data = fred.get_ind_prod(period=period)
+def plot_ind_prod(period, save=False, units='pc1'):
+    data = fred.get_ind_prod(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
     plt.plot(df.index, df['value'], label='ind prod', color='green', linewidth=3, marker= 'o', alpha=0.8)
     plt.xlabel('Date')
     plt.ylabel('Ind Prod')
-    plt.title('Industrial Production: % Change from Year Ago')
+    plt.title(f"Industrial Production: {units}")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -218,15 +218,15 @@ def plot_ind_prod(period, save=False):
     else:
         plt.show()
 
-def plot_netex(period, save=False):
-    data = fred.get_netex(period=period)
+def plot_netex(period, save=False, units='lin'):
+    data = fred.get_netex(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
     plt.plot(df.index, df['value'], label='NetEx', color='green', linewidth=3, marker= 'o', alpha=0.8)
     plt.xlabel('Date')
     plt.ylabel('NetEx')
-    plt.title('Real Net Exports of Goods and Services')
+    plt.title(f"Real Net Exports of Goods and Services: {units}")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()

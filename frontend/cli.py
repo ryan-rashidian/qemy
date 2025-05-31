@@ -256,9 +256,9 @@ class QemyShell(cmd.Cmd):
             print(f"Fetching plot chart for CPI inflation: % Change from Year Ago...")
             try:
                 if save_state in ('Y', 'YES'):
-                    plot.plot_cpi(period=period, save=True)
+                    plot.plot_cpi(period=period, save=True, units=units)
                 else:
-                    plot.plot_cpi(period=period, save=False)
+                    plot.plot_cpi(period=period, save=False, units=units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -268,14 +268,15 @@ class QemyShell(cmd.Cmd):
         print('Usage: plot_cpi -p <PERIOD>')
 #=============================================================================#
     def do_plot_gdp(self, arg):
-        period, save_state = parse_arg.parse_arg_p_s(arg=arg, name='plot_gdp')
+        period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_gdp')
+        units = 'pc1' if units is None else units
         if isinstance(period, str) and isinstance(save_state, str):
             print(f"Fetching plot chart for GDP: % Change from Year Ago...")
             try:
                 if save_state in ('Y', 'YES'):
-                    plot.plot_gdp(period=period, save=True)
+                    plot.plot_gdp(period=period, save=True, units=units)
                 else:
-                    plot.plot_gdp(period=period, save=False)
+                    plot.plot_gdp(period=period, save=False, units=units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -285,14 +286,15 @@ class QemyShell(cmd.Cmd):
         print('Usage: plot_gdp -p <PERIOD>')
 #=============================================================================#
     def do_plot_sent(self, arg):
-        period, save_state = parse_arg.parse_arg_p_s(arg=arg, name='plot_sent')
+        period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_sent')
+        units = 'pch' if units is None else units
         if isinstance(period, str) and isinstance(save_state, str):
             print(f"Fetching plot chart for Sentiment: % Change...")
             try:
                 if save_state in ('Y', 'YES'):
-                    plot.plot_sentiment(period=period, save=True)
+                    plot.plot_sentiment(period=period, save=True, units=units)
                 else:
-                    plot.plot_sentiment(period=period, save=False)
+                    plot.plot_sentiment(period=period, save=False, units=units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -302,14 +304,15 @@ class QemyShell(cmd.Cmd):
         print('Usage: plot_sent -p <PERIOD>')
 #=============================================================================#
     def do_plot_nfp(self, arg):
-        period, save_state = parse_arg.parse_arg_p_s(arg=arg, name='plot_nfp')
+        period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_nfp')
+        units = 'pc1' if units is None else units
         if isinstance(period, str) and isinstance(save_state, str):
             print(f"Fetching plot chart for Non-Farm Payrolls: % Change from Year Ago...")
             try:
                 if save_state in ('Y', 'YES'):
-                    plot.plot_nfp(period=period, save=True)
+                    plot.plot_nfp(period=period, save=True, units=units)
                 else:
-                    plot.plot_nfp(period=period, save=False)
+                    plot.plot_nfp(period=period, save=False, units=units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -319,14 +322,15 @@ class QemyShell(cmd.Cmd):
         print('Usage: plot_nfp -p <PERIOD>')
 #=============================================================================#
     def do_plot_interest(self, arg):
-        period, save_state = parse_arg.parse_arg_p_s(arg=arg, name='plot_interest')
+        period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_interest')
+        units = 'pc1' if units is None else units
         if isinstance(period, str) and isinstance(save_state, str):
             print(f"Fetching plot chart for Interest rates: % Change from Year Ago...")
             try:
                 if save_state in ('Y', 'YES'):
-                    plot.plot_interest(period=period, save=True)
+                    plot.plot_interest(period=period, save=True, units=units)
                 else:
-                    plot.plot_interest(period=period, save=False)
+                    plot.plot_interest(period=period, save=False, units=units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -336,14 +340,15 @@ class QemyShell(cmd.Cmd):
         print('Usage: plot_interest -p <PERIOD>')
 #=============================================================================#
     def do_plot_jobc(self, arg):
-        period, save_state = parse_arg.parse_arg_p_s(arg=arg, name='plot_jobc')
+        period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_jobc')
+        units = 'pc1' if units is None else units
         if isinstance(period, str) and isinstance(save_state, str):
             print(f"Fetching plot chart for Jobless Claims: % Change from Year Ago...")
             try:
                 if save_state in ('Y', 'YES'):
-                    plot.plot_jobc(period=period, save=True)
+                    plot.plot_jobc(period=period, save=True, units=units)
                 else:
-                    plot.plot_jobc(period=period, save=False)
+                    plot.plot_jobc(period=period, save=False, units=units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -353,14 +358,15 @@ class QemyShell(cmd.Cmd):
         print('Usage: plot_jobc -p <PERIOD>')
 #=============================================================================#
     def do_plot_unem(self, arg):
-        period, save_state = parse_arg.parse_arg_p_s(arg=arg, name='plot_unem')
+        period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_unem')
+        units = 'pc1' if units is None else units
         if isinstance(period, str) and isinstance(save_state, str):
             print(f"Fetching plot chart for Unemployment rate: % Change from Year Ago...")
             try:
                 if save_state in ('Y', 'YES'):
-                    plot.plot_unemployment(period=period, save=True)
+                    plot.plot_unemployment(period=period, save=True, units=units)
                 else:
-                    plot.plot_unemployment(period=period, save=False)
+                    plot.plot_unemployment(period=period, save=False, units=units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -370,14 +376,15 @@ class QemyShell(cmd.Cmd):
         print('Usage: plot_unem -p <PERIOD>')
 #=============================================================================#
     def do_plot_indp(self, arg):
-        period, save_state = parse_arg.parse_arg_p_s(arg=arg, name='plot_indp')
+        period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_indp')
+        units = 'pc1' if units is None else units
         if isinstance(period, str) and isinstance(save_state, str):
             print(f"Fetching plot chart for Industrial Production: % Change from Year Ago...")
             try:
                 if save_state in ('Y', 'YES'):
-                    plot.plot_ind_prod(period=period, save=True)
+                    plot.plot_ind_prod(period=period, save=True, units=units)
                 else:
-                    plot.plot_ind_prod(period=period, save=False)
+                    plot.plot_ind_prod(period=period, save=False, units=units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -387,14 +394,15 @@ class QemyShell(cmd.Cmd):
         print('Usage: plot_indp -p <PERIOD>')
 #=============================================================================#
     def do_plot_netex(self, arg):
-        period, save_state = parse_arg.parse_arg_p_s(arg=arg, name='plot_netex')
+        period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_netex')
+        units = 'lin' if units is None else units
         if isinstance(period, str) and isinstance(save_state, str):
             print(f"Fetching plot chart for Real Net Exports of Goods and Services...")
             try:
                 if save_state in ('Y', 'YES'):
-                    plot.plot_netex(period=period, save=True)
+                    plot.plot_netex(period=period, save=True, units=units)
                 else:
-                    plot.plot_netex(period=period, save=False)
+                    plot.plot_netex(period=period, save=False, units=units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
