@@ -26,7 +26,7 @@ def get_tbill_yield():
     except Exception as e:
         print(f"Failed to request data. Error code:\n{e}")
 
-def get_cpi_inflation(period="1Y"):
+def get_cpi_inflation(period='1Y', units ='pc1'):
     start_date, end_date = parse_period(period)
     url = 'https://api.stlouisfed.org/fred/series/observations'
     params = {
@@ -38,7 +38,7 @@ def get_cpi_inflation(period="1Y"):
         'observation_end': end_date,
         'frequency': 'm',
         'aggregation_method': 'avg',
-        'units': 'pc1'
+        'units': units,
     }
     try:
         data = safe_status_get(url=url, params=params)
@@ -53,7 +53,7 @@ def get_cpi_inflation(period="1Y"):
     except Exception as e:
         print(f"Failed to request data. Error code:\n{e}")
 
-def get_gdp(period='1Y'):
+def get_gdp(period='1Y', units='pc1'):
     start_date, end_date = parse_period(period)
     url = 'https://api.stlouisfed.org/fred/series/observations'
     params = {
@@ -64,7 +64,7 @@ def get_gdp(period='1Y'):
         'observation_start': start_date,
         'observation_end': end_date,
         'frequency': 'q',
-        'units': 'pc1'
+        'units': units,
     }
     try:
         data = safe_status_get(url=url, params=params)
@@ -79,7 +79,7 @@ def get_gdp(period='1Y'):
     except Exception as e:
         print(f"Failed to request data. Error code:\n{e}")
 
-def get_sentiment(period='1Y'):
+def get_sentiment(period='1Y', units='pch'):
     start_date, end_date = parse_period(period)
     url = 'https://api.stlouisfed.org/fred/series/observations'
     params = {
@@ -90,7 +90,7 @@ def get_sentiment(period='1Y'):
         'observation_start': start_date,
         'observation_end': end_date,
         'frequency': 'm',
-        'units': 'pch'
+        'units': units,
     }
     try:
         data = safe_status_get(url=url, params=params)
@@ -105,7 +105,7 @@ def get_sentiment(period='1Y'):
     except Exception as e:
         print(f"Failed to request data. Error code:\n{e}")
 
-def get_nf_payrolls(period='1Y'):
+def get_nf_payrolls(period='1Y', units='pc1'):
     start_date, end_date = parse_period(period)
     url = 'https://api.stlouisfed.org/fred/series/observations'
     params = {
@@ -116,7 +116,7 @@ def get_nf_payrolls(period='1Y'):
         'observation_start': start_date,
         'observation_end': end_date,
         'frequency': 'm',
-        'units': 'pc1'
+        'units': units,
     }
     try:
         data = safe_status_get(url=url, params=params)
@@ -131,7 +131,7 @@ def get_nf_payrolls(period='1Y'):
     except Exception as e:
         print(f"Failed to request data. Error code:\n{e}")
         
-def get_interest(period='1Y'):
+def get_interest(period='1Y', units='pc1'):
     start_date, end_date = parse_period(period)
     url = 'https://api.stlouisfed.org/fred/series/observations'
     params = {
@@ -142,7 +142,7 @@ def get_interest(period='1Y'):
         'observation_start': start_date,
         'observation_end': end_date,
         'frequency': 'd',
-        'units': 'pc1'
+        'units': units,
     }
     try:
         data = safe_status_get(url=url, params=params)
@@ -157,7 +157,7 @@ def get_interest(period='1Y'):
     except Exception as e:
         print(f"Failed to request data. Error code:\n{e}")
 
-def get_jobless_claims(period='1Y'):
+def get_jobless_claims(period='1Y', units='pc1'):
     start_date, end_date = parse_period(period)
     url = 'https://api.stlouisfed.org/fred/series/observations'
     params = {
@@ -168,7 +168,7 @@ def get_jobless_claims(period='1Y'):
         'observation_start': start_date,
         'observation_end': end_date,
         'frequency': 'w',
-        'units': 'pc1'
+        'units': units,
     }
     try:
         data = safe_status_get(url=url, params=params)
@@ -183,7 +183,7 @@ def get_jobless_claims(period='1Y'):
     except Exception as e:
         print(f"Failed to request data. Error code:\n{e}")
 
-def get_unemployment(period='1Y'):
+def get_unemployment(period='1Y', units= 'pc1'):
     start_date, end_date = parse_period(period)
     url = 'https://api.stlouisfed.org/fred/series/observations'
     params = {
@@ -194,7 +194,7 @@ def get_unemployment(period='1Y'):
         'observation_start': start_date,
         'observation_end': end_date,
         'frequency': 'm',
-        'units': 'pc1'
+        'units': units,
     }
     try:
         data = safe_status_get(url=url, params=params)
@@ -209,7 +209,7 @@ def get_unemployment(period='1Y'):
     except Exception as e:
         print(f"Failed to request data. Error code:\n{e}")
 
-def get_ind_prod(period='1Y'):
+def get_ind_prod(period='1Y', units='pc1'):
     start_date, end_date = parse_period(period)
     url = 'https://api.stlouisfed.org/fred/series/observations'
     params = {
@@ -220,7 +220,7 @@ def get_ind_prod(period='1Y'):
         'observation_start': start_date,
         'observation_end': end_date,
         'frequency': 'm',
-        'units': 'pc1'
+        'units': units,
     }
     try:
         data = safe_status_get(url=url, params=params)
@@ -235,7 +235,7 @@ def get_ind_prod(period='1Y'):
     except Exception as e:
         print(f"Failed to request data. Error code:\n{e}")
 
-def get_netex(period='1Y'): ### BUG
+def get_netex(period='1Y', units='lin'): 
     start_date, end_date = parse_period(period)
     url = 'https://api.stlouisfed.org/fred/series/observations'
     params = {
@@ -246,13 +246,13 @@ def get_netex(period='1Y'): ### BUG
         'observation_start': start_date,
         'observation_end': end_date,
         'frequency': 'q',
-        'units': 'lin'
+        'units': units,
     }
     try:
         data = safe_status_get(url=url, params=params)
         if data:
             df = pd.DataFrame(data['observations'])
-            df['date'] = pd.to_datetime(df['date']) #### error: 'date' = None, check 'observations' .keys()
+            df['date'] = pd.to_datetime(df['date']) 
             df.set_index('date', inplace=True)
             df['value'] = df['value'].astype(float)
             df = df.drop('realtime_start', axis=1)
