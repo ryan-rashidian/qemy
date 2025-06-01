@@ -9,6 +9,7 @@ from backend.core.session import SessionManager
 from backend.fetch import api_tiingo as tiingo
 from backend.fetch import api_fred as fred
 from backend.fetch.api_edgar import SEC_Filings
+from backend.fetch.api_edgar_bulk import bulk_refresh
 from . import parse_arg 
 from .utils_cli import save_to_csv
 
@@ -58,6 +59,19 @@ class QemyShell(cmd.Cmd):
     def help_filing(self):
         print('Fetches latest 10K/10Q metrics for given ticker.')
         print('Usage: filing <TICKER>')
+#=============================================================================#
+    def do_bulk_refresh(self, arg):
+        arg = arg
+        confirm = input("All previous bulk data will be overwritten.\nAre you sure? (yes/no): ")
+        if confirm.strip().lower() == 'yes':
+            try:
+                bulk_refresh()
+            except Exception as e:
+                print(f"Bulk refresh failed. Error:\n{e}")
+    def help_bulk_refresh(self):
+        print('Re-downloads bulk data from SEC EDGAR API with latest filings.')
+        print('Note: every bulk_refresh will download and unzip ~20GB of filing data.')
+        print('All previous bulk data will be overwritten.')
 #=============================================================================#
 ################################## FED ########################################
 #=============================================================================#
