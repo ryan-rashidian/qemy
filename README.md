@@ -19,6 +19,7 @@ Features may change, break, or get replaced as the project evolves.
 - Fetch: economic data from FRED API
 - Chart: price history, linear regression, etc.
 - Save: SEC filings and FRED data. 
+- *Model: DCF, Comps, and other valuation models.
 - **Filter: metric based stock screening.
 - **Backtest: Monte Carlo and historical simulations.
 - **Cache: SQLite local cache for SEC filings and FRED data.
