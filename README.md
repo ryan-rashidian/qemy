@@ -22,8 +22,9 @@ Features may change, break, or get replaced as the project evolves.
 - *Model: DCF, Comps, and other valuation models.
 - **Filter: metric based stock screening.
 - **Backtest: Monte Carlo and historical simulations.
-- **Cache: SQLite local cache for SEC filings and FRED data.
 - **Profile: user accounts and portfolio tracking.
+
+Note: Filing data is limited to US markets (GAAP) and all metrics are in USD for now. Support for global markets (IFRS) and currency conversion is planned. 
 
 ---
 
@@ -154,7 +155,16 @@ python -m frontend.cli
 
 ## Development Notes
 
-// Dev notes will go here in future versions
+Known Issues:
+
+- (Non-critical) Parsing logic in SEC_Filings class is slightly inaccurate. Filing data is not always in chronological order. The issue has been solved in testing, and a fix will be implemented soon. 
+
+Ideas:
+
+- Backtesting engine for Monte Carlo and historical simulations.
+- Stock screening and filtering.
+- IFRS filing support in SEC_Filings parser and currency conversion. 
+- (In Progress) Valuation modeling using DCF, comps, etc.
 
 ---
 
