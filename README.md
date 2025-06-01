@@ -18,7 +18,7 @@ Features may change, break, or get replaced as the project evolves.
 - Fetch: SEC filing data (e.g. 10K/10Q) from SEC EDGAR API.
 - Fetch: economic data from FRED API
 - Chart: price history, linear regression, etc.
-- Save: SEC filings and FRED data. 
+- *Fetch: bulk data (~18GB) downloads from SEC EDGAR API. 
 - *Model: DCF, Comps, and other valuation models.
 - **Filter: metric based stock screening.
 - **Backtest: Monte Carlo and historical simulations.
