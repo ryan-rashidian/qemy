@@ -1,27 +1,53 @@
 import os
+import time
+import json
 from math import nan
 import pandas as pd
+from pathlib import Path
 from . import api_edgar_lists as keylist
 from .utils_fetch import safe_status_get
 
 class SEC_Filings:
-    def __init__(self, ticker):
+    def __init__(self, ticker, use_requests=False):
         self.HEADERS = {'User-Agent': os.getenv('EDGAR_USER_AGENT')} 
         self.ticker = ticker.upper().strip()
+        self.use_requests = use_requests
         self.cik = None
         try:
-            url = 'https://www.sec.gov/files/company_tickers.json'
-            data = safe_status_get(url=url, headers=self.HEADERS)
+            if use_requests:
+                url = 'https://www.sec.gov/files/company_tickers.json'
+                data = safe_status_get(url=url, headers=self.HEADERS)
+            else:
+                bulk_cik_path = Path('bulk_data/company_tickers.json')
+                with open(bulk_cik_path, 'r') as f:
+                    data = json.load(f)
             if data:
                 for entry in data.values():
                     if entry['ticker'].lower() == ticker.lower():
                         self.cik = str(entry['cik_str']).zfill(10) 
         except Exception as e:
-            print(f"Failed to request cik. Error code:\n{e}")
+            print(f"Failed to request cik. Use request option if you have not downloaded the bulk data.\nError code:\n{e}")
 
     def get_metrics(self) -> pd.DataFrame | None:
         try:
-            facts = safe_status_get(url=f"https://data.sec.gov/api/xbrl/companyfacts/CIK{self.cik}.json", headers=self.HEADERS)
+            if self.use_requests:
+                print('Sending request to SEC EDGAR API...')
+                time.sleep(1) # be polite to SEC server
+                facts = safe_status_get(url=f"https://data.sec.gov/api/xbrl/companyfacts/CIK{self.cik}.json", headers=self.HEADERS)
+                if facts is None:
+                    print("Failed to fetch data from SEC")
+                    return None
+            else:
+                bulk_data_path = Path(f"bulk_data/companyfacts/CIK{self.cik}.json")
+                if not bulk_data_path.exists():
+                    print(f"Error: {bulk_data_path}\nDoes not exist.")
+                    return None
+                with open(bulk_data_path, 'r') as f:
+                    facts = json.load(f)
+        except Exception as e:
+            print(f"Error loading filings:\n{e}")
+            return None
+        try:
             if facts:
                 for key in keylist.key_list_shares:
                     if key in facts['facts']['us-gaap'].keys():
