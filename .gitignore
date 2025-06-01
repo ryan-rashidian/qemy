@@ -1,5 +1,6 @@
 test.py
 /exports/
+/bulk_data/
 /dist/
 /build/
 *.dist/
