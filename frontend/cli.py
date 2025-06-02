@@ -45,10 +45,18 @@ class QemyShell(cmd.Cmd):
 ################################### SEC #######################################
 #=============================================================================#
     def do_filing(self, arg):
-        ticker = arg.strip().upper()
+        if ' -r' in arg:
+            ticker = arg.replace('-r', '').strip().upper() 
+            use_requests = True
+        if ' --request' in arg:
+            ticker = arg.replace('--request', '').strip().upper() 
+            use_requests = True
+        else:
+            ticker = arg.strip().upper()
+            use_requests = False
         print(f"Fetching latest 10K/10Q filing metrics for {ticker}")
         try:
-            df = SEC_Filings(arg).get_metrics() 
+            df = SEC_Filings(ticker=ticker, use_requests=use_requests).get_metrics() 
             if isinstance(df, pd.DataFrame): 
                 self.ticker_df[ticker] = df[ticker]
                 print(df.to_string(justify='left', formatters={
@@ -58,7 +66,8 @@ class QemyShell(cmd.Cmd):
             print('Could not fetch filing metrics, please try another ticker.')
     def help_filing(self):
         print('Fetches latest 10K/10Q metrics for given ticker.')
-        print('Usage: filing <TICKER>')
+        print('Usage: filing <TICKER>\nFlags:')
+        print('(-r --request) --- Fetches filing data directly from SEC EDGAR API.')
 #=============================================================================#
     def do_bulk_refresh(self, arg):
         arg = arg
