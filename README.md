@@ -18,7 +18,7 @@ Features may change, break, or get replaced as the project evolves.
 - Fetch: SEC filing data (e.g. 10K/10Q) from SEC EDGAR API.
 - Fetch: economic data from FRED API
 - Chart: price history, linear regression, etc.
-- *Fetch: bulk data (~18GB) downloads from SEC EDGAR API. 
+- *Fetch: bulk data (~18GB) download from SEC EDGAR API. 
 - *Model: DCF, Comps, and other valuation models.
 - **Filter: metric based stock screening.
 - **Backtest: Monte Carlo and historical simulations.
@@ -158,6 +158,7 @@ python -m frontend.cli
 Known Issues:
 
 - (Non-critical) Parsing logic in SEC_Filings class is slightly inaccurate. Filing data is not always in chronological order. The issue has been solved in testing, and a fix will be implemented soon. 
+- (Non-critical) DCF model is not yet factoring a company's net debt metric into the calculation. Waiting for implementation of better parsing logic, referenced in the previous issue. 
 
 Ideas:
 
