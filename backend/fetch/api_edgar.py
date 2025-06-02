@@ -192,3 +192,68 @@ class SEC_Filings:
             print(f"Failed to request company facts:\n{e}")
             return None
 
+    def get_dcf_metrics(self):
+        try:
+            if self.facts is not None:
+                keys = self.facts['facts']['us-gaap'].keys()
+                shares = None
+                df_capex = None
+                df_ocf = None
+                for key in keylist.key_list_shares:
+                    try:
+                        if key in keys:
+                            data = self.facts['facts']['us-gaap'][key]['units']['shares'][-40:]
+                            result = [{'val': entry['val'], 'filed': entry['filed']} for entry in data]
+                            df = pd.DataFrame(result)
+                            df['filed'] = pd.to_datetime(df['filed'])
+                            df = df.sort_values('filed', ascending=True)
+                            df = df.drop_duplicates(subset='filed', keep='first')
+                            df_shares = df.tail(20)
+                            shares = df_shares.iloc[-1]['val']
+                            break
+                    except:
+                        continue
+                for key in keylist.key_list_capex:
+                    try:
+                        if key in keys:
+                            data = self.facts['facts']['us-gaap'][key]['units']['USD'][-40:]
+                            result = [{'val': entry['val'], 'filed': entry['filed']} for entry in data]
+                            df = pd.DataFrame(result)
+                            df['filed'] = pd.to_datetime(df['filed'])
+                            df = df.sort_values('filed', ascending=True)
+                            df = df.drop_duplicates(subset='filed', keep='first')
+                            df_capex = df.tail(20)
+                            break
+                    except:
+                        continue
+                for key in keylist.key_list_ocf:
+                    try:
+                        if key in keys:
+                            data = self.facts['facts']['us-gaap'][key]['units']['USD'][-40:]
+                            result = [{'val': entry['val'], 'filed': entry['filed']} for entry in data]
+                            df = pd.DataFrame(result)
+                            df['filed'] = pd.to_datetime(df['filed'])
+                            df = df.sort_values('filed', ascending=True)
+                            df = df.drop_duplicates(subset='filed', keep='first')
+                            df_ocf = df.tail(20)
+                            break
+                    except:
+                        continue
+                if isinstance(df_ocf, pd.DataFrame) and isinstance(df_capex, pd.DataFrame):
+                    df_fcf = pd.DataFrame()
+                    df_fcf['date'] = df_ocf['filed']
+                    df_fcf['ocf'] = df_ocf['val']
+                    df_fcf['capex'] = df_capex['val']
+                    df_fcf['fcf'] = df_fcf['ocf'] - df_fcf['capex']
+                    df_fcf.set_index('date', inplace=True)
+                    return df_fcf, shares
+                else:
+                    print("data not found")
+                    return None, None
+            else:
+                print("Error: filing data failed to initialize.")
+                return None, None
+        except Exception as e:
+            print(f"Failed to request company facts:\n{e}")
+            return None, None
+
