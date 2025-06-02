@@ -5,6 +5,7 @@ import cmd
 import os
 import pandas as pd
 from backend.core import plot
+from backend.core.dcf import get_dcf_eval
 from backend.core.session import SessionManager
 from backend.fetch import api_tiingo as tiingo
 from backend.fetch import api_fred as fred
@@ -68,6 +69,12 @@ class QemyShell(cmd.Cmd):
         print('Fetches latest 10K/10Q metrics for given ticker.')
         print('Usage: filing <TICKER>\nFlags:')
         print('(-r --request) --- Fetches filing data directly from SEC EDGAR API.')
+#=============================================================================#
+    def do_dcf(self, arg):
+        get_dcf_eval(arg)
+    def help_dcf(self):
+        print('Performs DCF model evaluation on given ticker.')
+        print('Usage: dcf <TICKER>')
 #=============================================================================#
     def do_bulk_refresh(self, arg):
         arg = arg
