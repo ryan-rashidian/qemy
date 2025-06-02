@@ -11,47 +11,52 @@ class SEC_Filings:
     def __init__(self, ticker, use_requests=False):
         self.HEADERS = {'User-Agent': os.getenv('EDGAR_USER_AGENT')} 
         self.ticker = ticker.upper().strip()
-        self.use_requests = use_requests
         self.cik = None
+        self.facts = None
         try:
             if use_requests:
                 url = 'https://www.sec.gov/files/company_tickers.json'
                 data = safe_status_get(url=url, headers=self.HEADERS)
+                if data:
+                    for entry in data.values():
+                        if entry['ticker'].lower() == ticker.lower():
+                            self.cik = str(entry['cik_str']).zfill(10) 
+                if self.cik is None:
+                    print('Failed to request ticker symbol cik.')
+                else:
+                    print('Sending request to SEC EDGAR API...')
+                    time.sleep(1) # be polite to SEC server
+                    self.facts = safe_status_get(url=f"https://data.sec.gov/api/xbrl/companyfacts/CIK{self.cik}.json", headers=self.HEADERS)
+                    if self.facts is None:
+                        print("Failed to fetch filing data from SEC.")
             else:
                 bulk_cik_path = Path('bulk_data/company_tickers.json')
                 with open(bulk_cik_path, 'r') as f:
                     data = json.load(f)
-            if data:
-                for entry in data.values():
-                    if entry['ticker'].lower() == ticker.lower():
-                        self.cik = str(entry['cik_str']).zfill(10) 
+                    if data:
+                        for entry in data.values():
+                            if entry['ticker'].lower() == ticker.lower():
+                                self.cik = str(entry['cik_str']).zfill(10) 
+                if self.cik is None:
+                    print('Failed to request ticker symbol cik.')
+                else:
+                    bulk_data_path = Path(f"bulk_data/companyfacts/CIK{self.cik}.json")
+                    if not bulk_data_path.exists():
+                        print(f"Error: {bulk_data_path}\nDoes not exist.")
+                        return None
+                    with open(bulk_data_path, 'r') as f:
+                        self.facts = json.load(f)
+                    if self.facts is None:
+                        print("Failed to fetch filing from bulk SEC data.")
         except Exception as e:
-            print(f"Failed to request cik. Use request option if you have not downloaded the bulk data.\nError code:\n{e}")
+            print(f"Failed to request data. Use request option if you have not downloaded the bulk data.\nError code:\n{e}")
 
     def get_metrics(self) -> pd.DataFrame | None:
         try:
-            if self.use_requests:
-                print('Sending request to SEC EDGAR API...')
-                time.sleep(1) # be polite to SEC server
-                facts = safe_status_get(url=f"https://data.sec.gov/api/xbrl/companyfacts/CIK{self.cik}.json", headers=self.HEADERS)
-                if facts is None:
-                    print("Failed to fetch data from SEC")
-                    return None
-            else:
-                bulk_data_path = Path(f"bulk_data/companyfacts/CIK{self.cik}.json")
-                if not bulk_data_path.exists():
-                    print(f"Error: {bulk_data_path}\nDoes not exist.")
-                    return None
-                with open(bulk_data_path, 'r') as f:
-                    facts = json.load(f)
-        except Exception as e:
-            print(f"Error loading filings:\n{e}")
-            return None
-        try:
-            if facts:
+            if self.facts is not None:
                 for key in keylist.key_list_shares:
-                    if key in facts['facts']['us-gaap'].keys():
-                        shares_outstanding = facts['facts']['us-gaap'][key]['units']['shares'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        shares_outstanding = self.facts['facts']['us-gaap'][key]['units']['shares'][-1]
                         form = shares_outstanding['form']
                         filed = shares_outstanding['filed']
                         shares_outstanding = shares_outstanding['val']
@@ -62,36 +67,36 @@ class SEC_Filings:
                     form = None
                     filed = None
                 for key in keylist.key_list_cash:
-                    if key in facts['facts']['us-gaap'].keys():
-                        cash = facts['facts']['us-gaap'][key]['units']['USD'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        cash = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
                         cash = cash['val']
                         break
                 else:
                     cash = nan
                 for key in keylist.key_list_debt:
-                    if key in facts['facts']['us-gaap'].keys():
-                        debt = facts['facts']['us-gaap'][key]['units']['USD'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        debt = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
                         debt = debt['val']
                         break
                 else:
                     debt = nan
                 for key in keylist.key_list_revenue:
-                    if key in facts['facts']['us-gaap'].keys():
-                        revenue = facts['facts']['us-gaap'][key]['units']['USD'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        revenue = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
                         revenue = revenue['val']
                         break
                 else:
                     revenue = nan
                 for key in keylist.key_list_cogs:
-                    if key in facts['facts']['us-gaap'].keys():
-                        cogs = facts['facts']['us-gaap'][key]['units']['USD'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        cogs = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
                         cogs = cogs['val']
                         break
                 else:
                     cogs = nan
                 for key in keylist.key_list_gross_profit:
-                    if key in facts['facts']['us-gaap'].keys():
-                        gross_profit = facts['facts']['us-gaap'][key]['units']['USD'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        gross_profit = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
                         gross_profit = gross_profit['val']
                         break
                 else:
@@ -100,57 +105,57 @@ class SEC_Filings:
                     except:
                         gross_profit = nan
                 for key in keylist.key_list_operating_income:
-                    if key in facts['facts']['us-gaap'].keys():
-                        operating_income = facts['facts']['us-gaap'][key]['units']['USD'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        operating_income = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
                         operating_income = operating_income['val']
                         break
                 else:
                     operating_income = nan
                 for key in keylist.key_list_income:
-                    if key in facts['facts']['us-gaap'].keys():
-                        income = facts['facts']['us-gaap'][key]['units']['USD'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        income = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
                         income = income['val']
                         break
                 else:
                     income = nan
                 for key in keylist.key_list_assets:
-                    if key in facts['facts']['us-gaap'].keys():
-                        assets = facts['facts']['us-gaap'][key]['units']['USD'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        assets = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
                         assets = assets['val']
                         break
                 else:
                     assets = nan
                 for key in keylist.key_list_liability:
-                    if key in facts['facts']['us-gaap'].keys():
-                        liability = facts['facts']['us-gaap'][key]['units']['USD'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        liability = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
                         liability = liability['val']
                         break
                 else:
                     liability = nan
                 for key in keylist.key_list_opex:
-                    if key in facts['facts']['us-gaap'].keys():
-                        opex = facts['facts']['us-gaap'][key]['units']['USD'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        opex = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
                         opex = opex['val']
                         break
                 else:
                     opex = nan
                 for key in keylist.key_list_capex:
-                    if key in facts['facts']['us-gaap'].keys():
-                        capex = facts['facts']['us-gaap'][key]['units']['USD'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        capex = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
                         capex = capex['val']
                         break
                 else:
                     capex = nan
                 for key in keylist.key_list_ocf:
-                    if key in facts['facts']['us-gaap'].keys():
-                        ocf = facts['facts']['us-gaap'][key]['units']['USD'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        ocf = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
                         ocf = ocf['val']
                         break
                 else:
                     ocf = nan
                 for key in keylist.key_list_eps:
-                    if key in facts['facts']['us-gaap'].keys():
-                        eps = facts['facts']['us-gaap'][key]['units']['USD/shares'][-1]
+                    if key in self.facts['facts']['us-gaap'].keys():
+                        eps = self.facts['facts']['us-gaap'][key]['units']['USD/shares'][-1]
                         eps = eps['val']
                         break
                 else:
@@ -180,6 +185,9 @@ class SEC_Filings:
                 df.index.name = 'Metrics:'
                 df.columns = [self.ticker]
                 return df
+            else:
+                print("Error: filing data failed to initialize.")
+                return None
         except Exception as e:
             print(f"Failed to request company facts:\n{e}")
             return None
