@@ -34,8 +34,7 @@ class QemyShell(cmd.Cmd):
 #=============================================================================#
 ################################# SESSION #####################################
 #=============================================================================#
-    def do_session(self, arg):
-        arg = arg
+    def do_session(self, _):
         try:
             SessionManager().run()
         except Exception as e:
@@ -77,8 +76,7 @@ class QemyShell(cmd.Cmd):
         print('Performs DCF model evaluation on given ticker.')
         print('Usage: dcf <TICKER>')
 #=============================================================================#
-    def do_bulk_refresh(self, arg):
-        arg = arg
+    def do_bulk_refresh(self, _):
         confirm = input("All previous bulk data will be overwritten.\nAre you sure? (yes/no): ")
         if confirm.strip().lower() == 'yes':
             try:
@@ -92,8 +90,7 @@ class QemyShell(cmd.Cmd):
 #=============================================================================#
 ################################## FED ########################################
 #=============================================================================#
-    def do_rfr(self, arg):
-        arg = arg
+    def do_rfr(self, _):
         try:
             print(fred.get_tbill_yield())
         except Exception as e:
@@ -444,8 +441,7 @@ class QemyShell(cmd.Cmd):
 #=============================================================================#
 ################################## CLI ########################################
 #=============================================================================#
-    def do_watchlist(self, arg):
-        arg = arg
+    def do_watchlist(self, _):
         print('Watchlist:')
         print(self.ticker_list)
     def help_watchlist(self):
@@ -495,8 +491,7 @@ class QemyShell(cmd.Cmd):
         clear_screen = 'cls' if platform.system() == 'Windows' else 'clear'
         os.system(clear_screen)
 #=============================================================================#
-    def do_exit(self, arg):
-        arg = arg
+    def do_exit(self, _):
         print("Exiting... Goodbye!")
         return True
 #=============================================================================#
