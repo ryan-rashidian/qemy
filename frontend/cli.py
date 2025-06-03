@@ -472,7 +472,17 @@ class QemyShell(cmd.Cmd):
         print('Fetches table of current filings')
         print('Usage: table')
 #=============================================================================#
-################################## CLI ########################################
+################################ CLI UTIL #####################################
+#=============================================================================#
+    def do_calc(self, arg):
+        try:
+            result = eval(arg, {"__builtins__": {}}, {})
+            print(result)
+        except:
+            print("Invalid expression")
+    def help_calc(self):
+        print("Simple calculator with Python syntax")
+        print("Example: calc 2 + 2")
 #=============================================================================#
     def do_help(self, arg):
         if arg:

@@ -42,6 +42,7 @@ def help():
         ("plot_unem", ""),
     ])
     print_help_table(" General Commands: ", [
+        ("calc", "Simple Calculator"),
         ("clear", ""),
         ("exit", ""),
     ])
