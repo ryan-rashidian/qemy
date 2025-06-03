@@ -131,6 +131,13 @@ class QemyShell(cmd.Cmd):
         print('Fetches daily closing prices for given ticker.')
         print('Usage: price <TICKER> -p <PERIOD>')
 #=============================================================================#
+    def do_lr(self, arg):
+        cli_tiingo.lr(arg=arg)
+    def help_lr(self):
+        print('Fetches daily closing prices for given ticker and performs linear calculation.')
+        print('Usage: lr <TICKER> -p <PERIOD>')
+        print('Uses SPY ETF Trust as dependent variable.')
+#=============================================================================#
 ################################## PLOT #######################################
 #=============================================================================#
     def do_plot_price(self, arg):
