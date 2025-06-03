@@ -1,11 +1,10 @@
 from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
 from utils.filetools import get_next_path
-from sklearn.linear_model import LinearRegression
 from backend.fetch.api_tiingo import get_tiingo_prices
 from backend.fetch import api_fred as fred
+from .linear_r import linear_r
 
 project_root = Path(__file__).resolve().parents[2]
 export_dir = project_root / "exports" / "charts"
@@ -33,25 +32,7 @@ def plot_price(ticker, period):
     plt.show()
 
 def plot_lr(ticker, period):
-    input_data = get_tiingo_prices(ticker=ticker, period=period)
-    auto_data = get_tiingo_prices(ticker='SPY', period=period)
-    input_df, auto_df = pd.DataFrame(input_data), pd.DataFrame(auto_data)
-    input_df.set_index('date', inplace=True)
-    input_df.index = pd.to_datetime(input_df.index)
-    auto_df.set_index('date', inplace=True)
-    auto_df.index = pd.to_datetime(auto_df.index)
-    data = pd.DataFrame({
-        ticker: input_df['close'], 
-        'SPY': auto_df['close']
-    }).dropna()
-    returns = data.pct_change().dropna()
-    x_ind = np.array(returns['SPY']).reshape(-1, 1) 
-    y_dep = np.array(returns[ticker])
-
-    model = LinearRegression()
-    model.fit(X=x_ind, y=y_dep)
-    alpha = model.intercept_
-    beta = model.coef_[0]
+    x_ind, y_dep, alpha, beta, model = linear_r(ticker=ticker, period=period)
     print(f"Alpha: {alpha:.6f}")
     print(f"Beta: {beta:.4f}")
 
