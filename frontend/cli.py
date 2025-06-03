@@ -3,6 +3,7 @@ setup_wizard() # First time setup + fills API_KEY variables
 # Must run setup_wizard before importing backend.fetch api modules
 import cmd
 import os
+import platform
 import pandas as pd
 from backend.core import plot
 from backend.core.dcf import get_dcf_eval
@@ -490,9 +491,9 @@ class QemyShell(cmd.Cmd):
         else:
             cli_helper.help()
 #=============================================================================#
-    def do_clear(self, arg):
-        arg = arg
-        os.system('clear')
+    def do_clear(self, _):
+        clear_screen = 'cls' if platform.system() == 'Windows' else 'clear'
+        os.system(clear_screen)
 #=============================================================================#
     def do_exit(self, arg):
         arg = arg
