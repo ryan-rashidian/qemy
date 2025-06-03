@@ -12,7 +12,7 @@ from backend.fetch import api_tiingo as tiingo
 from backend.fetch import api_fred as fred
 from backend.fetch.api_edgar import SEC_Filings
 from backend.fetch.api_edgar_bulk import bulk_refresh
-from . import parse_arg, cli_helper
+from . import parse_arg, cli_helper, cli_fred
 from .utils_cli import save_to_csv
 
 pd.set_option('display.max_columns', None)
@@ -88,139 +88,64 @@ class QemyShell(cmd.Cmd):
         print('Note: every bulk_refresh will download and unzip ~20GB of filing data.')
         print('All previous bulk data will be overwritten.')
 #=============================================================================#
-################################## FED ########################################
+################################## FRED #######################################
 #=============================================================================#
     def do_rfr(self, _):
-        try:
-            print(fred.get_tbill_yield())
-        except Exception as e:
-            print(f"Could not fetch data ERROR:\n{e}")
+        cli_fred.rfr()
     def help_rfr(self):
         print('Fetches latest 1 year T-Bill yield.')
         print('Usage: rfr')
 #=============================================================================#
     def do_cpi(self, arg):
-        period, units = parse_arg.parse_arg_p_u(arg=arg, name='cpi')
-        units = 'pc1' if units is None else units
-        if isinstance(period, str):
-            try:
-                print(fred.get_cpi_inflation(period=period, units=units))
-            except Exception as e:
-                print(f"Could not fetch data ERROR:\n{e}")
-        else:
-            print('For valid syntax, Try: cpi -p 1Y')
+        cli_fred.cpi(arg=arg)
     def help_cpi(self):
         print('Fetches monthly CPI data.')
         print('Usage: cpi -p <PERIOD>')
 #=============================================================================#
     def do_gdp(self, arg):
-        period, units = parse_arg.parse_arg_p_u(arg=arg, name='gdp')
-        units = 'pc1' if units is None else units
-        if isinstance(period, str):
-            try:
-                print(fred.get_gdp(period=period, units=units))
-            except Exception as e:
-                print(f"Could not fetch data ERROR:\n{e}")
-        else:
-            print('For valid syntax, Try: gdp -p 1Y')
+        cli_fred.gdp(arg=arg)
     def help_gdp(self):
         print('Fetches quarterly GDP data.')
         print('Usage: gdp -p <PERIOD>')
 #=============================================================================#
     def do_sent(self, arg):
-        period, units = parse_arg.parse_arg_p_u(arg=arg, name='sent')
-        units = 'pch' if units is None else units
-        if isinstance(period, str):
-            try:
-                print(fred.get_sentiment(period=period, units=units))
-            except Exception as e:
-                print(f"Could not fetch data ERROR:\n{e}")
-        else:
-            print('For valid syntax, Try: sent -p 1Y')
+        cli_fred.sent(arg=arg)
     def help_sent(self):
         print('Fetches cosumer sentiment data.')
         print('Usage: sent -p <PERIOD>')
 #=============================================================================#
     def do_nfp(self, arg):
-        period, units = parse_arg.parse_arg_p_u(arg=arg, name='nfp')
-        units = 'pc1' if units is None else units
-        if isinstance(period, str):
-            try:
-                print(fred.get_nf_payrolls(period=period, units=units))
-            except Exception as e:
-                print(f"Could not fetch data ERROR:\n{e}")
-        else:
-            print('For valid syntax, Try: nfp -p 1Y')
+        cli_fred.nfp(arg=arg)
     def help_nfp(self):
         print('Fetches non-farm payroll data.')
         print('Usage: nfp -p <PERIOD>')
 #=============================================================================#
     def do_interest(self, arg):
-        period, units = parse_arg.parse_arg_p_u(arg=arg, name='interest')
-        units = 'pc1' if units is None else units
-        if isinstance(period, str):
-            try:
-                print(fred.get_interest(period=period, units=units))
-            except Exception as e:
-                print(f"Could not fetch data ERROR:\n{e}")
-        else:
-            print('For valid syntax, Try: interest -p 1Y')
+        cli_fred.interest(arg=arg)
     def help_interest(self):
         print('Fetches interest rate data.')
         print('Usage: interest -p <PERIOD>')
 #=============================================================================#
     def do_jobc(self, arg):
-        period, units = parse_arg.parse_arg_p_u(arg=arg, name='jobc')
-        units = 'pc1' if units is None else units
-        if isinstance(period, str):
-            try:
-                print(fred.get_jobless_claims(period=period, units=units))
-            except Exception as e:
-                print(f"Could not fetch data ERROR:\n{e}")
-        else:
-            print('For valid syntax, Try: jobc -p 1Y')
+        cli_fred.jobc(arg=arg)
     def help_jobc(self):
         print('Fetches jobless claim data.')
         print('Usage: jobc -p <PERIOD>')
 #=============================================================================#
     def do_unem(self, arg):
-        period, units = parse_arg.parse_arg_p_u(arg=arg, name='unem')
-        units = 'pc1' if units is None else units
-        if isinstance(period, str):
-            try:
-                print(fred.get_unemployment(period=period, units=units))
-            except Exception as e:
-                print(f"Could not fetch data ERROR:\n{e}")
-        else:
-            print('For valid syntax, Try: unem -p 1Y')
+        cli_fred.unem(arg=arg)
     def help_unem(self):
         print('Fetches unemployment data.')
         print('Usage: unem -p <PERIOD>')
 #=============================================================================#
     def do_indp(self, arg):
-        period, units = parse_arg.parse_arg_p_u(arg=arg, name='indp')
-        units = 'pc1' if units is None else units
-        if isinstance(period, str):
-            try:
-                print(fred.get_ind_prod(period=period, units=units))
-            except Exception as e:
-                print(f"Could not fetch data ERROR:\n{e}")
-        else:
-            print('For valid syntax, Try: indp -p 1Y')
+        cli_fred.indp(arg=arg)
     def help_indp(self):
         print('Fetches industrial production data.')
         print('Usage: indp -p <PERIOD>')
 #=============================================================================#
     def do_netex(self, arg):
-        period, units = parse_arg.parse_arg_p_u(arg=arg, name='netex')
-        units = 'lin' if units is None else units 
-        if isinstance(period, str) and isinstance(units, str):
-            try:
-                print(fred.get_netex(period=period, units=units.lower()))
-            except Exception as e:
-                print(f"Could not fetch data ERROR:\n{e}")
-        else:
-            print('For valid syntax, Try: netex -p 1Y')
+        cli_fred.netex(arg=arg)
     def help_netex(self):
         print('Fetches real net exports of goods and services data.')
         print('Usage: netex -p <PERIOD>')
