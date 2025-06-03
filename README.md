@@ -1,28 +1,45 @@
-# Qemy (Prototype): Financial Data Engine 
+# qemy (prototype): command-line financial data engine for researchers and traders
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
 
-Qemy is a prototype financial data engine designed for market and economic analysis. This repository contains the core data pipeline and command-line interface.
+qemy is a prototype financial data engine designed for market and economic analysis. It aims to simplify and automate research by providing SEC filings, stock market data, macroeconomic indicators, and the tools needed to analyze and visualize them — all within a convenient CLI. This repository contains the core data pipeline and command-line interface.
 
 **Work in Progress**
 
-Qemy is in early development. I'm building this as a personal tool first, and refining as I go. Suggestions are welcome!
+qemy is in early development. I'm building this as a personal tool first, and refining as I go.
 Features may change, break, or get replaced as the project evolves.
+
+Suggestions are welcome!
+
+- [Start a Discussion](https://github.com/ryan-rashidian/qemy/discussions/new/choose)
+- [Report a Bug / Open an Issue](https://github.com/ryan-rashidian/qemy/issues/new)
 
 ---
 
-## Features (* = in progress) (** = planned)
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Setup API Keys](#setup-api-keys)
+- [Optional: Setup Launch Script](#optional-setup-launch-script)
+- [Usage](#usage)
+- [Development Notes](#development-notes)
+- [Legal / Attribution](#legal--attribution)
+- [License](#license)
+
+---
+
+## Features
 
 - CLI: Command line interface entry point.
 - Fetch: stock market data from Tiingo API.
-- Fetch: SEC filing data (e.g. 10K/10Q) from SEC EDGAR API.
+- Fetch: or download SEC filing data (e.g. 10K/10Q) from SEC EDGAR API.
 - Fetch: economic data from FRED API
 - Chart: price history, linear regression, etc.
-- *Fetch: bulk data (~18GB) download from SEC EDGAR API. 
-- *Model: DCF, Comps, and other valuation models.
-- **Filter: metric based stock screening.
-- **Backtest: Monte Carlo and historical simulations.
-- **Profile: user accounts and portfolio tracking.
+- (In Progress) Model: DCF, Comps, and other valuation models.
+- (Planned) Filter: metric based stock screening.
+- (Planned) Backtest: Monte Carlo and historical simulations.
+- (Planned) Profile: user accounts and portfolio tracking.
 
 Note: Filing data is limited to US markets (GAAP) and all metrics are in USD for now. Support for global markets (IFRS) and currency conversion is planned. 
 
@@ -68,11 +85,9 @@ API keys available free of charge. Sign up required for Tiingo API and Fred API:
 - https://www.tiingo.com/
 - https://www.sec.gov/search-filings/edgar-application-programming-interfaces (No sign up or API key required for EDGAR API. Users will be prompted for a "User Agent" during the setup wizard.)
 
-IMPORTANT: Read "Legal / Attribution" before using Qemy with any 3rd party API service.
+Run the CLI and qemy will guide you through an API key setup wizard on first launch.
 
 - Refer to "Usage" below for info related to API usage and data limitations.
-
-Run the CLI and Qemy will guide you through an API key setup wizard on first launch.
 
 Or manually create a .env file in project root directory and add API keys like this:
 
@@ -83,6 +98,8 @@ EDGAR_USER_AGENT=<your user agent> # EDGAR_USER_AGENT=john johndoe@example.com
 ```
 
 Make sure .env is included in .gitignore to keep your keys secure.
+
+IMPORTANT: Read "Legal / Attribution" before using qemy with any 3rd party API service.
 
 ---
 
@@ -132,7 +149,9 @@ export PATH="$HOME/path/to/your/project/root:$PATH"
 
 ## Usage
 
-- If you setup the optional launch script, you can simply run: 
+### Launch CLI
+
+If you setup the optional launch script, you can simply run: 
 
 ```bash
 qemy
@@ -140,7 +159,7 @@ qemy
 
 from any bash terminal session.
 
-- Alternatively, run the CLI manually with:
+Alternatively, run the CLI manually with:
 
 ```bash
 source ~/path/to/qemyenv/bin/activate
@@ -148,6 +167,18 @@ source ~/path/to/qemyenv/bin/activate
 cd ~/path/to/qemy # path to project root directory
 python -m frontend.cli
 ```
+
+### Use CLI
+
+```bash
+qemy> help
+qemy> help filing
+qemy> filing AAPL
+qemy> chart_lr TSLA -p 5y
+qemy> exit
+```
+
+Proper documentation is being planned. For now, refer to the help commands for more information.
 
 - This program does not require paying any fees or subscriptions. There are paid subscriptions for Tiingo API available in order to increase data usage limitation. Be mindful data usage/request limits for all APIs. More info and tracking is available on their websites.
 
@@ -171,13 +202,13 @@ Ideas:
 
 ## Legal / Attribution
 
-By using the Qemy application, you agree to the Qemy Terms of Use ("Legal / Attribution") below and Licensing terms.
+By using the qemy application, you agree to the qemy Terms of Use ("Legal / Attribution") below and Licensing terms.
 
 - Users are responsible for complying with the terms of any third-party APIs used.
-- Qemy is not affiliated with the SEC or Federal Reserve.
-- Qemy does not collect or transmit any user data, personal information, or API usage statistics.
+- qemy is not affiliated with the SEC or Federal Reserve.
+- qemy does not collect or transmit any user data, personal information, or API usage statistics.
 - Data may have errors, delays, or be incomplete.
-- 3rd party APIs sign ups must be done through their respective websites. Qemy does not, and will not ever include a automated sign up process for 3rd party APIs.
+- 3rd party APIs sign ups must be done through their respective websites. qemy does not include a automated sign up process for 3rd party APIs.
 
 ### SEC EDGAR
 
