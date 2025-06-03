@@ -196,6 +196,8 @@ Ideas:
 - Backtesting engine for Monte Carlo and historical simulations.
 - Stock screening and filtering.
 - IFRS filing support in SEC_Filings parser and currency conversion. 
+- "Modes" - or sub-sections within the CLI for plots, models, etc. 
+- (In Progress) Guide's and helpful information included in CLI.
 - (In Progress) Valuation modeling using DCF, comps, etc.
 
 ---
