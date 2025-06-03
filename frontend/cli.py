@@ -6,12 +6,8 @@ import os
 import platform
 import pandas as pd
 from backend.core import plot
-from backend.core.dcf import get_dcf_eval
 from backend.core.session import SessionManager
-from backend.fetch import api_tiingo as tiingo
-from backend.fetch.api_edgar import SEC_Filings
-from backend.fetch.api_edgar_bulk import bulk_refresh
-from . import parse_arg, cli_helper, cli_fred, cli_edgar
+from . import parse_arg, cli_helper, cli_fred, cli_edgar, cli_tiingo
 from .utils_cli import save_to_csv
 
 pd.set_option('display.max_columns', None)
@@ -131,21 +127,7 @@ class QemyShell(cmd.Cmd):
 ################################## PRICE ######################################
 #=============================================================================#
     def do_price(self, arg):
-        period, ticker = parse_arg.parse_arg_p_t(arg=arg, name='price')
-        if isinstance(period, str) and isinstance(ticker, str):
-            print(f"Fetching price info for: {ticker}...")
-            data = tiingo.get_tiingo_prices(ticker=ticker, period=period)
-            if data is None:
-                print('Could not fetch data, please try another ticker or period.')
-                return
-            try:
-                df = pd.DataFrame(data)
-                df['date'] = pd.to_datetime(df['date'])
-                print(df)
-            except Exception as e:
-                print('Failed to parse data: ', e)
-        else:
-            print('For valid syntax, Try: price AAPL -p 3M')
+        cli_tiingo.price(arg=arg)
     def help_price(self):
         print('Fetches daily closing prices for given ticker.')
         print('Usage: price <TICKER> -p <PERIOD>')
