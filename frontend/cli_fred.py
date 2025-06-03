@@ -107,3 +107,4 @@ def netex(arg):
             print(f"Could not fetch data ERROR:\n{e}")
     else:
         print('For valid syntax, Try: netex -p 1Y')
+

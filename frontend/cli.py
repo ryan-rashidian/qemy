@@ -9,10 +9,9 @@ from backend.core import plot
 from backend.core.dcf import get_dcf_eval
 from backend.core.session import SessionManager
 from backend.fetch import api_tiingo as tiingo
-from backend.fetch import api_fred as fred
 from backend.fetch.api_edgar import SEC_Filings
 from backend.fetch.api_edgar_bulk import bulk_refresh
-from . import parse_arg, cli_helper, cli_fred
+from . import parse_arg, cli_helper, cli_fred, cli_edgar
 from .utils_cli import save_to_csv
 
 pd.set_option('display.max_columns', None)
@@ -45,44 +44,23 @@ class QemyShell(cmd.Cmd):
 #=============================================================================#
 ################################### SEC #######################################
 #=============================================================================#
+    def do_dcf(self, arg):
+        cli_edgar.dcf(arg=arg)
+    def help_dcf(self):
+        print('Performs DCF model evaluation on given ticker.')
+        print('Usage: dcf <TICKER>')
+#=============================================================================#
     def do_filing(self, arg):
-        if ' -r' in arg:
-            ticker = arg.replace('-r', '').strip().upper() 
-            use_requests = True
-        if ' --request' in arg:
-            ticker = arg.replace('--request', '').strip().upper() 
-            use_requests = True
-        else:
-            ticker = arg.strip().upper()
-            use_requests = False
-        print(f"Fetching latest 10K/10Q filing metrics for {ticker}")
-        try:
-            df = SEC_Filings(ticker=ticker, use_requests=use_requests).get_metrics() 
-            if isinstance(df, pd.DataFrame): 
-                self.ticker_df[ticker] = df[ticker]
-                print(df.to_string(justify='left', formatters={
-                    ticker: lambda x: f"{x:,}" if isinstance(x, (int, float)) else x
-                }))
-        except:
-            print('Could not fetch filing metrics, please try another ticker.')
+        df_return = cli_edgar.filing(arg=arg, ticker_df=self.ticker_df)
+        if isinstance(df_return, pd.DataFrame):
+            self.ticker_df = df_return
     def help_filing(self):
         print('Fetches latest 10K/10Q metrics for given ticker.')
         print('Usage: filing <TICKER>\nFlags:')
         print('(-r --request) --- Fetches filing data directly from SEC EDGAR API.')
 #=============================================================================#
-    def do_dcf(self, arg):
-        get_dcf_eval(arg)
-    def help_dcf(self):
-        print('Performs DCF model evaluation on given ticker.')
-        print('Usage: dcf <TICKER>')
-#=============================================================================#
     def do_bulk_refresh(self, _):
-        confirm = input("All previous bulk data will be overwritten.\nAre you sure? (yes/no): ")
-        if confirm.strip().lower() == 'yes':
-            try:
-                bulk_refresh()
-            except Exception as e:
-                print(f"Bulk refresh failed. Error:\n{e}")
+        cli_edgar.bulk_refresh()
     def help_bulk_refresh(self):
         print('Re-downloads bulk data from SEC EDGAR API with latest filings.')
         print('Note: every bulk_refresh will download and unzip ~20GB of filing data.')
