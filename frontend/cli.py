@@ -11,14 +11,14 @@ from backend.fetch import api_tiingo as tiingo
 from backend.fetch import api_fred as fred
 from backend.fetch.api_edgar import SEC_Filings
 from backend.fetch.api_edgar_bulk import bulk_refresh
-from . import parse_arg 
+from . import parse_arg, cli_helper
 from .utils_cli import save_to_csv
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
 class QemyShell(cmd.Cmd):
-    intro = "Welcome to Qemy. Type help or ? to list commands.\n"
+    intro = "Welcome to qemy. Type help or ? to list commands.\n"
     prompt = "qemy> "
     def __init__(self):
         metric_index = pd.Index([
@@ -472,7 +472,13 @@ class QemyShell(cmd.Cmd):
         print('Fetches table of current filings')
         print('Usage: table')
 #=============================================================================#
-############################## CLI UTILITY ####################################
+################################## CLI ########################################
+#=============================================================================#
+    def do_help(self, arg):
+        if arg:
+            super().do_help(arg)
+        else:
+            cli_helper.help()
 #=============================================================================#
     def do_clear(self, arg):
         arg = arg
