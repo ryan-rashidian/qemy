@@ -200,6 +200,10 @@ Ideas:
 - (In Progress) Guide's and helpful information included in CLI.
 - (In Progress) Valuation modeling using DCF, comps, etc.
 
+Note (2025-06-03):
+
+- This is my first serious project on GitHub. Earlier commits show my learning curve with git, and workflow habits. Since then, I've been refining my process. - Thanks for understanding.
+
 ---
 
 ## Legal / Attribution
