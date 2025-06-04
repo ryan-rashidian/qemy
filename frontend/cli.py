@@ -248,6 +248,12 @@ class QemyShell(cmd.Cmd):
         print("Simple calculator with Python syntax")
         print("Example: calc 2 + 2")
 #=============================================================================#
+    def do_flags(self, _):
+        cli_helper.flags()
+#=============================================================================#
+    def do_units(self, _):
+        cli_helper.units()
+#=============================================================================#
     def do_help(self, arg):
         if arg:
             super().do_help(arg)

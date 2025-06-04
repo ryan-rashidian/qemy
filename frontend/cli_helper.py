@@ -7,11 +7,11 @@ def print_help_table(title, commands):
 
 def help():
     print("\n qemy - Command Reference Table")
-
     print_help_table(" Market Analysis: ", [
         ("bulk_refresh", "Downloads bulk filing data from SEC"),
         ("dcf", "Performs DCF modeling"),
         ("filing", "Fetches latest SEC filing (10K/10Q)"),
+        ("lr", "Linear Regression"),
         ("price", "Fetches stock price data"),
         ("table", "Shows and saves current filings"),
         ("watchlist", "Shows and saves current tickers"),
@@ -47,10 +47,55 @@ def help():
         ("exit", ""),
     ])
     print_help_table(" Additional Info: ", [
-        ("flags", "place-holder"),
-        ("units", "place-holder"),
-        ("info", "place-holder"),
+        ("flags", ""),
+        ("units", ""),
+        ("info", ""),
     ])
+    print("\nEnter 'help <COMMAND>' for more details.\n")
 
-    print("\nType 'help <command>' for more details.\n")
+def flags():
+    print("\n qemy - Flags")
+    print(" Basic Syntax: <FLAG> <ARGUMENT>")
+    print_help_table(" -p --period", [
+        ("D", "Day"),
+        ("W", "Week"),
+        ("M", "Month"),
+        ("Y", "Year"),
+        ("Info:", "Specifies a start and end date based on the given period. Start = <Current-Date>, End = <Start - Period>"),
+        ("Example:", "-p 3M"),
+    ])
+    print_help_table(" -s --save", [
+        ("(yes/no)", "Requires yes or no argument."),
+        ("Info:", "Saves a .png or .csv of requested data into /exports/ directory."),
+        ("Example:", "-s yes")
+    ])
+    print_help_table(" -u --units", [
+        ("Unit arguments", "lin, chg, ch1, pch, log, etc..."),
+        ("Info:", "Transforms data values to given unit type. Enter 'units' for a list and explanation of each argument."),
+        ("Example:", "-u log"),
+    ])
+    print("\n")
+
+def units():
+    print("\n qemy - Units")
+    print_help_table("Arguments", [
+        ("lin", "Default/No transformation"),
+        ("chg", "Change"),
+        ("ch1", "Change from Year Ago"),
+        ("pch", "Percent Change"),
+        ("pc1", "Percent Change from Year Ago"),
+        ("pca", "Compounded Annual Rate of Change"),
+        ("cch", "Continuously Compounded Rate of Change"),
+        ("cca", "Continuously Compounded Annual Rate of Change"),
+        ("log", "Natural Log"),
+    ])
+    print("\n")
+
+def info(): ### place holder
+    print("\n qemy - Information")
+    print_help_table(" Usage", [
+        ("", ""),
+        ("", ""),
+    ])
+    print("\n")
 
