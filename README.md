@@ -59,6 +59,14 @@ It's recommended to use a Python venv or Conda.
 
 #### To install for regular use: 
 
+Navigate to project root:
+
+```bash
+cd qemy
+```
+
+Then install qemy as a Python package:
+
 ```bash
 pip install .
 ```
