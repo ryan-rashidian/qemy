@@ -138,6 +138,12 @@ class QemyShell(cmd.Cmd):
         print('Usage: lr <TICKER> -p <PERIOD>')
         print('Uses SPY ETF Trust as dependent variable.')
 #=============================================================================#
+    def do_mcarlo(self, arg):
+        cli_tiingo.monte_carlo(arg=arg)
+    def help_mcarlo(self):
+        print('place holder')
+        print('Usage: mcarlo AAPL -p 2Y -n 1000')
+#=============================================================================#
 ################################## PLOT #######################################
 #=============================================================================#
     def do_plot_price(self, arg):
@@ -151,6 +157,12 @@ class QemyShell(cmd.Cmd):
     def help_plot_lr(self):
         print('Fetches linear regression beta comparison for given ticker.')
         print('Usage: plot_lr <TICKER> -p <PERIOD>')
+#=============================================================================#
+    def do_plot_mcarlo(self, arg):
+        cli_plot.plot_monte_carlo(arg=arg)
+    def help_plot_mcarlo(self):
+        print('test')
+        print('Usage: plot_mcarlo AAPL -p 2Y -n 1000')
 #=============================================================================#
     def do_plot_cpi(self, arg):
         cli_plot.plot_cpi(arg=arg)

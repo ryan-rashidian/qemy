@@ -12,6 +12,7 @@ def help():
         ("dcf", "Performs DCF modeling"),
         ("filing", "Fetches latest SEC filing (10K/10Q)"),
         ("lr", "Linear Regression"),
+        ("mcarlo", "Monte Carlo simulation"),
         ("price", "Fetches stock price data"),
         ("table", "Shows and saves current filings"),
         ("watchlist", "Shows and saves current tickers"),
@@ -35,6 +36,7 @@ def help():
         ("plot_interest", ""),
         ("plot_jobc", ""),
         ("plot_lr", ""),
+        ("plot_mcarlo", ""),
         ("plot_netex", ""),
         ("plot_nfp", ""),
         ("plot_price", ""),
@@ -70,9 +72,14 @@ def flags():
         ("Example:", "-s yes")
     ])
     print_help_table(" -u --units", [
-        ("Unit arguments", "lin, chg, ch1, pch, log, etc..."),
+        ("Unit arguments:", "lin, chg, ch1, pch, log, etc..."),
         ("Info:", "Transforms data values to given unit type. Enter 'units' for a list and explanation of each argument."),
         ("Example:", "-u log"),
+    ])
+    print_help_table(" -n -nums", [
+        ("Integer", "Requires integer as argument."),
+        ("Info:", "Takes integer argument to specify # of tests to run."),
+        ("Example:", "-n 1000"),
     ])
     print("\n")
 
