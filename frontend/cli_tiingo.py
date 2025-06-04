@@ -1,6 +1,7 @@
 import pandas as pd
 from backend.fetch import api_tiingo as tiingo
 from backend.core.linear_r import linear_r
+from backend.core.monte_carlo import monte_carlo_sim
 from . import parse_arg
 #=============================================================================#
 ################################## PRICE ######################################
@@ -34,3 +35,16 @@ def lr(arg):
     else:
         print('For valid syntax, Try: lr AAPL -p 1Y')
     
+def monte_carlo(arg):
+    period, ticker, num = parse_arg.parse_arg_p_t_n(arg=arg, name='monte_carlo')
+    if isinstance(period, str) and isinstance(ticker, str) and num:
+        try:
+            num = int(num)
+            _, end_mean, end_std = monte_carlo_sim(ticker=ticker, period=period, num_simulations=num)
+            print(f"End mean: {end_mean}")
+            print(f"End std: {end_std}")
+        except Exception as e:
+            print(f"Error:\n{e}")
+    else:
+        print('For valid syntax, Try: monte_carlo -p 2Y -n 1000')
+

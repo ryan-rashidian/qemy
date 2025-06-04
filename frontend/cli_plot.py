@@ -25,6 +25,17 @@ def plot_lr(arg):
     else:
         print('For valid syntax, Try: price_plot AAPL -p 3M')
 #=============================================================================#
+def plot_monte_carlo(arg):
+    period, ticker, num = parse_arg.parse_arg_p_t_n(arg=arg, name='plot_montec')
+    if isinstance(period, str) and isinstance(ticker, str) and num:
+        num = int(num)
+        try:
+            plot.plot_monte_carlo(ticker=ticker, period=period, num_simulations=num)
+        except Exception as e:
+            print(f"Error:\n{e}")
+    else:
+        print('For valid syntax, Try: monte_carlo -p 2Y -n 1000')
+#=============================================================================#
 def plot_cpi(arg):
     period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_cpi')
     units = 'pc1' if units is None else units
