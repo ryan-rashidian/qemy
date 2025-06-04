@@ -53,26 +53,20 @@ Note: Filing data is limited to US markets (GAAP) and all metrics are in USD for
 git clone https://github.com/ryan-rashidian/qemy.git
 ```
 
-### Install dependencies:
+### Install qemy with dependencies:
 
-#### Option 1: Using Python venv:
+It's recommended to use a Python venv or Conda.
+
+#### Option 1 (recommended): 
 
 ```bash
-cd path/to/your/venvs 
-python -m venv qemyenv
-source qemyenv/bin/activate # for Linux/MacOS
-# or
-qemyenv\Scripts\activate # for Windows
-# then
-pip install -r requirements.txt
+pip install .
 ```
 
-#### Option 2: Using Conda:
+#### Option 2 (for devs):
 
 ```bash
-conda create --name qemyenv python=3.12.3
-conda activate qemyenv
-pip install -r requirements.txt
+pip install -r requirements.txt # or requirements-dev.txt
 ```
 
 ---
@@ -105,11 +99,11 @@ IMPORTANT: Read "Legal / Attribution" before using qemy with any 3rd party API s
 
 ## Optional: Setup Launch Script
 
-- Recommended for convenience if you are working with the source code directly.
+- Recommended for convenience if you are working with the source code directly, and took option 2 during the installation.
 
 ### Set path to your venv in the bash script
 
-From the project root directory, find the qemy bash script and open with a text editor:
+In the scripts directory, find the qemy bash script and open with a text editor:
 
 ```bash
 #!/bin/bash
@@ -126,7 +120,7 @@ cd "$orig_dir"
 
 ### Turn qemy script into an executable
 
-Also from project root directory:
+Also from scripts directory:
 
 ```bash
 chmod +x qemy
@@ -138,11 +132,11 @@ chmod +x qemy
 nano ~/.bashrc
 ```
 
-Add the following to the bottom of your .bashrc. Replace "path/to/your/project/root" with your own: 
+Add the following to the bottom of your .bashrc. Replace "path/to/your/project/root/scripts" with your own: 
 
 ```bash
 # PATH for Qemy
-export PATH="$HOME/path/to/your/project/root:$PATH"
+export PATH="$HOME/path/to/your/project/root/scripts:$PATH"
 ```
 
 ---
@@ -151,13 +145,21 @@ export PATH="$HOME/path/to/your/project/root:$PATH"
 
 ### Launch CLI
 
-If you setup the optional launch script, you can simply run: 
+To start the qemy command-line interface run:
 
 ```bash
 qemy
 ```
 
-from any bash terminal session.
+from any terminal or shell.
+
+If you setup the optional launch script, you can also run: 
+
+```bash
+qemy
+```
+
+from any bash terminal or shell.
 
 Alternatively, run the CLI manually with:
 
@@ -165,7 +167,7 @@ Alternatively, run the CLI manually with:
 source ~/path/to/qemyenv/bin/activate
 # Conda users: change above line to "conda activate qemyenv"
 cd ~/path/to/qemy # path to project root directory
-python -m frontend.cli
+python -m qemy.cli
 ```
 
 ### Use CLI

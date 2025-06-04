@@ -1,0 +1,19 @@
+[project]
+name = "qemy"
+version = "0.1.0b1"
+description = "A Python CLI toolkit for stock market analysis and modeling"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Ryan A. Rashidian" }]
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "python-dotenv",
+    "requests",
+    "scikit-learn"
+]
+
+[project.scripts]
+qemy = "qemy.cli:main"
+
