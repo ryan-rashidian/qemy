@@ -57,16 +57,17 @@ git clone https://github.com/ryan-rashidian/qemy.git
 
 It's recommended to use a Python venv or Conda.
 
-#### Option 1 (recommended): 
+#### To install for regular use: 
 
 ```bash
 pip install .
 ```
 
-#### Option 2 (for devs):
+#### For development:
 
 ```bash
-pip install -r requirements.txt # or requirements-dev.txt
+pip install -e .
+pip install -r requirements-dev.txt
 ```
 
 ---
@@ -111,8 +112,8 @@ In the scripts directory, find the qemy bash script and open with a text editor:
 orig_dir=$(pwd)
 source ~/path/to/qemyenv/bin/activate # make sure this matches your venv activate path
 # Conda users: change above line to "conda activate qemyenv"
-cd ~/path/to/qemy # match with your project root directory
-python -m frontend.cli
+cd ~/path/to/projectroot/qemy # match with your project root directory
+python -m cli_main
 deactivate 
 # Conda users: change above line to "conda deactivate"
 cd "$orig_dir"
@@ -136,7 +137,7 @@ Add the following to the bottom of your .bashrc. Replace "path/to/your/project/r
 
 ```bash
 # PATH for Qemy
-export PATH="$HOME/path/to/your/project/root/scripts:$PATH"
+export PATH="$HOME/path/to/qemy/scripts:$PATH"
 ```
 
 ---

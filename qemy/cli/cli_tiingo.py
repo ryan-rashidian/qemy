@@ -1,8 +1,8 @@
 import pandas as pd
-from backend.fetch import api_tiingo as tiingo
-from backend.core.linear_r import linear_r
-from backend.core.monte_carlo import monte_carlo_sim
-from . import parse_arg
+from data import api_tiingo as tiingo
+from core.linear_r import linear_r
+from core.monte_carlo import monte_carlo_sim
+from utils import parse_arg
 #=============================================================================#
 ################################## PRICE ######################################
 #=============================================================================#

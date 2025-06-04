@@ -1,9 +1,9 @@
 import pandas as pd
 from pathlib import Path
-from utils.filetools import get_next_path
+from .filetools import get_next_path
 
 def save_to_csv(df: pd.DataFrame):
-    project_root = Path(__file__).resolve().parents[1]
+    project_root = Path(__file__).resolve().parents[2]
     export_dir = project_root / "exports" / "tables"
     export_dir.mkdir(parents=True, exist_ok=True)
     output_path =  get_next_path(export_dir, name='table', ext='csv')

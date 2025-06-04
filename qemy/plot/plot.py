@@ -2,10 +2,10 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 from utils.filetools import get_next_path
-from backend.fetch.api_tiingo import get_tiingo_prices
-from backend.fetch import api_fred as fred
-from .linear_r import linear_r
-from .monte_carlo import monte_carlo_sim
+from data.api_tiingo import get_tiingo_prices
+from data import api_fred as fred
+from core.linear_r import linear_r
+from core.monte_carlo import monte_carlo_sim
 
 project_root = Path(__file__).resolve().parents[2]
 export_dir = project_root / "exports" / "charts"

@@ -15,5 +15,5 @@ dependencies = [
 ]
 
 [project.scripts]
-qemy = "qemy.cli:main"
+qemy = "qemy.cli_main:main"
 

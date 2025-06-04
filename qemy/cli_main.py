@@ -5,9 +5,10 @@ import cmd
 import os
 import platform
 import pandas as pd
-from backend.core.session import SessionManager
-from . import parse_arg, cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot
-from .utils_cli import save_to_csv
+from core.session import SessionManager
+from cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot
+from utils.utils_cli import save_to_csv
+from utils import parse_arg
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -280,6 +281,9 @@ class QemyShell(cmd.Cmd):
         print("Exiting... Goodbye!")
         return True
 #=============================================================================#
-if __name__ == '__main__':
+def main():
     QemyShell().cmdloop()
+
+if __name__ == '__main__':
+    main()
 

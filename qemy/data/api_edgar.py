@@ -5,7 +5,7 @@ from math import nan
 import pandas as pd
 from pathlib import Path
 from . import api_edgar_lists as keylist
-from .utils_fetch import safe_status_get
+from utils.utils_fetch import safe_status_get
 
 class SEC_Filings:
     def __init__(self, ticker, use_requests=False):
@@ -30,7 +30,8 @@ class SEC_Filings:
                     if self.facts is None:
                         print("Failed to fetch filing data from SEC.")
             else:
-                bulk_cik_path = Path('bulk_data/company_tickers.json')
+                root_dir = Path(__file__).resolve().parents[2]
+                bulk_cik_path = root_dir / 'bulk_data' / 'company_tickers.json'
                 with open(bulk_cik_path, 'r') as f:
                     data = json.load(f)
                     if data:
@@ -40,7 +41,7 @@ class SEC_Filings:
                 if self.cik is None:
                     print('Failed to request ticker symbol cik.')
                 else:
-                    bulk_data_path = Path(f"bulk_data/companyfacts/CIK{self.cik}.json")
+                    bulk_data_path = root_dir / 'bulk_data' / 'companyfacts' / f"CIK{self.cik}.json"
                     if not bulk_data_path.exists():
                         print(f"Error: {bulk_data_path}\nDoes not exist.")
                         return None

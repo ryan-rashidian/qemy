@@ -6,7 +6,7 @@ def setup_wizard():
     if getattr(sys, 'frozen', False):
         project_root = Path(sys.executable).resolve().parent
     else:
-        project_root = Path(__file__).resolve().parent.parent
+        project_root = Path(__file__).resolve().parents[2]
 
     env_path = project_root / '.env'
 

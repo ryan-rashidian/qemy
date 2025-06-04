@@ -4,7 +4,7 @@ import shutil
 import zipfile
 import json
 from pathlib import Path
-from .utils_fetch import safe_status_get, safe_status_download
+from utils.utils_fetch import safe_status_get, safe_status_download
 
 def bulk_refresh():
     bulk_dir = Path("bulk_data")

@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from datetime import date, timedelta
-from .utils_fetch import parse_period, safe_status_get
+from utils.utils_fetch import parse_period, safe_status_get
 
 FRED_API_KEY = os.getenv('FRED_API_KEY')
 

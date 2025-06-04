@@ -1,7 +1,7 @@
 import pandas as pd
-from backend.core.dcf import get_dcf_eval
-from backend.fetch.api_edgar import SEC_Filings
-from backend.fetch.api_edgar_bulk import bulk_refresh
+from core.dcf import get_dcf_eval
+from data.api_edgar import SEC_Filings
+from data.api_edgar_bulk import bulk_refresh
 #=============================================================================#
 ################################### SEC #######################################
 #=============================================================================#
@@ -12,7 +12,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
     if ' -r' in arg:
         ticker = arg.replace('-r', '').strip().upper() 
         use_requests = True
-    if ' --request' in arg:
+    elif ' --request' in arg:
         ticker = arg.replace('--request', '').strip().upper() 
         use_requests = True
     else:
