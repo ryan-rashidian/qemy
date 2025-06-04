@@ -63,3 +63,12 @@ def parse_arg_p_s_u(arg, name='none'):
         return None, None, None
     return args.period, args.save.upper(), args.units
 
+def define_arg_p_t_n(parser):
+    parser.add_argument('-p', '--period', default='1Y', help='period (e.g. 5D, 3M, 1Y)')
+    parser.add_argument('-n', '--num', default=1000, help='number of instances (e.g. 100, 50, 1000)')
+    parser.add_argument('ticker', help='stock ticker symbol')
+def parse_arg_p_t_n(arg, name='none'):
+    args = parse_engine(arg, define_arg_p_t_n, prog_name=name)
+    if not args:
+        return None, None, None
+    return args.period, args.ticker.upper(), args.num
