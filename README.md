@@ -21,7 +21,6 @@ Suggestions are welcome!
 - [Features](#features)
 - [Installation](#installation)
 - [Setup API Keys](#setup-api-keys)
-- [Optional: Setup Launch Script](#optional-setup-launch-script)
 - [Usage](#usage)
 - [Development Notes](#development-notes)
 - [Legal / Attribution](#legal--attribution)
@@ -37,8 +36,9 @@ Suggestions are welcome!
 - Fetch: economic data from FRED API
 - Chart: price history, linear regression, etc.
 - (In Progress) Model: DCF, Comps, and other valuation models.
+- (In Progress) Model: Monte Carlo and historical simulations.
+- (In Progress) Manual: built in user manual and guide to using qemy CLI.
 - (Planned) Filter: metric based stock screening.
-- (Planned) Backtest: Monte Carlo and historical simulations.
 - (Planned) Profile: user accounts and portfolio tracking.
 
 Note: Filing data is limited to US markets (GAAP) and all metrics are in USD for now. Support for global markets (IFRS) and currency conversion is planned. 
@@ -69,6 +69,47 @@ pip install .
 pip install -e .
 pip install -r requirements-dev.txt
 ```
+Optional: Setup Launch Script:
+
+- Recommended for convenience.
+
+##### Set path to your venv in the bash script
+
+In the scripts directory, find the qemy-dev bash script and open with a text editor:
+
+```bash
+#!/bin/bash
+
+orig_dir=$(pwd)
+source ~/path/to/qemyenv/bin/activate # make sure this matches your venv activate path
+# Conda users: change above line to "conda activate qemyenv"
+cd ~/path/to/projectroot/qemy # match with your project root directory
+python -m cli_main
+deactivate 
+# Conda users: change above line to "conda deactivate"
+cd "$orig_dir"
+```
+
+##### Turn qemy script into an executable
+
+Also from scripts directory:
+
+```bash
+chmod +x qemy
+```
+
+##### Create Path in .bashrc
+
+```bash
+nano ~/.bashrc
+```
+
+Add the following to the bottom of your .bashrc. Replace "path/to/your/project/root/scripts" with your own: 
+
+```bash
+# PATH for Qemy
+export PATH="$HOME/path/to/qemy/scripts:$PATH"
+```
 
 ---
 
@@ -98,50 +139,6 @@ IMPORTANT: Read "Legal / Attribution" before using qemy with any 3rd party API s
 
 ---
 
-## Optional: Setup Launch Script
-
-- Recommended for convenience if you are working with the source code directly, and took option 2 during the installation.
-
-### Set path to your venv in the bash script
-
-In the scripts directory, find the qemy bash script and open with a text editor:
-
-```bash
-#!/bin/bash
-
-orig_dir=$(pwd)
-source ~/path/to/qemyenv/bin/activate # make sure this matches your venv activate path
-# Conda users: change above line to "conda activate qemyenv"
-cd ~/path/to/projectroot/qemy # match with your project root directory
-python -m cli_main
-deactivate 
-# Conda users: change above line to "conda deactivate"
-cd "$orig_dir"
-```
-
-### Turn qemy script into an executable
-
-Also from scripts directory:
-
-```bash
-chmod +x qemy
-```
-
-### Create Path in .bashrc
-
-```bash
-nano ~/.bashrc
-```
-
-Add the following to the bottom of your .bashrc. Replace "path/to/your/project/root/scripts" with your own: 
-
-```bash
-# PATH for Qemy
-export PATH="$HOME/path/to/qemy/scripts:$PATH"
-```
-
----
-
 ## Usage
 
 ### Launch CLI
@@ -157,7 +154,7 @@ from any terminal or shell.
 If you setup the optional launch script, you can also run: 
 
 ```bash
-qemy
+qemy-dev
 ```
 
 from any bash terminal or shell.
@@ -191,17 +188,15 @@ Proper documentation is being planned. For now, refer to the help commands for m
 
 Known Issues:
 
+- (Crash) Needs error handling when DCF model fails to find certain metrics.
 - (Non-critical) Parsing logic in SEC_Filings class is slightly inaccurate. Filing data is not always in chronological order. The issue has been solved in testing, and a fix will be implemented soon. 
 - (Non-critical) DCF model is not yet factoring a company's net debt metric into the calculation. Waiting for implementation of better parsing logic, referenced in the previous issue. 
 
 Ideas:
 
-- Backtesting engine for Monte Carlo and historical simulations.
 - Stock screening and filtering.
 - IFRS filing support in SEC_Filings parser and currency conversion. 
-- "Modes" - or sub-sections within the CLI for plots, models, etc. 
-- (In Progress) Guide's and helpful information included in CLI.
-- (In Progress) Valuation modeling using DCF, comps, etc.
+- "Modes" - or organized sub-sections within the CLI for plots, models, etc. 
 
 Note (2025-06-03):
 
