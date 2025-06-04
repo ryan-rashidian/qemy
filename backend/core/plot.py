@@ -5,6 +5,7 @@ from utils.filetools import get_next_path
 from backend.fetch.api_tiingo import get_tiingo_prices
 from backend.fetch import api_fred as fred
 from .linear_r import linear_r
+from .monte_carlo import monte_carlo_sim
 
 project_root = Path(__file__).resolve().parents[2]
 export_dir = project_root / "exports" / "charts"
@@ -46,6 +47,27 @@ def plot_lr(ticker, period):
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+
+def plot_monte_carlo(ticker, period='1Y', num_simulations=1000, num_days=None, save=False):
+    simulations, end_mean, end_std = monte_carlo_sim(ticker=ticker, period=period, num_simulations=num_simulations, num_days=num_days)
+    if simulations is not None and end_mean is not None and end_std is not None:
+        print(f"End mean: {end_mean}")
+        print(f"End std:  {end_std}")
+        plt.figure(figsize=(14, 8))
+        plt.plot(simulations.T, alpha=0.05, color='blue')
+        plt.title("Monte Carlo Sim")
+        plt.xlabel("Day")
+        plt.ylabel("Simulated Price")
+        plt.grid(True)
+        plt.tight_layout()
+        if save == True:
+            output_path =  get_next_path(export_dir, name='mcarlochart', ext='png')
+            plt.savefig(output_path)
+            plt.show()
+        else:
+            plt.show()
+    else:
+        print('Failed to load plot chart')
 
 def plot_cpi(period, save=False, units='pc1'):
     data = fred.get_cpi_inflation(period=period, units=units)
