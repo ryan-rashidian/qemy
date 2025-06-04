@@ -1,7 +1,7 @@
 import pandas as pd
-from core.dcf import get_dcf_eval
-from data.api_edgar import SEC_Filings
-from data.api_edgar_bulk import bulk_refresh
+from qemy.core.dcf import get_dcf_eval
+from qemy.data.api_edgar import SEC_Filings
+from qemy.data.api_edgar_bulk import bulk_refresh
 #=============================================================================#
 ################################### SEC #######################################
 #=============================================================================#

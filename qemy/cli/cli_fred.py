@@ -1,5 +1,5 @@
-from data import api_fred as fred
-from utils import parse_arg
+from qemy.data import api_fred as fred
+from qemy.utils import parse_arg
 #=============================================================================#
 ################################## FRED #######################################
 #=============================================================================#

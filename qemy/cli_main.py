@@ -1,14 +1,14 @@
-from utils.env_setup import setup_wizard
+from qemy.utils.env_setup import setup_wizard
 setup_wizard() # First time setup + fills API_KEY variables
 # Must run setup_wizard before importing backend.fetch api modules
 import cmd
 import os
 import platform
 import pandas as pd
-from core.session import SessionManager
-from cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot
-from utils.utils_cli import save_to_csv
-from utils import parse_arg
+from qemy.core.session import SessionManager
+from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot
+from qemy.utils.utils_cli import save_to_csv
+from qemy.utils import parse_arg
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)

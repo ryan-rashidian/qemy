@@ -1,8 +1,8 @@
 import pandas as pd
-from data import api_tiingo as tiingo
-from core.linear_r import linear_r
-from core.monte_carlo import monte_carlo_sim
-from utils import parse_arg
+from qemy.data import api_tiingo as tiingo
+from qemy.core.linear_r import linear_r
+from qemy.core.monte_carlo import monte_carlo_sim
+from qemy.utils import parse_arg
 #=============================================================================#
 ################################## PRICE ######################################
 #=============================================================================#

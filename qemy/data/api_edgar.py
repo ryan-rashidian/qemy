@@ -5,7 +5,7 @@ from math import nan
 import pandas as pd
 from pathlib import Path
 from . import api_edgar_lists as keylist
-from utils.utils_fetch import safe_status_get
+from qemy.utils.utils_fetch import safe_status_get
 
 class SEC_Filings:
     def __init__(self, ticker, use_requests=False):

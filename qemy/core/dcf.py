@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
-from data.api_edgar import SEC_Filings
+from qemy.data.api_edgar import SEC_Filings
 
 def get_dcf_eval(ticker):
     df, shares_outstanding = SEC_Filings(ticker=ticker).get_dcf_metrics()

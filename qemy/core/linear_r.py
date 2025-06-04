@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
-from data.api_tiingo import get_tiingo_prices
+from qemy.data.api_tiingo import get_tiingo_prices
 
 def linear_r(ticker, period):
     ind_data = get_tiingo_prices(ticker=ticker, period=period)

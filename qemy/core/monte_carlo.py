@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from data.api_tiingo import get_tiingo_prices
+from qemy.data.api_tiingo import get_tiingo_prices
 
 def monte_carlo_sim(ticker, period='1Y', num_simulations=1000, num_days=None):
     data = get_tiingo_prices(ticker=ticker, period=period)
