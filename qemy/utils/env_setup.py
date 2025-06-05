@@ -21,7 +21,7 @@ def setup_wizard():
         return
 
     print("\n No .env file found!\n Please setup your FRED API key, Tiingo API key, and EDGAR API 'User Agent'")
-    print("Type: 'exit' or 'q' to exit this setup at any time.")
+    print(" Type: 'exit' or 'q' to exit this setup at any time.")
 
     try:
         fred_key = setup_input(" Enter your FRED API key: ")
@@ -40,4 +40,5 @@ def setup_wizard():
         if temp_env_path.exists():
             temp_env_path.unlink()
         print("Setup aborted. No setup information saved.\n")
+        sys.exit()
 
