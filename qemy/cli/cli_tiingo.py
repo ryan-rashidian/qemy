@@ -40,9 +40,10 @@ def monte_carlo(arg):
     if isinstance(period, str) and isinstance(ticker, str) and num:
         try:
             num = int(num)
-            _, end_mean, end_std = monte_carlo_sim(ticker=ticker, period=period, num_simulations=num)
-            print(f"End mean: {end_mean}")
-            print(f"End std: {end_std}")
+            _, end_mean, end_std, start_price = monte_carlo_sim(ticker=ticker, period=period, num_simulations=num)
+            print(f"Start price:   {start_price:.2f}")
+            print(f"End mean:      {end_mean:.2f}")
+            print(f"End std:       {end_std:.4f}")
         except Exception as e:
             print(f"Error:\n{e}")
     else:

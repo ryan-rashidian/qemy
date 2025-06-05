@@ -24,8 +24,8 @@ def monte_carlo_sim(ticker, period='1Y', num_simulations=1000, num_days=None):
 
         end_mean = np.mean(simulations[:, -1])
         end_std = np.std(simulations[:, -1])
-        return simulations, end_mean, end_std 
+        return simulations, end_mean, end_std, start_price
     else:
         print(f"Failed to retrieve price data for {ticker}")
-        return None, None, None
+        return None, None, None, None
 

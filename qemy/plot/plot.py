@@ -49,13 +49,14 @@ def plot_lr(ticker, period):
     plt.show()
 
 def plot_monte_carlo(ticker, period='1Y', num_simulations=1000, num_days=None, save=False):
-    simulations, end_mean, end_std = monte_carlo_sim(ticker=ticker, period=period, num_simulations=num_simulations, num_days=num_days)
+    simulations, end_mean, end_std, start_price = monte_carlo_sim(ticker=ticker, period=period, num_simulations=num_simulations, num_days=num_days)
     if simulations is not None and end_mean is not None and end_std is not None:
-        print(f"End mean: {end_mean}")
-        print(f"End std:  {end_std}")
+        print(f"Start price:   {start_price:.2f}")
+        print(f"End mean:      {end_mean:.2f}")
+        print(f"End std:       {end_std:.4f}")
         plt.figure(figsize=(14, 8))
         plt.plot(simulations.T, alpha=0.05, color='blue')
-        plt.title("Monte Carlo Sim")
+        plt.title(f"{num_simulations} Monte Carlo Simulations for {ticker}")
         plt.xlabel("Day")
         plt.ylabel("Simulated Price")
         plt.grid(True)
