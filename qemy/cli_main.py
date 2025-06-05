@@ -127,6 +127,12 @@ class QemyShell(cmd.Cmd):
 #=============================================================================#
 ################################## PRICE ######################################
 #=============================================================================#
+    def do_quote(self, arg):
+        cli_tiingo.quote(arg=arg)
+    def help_quote(self):
+        print("Fetches latest price quote for given ticker.")
+        print("Usage: quote <TICKER>")
+#=============================================================================#
     def do_price(self, arg):
         cli_tiingo.price(arg=arg)
     def help_price(self):

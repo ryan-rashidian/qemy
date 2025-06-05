@@ -14,6 +14,7 @@ def help():
         ("lr", "Linear Regression"),
         ("mcarlo", "Monte Carlo simulation"),
         ("price", "Fetches stock price data"),
+        ("quote", "Fetches latest price quote"),
         ("table", "Shows and saves current filings"),
         ("watchlist", "Shows and saves current tickers"),
     ])
