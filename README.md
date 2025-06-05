@@ -39,7 +39,6 @@ Suggestions are welcome!
 - (In Progress) Model: Monte Carlo and historical simulations.
 - (In Progress) Manual: built in user manual and guide to using qemy CLI.
 - (Planned) Filter: metric based stock screening.
-- (Planned) Profile: user accounts and portfolio tracking.
 
 Note: Filing data is limited to US markets (GAAP) and all metrics are in USD for now. Support for global markets (IFRS) and currency conversion is planned. 
 
@@ -53,7 +52,7 @@ Note: Filing data is limited to US markets (GAAP) and all metrics are in USD for
 git clone https://github.com/ryan-rashidian/qemy.git
 ```
 
-### Install qemy with dependencies:
+### Install qemy with dependencies
 
 It's recommended to use a Python venv or Conda.
 
@@ -77,11 +76,11 @@ pip install .
 pip install -e .
 pip install -r requirements-dev.txt
 ```
-Optional: Setup Launch Script:
+Optional - Setup Launch Script
 
 - Recommended for convenience.
 
-##### Set path to your venv in the bash script
+Step 1 - Set path to your venv in the bash script
 
 In the scripts directory, find the qemy-dev bash script and open with a text editor:
 
@@ -92,13 +91,13 @@ orig_dir=$(pwd)
 source ~/path/to/qemyenv/bin/activate # make sure this matches your venv activate path
 # Conda users: change above line to "conda activate qemyenv"
 cd ~/path/to/projectroot/qemy # match with your project root directory
-python -m cli_main
+python -m qemy.cli_main
 deactivate 
 # Conda users: change above line to "conda deactivate"
 cd "$orig_dir"
 ```
 
-##### Turn qemy script into an executable
+Step 2 - Turn qemy script into an executable
 
 Also from scripts directory:
 
@@ -106,13 +105,13 @@ Also from scripts directory:
 chmod +x qemy
 ```
 
-##### Create Path in .bashrc
+Step 3 - Create Path in .bashrc
 
 ```bash
 nano ~/.bashrc
 ```
 
-Add the following to the bottom of your .bashrc. Replace "path/to/your/project/root/scripts" with your own: 
+Add the following to the bottom of your .bashrc. Replace "path/to/qemy/scripts" with your own: 
 
 ```bash
 # PATH for Qemy
@@ -188,7 +187,7 @@ qemy> exit
 
 Proper documentation is being planned. For now, refer to the help commands for more information.
 
-- This program does not require paying any fees or subscriptions. There are paid subscriptions for Tiingo API available in order to increase data usage limitation. Be mindful data usage/request limits for all APIs. More info and tracking is available on their websites.
+- This program does not require paying any fees or subscriptions. There are paid subscriptions for Tiingo API available in order to increase data usage limitation. Be mindful of data usage/request limits for all APIs. More info and tracking is available on their websites.
 
 ---
 
@@ -202,9 +201,11 @@ Known Issues:
 
 Ideas:
 
+- Cover all the basic metrics, ratios, etc. (e.g. Sharpe, PE, PEG, etc.)
 - Stock screening and filtering.
 - IFRS filing support in SEC_Filings parser and currency conversion. 
 - "Modes" - or organized sub-sections within the CLI for plots, models, etc. 
+- sklearn model that is trained on valuation data -> makes predictions and evaluates.
 
 Note (2025-06-03):
 
