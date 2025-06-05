@@ -284,8 +284,14 @@ class QemyShell(cmd.Cmd):
     def do_clear(self, _):
         clear_screen = 'cls' if platform.system() == 'Windows' else 'clear'
         os.system(clear_screen)
+    def do_cls(self, _):
+        clear_screen = 'cls' if platform.system() == 'Windows' else 'clear'
+        os.system(clear_screen)
 
     def do_exit(self, _):
+        print("Exiting... Goodbye!")
+        return True
+    def do_q(self, _):
         print("Exiting... Goodbye!")
         return True
 
