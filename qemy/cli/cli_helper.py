@@ -46,10 +46,11 @@ def help():
         ("plot_sent", ""),
         ("plot_unem", ""),
     ])
-    print_help_table(" General Commands: ", [
+    print_help_table(" Auxiliary Commands: ", [
         ("calc", "Simple Calculator"),
         ("clear", ""),
         ("exit", ""),
+        ("env_reset", "Deletes current .env file"),
     ])
     print_help_table(" Additional Info: ", [
         ("flags", ""),

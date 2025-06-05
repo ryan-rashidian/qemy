@@ -7,7 +7,7 @@ import platform
 import pandas as pd
 from numbers import Number
 from qemy.cli.cli_core import SessionManager
-from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot
+from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot, cli_aux
 from qemy.utils.utils_cli import save_to_csv
 from qemy.utils import parse_arg
 
@@ -269,7 +269,7 @@ class QemyShell(cmd.Cmd):
     def do_units(self, _):
         cli_helper.units()
 
-#================================== CLI UTIL =================================#
+#================================== AUX ======================================#
 
     def do_calc(self, arg):
         try:
@@ -294,6 +294,12 @@ class QemyShell(cmd.Cmd):
     def do_q(self, _):
         print("Exiting... Goodbye!")
         return True
+
+    def do_env_reset(self, _):
+        cli_aux.env_reset()
+    def help_env_reset(self):
+        print("Deletes the .env files containing your current API keys and User Agent information.")
+        print("This command will also exit qemy, and users will have to complete the setup wizard again.")
 
 #=============================================================================#
 
