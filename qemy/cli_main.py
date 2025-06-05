@@ -5,6 +5,7 @@ import cmd
 import os
 import platform
 import pandas as pd
+from numbers import Number
 from qemy.core.session import SessionManager
 from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot
 from qemy.utils.utils_cli import save_to_csv
@@ -238,7 +239,7 @@ class QemyShell(cmd.Cmd):
                 else:
                     print('Filings:')
                     print(self.ticker_df.to_string(justify='left', formatters={
-                        col: (lambda x: f"{x:,}" if isinstance(x, (int, float)) else x)
+                        col: (lambda x: f"{x:,}" if isinstance(x, Number) else x)
                         for col in self.ticker_df.columns
                     }))
             except Exception as e:

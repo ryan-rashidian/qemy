@@ -1,4 +1,5 @@
 import pandas as pd
+from numbers import Number
 from qemy.core.dcf import get_dcf_eval
 from qemy.data.api_edgar import SEC_Filings
 from qemy.data.api_edgar_bulk import bulk_refresh
@@ -24,7 +25,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
         if isinstance(df, pd.DataFrame): 
             ticker_df[ticker] = df[ticker]
             print(df.to_string(justify='left', formatters={
-                ticker: lambda x: f"{x:,}" if isinstance(x, (int, float)) else x
+                ticker: lambda x: f"{x:,}" if isinstance(x, Number) else x
             }))
             if isinstance(ticker_df, pd.DataFrame):
                 return ticker_df
