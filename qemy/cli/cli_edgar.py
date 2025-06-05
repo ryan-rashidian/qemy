@@ -1,6 +1,6 @@
 import pandas as pd
 from numbers import Number
-from qemy.core.dcf import get_dcf_eval
+from qemy.core.models.dcf import get_dcf_eval
 from qemy.data.api_edgar import SEC_Filings
 from qemy.data.api_edgar_bulk import bulk_refresh
 #=============================================================================#

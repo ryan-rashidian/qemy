@@ -6,7 +6,7 @@ import os
 import platform
 import pandas as pd
 from numbers import Number
-from qemy.core.session import SessionManager
+from qemy.cli.cli_core import SessionManager
 from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot
 from qemy.utils.utils_cli import save_to_csv
 from qemy.utils import parse_arg

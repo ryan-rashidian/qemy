@@ -1,4 +1,4 @@
-from qemy.plot import plot
+from qemy.core.plot import plot
 from qemy.utils import parse_arg
 
 #=============================================================================#
