@@ -6,6 +6,23 @@ from qemy.utils import parse_arg
 #=============================================================================#
 ################################## PRICE ######################################
 #=============================================================================#
+def quote(arg):
+    try:
+        ticker = arg.strip().upper()
+        if isinstance(ticker, str):
+            data = tiingo.get_tiingo_quote(tickers=ticker)
+            if data and ticker in data:
+                quote_data = data[ticker]
+                quote = quote_data.get('last') or quote_data.get('tngoLast') or quote_data.get('mid')
+                if quote is not None:
+                    print(f"{ticker}: {quote}")
+            else:
+                print(f"Could note fetch data for {ticker}, please try another ticker.")
+        else:
+            print("For valid syntax Try: quote <TICKER>")
+    except Exception as e:
+        print(f"Error:\n{e}")
+
 def price(arg):
     period, ticker = parse_arg.parse_arg_p_t(arg=arg, name='price')
     if isinstance(period, str) and isinstance(ticker, str):
