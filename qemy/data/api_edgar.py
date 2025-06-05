@@ -14,6 +14,7 @@ class SEC_Filings:
         self.ticker = ticker.upper().strip()
         self.cik = None
         self.facts = None
+
         try:
             if use_requests:
                 url = 'https://www.sec.gov/files/company_tickers.json'
@@ -52,10 +53,11 @@ class SEC_Filings:
                         print("Failed to fetch filing from bulk SEC data.")
         except Exception as e:
             print(f"Failed to request data. Use request option if you have not downloaded the bulk data.\nError code:\n{e}")
-
+    
     def get_metrics(self) -> pd.DataFrame | None:
         try:
             if self.facts is not None:
+
                 df_shares = get_metric_df(facts=self.facts, keylist=keylist.key_list_shares, unit='shares', quarters=10)
                 if not df_shares.empty:
                     latest = df_shares.iloc[-1]
@@ -117,6 +119,7 @@ class SEC_Filings:
                 df.index.name = 'Metrics:'
                 df.columns = [self.ticker]
                 return df
+
             else:
                 print("Error: filing data failed to initialize.")
                 return None
@@ -148,6 +151,7 @@ class SEC_Filings:
                 else:
                     print("data not found")
                     return None, None
+
             else:
                 print("Error: filing data failed to initialize.")
                 return None, None
