@@ -6,6 +6,7 @@ import pandas as pd
 from pathlib import Path
 from . import api_edgar_lists as keylist
 from qemy.utils.utils_fetch import safe_status_get
+from qemy.utils.parse_filing import get_metric_df
 
 class SEC_Filings:
     def __init__(self, ticker, use_requests=False):
@@ -55,112 +56,42 @@ class SEC_Filings:
     def get_metrics(self) -> pd.DataFrame | None:
         try:
             if self.facts is not None:
-                for key in keylist.key_list_shares:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        shares_outstanding = self.facts['facts']['us-gaap'][key]['units']['shares'][-1]
-                        form = shares_outstanding['form']
-                        filed = shares_outstanding['filed']
-                        shares_outstanding = shares_outstanding['val']
-                        if shares_outstanding is not None and shares_outstanding > 0:
-                            break
+                df_shares = get_metric_df(facts=self.facts, keylist=keylist.key_list_shares, unit='shares', quarters=10)
+                if not df_shares.empty:
+                    latest = df_shares.iloc[-1]
+                    shares_outstanding = latest['val']
+                    form = latest['form']
+                    filed = latest['filed']
                 else:
                     shares_outstanding = nan
                     form = None
                     filed = None
-                for key in keylist.key_list_cash:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        cash = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
-                        cash = cash['val']
-                        break
-                else:
-                    cash = nan
-                for key in keylist.key_list_debt:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        debt = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
-                        debt = debt['val']
-                        break
-                else:
-                    debt = nan
-                for key in keylist.key_list_revenue:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        revenue = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
-                        revenue = revenue['val']
-                        break
-                else:
-                    revenue = nan
-                for key in keylist.key_list_cogs:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        cogs = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
-                        cogs = cogs['val']
-                        break
-                else:
-                    cogs = nan
-                for key in keylist.key_list_gross_profit:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        gross_profit = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
-                        gross_profit = gross_profit['val']
-                        break
-                else:
-                    try:
-                        gross_profit = revenue - cogs
-                    except:
-                        gross_profit = nan
-                for key in keylist.key_list_operating_income:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        operating_income = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
-                        operating_income = operating_income['val']
-                        break
-                else:
-                    operating_income = nan
-                for key in keylist.key_list_income:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        income = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
-                        income = income['val']
-                        break
-                else:
-                    income = nan
-                for key in keylist.key_list_assets:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        assets = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
-                        assets = assets['val']
-                        break
-                else:
-                    assets = nan
-                for key in keylist.key_list_liability:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        liability = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
-                        liability = liability['val']
-                        break
-                else:
-                    liability = nan
-                for key in keylist.key_list_opex:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        opex = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
-                        opex = opex['val']
-                        break
-                else:
-                    opex = nan
-                for key in keylist.key_list_capex:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        capex = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
-                        capex = capex['val']
-                        break
-                else:
-                    capex = nan
-                for key in keylist.key_list_ocf:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        ocf = self.facts['facts']['us-gaap'][key]['units']['USD'][-1]
-                        ocf = ocf['val']
-                        break
-                else:
-                    ocf = nan
-                for key in keylist.key_list_eps:
-                    if key in self.facts['facts']['us-gaap'].keys():
-                        eps = self.facts['facts']['us-gaap'][key]['units']['USD/shares'][-1]
-                        eps = eps['val']
-                        break
-                else:
-                    eps = nan
+                df_cash = get_metric_df(self.facts, keylist.key_list_cash, unit='USD', quarters=10)
+                cash = df_cash.iloc[-1]['val'] if not df_cash.empty else nan
+                df_debt = get_metric_df(self.facts, keylist.key_list_debt, unit='USD', quarters=10)
+                debt = df_debt.iloc[-1]['val'] if not df_debt.empty else nan
+                df_revenue = get_metric_df(self.facts, keylist.key_list_revenue, unit='USD', quarters=10)
+                revenue = df_revenue.iloc[-1]['val'] if not df_revenue.empty else nan
+                df_cogs = get_metric_df(self.facts, keylist.key_list_cogs, unit='USD', quarters=10)
+                cogs = df_cogs.iloc[-1]['val'] if not df_cogs.empty else nan
+                df_gross_profit = get_metric_df(self.facts, keylist.key_list_gross_profit, unit='USD', quarters=10)
+                gross_profit = df_gross_profit.iloc[-1]['val'] if not df_gross_profit.empty else revenue - cogs
+                df_operating_income = get_metric_df(self.facts, keylist.key_list_operating_income, unit='USD', quarters=10)
+                operating_income = df_operating_income.iloc[-1]['val'] if not df_operating_income.empty else nan
+                df_income = get_metric_df(self.facts, keylist.key_list_income, unit='USD', quarters=10)
+                income = df_income.iloc[-1]['val'] if not df_income.empty else nan
+                df_assets = get_metric_df(self.facts, keylist.key_list_assets, unit='USD', quarters=10)
+                assets = df_assets.iloc[-1]['val'] if not df_assets.empty else nan
+                df_liability = get_metric_df(self.facts, keylist.key_list_liability, unit='USD', quarters=10)
+                liability = df_liability.iloc[-1]['val'] if not df_liability.empty else nan
+                df_opex = get_metric_df(self.facts, keylist.key_list_opex, unit='USD', quarters=10)
+                opex = df_opex.iloc[-1]['val'] if not df_opex.empty else nan
+                df_capex = get_metric_df(self.facts, keylist.key_list_capex, unit='USD', quarters=10)
+                capex = df_capex.iloc[-1]['val'] if not df_capex.empty else nan
+                df_ocf = get_metric_df(self.facts, keylist.key_list_ocf, unit='USD', quarters=10)
+                ocf = df_ocf.iloc[-1]['val'] if not df_ocf.empty else nan
+                df_eps = get_metric_df(self.facts, keylist.key_list_eps, unit='USD/shares', quarters=10)
+                eps = df_eps.iloc[-1]['val'] if not df_eps.empty else nan
 
                 df: pd.DataFrame = pd.DataFrame([
                     ['Form', form],
@@ -196,57 +127,23 @@ class SEC_Filings:
     def get_dcf_metrics(self):
         try:
             if self.facts is not None:
-                keys = self.facts['facts']['us-gaap'].keys()
-                shares = None
-                df_capex = None
-                df_ocf = None
-                for key in keylist.key_list_shares:
-                    try:
-                        if key in keys:
-                            data = self.facts['facts']['us-gaap'][key]['units']['shares'][-40:]
-                            result = [{'val': entry['val'], 'filed': entry['filed']} for entry in data]
-                            df = pd.DataFrame(result)
-                            df['filed'] = pd.to_datetime(df['filed'])
-                            df = df.sort_values('filed', ascending=True)
-                            df = df.drop_duplicates(subset='filed', keep='first')
-                            df_shares = df.tail(20)
-                            shares = df_shares.iloc[-1]['val']
-                            break
-                    except:
-                        continue
-                for key in keylist.key_list_capex:
-                    try:
-                        if key in keys:
-                            data = self.facts['facts']['us-gaap'][key]['units']['USD'][-40:]
-                            result = [{'val': entry['val'], 'filed': entry['filed']} for entry in data]
-                            df = pd.DataFrame(result)
-                            df['filed'] = pd.to_datetime(df['filed'])
-                            df = df.sort_values('filed', ascending=True)
-                            df = df.drop_duplicates(subset='filed', keep='first')
-                            df_capex = df.tail(20)
-                            break
-                    except:
-                        continue
-                for key in keylist.key_list_ocf:
-                    try:
-                        if key in keys:
-                            data = self.facts['facts']['us-gaap'][key]['units']['USD'][-40:]
-                            result = [{'val': entry['val'], 'filed': entry['filed']} for entry in data]
-                            df = pd.DataFrame(result)
-                            df['filed'] = pd.to_datetime(df['filed'])
-                            df = df.sort_values('filed', ascending=True)
-                            df = df.drop_duplicates(subset='filed', keep='first')
-                            df_ocf = df.tail(20)
-                            break
-                    except:
-                        continue
+
+                df_shares = get_metric_df(self.facts, keylist.key_list_shares, unit='shares', quarters=40)
+                df_shares = df_shares.drop_duplicates('filed').sort_values('filed').tail(20)
+                shares = df_shares.iloc[-1]['val'] if not df_shares.empty else nan
+                df_capex = get_metric_df(self.facts, keylist.key_list_capex, unit='USD', quarters=40)
+                df_capex  = df_capex.drop_duplicates('filed').sort_values('filed').tail(20)
+                df_ocf = get_metric_df(self.facts, keylist.key_list_ocf, unit='USD', quarters=40)
+                df_ocf    = df_ocf.drop_duplicates('filed').sort_values('filed').tail(20)
+
                 if isinstance(df_ocf, pd.DataFrame) and isinstance(df_capex, pd.DataFrame):
-                    df_fcf = pd.DataFrame()
-                    df_fcf['date'] = df_ocf['filed']
-                    df_fcf['ocf'] = df_ocf['val']
-                    df_fcf['capex'] = df_capex['val']
-                    df_fcf['fcf'] = df_fcf['ocf'] - df_fcf['capex']
-                    df_fcf.set_index('date', inplace=True)
+                    if not df_ocf.empty and not df_capex.empty:
+                        df_fcf = pd.merge(df_ocf, df_capex, on='filed', suffixes=('_ocf', '_capex'))
+                        df_fcf['fcf'] = df_fcf['val_ocf'] - df_fcf['val_capex']
+                        df_fcf.rename(columns={'filed': 'date'}, inplace=True)
+                        df_fcf.set_index('date', inplace=True)
+                    else:
+                        df_fcf = None
                     return df_fcf, shares
                 else:
                     print("data not found")
