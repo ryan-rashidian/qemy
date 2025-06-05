@@ -1,14 +1,16 @@
 from qemy.data import api_fred as fred
 from qemy.utils import parse_arg
+
 #=============================================================================#
 ################################## FRED #######################################
 #=============================================================================#
+
 def rfr():
     try:
         print(fred.get_tbill_yield())
     except Exception as e:
         print(f"Could not fetch data ERROR:\n{e}")
-#=============================================================================#
+
 def cpi(arg):
     period, units = parse_arg.parse_arg_p_u(arg=arg, name='cpi')
     units = 'pc1' if units is None else units
@@ -19,7 +21,7 @@ def cpi(arg):
             print(f"Could not fetch data ERROR:\n{e}")
     else:
         print('For valid syntax, Try: cpi -p 1Y')
-#=============================================================================#
+
 def gdp(arg):
     period, units = parse_arg.parse_arg_p_u(arg=arg, name='gdp')
     units = 'pc1' if units is None else units
@@ -30,7 +32,7 @@ def gdp(arg):
             print(f"Could not fetch data ERROR:\n{e}")
     else:
         print('For valid syntax, Try: gdp -p 1Y')
-#=============================================================================#
+
 def sent(arg):
     period, units = parse_arg.parse_arg_p_u(arg=arg, name='sent')
     units = 'pch' if units is None else units
@@ -41,7 +43,7 @@ def sent(arg):
             print(f"Could not fetch data ERROR:\n{e}")
     else:
         print('For valid syntax, Try: sent -p 1Y')
-#=============================================================================#
+
 def nfp(arg):
     period, units = parse_arg.parse_arg_p_u(arg=arg, name='nfp')
     units = 'pc1' if units is None else units
@@ -52,7 +54,7 @@ def nfp(arg):
             print(f"Could not fetch data ERROR:\n{e}")
     else:
         print('For valid syntax, Try: nfp -p 1Y')
-#=============================================================================#
+
 def interest(arg):
     period, units = parse_arg.parse_arg_p_u(arg=arg, name='interest')
     units = 'pc1' if units is None else units
@@ -63,7 +65,7 @@ def interest(arg):
             print(f"Could not fetch data ERROR:\n{e}")
     else:
         print('For valid syntax, Try: interest -p 1Y')
-#=============================================================================#
+
 def jobc(arg):
     period, units = parse_arg.parse_arg_p_u(arg=arg, name='jobc')
     units = 'pc1' if units is None else units
@@ -74,7 +76,7 @@ def jobc(arg):
             print(f"Could not fetch data ERROR:\n{e}")
     else:
         print('For valid syntax, Try: jobc -p 1Y')
-#=============================================================================#
+
 def unem(arg):
     period, units = parse_arg.parse_arg_p_u(arg=arg, name='unem')
     units = 'pc1' if units is None else units
@@ -85,7 +87,7 @@ def unem(arg):
             print(f"Could not fetch data ERROR:\n{e}")
     else:
         print('For valid syntax, Try: unem -p 1Y')
-#=============================================================================#
+
 def indp(arg):
     period, units = parse_arg.parse_arg_p_u(arg=arg, name='indp')
     units = 'pc1' if units is None else units
@@ -96,7 +98,7 @@ def indp(arg):
             print(f"Could not fetch data ERROR:\n{e}")
     else:
         print('For valid syntax, Try: indp -p 1Y')
-#=============================================================================#
+
 def netex(arg):
     period, units = parse_arg.parse_arg_p_u(arg=arg, name='netex')
     units = 'lin' if units is None else units 

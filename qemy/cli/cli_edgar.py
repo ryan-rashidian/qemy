@@ -8,7 +8,7 @@ from qemy.data.api_edgar_bulk import bulk_refresh
 #=============================================================================#
 def dcf(arg):
     get_dcf_eval(arg)
-#=============================================================================#
+
 def filing(arg, ticker_df) -> pd.DataFrame | None:
     if ' -r' in arg:
         ticker = arg.replace('-r', '').strip().upper() 
@@ -33,7 +33,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
                 return None
     except:
         print('Could not fetch filing metrics, please try another ticker.')
-#=============================================================================#
+
 def bulk_refresh():
     confirm = input("All previous bulk data will be overwritten.\nAre you sure? (yes/no): ")
     if confirm.strip().lower() == 'yes':

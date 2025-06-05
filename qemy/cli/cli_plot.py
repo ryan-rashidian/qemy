@@ -1,8 +1,10 @@
 from qemy.plot import plot
 from qemy.utils import parse_arg
+
 #=============================================================================#
 ################################## PLOT #######################################
 #=============================================================================#
+
 def plot_price(arg):
     period, ticker = parse_arg.parse_arg_p_t(arg=arg, name='plot_price')
     if isinstance(period, str) and isinstance(ticker, str):
@@ -13,7 +15,7 @@ def plot_price(arg):
             print(f"Could not fetch plot chart, please try another ticker. Error:\n{e}")
     else:
         print('For valid syntax, Try: plot_price AAPL -p 3M')
-#=============================================================================#
+
 def plot_lr(arg):
     period, ticker = parse_arg.parse_arg_p_t(arg=arg, name='plot_lr')
     if isinstance(period, str) and isinstance(ticker, str):
@@ -24,7 +26,7 @@ def plot_lr(arg):
             print(f"Could not fetch plot chart, please try another ticker. Error:\n{e}")
     else:
         print('For valid syntax, Try: price_plot AAPL -p 3M')
-#=============================================================================#
+
 def plot_monte_carlo(arg):
     period, ticker, num = parse_arg.parse_arg_p_t_n(arg=arg, name='plot_montec')
     if isinstance(period, str) and isinstance(ticker, str) and num:
@@ -35,7 +37,7 @@ def plot_monte_carlo(arg):
             print(f"Error:\n{e}")
     else:
         print('For valid syntax, Try: monte_carlo -p 2Y -n 1000')
-#=============================================================================#
+
 def plot_cpi(arg):
     period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_cpi')
     units = 'pc1' if units is None else units
@@ -50,7 +52,7 @@ def plot_cpi(arg):
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
         print('For valid syntax, Try: plot_cpi -p 3m -s yes')
-#=============================================================================#
+
 def plot_gdp(arg):
     period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_gdp')
     units = 'pc1' if units is None else units
@@ -65,7 +67,7 @@ def plot_gdp(arg):
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
         print('For valid syntax, Try: plot_gdp -p 3M -s yes')
-#=============================================================================#
+
 def plot_sent(arg):
     period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_sent')
     units = 'pch' if units is None else units
@@ -80,7 +82,7 @@ def plot_sent(arg):
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
         print('For valid syntax, Try: plot_sent -p 3M -s yes')
-#=============================================================================#
+
 def plot_nfp(arg):
     period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_nfp')
     units = 'pc1' if units is None else units
@@ -95,7 +97,7 @@ def plot_nfp(arg):
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
         print('For valid syntax, Try: plot_nfp -p 3M -s yes')
-#=============================================================================#
+
 def plot_interest(arg):
     period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_interest')
     units = 'pc1' if units is None else units
@@ -110,7 +112,7 @@ def plot_interest(arg):
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
         print('For valid syntax, Try: plot_interest -p 3M -s yes')
-#=============================================================================#
+
 def plot_jobc(arg):
     period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_jobc')
     units = 'pc1' if units is None else units
@@ -125,7 +127,7 @@ def plot_jobc(arg):
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
         print('For valid syntax, Try: plot_jobc -p 3M -s yes')
-#=============================================================================#
+
 def plot_unem(arg):
     period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_unem')
     units = 'pc1' if units is None else units
@@ -140,7 +142,7 @@ def plot_unem(arg):
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
         print('For valid syntax, Try: plot_unem -p 3M -s yes')
-#=============================================================================#
+
 def plot_indp(arg):
     period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_indp')
     units = 'pc1' if units is None else units
@@ -155,7 +157,7 @@ def plot_indp(arg):
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
         print('For valid syntax, Try: plot_indp -p 3M -s yes')
-#=============================================================================#
+
 def plot_netex(arg):
     period, save_state, units = parse_arg.parse_arg_p_s_u(arg=arg, name='plot_netex')
     units = 'lin' if units is None else units
