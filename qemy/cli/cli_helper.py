@@ -1,4 +1,6 @@
-# cli_helper is for the 'help' command in cli.py
+
+#================================== HELPER ===================================#
+
 def print_help_table(title, commands):
     print(f"\n{title}")
     print("-" * len(title))

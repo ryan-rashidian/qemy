@@ -30,9 +30,34 @@ class QemyShell(cmd.Cmd):
         self.ticker_df = pd.DataFrame(index=metric_index) 
         self.ticker_df.index.name = 'Metrics:'
 
-#=============================================================================#
-################################# SESSION #####################################
-#=============================================================================#
+#================================== CORE =====================================#
+    def do_table(self, arg):
+        save_state = parse_arg.parse_arg_s(arg=arg, name='table')
+        if isinstance(save_state, str):
+            try:
+                if save_state in ('Y', 'YES'):
+                    save_to_csv(df=self.ticker_df)
+                    print("File saved...\n /qemy/exports/tables/")
+                else:
+                    print('Filings:')
+                    print(self.ticker_df.to_string(justify='left', formatters={
+                        col: (lambda x: f"{x:,}" if isinstance(x, Number) else x)
+                        for col in self.ticker_df.columns
+                    }))
+            except Exception as e:
+                print(f"Could not fetch/save table. ERROR:\n{e}")
+        else:
+            print("For valid syntax, Try: table -s yes")
+    def help_table(self):
+        print("Fetches table of current filings")
+        print("Usage: table")
+
+    def do_watchlist(self, _):
+        print('Watchlist:')
+        print(self.ticker_list)
+    def help_watchlist(self):
+        print("Fetches current watchlist")
+        print("Usage: watchlist")
 
     def do_session(self, _):
         try:
@@ -43,9 +68,7 @@ class QemyShell(cmd.Cmd):
         print("Starts a session.")
         print("Usage: session")
 
-#=============================================================================#
-################################### SEC #######################################
-#=============================================================================#
+#================================== EDGAR ====================================#
 
     def do_dcf(self, arg):
         cli_edgar.dcf(arg=arg)
@@ -69,9 +92,7 @@ class QemyShell(cmd.Cmd):
         print("Note: every bulk_refresh will download and unzip ~20GB of filing data.")
         print("All previous bulk data will be overwritten.")
 
-#=============================================================================#
-################################## FRED #######################################
-#=============================================================================#
+#================================== FRED =====================================#
 
     def do_rfr(self, _):
         cli_fred.rfr()
@@ -133,9 +154,7 @@ class QemyShell(cmd.Cmd):
         print("Fetches Real Net Exports of Goods and Services data.")
         print("Usage: netex -p <PERIOD>")
 
-#=============================================================================#
-################################## PRICE ######################################
-#=============================================================================#
+#================================== TIINGO ===================================#
 
     def do_quote(self, arg):
         cli_tiingo.quote(arg=arg)
@@ -162,9 +181,7 @@ class QemyShell(cmd.Cmd):
         print("Performs Monte Carlo simulations on given ticker's price history")
         print("Usage: mcarlo AAPL -p 2Y -n 1000")
 
-#=============================================================================#
-################################## PLOT #######################################
-#=============================================================================#
+#================================== PLOT =====================================#
 
     def do_plot_price(self, arg):
         cli_plot.plot_price(arg=arg)
@@ -238,41 +255,21 @@ class QemyShell(cmd.Cmd):
         print("Fetches plot chart for Real Net Exports of Goods and Services.")
         print("Usage: plot_netex -p <PERIOD>")
 
-#=============================================================================#
-################################## CLI ########################################
-#=============================================================================#
+#================================== HELPER ===================================#
 
-    def do_watchlist(self, _):
-        print('Watchlist:')
-        print(self.ticker_list)
-    def help_watchlist(self):
-        print("Fetches current watchlist")
-        print("Usage: watchlist")
-
-    def do_table(self, arg):
-        save_state = parse_arg.parse_arg_s(arg=arg, name='table')
-        if isinstance(save_state, str):
-            try:
-                if save_state in ('Y', 'YES'):
-                    save_to_csv(df=self.ticker_df)
-                    print("File saved...\n /qemy/exports/tables/")
-                else:
-                    print('Filings:')
-                    print(self.ticker_df.to_string(justify='left', formatters={
-                        col: (lambda x: f"{x:,}" if isinstance(x, Number) else x)
-                        for col in self.ticker_df.columns
-                    }))
-            except Exception as e:
-                print(f"Could not fetch/save table. ERROR:\n{e}")
+    def do_help(self, arg):
+        if arg:
+            super().do_help(arg)
         else:
-            print("For valid syntax, Try: table -s yes")
-    def help_table(self):
-        print("Fetches table of current filings")
-        print("Usage: table")
+            cli_helper.help()
 
-#=============================================================================#
-################################ CLI UTIL #####################################
-#=============================================================================#
+    def do_flags(self, _):
+        cli_helper.flags()
+
+    def do_units(self, _):
+        cli_helper.units()
+
+#================================== CLI UTIL =================================#
 
     def do_calc(self, arg):
         try:
@@ -283,18 +280,6 @@ class QemyShell(cmd.Cmd):
     def help_calc(self):
         print("Simple calculator with Python syntax")
         print("Example: calc 2 + 2")
-
-    def do_flags(self, _):
-        cli_helper.flags()
-
-    def do_units(self, _):
-        cli_helper.units()
-
-    def do_help(self, arg):
-        if arg:
-            super().do_help(arg)
-        else:
-            cli_helper.help()
 
     def do_clear(self, _):
         clear_screen = 'cls' if platform.system() == 'Windows' else 'clear'

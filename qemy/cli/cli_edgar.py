@@ -3,9 +3,9 @@ from numbers import Number
 from qemy.core.models.dcf import get_dcf_eval
 from qemy.data.api_edgar import SEC_Filings
 from qemy.data.api_edgar_bulk import bulk_refresh
-#=============================================================================#
-################################### SEC #######################################
-#=============================================================================#
+
+#================================== EDGAR ====================================#
+
 def dcf(arg):
     get_dcf_eval(arg)
 
