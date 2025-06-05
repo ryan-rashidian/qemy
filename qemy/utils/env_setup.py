@@ -2,28 +2,42 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
+def setup_input(prompt):
+    user_input = input(prompt).strip()
+    if user_input.lower() in ('exit', 'q'):
+        sys.exit()
+    else:
+        return user_input
+
 def setup_wizard():
     if getattr(sys, 'frozen', False):
         project_root = Path(sys.executable).resolve().parent
     else:
         project_root = Path(__file__).resolve().parents[2]
-
     env_path = project_root / '.env'
-
+    temp_env_path = project_root / '.env.tmp'
     if env_path.exists():
         load_dotenv(dotenv_path=env_path)
         return
 
-    print("\n No .env file found! Please setup your FRED API key, Tiingo API key, and EGDAR API 'User Agent'")
-    fred_key = input("Enter your FRED API key: ").strip()
-    tiingo_key = input("Enter your Tiingo API key: ").strip()
-    print("Enter a 'User Agent' to identify yourself to EDGAR API")
-    print("- e.g. john johndoe@example.com")
-    edgar_agent = input("Enter a 'User Agent': ")
-    with env_path.open('w') as f:
-        f.write(f"FRED_API_KEY={fred_key}\n")
-        f.write(f"TIINGO_API_KEY={tiingo_key}\n")
-        f.write(f"EDGAR_USER_AGENT={edgar_agent}\n")
-    print(".env file created successfully!\n")
-    load_dotenv(dotenv_path=env_path)
+    print("\n No .env file found!\n Please setup your FRED API key, Tiingo API key, and EDGAR API 'User Agent'")
+    print("Type: 'exit' or 'q' to exit this setup at any time.")
+
+    try:
+        fred_key = setup_input(" Enter your FRED API key: ")
+        tiingo_key = setup_input(" Enter your Tiingo API key: ")
+        print(" Enter a 'User Agent' to identify yourself to EDGAR API")
+        print(" - e.g. john johndoe@example.com")
+        edgar_agent = setup_input("Enter a 'User Agent': ")
+        with temp_env_path.open('w') as f:
+            f.write(f"FRED_API_KEY={fred_key}\n")
+            f.write(f"TIINGO_API_KEY={tiingo_key}\n")
+            f.write(f"EDGAR_USER_AGENT={edgar_agent}\n")
+        temp_env_path.rename(env_path)
+        print(".env file created successfully!\n")
+        load_dotenv(dotenv_path=env_path)
+    except SystemExit:
+        if temp_env_path.exists():
+            temp_env_path.unlink()
+        print("Setup aborted. No setup information saved.\n")
 
