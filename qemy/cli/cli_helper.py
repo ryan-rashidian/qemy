@@ -18,7 +18,7 @@ def help():
         ("price", "Fetches stock price data"),
         ("quote", "Fetches latest price quote"),
         ("table", "Shows and saves current filings"),
-        ("watchlist", "Shows and saves current tickers"),
+        ("wl", "Show, edit and save current tickers"),
     ])
     print_help_table(" Economic Analysis (FRED): ", [
         ("cpi", "Fetches data for - Consumer Price Index"),
@@ -48,14 +48,15 @@ def help():
     ])
     print_help_table(" Auxiliary Commands: ", [
         ("calc", "Simple Calculator"),
-        ("clear", ""),
-        ("exit", ""),
+        ("clear", "or 'cls' to clear screen."),
+        ("exit", "or 'q' to exit qemy."),
         ("env_reset", "Deletes current .env file"),
     ])
     print_help_table(" Additional Info: ", [
-        ("flags", ""),
-        ("units", ""),
-        ("info", ""),
+        ("flags", "- -- Flag command list and descriptions."),
+        ("units", "Unit commands for the -u --units flag."),
+        ("info", "Adding soon."),
+        ("manual", "In progress/planned."),
     ])
     print("\nEnter 'help <COMMAND>' for more details.\n")
 
