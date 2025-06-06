@@ -195,9 +195,9 @@ Proper documentation is being planned. For now, refer to the help commands for m
 
 Known Issues:
 
-- (Crash) Needs error handling when DCF model fails to find certain metrics.
-- (Fixed - 2025-06-05) Parsing logic in SEC_Filings class is slightly inaccurate. Filing data is not always in chronological order. The issue has been solved in testing, and a fix will be implemented soon. 
-- (Non-critical) DCF model is not yet factoring a company's net debt metric into the calculation. Waiting for implementation of better parsing logic, referenced in the previous issue. 
+- [x] Needs error handling when DCF model fails to find certain metrics.
+- [x] (Non-critical) Parsing logic in SEC_Filings class is slightly inaccurate. Filing data is not always in chronological order. The issue has been solved in testing, and a fix will be implemented soon. 
+- [ ] (Non-critical) DCF model is not yet factoring a company's net debt metric into the calculation. Waiting for implementation of better parsing logic, referenced in the previous issue. 
 
 Ideas:
 
