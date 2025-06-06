@@ -6,7 +6,7 @@ import os
 import platform
 import pandas as pd
 from numbers import Number
-from qemy.cli.cli_core import SessionManager
+from qemy.cli.cli_core import WatchListManager
 from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot, cli_aux
 from qemy.utils.utils_cli import save_to_csv
 from qemy.utils import parse_arg
@@ -31,6 +31,7 @@ class QemyShell(cmd.Cmd):
         self.ticker_df.index.name = 'Metrics:'
 
 #================================== CORE =====================================#
+
     def do_table(self, arg):
         save_state = parse_arg.parse_arg_s(arg=arg, name='table')
         if isinstance(save_state, str):
@@ -52,21 +53,18 @@ class QemyShell(cmd.Cmd):
         print("Fetches table of current filings")
         print("Usage: table")
 
-    def do_watchlist(self, _):
-        print('Watchlist:')
-        print(self.ticker_list)
-    def help_watchlist(self):
-        print("Fetches current watchlist")
-        print("Usage: watchlist")
-
-    def do_session(self, _):
+    def do_wl(self, _):
         try:
-            SessionManager().run()
+            ticker_list = WatchListManager(ticker_list=self.ticker_list.copy()).run()
+            if ticker_list:
+                self.ticker_list = ticker_list
+            else:
+                return
         except Exception as e:
-            print(f"Failed to load session ERROR:\n{e}")
-    def help_session(self):
-        print("Starts a session.")
-        print("Usage: session")
+            print(f"Failed to load watchlist, Error:\n{e}")
+    def help_wl(self):
+        print("Starts watchlist editor.")
+        print("Usage: watchlist")
 
 #================================== EDGAR ====================================#
 

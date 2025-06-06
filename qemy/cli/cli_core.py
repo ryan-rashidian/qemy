@@ -2,9 +2,9 @@ import os
 
 #================================== CORE =====================================#
 
-class SessionManager:
-    def __init__(self):
-        self.tickers = []
+class WatchListManager:
+    def __init__(self, ticker_list):
+        self.tickers = ticker_list
 
     def add(self, ticker):
         if ticker not in self.tickers:
@@ -20,19 +20,19 @@ class SessionManager:
         else:
             print(f"{ticker} not found in the list.")
 
-    def view(self):
+    def show(self):
         print("Current tickers:")
         for t in self.tickers:
             print(f"- {t}")
 
     def help(self):
-        print("Session:\n- 'add <TICKER>'\n- 'remove <Ticker>'\n- 'view'\n- 'clear'\n- 'exit'\n- 'help'")
+        print("Watchlist manager:\n- 'add <TICKER>'\n- 'remove <Ticker>'\n- 'show'\n- 'clear'\n- 'exit'\n- 'help'")
 
     def run(self):
-        print("Session running:\n- type 'help' to list commands.")
+        print("Watchlist manager:\n- type 'help' to list commands.")
 
         while True:
-            user_input = input("qemy>session> ").upper()
+            user_input = input("qemy>watchlist> ").upper()
 
             if user_input.startswith('ADD'):
                 ticker = user_input.split()[1:]
@@ -44,14 +44,19 @@ class SessionManager:
                 ticker = [s.strip() for s in ticker]
                 for t in ticker:
                     self.remove(t)
-            elif user_input == 'VIEW':
-                self.view()
+            elif user_input == 'SHOW':
+                self.show()
             elif user_input == 'CLEAR':
                 os.system('clear')
             elif user_input == 'HELP':
                 self.help()
-            elif user_input == 'EXIT':
-                print('Exiting current session.')
-                break
+            elif user_input in ('EXIT', 'Q'):
+                save_watchlist = input("Save changes? (yes/no): ")
+                if save_watchlist == 'yes':
+                    print("Exiting and saving current watchlist.")
+                    return self.tickers
+                else:
+                    print('Exiting watchlist editor.')
+                    return None
             else:
                 print('Unknown command.')
