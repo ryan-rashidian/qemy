@@ -1,15 +1,11 @@
 from qemy.utils.env_setup import setup_wizard
 setup_wizard() # First time setup + fills API_KEY variables
-# Must run setup_wizard before importing backend.fetch api modules
+# Must run setup_wizard before importing qemy modules
 import cmd
 import os
 import platform
 import pandas as pd
-from numbers import Number
-from qemy.cli.cli_core import WatchListManager
-from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot, cli_aux
-from qemy.utils.utils_cli import save_to_csv
-from qemy.utils import parse_arg
+from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot, cli_aux, cli_core
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -33,29 +29,14 @@ class QemyShell(cmd.Cmd):
 #================================== CORE =====================================#
 
     def do_table(self, arg):
-        save_state = parse_arg.parse_arg_s(arg=arg, name='table')
-        if isinstance(save_state, str):
-            try:
-                if save_state in ('Y', 'YES'):
-                    save_to_csv(df=self.ticker_df)
-                    print("File saved...\n /qemy/exports/tables/")
-                else:
-                    print('Filings:')
-                    print(self.ticker_df.to_string(justify='left', formatters={
-                        col: (lambda x: f"{x:,}" if isinstance(x, Number) else x)
-                        for col in self.ticker_df.columns
-                    }))
-            except Exception as e:
-                print(f"Could not fetch/save table. ERROR:\n{e}")
-        else:
-            print("For valid syntax, Try: table -s yes")
+        cli_core.table(arg=arg, ticker_df=self.ticker_df)
     def help_table(self):
         print("Fetches table of current filings")
         print("Usage: table")
 
     def do_wl(self, _):
         try:
-            ticker_list = WatchListManager(ticker_list=self.ticker_list.copy()).run()
+            ticker_list = cli_core.WatchListManager(ticker_list=self.ticker_list.copy()).run()
             if ticker_list:
                 self.ticker_list = ticker_list
             else:

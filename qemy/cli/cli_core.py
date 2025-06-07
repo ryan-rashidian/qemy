@@ -1,4 +1,7 @@
 import os
+from numbers import Number
+from qemy.utils.utils_cli import save_to_csv
+from qemy.utils import parse_arg
 
 #================================== CORE =====================================#
 
@@ -60,3 +63,21 @@ class WatchListManager:
                     return None
             else:
                 print('Unknown command.')
+
+def table(arg, ticker_df):
+    save_state = parse_arg.parse_arg_s(arg=arg, name='table')
+    if isinstance(save_state, str):
+        try:
+            if save_state in ('Y', 'YES'):
+                save_to_csv(df=ticker_df)
+                print("File saved...\n /qemy/exports/tables/")
+            else:
+                print('Filings:')
+                print(ticker_df.to_string(justify='left', formatters={
+                    col: (lambda x: f"{x:,}" if isinstance(x, Number) else x)
+                    for col in ticker_df.columns
+                }))
+        except Exception as e:
+            print(f"Could not fetch/save table. ERROR:\n{e}")
+    else:
+        print("For valid syntax, Try: table -s yes")
