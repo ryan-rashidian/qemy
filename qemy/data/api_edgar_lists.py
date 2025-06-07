@@ -7,8 +7,11 @@ key_list_cash = [
     'Cash',
 ]
 key_list_debt = [
+    ### total debt
     'DebtLongtermAndShorttermCombinedAmount',
-    'DebtInstrumentCarryingAmount',
+    'Debt'
+    'LongTermDebtAndCapitalLeaseObligations'
+    ### temporary fallback logic
     'LongTermDebt',
     'LongTermDebtNoncurrent',
     'LongTermDebtCurrent',
@@ -17,6 +20,24 @@ key_list_debt = [
     'NotesPayableRelatedPartiesCurrentAndNoncurrent',
     'ConvertibleDebtNoncurrent',
     'OperatingLeaseLiability',
+    'DebtInstrumentCarryingAmount',
+]
+key_list_debt_components = [
+    ### long term debt
+    'LongTermDebt', ### total current and non-current, component of a component. needs own check.
+    'LongTermDebtNoncurrent',
+    'LongTermDebtCurrent',
+    ### short term debt
+    'CurrentPortionOfLongTermDebt',
+    'DebtCurrent',
+    'ShortTermBorrowings',
+    'ShortTermDebt',
+    ### legacy terms, fallback logic
+    'NotesPayable',
+    'NotesPayableRelatedPartiesCurrentAndNoncurrent',
+    'ConvertibleDebtNoncurrent',
+    'OperatingLeaseLiability',
+    'DebtInstrumentCarryingAmount',
 ]
 key_list_revenue = [
     'RevenueFromContractWithCustomerExcludingAssessedTax',
