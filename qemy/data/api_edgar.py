@@ -101,6 +101,7 @@ class SEC_Filings:
                     ['Shares Outstanding', shares_outstanding],
                     ['Cash', cash],
                     ['Debt', debt],
+                    ['Net Debt', debt - cash],
                     ['Revenue', revenue],
                     ['COGS', cogs],
                     ['Gross Profit', gross_profit],

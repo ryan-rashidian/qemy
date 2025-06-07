@@ -17,9 +17,9 @@ class QemyShell(cmd.Cmd):
     prompt = "qemy> "
     def __init__(self):
         metric_index = pd.Index([
-            'Form', 'Filed', 'Shares Outstanding', 'Cash', 'Debt', 'Revenue',
-            'COGS', 'Gross Profit', 'EBIT', 'Net Income', 'Assets', 'Liabilities', 
-            'Equity', 'OpEx', 'CapEx', 'OCF', 'FCF', 'EPS', 
+            'Form', 'Filed', 'Shares Outstanding', 'Cash', 'Debt', 'Net Debt',
+            'Revenue', 'COGS', 'Gross Profit', 'EBIT', 'Net Income', 'Assets', 
+            'Liabilities', 'Equity', 'OpEx', 'CapEx', 'OCF', 'FCF', 'EPS', 
         ])
         super().__init__()
         self.ticker_list = []
