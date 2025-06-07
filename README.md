@@ -195,8 +195,9 @@ Proper documentation is being planned. For now, refer to the help commands for m
 
 Known Issues:
 
-- [x] Needs error handling when DCF model fails to find certain metrics.
+- [x] (Crash) Needs error handling when DCF model fails to find certain metrics.
 - [x] (Non-critical) Parsing logic in SEC_Filings class is slightly inaccurate. Filing data is not always in chronological order. The issue has been solved in testing, and a fix will be implemented soon. 
+- [ ] (Non-critical) Total debt metric needs a pre-processing step to aggregate component metrics (short term, long term, current portion, etc.) when a single total debt value is not reported in the filing being parsed.
 - [ ] (Non-critical) DCF model is not yet factoring a company's net debt metric into the calculation. Waiting for implementation of better parsing logic, referenced in the previous issue. 
 
 Ideas:
