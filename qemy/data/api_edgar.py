@@ -128,6 +128,23 @@ class SEC_Filings:
             print(f"Failed to request company facts:\n{e}")
             return None
 
+    def get_metric_history(self, key=keylist.key_list_eps, units='USD/shares', quarters=20):
+        try:
+            if self.facts is not None:
+
+                df_metric_hist = get_metric_df(self.facts, keylist=key, unit=units, quarters=quarters * 4)
+                metric = df_metric_hist.tail(quarters)
+                metric.set_index('filed', inplace=True)
+                if isinstance(metric, pd.DataFrame):
+                    return metric
+                else:
+                    print("get_metric_history\nData Not Found.")
+                    return None
+
+        except Exception as e:
+            print(f"Failed to request company facts:\n{e}")
+            return None
+
     def get_dcf_metrics(self):
         try:
             if self.facts is not None:
@@ -150,7 +167,7 @@ class SEC_Filings:
                         df_fcf = None
                     return df_fcf, shares
                 else:
-                    print("data not found")
+                    print("get_dcf_metrics\nData Not Found")
                     return None, None
 
             else:
