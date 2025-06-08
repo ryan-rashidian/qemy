@@ -152,6 +152,12 @@ class SEC_Filings:
                 df_shares = get_metric_df(self.facts, keylist.key_list_shares, unit='shares', quarters=40)
                 df_shares = df_shares.drop_duplicates('filed').sort_values('filed').tail(20)
                 shares = df_shares.iloc[-1]['val'] if not df_shares.empty else nan
+                df_cash = get_metric_df(self.facts, keylist.key_list_cash, unit='USD', quarters=10)
+                cash = df_cash.iloc[-1]['val'] if not df_cash.empty else nan
+                df_debt = get_metric_df(self.facts, keylist.key_list_debt, unit='USD', quarters=10)
+                debt = df_debt.iloc[-1]['val'] if not df_debt.empty else nan
+                net_debt = debt - cash
+
                 df_capex = get_metric_df(self.facts, keylist.key_list_capex, unit='USD', quarters=40)
                 df_capex  = df_capex.drop_duplicates('filed').sort_values('filed').tail(20)
                 df_ocf = get_metric_df(self.facts, keylist.key_list_ocf, unit='USD', quarters=40)
@@ -165,15 +171,15 @@ class SEC_Filings:
                         df_fcf.set_index('date', inplace=True)
                     else:
                         df_fcf = None
-                    return df_fcf, shares
+                    return df_fcf, shares, net_debt
                 else:
                     print("get_dcf_metrics\nData Not Found")
-                    return None, None
+                    return None, None, None
 
             else:
                 print("Error: filing data failed to initialize.")
-                return None, None
+                return None, None, None
         except Exception as e:
             print(f"Failed to request company facts:\n{e}")
-            return None, None
+            return None, None, None
 
