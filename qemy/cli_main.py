@@ -55,11 +55,11 @@ class QemyShell(cmd.Cmd):
         print("Performs DCF model evaluation on given ticker.")
         print("Usage: dcf <TICKER>")
 
-    def do_filing(self, arg):
+    def do_f(self, arg):
         df_return = cli_edgar.filing(arg=arg, ticker_df=self.ticker_df)
         if isinstance(df_return, pd.DataFrame):
             self.ticker_df = df_return
-    def help_filing(self):
+    def help_f(self):
         print("Fetches latest 10K/10Q/20F metrics for given ticker.")
         print("Usage: filing <TICKER>\nFlags:")
         print("(-r --request) --- Fetches filing data directly from SEC EDGAR API.")
