@@ -58,7 +58,7 @@ class SEC_Filings:
         try:
             if self.facts is not None:
 
-                df_shares = get_metric_df(facts=self.facts, keylist=keylist.key_list_shares, unit='shares', quarters=10)
+                df_shares = get_metric_df(facts=self.facts, keylist=keylist.key_list_shares, quarters=10)
                 if not df_shares.empty:
                     latest = df_shares.iloc[-1]
                     shares_outstanding = latest['val']
@@ -68,31 +68,31 @@ class SEC_Filings:
                     shares_outstanding = nan
                     form = None
                     filed = None
-                df_cash = get_metric_df(self.facts, keylist.key_list_cash, unit='USD', quarters=10)
+                df_cash = get_metric_df(self.facts, keylist.key_list_cash, quarters=10)
                 cash = df_cash.iloc[-1]['val'] if not df_cash.empty else nan
-                df_debt = get_metric_df(self.facts, keylist.key_list_debt, unit='USD', quarters=10)
+                df_debt = get_metric_df(self.facts, keylist.key_list_debt, quarters=10)
                 debt = df_debt.iloc[-1]['val'] if not df_debt.empty else nan
-                df_revenue = get_metric_df(self.facts, keylist.key_list_revenue, unit='USD', quarters=10)
+                df_revenue = get_metric_df(self.facts, keylist.key_list_revenue, quarters=10)
                 revenue = df_revenue.iloc[-1]['val'] if not df_revenue.empty else nan
-                df_cogs = get_metric_df(self.facts, keylist.key_list_cogs, unit='USD', quarters=10)
+                df_cogs = get_metric_df(self.facts, keylist.key_list_cogs, quarters=10)
                 cogs = df_cogs.iloc[-1]['val'] if not df_cogs.empty else nan
-                df_gross_profit = get_metric_df(self.facts, keylist.key_list_gross_profit, unit='USD', quarters=10)
+                df_gross_profit = get_metric_df(self.facts, keylist.key_list_gross_profit, quarters=10)
                 gross_profit = df_gross_profit.iloc[-1]['val'] if not df_gross_profit.empty else revenue - cogs
-                df_operating_income = get_metric_df(self.facts, keylist.key_list_operating_income, unit='USD', quarters=10)
+                df_operating_income = get_metric_df(self.facts, keylist.key_list_operating_income, quarters=10)
                 operating_income = df_operating_income.iloc[-1]['val'] if not df_operating_income.empty else nan
-                df_income = get_metric_df(self.facts, keylist.key_list_income, unit='USD', quarters=10)
+                df_income = get_metric_df(self.facts, keylist.key_list_income, quarters=10)
                 income = df_income.iloc[-1]['val'] if not df_income.empty else nan
-                df_assets = get_metric_df(self.facts, keylist.key_list_assets, unit='USD', quarters=10)
+                df_assets = get_metric_df(self.facts, keylist.key_list_assets, quarters=10)
                 assets = df_assets.iloc[-1]['val'] if not df_assets.empty else nan
-                df_liability = get_metric_df(self.facts, keylist.key_list_liability, unit='USD', quarters=10)
+                df_liability = get_metric_df(self.facts, keylist.key_list_liability, quarters=10)
                 liability = df_liability.iloc[-1]['val'] if not df_liability.empty else nan
-                df_opex = get_metric_df(self.facts, keylist.key_list_opex, unit='USD', quarters=10)
+                df_opex = get_metric_df(self.facts, keylist.key_list_opex, quarters=10)
                 opex = df_opex.iloc[-1]['val'] if not df_opex.empty else nan
-                df_capex = get_metric_df(self.facts, keylist.key_list_capex, unit='USD', quarters=10)
+                df_capex = get_metric_df(self.facts, keylist.key_list_capex, quarters=10)
                 capex = df_capex.iloc[-1]['val'] if not df_capex.empty else nan
-                df_ocf = get_metric_df(self.facts, keylist.key_list_ocf, unit='USD', quarters=10)
+                df_ocf = get_metric_df(self.facts, keylist.key_list_ocf, quarters=10)
                 ocf = df_ocf.iloc[-1]['val'] if not df_ocf.empty else nan
-                df_eps = get_metric_df(self.facts, keylist.key_list_eps, unit='USD/shares', quarters=10)
+                df_eps = get_metric_df(self.facts, keylist.key_list_eps, quarters=10)
                 eps = df_eps.iloc[-1]['val'] if not df_eps.empty else nan
 
                 df: pd.DataFrame = pd.DataFrame([
@@ -128,11 +128,11 @@ class SEC_Filings:
             print(f"Failed to request company facts:\n{e}")
             return None
 
-    def get_metric_history(self, key=keylist.key_list_eps, units='USD/shares', quarters=20):
+    def get_metric_history(self, key=keylist.key_list_eps, quarters=20):
         try:
             if self.facts is not None:
 
-                df_metric_hist = get_metric_df(self.facts, keylist=key, unit=units, quarters=quarters * 4)
+                df_metric_hist = get_metric_df(self.facts, keylist=key, quarters=quarters * 4)
                 metric = df_metric_hist.tail(quarters)
                 metric.set_index('filed', inplace=True)
                 if isinstance(metric, pd.DataFrame):
@@ -149,18 +149,18 @@ class SEC_Filings:
         try:
             if self.facts is not None:
 
-                df_shares = get_metric_df(self.facts, keylist.key_list_shares, unit='shares', quarters=40)
+                df_shares = get_metric_df(self.facts, keylist.key_list_shares, quarters=40)
                 df_shares = df_shares.drop_duplicates('filed').sort_values('filed').tail(20)
                 shares = df_shares.iloc[-1]['val'] if not df_shares.empty else nan
-                df_cash = get_metric_df(self.facts, keylist.key_list_cash, unit='USD', quarters=10)
+                df_cash = get_metric_df(self.facts, keylist.key_list_cash, quarters=10)
                 cash = df_cash.iloc[-1]['val'] if not df_cash.empty else nan
-                df_debt = get_metric_df(self.facts, keylist.key_list_debt, unit='USD', quarters=10)
+                df_debt = get_metric_df(self.facts, keylist.key_list_debt, quarters=10)
                 debt = df_debt.iloc[-1]['val'] if not df_debt.empty else nan
                 net_debt = debt - cash
 
-                df_capex = get_metric_df(self.facts, keylist.key_list_capex, unit='USD', quarters=40)
+                df_capex = get_metric_df(self.facts, keylist.key_list_capex, quarters=40)
                 df_capex  = df_capex.drop_duplicates('filed').sort_values('filed').tail(20)
-                df_ocf = get_metric_df(self.facts, keylist.key_list_ocf, unit='USD', quarters=40)
+                df_ocf = get_metric_df(self.facts, keylist.key_list_ocf, quarters=40)
                 df_ocf    = df_ocf.drop_duplicates('filed').sort_values('filed').tail(20)
 
                 if isinstance(df_ocf, pd.DataFrame) and isinstance(df_capex, pd.DataFrame):
