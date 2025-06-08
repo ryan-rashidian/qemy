@@ -21,10 +21,10 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
         use_requests = False
     print(f"Fetching latest 10K/10Q filing metrics for {ticker}")
     try:
-        df = SEC_Filings(ticker=ticker, use_requests=use_requests).get_metrics() 
-        if isinstance(df, pd.DataFrame): 
-            ticker_df[ticker] = df[ticker]
-            print(df.to_string(justify='left', formatters={
+        filing_df = SEC_Filings(ticker=ticker, use_requests=use_requests).get_metrics() 
+        if isinstance(filing_df, pd.DataFrame): 
+            ticker_df[ticker] = filing_df[ticker]
+            print(filing_df.to_string(justify='left', formatters={
                 ticker: lambda x: f"{x:,}" if isinstance(x, Number) else x
             }))
             if isinstance(ticker_df, pd.DataFrame):
@@ -32,7 +32,18 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
             else:
                 return None
     except:
-        print('Could not fetch filing metrics, please try another ticker.')
+        print("cli_edgar\nCould not fetch filing metrics, try another ticker.")
+
+def filing_metric(arg):
+    ticker = arg.strip().upper()
+    try:
+        metric_df = SEC_Filings(ticker=ticker).get_metric_history()
+        if isinstance(metric_df, pd.DataFrame): 
+            print(metric_df.to_string(justify='left', formatters={
+                ticker: lambda x: f"{x:,}" if isinstance(x, Number) else x
+            }))
+    except:
+        print("cli_edgar\nCould not fetch metric, try another ticker")
 
 def bulk_refresh():
     confirm = input("All previous bulk data will be overwritten.\nAre you sure? (yes/no): ")
@@ -40,5 +51,5 @@ def bulk_refresh():
         try:
             bulk_refresh()
         except Exception as e:
-            print(f"Bulk refresh failed. Error:\n{e}")
+            print(f"cli_edgar\nBulk refresh failed. Error:\n{e}")
 
