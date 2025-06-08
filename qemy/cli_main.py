@@ -64,6 +64,11 @@ class QemyShell(cmd.Cmd):
         print("Usage: filing <TICKER>\nFlags:")
         print("(-r --request) --- Fetches filing data directly from SEC EDGAR API.")
 
+    def do_fmetric(self, arg):
+        cli_edgar.filing_metric(arg=arg)
+    def help_fmetric(self):
+        print("Place holder")
+
     def do_bulk_refresh(self, _):
         cli_edgar.bulk_refresh()
     def help_bulk_refresh(self):
