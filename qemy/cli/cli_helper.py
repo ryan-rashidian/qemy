@@ -12,7 +12,7 @@ def help():
     print_help_table(" Market Analysis: ", [
         ("bulk_refresh", "Downloads bulk filing data from SEC"),
         ("dcf", "Performs DCF modeling"),
-        ("filing", "Fetches latest SEC filing (10K/10Q)"),
+        ("filing", "Fetches latest SEC filing (10K/10Q/20F)"),
         ("lr", "Linear Regression"),
         ("mcarlo", "Monte Carlo simulation"),
         ("price", "Fetches stock price data"),
