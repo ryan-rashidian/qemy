@@ -19,7 +19,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
     else:
         ticker = arg.strip().upper()
         use_requests = False
-    print(f"Fetching latest 10K/10Q filing metrics for {ticker}")
+    print(f"Fetching latest 10K/10Q/20F filing metrics for {ticker}")
     try:
         filing_df = SEC_Filings(ticker=ticker, use_requests=use_requests).get_metrics() 
         if isinstance(filing_df, pd.DataFrame): 

@@ -17,8 +17,8 @@ class QemyShell(cmd.Cmd):
     prompt = "qemy> "
     def __init__(self):
         metric_index = pd.Index([
-            'Form', 'Filed', 'Shares Outstanding', 'Cash', 'Debt', 'Net Debt',
-            'Revenue', 'COGS', 'Gross Profit', 'EBIT', 'Net Income', 'Assets', 
+            'Form', 'Filed', 'Shares Outstanding', 'Cash & Equivalents', 'Total Debt',
+            'Net Debt', 'Revenue', 'COGS', 'Gross Profit', 'EBIT', 'Net Income', 'Assets', 
             'Liabilities', 'Equity', 'OpEx', 'CapEx', 'OCF', 'FCF', 'EPS', 
         ])
         super().__init__()
@@ -60,7 +60,7 @@ class QemyShell(cmd.Cmd):
         if isinstance(df_return, pd.DataFrame):
             self.ticker_df = df_return
     def help_filing(self):
-        print("Fetches latest 10K/10Q metrics for given ticker.")
+        print("Fetches latest 10K/10Q/20F metrics for given ticker.")
         print("Usage: filing <TICKER>\nFlags:")
         print("(-r --request) --- Fetches filing data directly from SEC EDGAR API.")
 
