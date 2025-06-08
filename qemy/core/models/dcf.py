@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression
 from qemy.data.api_edgar import SEC_Filings
 
 def get_dcf_eval(ticker):
-    df, shares_outstanding = SEC_Filings(ticker=ticker).get_dcf_metrics()
+    df, shares_outstanding, net_debt = SEC_Filings(ticker=ticker).get_dcf_metrics()
 
     if isinstance(df, pd.DataFrame) and shares_outstanding is not None:
         try:
@@ -27,9 +27,17 @@ def get_dcf_eval(ticker):
             discounted_tv = terminal_value / ((1 + r) ** n)
 
             enterprise_value = np.sum(discounted_fcf) + discounted_tv
-            intrinsic_value_per_share = enterprise_value / shares_outstanding
-            print(f"Enterprise Value: {enterprise_value}")
-            print(f"Inrinsic Value Per-Share: {intrinsic_value_per_share}")
+            if net_debt:
+                equity_value = enterprise_value - net_debt
+                intrinsic_value_per_share = equity_value / shares_outstanding
+                print(f"Enterprise Value: {enterprise_value:.0f}")
+                print(f"Equity Value: {equity_value:.0f}")
+                print(f"Inrinsic Value Per-Share: {intrinsic_value_per_share:.2f}")
+            else:
+                enterprise_value_per_share = enterprise_value / shares_outstanding
+                print(f"Enterprise Value: {enterprise_value:.0f}")
+                print(f"Inrinsic Value Per-Share: {enterprise_value_per_share:.2f}")
+
         except Exception as e:
             print(f"core/models/dcf.py Exception ERROR:\n{e}")
     else:
