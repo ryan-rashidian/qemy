@@ -1,9 +1,23 @@
 import pandas as pd
 
-def get_metric_df(facts, keylist, unit='USD', quarters=40):
+key_list_units = [
+    'USD',
+    'USD/shares',
+    'shares',
+]
+
+def get_metric_df(facts, keylist, quarters=40):
     for key in keylist:
         try:
             if key in facts['facts']['us-gaap']:
+                unit = None
+                unit_keys = facts['facts']['us-gaap'][key]['units']
+                for try_key in key_list_units:
+                    if try_key in unit_keys:
+                        unit = try_key
+                        break
+                if unit is None:
+                    unit = 'USD'
                 raw = facts['facts']['us-gaap'][key]['units'].get(unit, [])[-quarters:]
                 data = []
                 for d in raw:
