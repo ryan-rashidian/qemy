@@ -31,16 +31,14 @@ Suggestions are welcome!
 ## Features
 
 - CLI: Command line interface entry point.
-- Fetch: stock market data from Tiingo API.
-- Fetch: or download SEC filing data (e.g. 10K/10Q) from SEC EDGAR API.
-- Fetch: economic data from FRED API
-- Chart: price history, linear regression, etc.
+- Fetch: SEC filings, stock market data and macroeconomic indicators.
+- Chart: price history, model visualization, etc.
 - (In Progress) Model: DCF, Comps, and other valuation models.
 - (In Progress) Model: Monte Carlo and historical simulations.
-- (In Progress) Manual: built in user manual and guide to using qemy CLI.
+- (In Progress) Manual: built in help commands and info as guides for using qemy CLI.
 - (Planned) Filter: metric based stock screening.
 
-Note: Filing data is limited to US markets (GAAP) and all metrics are in USD for now. Support for global markets (IFRS) and currency conversion is planned. 
+Note: Filing data is currently limited to US Generally Accepted Accounting Principles (US-GAAP) format and all metrics are in USD for now. Support for International Financial Reporting Standard (IFRS) and currency conversion is planned. 
 
 ---
 
@@ -198,7 +196,7 @@ Known Issues:
 - [x] (Crash) Needs error handling when DCF model fails to find certain metrics.
 - [x] (Non-critical) Parsing logic in SEC_Filings class is slightly inaccurate. Filing data is not always in chronological order. The issue has been solved in testing, and a fix will be implemented soon. 
 - [ ] (Non-critical) Total debt metric needs a pre-processing step to aggregate component metrics (short term, long term, current portion, etc.) when a single total debt value is not reported in the filing being parsed.
-- [ ] (Non-critical) DCF model is not yet factoring a company's net debt metric into the calculation. Waiting for implementation of better parsing logic, referenced in the previous issue. 
+- [x] (Non-critical) DCF model is not yet factoring a company's net debt metric into the calculation. Waiting for implementation of better parsing logic, referenced in the previous issue. 
 
 Ideas:
 
@@ -206,7 +204,8 @@ Ideas:
 - Stock screening and filtering.
 - IFRS filing support in SEC_Filings parser and currency conversion. 
 - "Modes" - or organized sub-sections within the CLI for plots, models, etc. 
-- sklearn model that is trained on valuation data -> makes predictions and evaluates.
+- sklearn model that is trained on valuation data as features -> makes predictions and evaluates feature importance -> feature importance can be used to weigh different filtering/screening conditions. (Batch learning, train on demand, simple machine learning pipeline.)
+- For last idea to work, metrics will need to be properly pre-processed: scaled and normalized (z-score/min-max).      
 
 Note (2025-06-03):
 
