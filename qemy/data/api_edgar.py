@@ -131,18 +131,72 @@ class SEC_Filings:
     def get_metric_history(self, key='eps', quarters=20):
         try:
             if self.facts is not None:
-
-                key = keylist.key_lists.get(key.strip().lower())
-                if key is None:
-                    print(f"Unknown metric type: {key}")
-                    return None
-                df_metric_hist = get_metric_df(self.facts, keylist=key, quarters=quarters * 4)
-                metric = df_metric_hist.tail(quarters)
-                metric.set_index('filed', inplace=True)
-                if isinstance(metric, pd.DataFrame):
+                key = key.strip().lower()
+                
+                if key == 'gprofit':
+                    df_gprofit_hist = get_metric_df(self.facts, keylist=keylist.key_list_gross_profit, quarters=quarters * 4)
+                    if not df_gprofit_hist.empty:
+                        metric = df_gprofit_hist.tail(quarters).set_index('filed')
+                        return metric
+                    df_revenue_hist = get_metric_df(self.facts, keylist=keylist.key_list_revenue, quarters=quarters * 4)
+                    df_cogs_hist = get_metric_df(self.facts, keylist=keylist.key_list_cogs, quarters=quarters * 4)
+                    if df_revenue_hist.empty and df_cogs_hist.empty:
+                        print("Fallback failed. Gross Profit metric not found.")
+                        return None
+                    df = pd.merge(df_revenue_hist, df_cogs_hist, on='filed', suffixes=('_rev', '_cogs'))
+                    df['val'] = df['val_rev'] - df['val_cogs']
+                    metric = df[['filed', 'val']].tail(quarters)
+                    metric.set_index('filed', inplace=True)
                     return metric
+
+                if key == 'netdebt':
+                    df_debt_hist = get_metric_df(self.facts, keylist=keylist.key_list_debt, quarters=quarters * 4)
+                    df_cash_hist = get_metric_df(self.facts, keylist=keylist.key_list_cash, quarters=quarters * 4)
+                    if df_cash_hist.empty and df_debt_hist.empty:
+                        print("Net Debt: required metrics not found.")
+                        return None
+                    df = pd.merge(df_debt_hist, df_cash_hist, on='filed', suffixes=('_debt', '_cash'))
+                    df['val'] = df['val_debt'] - df['val_cash']
+                    metric = df[['filed', 'val']].tail(quarters)
+                    metric.set_index('filed', inplace=True)
+                    return metric
+
+                if key == 'equity':
+                    df_assets_hist = get_metric_df(self.facts, keylist=keylist.key_list_assets, quarters=quarters * 4)
+                    df_liability_hist = get_metric_df(self.facts, keylist=keylist.key_list_liability, quarters=quarters * 4)
+                    if df_assets_hist.empty and df_liability_hist.empty:
+                        print("Net Debt: required metrics not found.")
+                        return None
+                    df = pd.merge(df_assets_hist, df_liability_hist, on='filed', suffixes=('_assets', '_liability'))
+                    df['val'] = df['val_assets'] - df['val_liability']
+                    metric = df[['filed', 'val']].tail(quarters)
+                    metric.set_index('filed', inplace=True)
+                    return metric
+
+                if key == 'fcf':
+                    df_ocf_hist = get_metric_df(self.facts, keylist=keylist.key_list_ocf, quarters=quarters * 4)
+                    df_capex_hist = get_metric_df(self.facts, keylist=keylist.key_list_capex, quarters=quarters * 4)
+                    if df_ocf_hist.empty and df_capex_hist.empty:
+                        print("Net Debt: required metrics not found.")
+                        return None
+                    df = pd.merge(df_ocf_hist, df_capex_hist, on='filed', suffixes=('_ocf', '_capex'))
+                    df['val'] = df['val_ocf'] - df['val_capex']
+                    metric = df[['filed', 'val']].tail(quarters)
+                    metric.set_index('filed', inplace=True)
+                    return metric
+
+                if key in keylist.key_lists:
+                    key = keylist.key_lists.get(key)
+                    if key is None:
+                        print(f"Unknown metric type: {key}")
+                        return None
+                    df_metric_hist = get_metric_df(self.facts, keylist=key, quarters=quarters * 4)
+                    metric = df_metric_hist.tail(quarters)
+                    metric.set_index('filed', inplace=True)
+                    if isinstance(metric, pd.DataFrame):
+                        return metric
                 else:
-                    print("get_metric_history\nData Not Found.")
+                    print(f"get_metric_history: invalid metric name: {key}")
                     return None
 
         except Exception as e:
