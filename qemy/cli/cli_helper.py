@@ -56,6 +56,7 @@ def help():
     print_help_table(" Additional Info: ", [
         ("flags", "- -- Flag command list and descriptions."),
         ("units", "Unit commands for the -u --units flag."),
+        ("metrics", "Metric commands for the -m --metric flag."),
         ("info", "Adding soon."),
         ("manual", "In progress/planned."),
     ])
@@ -101,6 +102,29 @@ def units():
         ("cch", "Continuously Compounded Rate of Change"),
         ("cca", "Continuously Compounded Annual Rate of Change"),
         ("log", "Natural Log"),
+    ])
+    print("\n")
+
+def metrics():
+    print("\n qemy - Metrics")
+    print_help_table("Arguments", [
+        ("assets", "Total Assets"),
+        ("capex", "Capital Expenditure"),
+        ("cash", "Total Cash"),
+        ("cogs", "Cost of Goods and Service"),
+        ("debt", "Total Debt"),
+        ("ebit", "Earnings Before Interest and Taxes"),
+        ("eps", "Diluted Earnings Per-Share"),
+        ("equity", "Total Equity"),
+        ("fcf", "Free Cash Flow"),
+        ("gprofit", "Gross Profit"),
+        ("liab", "Total Liability"),
+        ("netdebt", "Net Debt"),
+        ("netinc", "Net Income"),
+        ("ocf", "Operating Cash Flow"),
+        ("opex", "Operating Expenditure"),
+        ("rev", "Revenue"),
+        ("shares", "Shares Outstanding"),
     ])
     print("\n")
 
