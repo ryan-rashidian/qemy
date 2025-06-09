@@ -109,7 +109,7 @@ key_lists = {
     'shares': key_list_shares,
     'cash': key_list_cash,
     'debt': key_list_debt,
-    'revenue': key_list_revenue,
+    'rev': key_list_revenue,
     'cogs': key_list_cogs,
     'gprofit': key_list_gross_profit,
     'ebit': key_list_operating_income,
