@@ -253,6 +253,9 @@ class QemyShell(cmd.Cmd):
     def do_units(self, _):
         cli_helper.units()
 
+    def do_metrics(self, _):
+        cli_helper.metrics()
+
 #================================== AUX ======================================#
 
     def do_calc(self, arg):
