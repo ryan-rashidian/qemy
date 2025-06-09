@@ -75,7 +75,7 @@ def parse_arg_p_t_n(arg, name='none'):
 
 def define_arg_t_q_m(parser):
     parser.add_argument('-q', '--quarters', default='20', help='quarters (4 quarters per year)')
-    parser.add_argument('-m', '--metric', default='EPS', help='metric (e.g. EPS, net debt, revenue)')
+    parser.add_argument('-m', '--metric', default='eps', help='metric (e.g. EPS, net debt, revenue)')
     parser.add_argument('ticker', help='stock ticker symbol')
 def parse_arg_t_q_m(arg, name='none'):
     args = parse_engine(arg, define_arg_t_q_m, prog_name=name)
