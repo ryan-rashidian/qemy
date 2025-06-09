@@ -9,8 +9,8 @@ key_list_cash = [
 key_list_debt = [
     ### total debt
     'DebtLongtermAndShorttermCombinedAmount',
-    'Debt'
-    'LongTermDebtAndCapitalLeaseObligations'
+    'Debt',
+    'LongTermDebtAndCapitalLeaseObligations',
     ### temporary fallback logic
     'LongTermDebt',
     'LongTermDebtNoncurrent',
@@ -104,3 +104,21 @@ key_list_eps = [
     'EarningsPerShareDiluted',
     'EarningsPerShareBasic',
 ]
+
+key_lists = {
+    'shares': key_list_shares,
+    'cash': key_list_cash,
+    'debt': key_list_debt,
+    'revenue': key_list_revenue,
+    'cogs': key_list_cogs,
+    'gprofit': key_list_gross_profit,
+    'ebit': key_list_operating_income,
+    'netinc': key_list_income,
+    'assets': key_list_assets,
+    'liab': key_list_liability,
+    'opex': key_list_opex,
+    'capex': key_list_capex,
+    'ocf': key_list_ocf,
+    'eps': key_list_eps,
+}
+
