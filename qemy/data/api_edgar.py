@@ -128,10 +128,14 @@ class SEC_Filings:
             print(f"Failed to request company facts:\n{e}")
             return None
 
-    def get_metric_history(self, key=keylist.key_list_eps, quarters=20):
+    def get_metric_history(self, key='eps', quarters=20):
         try:
             if self.facts is not None:
 
+                key = keylist.key_lists.get(key.strip().lower())
+                if key is None:
+                    print(f"Unknown metric type: {key}")
+                    return None
                 df_metric_hist = get_metric_df(self.facts, keylist=key, quarters=quarters * 4)
                 metric = df_metric_hist.tail(quarters)
                 metric.set_index('filed', inplace=True)
