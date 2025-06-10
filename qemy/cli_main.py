@@ -249,6 +249,18 @@ class QemyShell(cmd.Cmd):
         else:
             cli_helper.help()
 
+    def do_econ(self, _):
+        cli_helper.econ()
+
+    def do_market(self, _):
+        cli_helper.market()
+
+    def do_model(self, _):
+        cli_helper.model()
+
+    def do_plot(self, _):
+        cli_helper.plot()
+
     def do_flags(self, _):
         cli_helper.flags()
 
