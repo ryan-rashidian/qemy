@@ -33,10 +33,9 @@ Suggestions are welcome!
 - CLI: Command line interface entry point.
 - Fetch: SEC filings, stock market data and macroeconomic indicators.
 - Chart: price history, model visualization, etc.
-- (In Progress) Model: DCF, Comps, and other valuation models.
-- (In Progress) Model: Monte Carlo and historical simulations.
-- (In Progress) Manual: built in help commands and info as guides for using qemy CLI.
-- (Planned) Filter: metric based stock screening.
+- Model: DCF, Monte Carlo, linear regression, and more to come.
+- Info: help commands and guides within the qemy CLI.
+- (Planned) Filter: stock screening.
 
 Note: Filing data is currently limited to US Generally Accepted Accounting Principles (US-GAAP) format and all metrics are in USD for now. Support for International Financial Reporting Standard (IFRS) and currency conversion is planned. 
 
@@ -195,8 +194,9 @@ Known Issues:
 
 - [x] (Crash) Needs error handling when DCF model fails to find certain metrics.
 - [x] (Non-critical) Parsing logic in SEC_Filings class is slightly inaccurate. Filing data is not always in chronological order. The issue has been solved in testing, and a fix will be implemented soon. 
-- [ ] (Non-critical) Total debt metric needs a pre-processing step to aggregate component metrics (short term, long term, current portion, etc.) when a single total debt value is not reported in the filing being parsed.
+- [x] (Non-critical) Total debt metric needs a pre-processing step to aggregate component metrics (short term, long term, current portion, etc.) when a single total debt value is not reported in the filing being parsed.
 - [x] (Non-critical) DCF model is not yet factoring a company's net debt metric into the calculation. Waiting for implementation of better parsing logic, referenced in the previous issue. 
+- [ ] (Non-critical) Total debt metric has been improved by previous fixes in terms of accuracy, but still skips quarters - resulting in incomplete historical data and often out-dated values when attempting to fetch 'latest' filing. The suspected cause of this issue is the potential that: not only can debt be reported differently for each company (in components, or in a single total), but debt may also be reported differently for each quarterly filing for a single company as well. Idea for fix: run current parsing logic on each individual quarterly filing, then combine and sort.      
 
 Ideas:
 
