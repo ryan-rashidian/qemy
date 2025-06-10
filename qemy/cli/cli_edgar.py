@@ -40,9 +40,12 @@ def filing_metric(arg):
             quarters = int(quarters)
             metric_df = SEC_Filings(ticker=ticker).get_metric_history(quarters=quarters, key=metric)
             if isinstance(metric_df, pd.DataFrame): 
+                metric_df['pch'] = metric_df['val'].pct_change().map(lambda x: f"{x:.2%}" if pd.notnull(x) else "0.00%") 
+                total_pch = (metric_df['val'].iloc[-1] - metric_df['val'].iloc[0]) / metric_df['val'].iloc[0]
                 print(metric_df.to_string(justify='left', formatters={
                     ticker: lambda x: f"{x:,}" if isinstance(x, Number) else x
                 }))
+                print(f"\nTotal % Change: {total_pch:.2%}")
         except:
             print("cli_edgar\nCould not fetch metric, try another ticker")
     else:
