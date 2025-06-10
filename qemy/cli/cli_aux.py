@@ -1,5 +1,14 @@
 import sys
 from pathlib import Path
+from qemy.data import api_edgar_bulk as bulk
+
+def bulk_refresh():
+    confirm = input("All previous bulk data will be overwritten.\nAre you sure? (yes/no): ")
+    if confirm.strip().lower() == 'yes':
+        try:
+            bulk.bulk_refresh()
+        except Exception as e:
+            print(f"cli_edgar\nBulk refresh failed. Error:\n{e}")
 
 def env_reset():
     if getattr(sys, 'frozen', False):

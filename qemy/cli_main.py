@@ -63,13 +63,6 @@ class QemyShell(cmd.Cmd):
     def help_fmetric(self):
         print("Place holder")
 
-    def do_bulk_refresh(self, _):
-        cli_edgar.bulk_refresh()
-    def help_bulk_refresh(self):
-        print("Re-downloads bulk data from SEC EDGAR API with latest filings.")
-        print("Note: every bulk_refresh will download and unzip ~20GB of filing data.")
-        print("All previous bulk data will be overwritten.")
-
 #================================== FRED =====================================#
 
     def do_rfr(self, _):
@@ -272,16 +265,6 @@ class QemyShell(cmd.Cmd):
 
 #================================== AUX ======================================#
 
-    def do_calc(self, arg):
-        try:
-            result = eval(arg, {"__builtins__": {}}, {})
-            print(result)
-        except:
-            print("Invalid expression")
-    def help_calc(self):
-        print("Simple calculator with Python syntax")
-        print("Example: calc 2 + 2")
-
     def do_clear(self, _):
         clear_screen = 'cls' if platform.system() == 'Windows' else 'clear'
         os.system(clear_screen)
@@ -295,6 +278,23 @@ class QemyShell(cmd.Cmd):
     def do_q(self, _):
         print("Exiting... Goodbye!")
         return True
+
+    def do_bulk_refresh(self, _):
+        cli_aux.bulk_refresh()
+    def help_bulk_refresh(self):
+        print("Re-downloads bulk data from SEC EDGAR API with latest filings.")
+        print("Note: every bulk_refresh will download and unzip ~20GB of filing data.")
+        print("All previous bulk data will be overwritten.")
+
+    def do_calc(self, arg):
+        try:
+            result = eval(arg, {"__builtins__": {}}, {})
+            print(result)
+        except:
+            print("Invalid expression")
+    def help_calc(self):
+        print("Simple calculator with Python syntax")
+        print("Example: calc 2 + 2")
 
     def do_env_reset(self, _):
         cli_aux.env_reset()

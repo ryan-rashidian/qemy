@@ -2,7 +2,6 @@ import pandas as pd
 from numbers import Number
 from qemy.utils import parse_arg
 from qemy.data.api_edgar import SEC_Filings
-from qemy.data.api_edgar_bulk import bulk_refresh
 
 #================================== EDGAR ====================================#
 
@@ -50,12 +49,4 @@ def filing_metric(arg):
             print("cli_edgar\nCould not fetch metric, try another ticker")
     else:
         print("For valid syntax, try: fmetric <TICKER> -q 20 -m EPS")
-
-def bulk_refresh():
-    confirm = input("All previous bulk data will be overwritten.\nAre you sure? (yes/no): ")
-    if confirm.strip().lower() == 'yes':
-        try:
-            bulk_refresh()
-        except Exception as e:
-            print(f"cli_edgar\nBulk refresh failed. Error:\n{e}")
 
