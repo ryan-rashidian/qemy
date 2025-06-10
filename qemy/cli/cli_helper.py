@@ -9,19 +9,31 @@ def print_help_table(title, commands):
 
 def help():
     print("\n qemy - Command Reference Table")
-    print_help_table(" Market Analysis: ", [
-        ("bulk_refresh", "Downloads bulk filing data from SEC"),
-        ("dcf", "Performs DCF modeling"),
-        ("f", "Fetches latest SEC filing (10K/10Q/20F)"),
-        ("fmetric", "Fetches filing history for given metric"),
-        ("lr", "Linear Regression"),
-        ("mcarlo", "Monte Carlo simulation"),
-        ("price", "Fetches stock price data"),
-        ("quote", "Fetches latest price quote"),
-        ("table", "Shows and saves current filings"),
-        ("wl", "Show, edit and save current tickers"),
+    print_help_table(" Command Categories: ", [
+        ("econ", "Enter: 'econ' for economic command table"),
+        ("market", "Enter: 'market' for market command table"),
+        ("model", "Enter: 'model' for modeling command table"),
+        ("plot", "Enter: 'plot' for plotting command table"),
     ])
-    print_help_table(" Economic Analysis (FRED): ", [
+    print_help_table(" Auxiliary Commands: ", [
+        ("clear", "or 'cls' to clear screen."),
+        ("exit", "or 'q' to exit qemy."),
+        ("calc", "Simple Calculator"),
+        ("bulk_refresh", "Downloads bulk filing data from SEC"),
+        ("env_reset", "Deletes current .env file"),
+    ])
+    print_help_table(" Additional Info: ", [
+        ("flags", "- -- Flag command list and descriptions."),
+        ("units", "Unit commands for the -u --units flag."),
+        ("metrics", "Metric commands for the -m --metric flag."),
+        ("info", "Adding soon."),
+        ("manual", "In progress/planned."),
+    ])
+    print("\nEnter 'help <COMMAND>' for more details.\n")
+
+def econ():
+    print("\n qemy - Economic Command Reference Table")
+    print_help_table(" Econ: ", [
         ("cpi", "Fetches data for - Consumer Price Index"),
         ("gdp", "Fetches data for - Gross Domestic Product"),
         ("indp", "Fetches data for - Industrial Production: Total Index"),
@@ -33,7 +45,32 @@ def help():
         ("sent", "Fetches data for - Consumer Sentiment"),
         ("unem", "Fetches data for - Unemployment Rate"),
     ])
-    print_help_table(" Plotting / Charts: ", [
+    print("\n")
+
+def market():
+    print("\n qemy - Market Command Reference Table")
+    print_help_table(" Market:", [
+        ("f", "Fetches latest SEC filing (10K/10Q/20F)"),
+        ("fmetric", "Fetches filing history for given metric"),
+        ("price", "Fetches stock price data"),
+        ("quote", "Fetches latest price quote"),
+        ("table", "Shows and saves current filings"),
+        ("wl", "Show, edit and save current tickers"),
+    ])
+    print("\n")
+
+def model():
+    print("\n qemy - Market Command Reference Table")
+    print_help_table(" Model:", [
+        ("dcf", "Performs DCF modeling"),
+        ("lr", "Linear Regression"),
+        ("mcarlo", "Monte Carlo simulation"),
+    ])
+    print("\n")
+
+def plot():
+    print("\n qemy - Plotting Command Reference Table")
+    print_help_table(" Plot:", [
         ("plot_cpi", ""),
         ("plot_gdp", ""),
         ("plot_indp", ""),
@@ -47,20 +84,7 @@ def help():
         ("plot_sent", ""),
         ("plot_unem", ""),
     ])
-    print_help_table(" Auxiliary Commands: ", [
-        ("calc", "Simple Calculator"),
-        ("clear", "or 'cls' to clear screen."),
-        ("exit", "or 'q' to exit qemy."),
-        ("env_reset", "Deletes current .env file"),
-    ])
-    print_help_table(" Additional Info: ", [
-        ("flags", "- -- Flag command list and descriptions."),
-        ("units", "Unit commands for the -u --units flag."),
-        ("metrics", "Metric commands for the -m --metric flag."),
-        ("info", "Adding soon."),
-        ("manual", "In progress/planned."),
-    ])
-    print("\nEnter 'help <COMMAND>' for more details.\n")
+    print("\n")
 
 def flags():
     print("\n qemy - Flags")
