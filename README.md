@@ -174,6 +174,14 @@ cd ~/path/to/qemy # path to project root directory
 python -m qemy.cli
 ```
 
+### (Recommended) Download bulk data from SEC
+
+- qemy> bulk_refresh
+
+This will download and unzip ~18GB of SEC filing data onto your machine, rather than sending multiple small requests to the SEC servers (which can be done with the -r --request flag in the CLI). This is recommended, since qemy has only basic safe-guards to stop users from potentially being blocked by EDGAR API for abusing requests (it is also much faster for loading times). 
+
+- Bulk data is updated by the SEC on a daily basis. bulk_refresh command can be used to re-download, and replace all previous data from within the CLI. 
+
 ### Use CLI
 
 ![Filing Screenshot](assets/screenshots/qemy_filing.png)
