@@ -1,5 +1,7 @@
 # qemy (prototype): command-line financial data engine for researchers and traders
 
+![Header Screenshot](assets/screenshots/qemy_welcome.png)
+
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
 
 qemy is a prototype financial data engine designed for market and economic analysis. It aims to simplify and automate research by providing SEC filings, stock market data, macroeconomic indicators, and the tools needed to analyze and visualize them — all within a convenient CLI. This repository contains the core data pipeline and command-line interface.
@@ -174,13 +176,9 @@ python -m qemy.cli
 
 ### Use CLI
 
-```bash
-qemy> help
-qemy> help filing
-qemy> filing AAPL
-qemy> chart_lr TSLA -p 5y
-qemy> exit
-```
+![Filing Screenshot](assets/screenshots/qemy_filing.png)
+
+![Monte Carlo Screenshot](assets/screenshots/qemy_mcarlo.png)
 
 Proper documentation is being planned. For now, refer to the help commands for more information.
 
