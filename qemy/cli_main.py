@@ -5,7 +5,7 @@ import cmd
 import os
 import platform
 import pandas as pd
-from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot, cli_aux, cli_core
+from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot, cli_aux, cli_core, cli_model
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -48,12 +48,6 @@ class QemyShell(cmd.Cmd):
         print("Usage: watchlist")
 
 #================================== EDGAR ====================================#
-
-    def do_dcf(self, arg):
-        cli_edgar.dcf(arg=arg)
-    def help_dcf(self):
-        print("Performs DCF model evaluation on given ticker.")
-        print("Usage: dcf <TICKER>")
 
     def do_f(self, arg):
         df_return = cli_edgar.filing(arg=arg, ticker_df=self.ticker_df)
@@ -152,15 +146,23 @@ class QemyShell(cmd.Cmd):
         print("Fetches daily closing prices for given ticker.")
         print("Usage: price <TICKER> -p <PERIOD>")
 
+#================================== MODEL ====================================#
+    
+    def do_dcf(self, arg):
+        cli_model.dcf(arg=arg)
+    def help_dcf(self):
+        print("Performs DCF model evaluation on given ticker.")
+        print("Usage: dcf <TICKER>")
+
     def do_lr(self, arg):
-        cli_tiingo.lr(arg=arg)
+        cli_model.lr(arg=arg)
     def help_lr(self):
         print("Fetches daily closing prices for given ticker and performs linear calculation.")
         print("Usage: lr <TICKER> -p <PERIOD>")
         print("Uses SPY ETF Trust as dependent variable.")
 
     def do_mcarlo(self, arg):
-        cli_tiingo.monte_carlo(arg=arg)
+        cli_model.monte_carlo(arg=arg)
     def help_mcarlo(self):
         print("Performs Monte Carlo simulations on given ticker's price history")
         print("Usage: mcarlo AAPL -p 2Y -n 1000")

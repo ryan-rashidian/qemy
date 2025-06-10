@@ -1,14 +1,10 @@
 import pandas as pd
 from numbers import Number
 from qemy.utils import parse_arg
-from qemy.core.models.dcf import get_dcf_eval
 from qemy.data.api_edgar import SEC_Filings
 from qemy.data.api_edgar_bulk import bulk_refresh
 
 #================================== EDGAR ====================================#
-
-def dcf(arg):
-    get_dcf_eval(arg)
 
 def filing(arg, ticker_df) -> pd.DataFrame | None:
     if ' -r' in arg:
