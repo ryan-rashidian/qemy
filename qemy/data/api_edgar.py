@@ -95,6 +95,15 @@ class SEC_Filings:
                 if not pd.isna(debt):
                     debt = int(debt)
 
+                if pd.notna(debt) and pd.notna(cash):
+                    net_debt = debt - cash
+                elif pd.notna(debt):
+                    net_debt = debt
+                elif pd.notna(cash):
+                    net_debt = -cash
+                else:
+                    net_debt = nan
+
                 df_revenue = get_metric_df(self.facts, keylist.key_list_revenue, quarters=10)
                 revenue = df_revenue.iloc[-1]['val'] if not df_revenue.empty else nan
 
@@ -141,7 +150,7 @@ class SEC_Filings:
                     ['Shares Outstanding', shares_outstanding],
                     ['Cash & Equivalents', cash],
                     ['Total Debt', debt],
-                    ['Net Debt', debt - cash],
+                    ['Net Debt', net_debt],
                     ['Revenue', revenue],
                     ['COGS', cogs],
                     ['Gross Profit', gross_profit],
