@@ -67,6 +67,8 @@ key_list_cogs = [
     'CostOfGoodsSoldExcludingDepreciation',
     'CostsAndExpensesApplicableToRevenue',
     'CostsAndExpensesDirect',
+    'ProgrammingCosts',
+    'CostsAndExpenses', # suspect
 ]
 
 key_list_gross_profit = [
