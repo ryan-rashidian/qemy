@@ -13,7 +13,8 @@ Features may change, break, or get replaced as the project evolves.
 
 Suggestions are welcome!
 
-- [Start a Discussion](https://github.com/ryan-rashidian/qemy/discussions/new/choose)
+- [Feedback](https://github.com/ryan-rashidian/qemy/discussions/1)
+- [Ideas](https://github.com/ryan-rashidian/qemy/discussions/2)
 - [Report a Bug / Open an Issue](https://github.com/ryan-rashidian/qemy/issues/new)
 
 ---
