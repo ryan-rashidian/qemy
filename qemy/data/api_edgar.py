@@ -253,9 +253,20 @@ class SEC_Filings:
 
                 df_cash = get_metric_df(self.facts, keylist.key_list_cash, quarters=10)
                 cash = df_cash.iloc[-1]['val'] if not df_cash.empty else nan
-
-                df_debt = get_metric_df(self.facts, keylist.key_list_debt, quarters=10)
-                debt = df_debt.iloc[-1]['val'] if not df_debt.empty else nan
+                df_total_debt = get_metric_df(self.facts, keylist.key_list_debt, quarters=10)
+                if df_total_debt.empty:
+                    df_debt_long = get_metric_df(self.facts, keylist.key_list_debt_long, quarters=10)
+                    df_debt_short = get_metric_df(self.facts, keylist.key_list_debt_short, quarters=10)
+                    df_total_debt = pd.merge(df_debt_long, df_debt_short, on='filed', suffixes=('_long', '_short')).copy()
+                    df_total_debt['val'] = df_total_debt['val_long'] + df_total_debt['val_short']
+                    df_total_debt = df_total_debt[['filed', 'val']]
+                if df_total_debt.empty:
+                    df_total_debt = get_metric_df(self.facts, keylist.key_list_debt_fallbacks, quarters=10)
+                if not df_total_debt.empty:
+                    df_total_debt = df_total_debt.sort_values('filed').reset_index(drop=True)
+                    debt = df_total_debt.iloc[-1]['val']
+                else:
+                    debt = nan
                 net_debt = debt - cash
 
                 df_capex = get_metric_df(self.facts, keylist.key_list_capex, quarters=40)
