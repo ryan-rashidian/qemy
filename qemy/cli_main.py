@@ -62,7 +62,8 @@ class QemyShell(cmd.Cmd):
     def do_fmetric(self, arg):
         cli_edgar.filing_metric(arg=arg)
     def help_fmetric(self):
-        print("Place holder")
+        print("Fetches --metric history from 10K/10Q/20F filings for given ticker.")
+        print("Usage: fmetric <TICKER> -m <METRIC> -q <#_Of_Quarters>")
 
 #================================== FRED =====================================#
 
