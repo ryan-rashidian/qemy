@@ -8,35 +8,48 @@ def get_dcf_eval(ticker):
 
     if isinstance(df, pd.DataFrame) and shares_outstanding is not None:
         try:
-            fcf = df['fcf'].values
+            fcf = df['fcf'].rolling(window=4).mean().dropna().values
+            if len(fcf) < 4:
+                print("Not enough FCF data to apply rolling average.")
+                return
             x_axis = np.arange(len(fcf)).reshape(-1, 1)
             y_axis = fcf
             model = LinearRegression().fit(X=x_axis, y=y_axis)
+
             future_x = np.arange(len(fcf), len(fcf) + 20).reshape(-1, 1)
             fcf_forecast = model.predict(future_x)
+            fcf_forecast = np.clip(fcf_forecast, 0, None)
+
+            r_squared = model.score(x_axis, y_axis)
 
             discount_rate = 0.09 / 4
             quarters = np.arange(1, 21)
             discount_factors = 1 / (1 + discount_rate) ** quarters
             discounted_fcf = fcf_forecast * discount_factors
+
             g = 0.02
             r = 0.09
             fcf_last = fcf_forecast[-1]
             terminal_value = (fcf_last * (1 + g)) / (r - g)
             n = len(fcf_forecast)
-            discounted_tv = terminal_value / ((1 + r) ** n)
+            discounted_tv = terminal_value / ((1 + discount_rate) ** n)
 
             enterprise_value = np.sum(discounted_fcf) + discounted_tv
+
             if net_debt:
                 equity_value = enterprise_value - net_debt
-                intrinsic_value_per_share = equity_value / shares_outstanding
-                print(f"Enterprise Value: {enterprise_value:.0f}")
-                print(f"Equity Value: {equity_value:.0f}")
-                print(f"Inrinsic Value Per-Share: {intrinsic_value_per_share:.2f}")
+                intrinsic_value_per_share = max(0, equity_value / shares_outstanding)
+                print(f"Model Fit Confidence:               {r_squared:.2%}")
+                print(f"Shares Outstanding:                 {shares_outstanding}")
+                print(f"Enterprise Value:                   {enterprise_value:.0f}")
+                print(f"Equity Value:                       {equity_value:.0f}")
+                print(f"Inrinsic Value Per-Share:           {intrinsic_value_per_share:.2f}")
             else:
-                enterprise_value_per_share = enterprise_value / shares_outstanding
-                print(f"Enterprise Value: {enterprise_value:.0f}")
-                print(f"Inrinsic Value Per-Share: {enterprise_value_per_share:.2f}")
+                enterprise_value_per_share = max(0, enterprise_value / shares_outstanding)
+                print(f"Model Fit Confidence:               {r_squared:.2%}")
+                print(f"Shares Outstanding:                 {shares_outstanding}")
+                print(f"Enterprise Value:                   {enterprise_value:.0f}")
+                print(f"Intrinsic Value Per-Share:          {enterprise_value_per_share:.2f}")
 
         except Exception as e:
             print(f"core/models/dcf.py Exception ERROR:\n{e}")
