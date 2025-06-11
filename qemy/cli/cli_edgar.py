@@ -3,6 +3,10 @@ from numbers import Number
 from qemy.utils import parse_arg
 from qemy.data.api_edgar import SEC_Filings
 
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+pd.set_option('display.float_format', '{:,.0f}'.format)
+
 #================================== EDGAR ====================================#
 
 def filing(arg, ticker_df) -> pd.DataFrame | None:

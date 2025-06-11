@@ -9,6 +9,7 @@ from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot, cli_
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
+pd.set_option('display.float_format', '{:,.0f}'.format)
 
 #=============================================================================#
 
