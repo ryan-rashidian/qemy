@@ -2,31 +2,38 @@
 key_list_shares = [
     'CommonStockSharesOutstanding',
     'WeightedAverageNumberOfSharesOutstandingBasic',
+    'WeightedAverageNumberOfDilutedSharesOutstanding',
+    'EntityCommonStockSharesOutstanding',
 ]
 
 key_list_cash = [
     'CashAndCashEquivalentsAtCarryingValue',
     'Cash',
+    'CashCashEquivalentsAndShortTermInvestments',
 ]
 
 key_list_debt = [
     ### total debt
-    'DebtLongtermAndShorttermCombinedAmount',
     'Debt',
+    'DebtLongtermAndShorttermCombinedAmount',
     'LongTermDebtAndCapitalLeaseObligations',
+    'DebtSecurities',
+    'TotalDebt',
 ]
 key_list_debt_long = [
     ### long term debt
-    'LongTermDebt', ### total current and non-current, component of a component. needs own check.
+    'LongTermDebtAndLeaseObligation',
     'LongTermDebtNoncurrent',
     'LongTermDebtCurrent',
+    'LongTermDebt', ### total current and non-current, component of a component. needs own check.
 ]
 key_list_debt_short = [
     ### short term debt
-    'CurrentPortionOfLongTermDebt',
-    'DebtCurrent',
-    'ShortTermBorrowings',
+    'ShortTermDebtAndCurrentPortionOfLongTermDebt',
     'ShortTermDebt',
+    'DebtCurrent',
+    'CurrentPortionOfLongTermDebt',
+    'ShortTermBorrowings',
 ]
 key_list_debt_fallbacks = [
     ### legacy terms, fallback logic
@@ -35,24 +42,31 @@ key_list_debt_fallbacks = [
     'ConvertibleDebtNoncurrent',
     'OperatingLeaseLiability',
     'DebtInstrumentCarryingAmount',
+    'FinanceLeaseLiability',
+    'FinanceLeaseObligation',
 ]
 
 key_list_revenue = [
+    'Revenue',
+    'RevenueNet',
     'RevenueFromContractWithCustomerExcludingAssessedTax',
     'SalesRevenueNet',
     'Revenues',
     'TotalRevenues',
     'NetSales',
     'SalesRevenueGoodsNet',
-    'OperatingIncomeLoss',
 ]
 
 key_list_cogs = [
     'CostOfRevenue',
     'CostOfGoodsAndServicesSold',
+    'CostOfGoodsSold',
     'CostOfGoodsAndServiceExcludingDepreciationDepletionAndAmortization',
-    'CostsAndExpenses',
-    'InterestExpense',
+    'CostOfSales',
+    'CostsOfSales',
+    'CostOfGoodsSoldExcludingDepreciation',
+    'CostsAndExpensesApplicableToRevenue',
+    'CostsAndExpensesDirect',
 ]
 
 key_list_gross_profit = [
@@ -63,17 +77,20 @@ key_list_gross_profit = [
 
 key_list_operating_income = [
     'OperatingIncomeLoss',
-    'OperatingIncomeLossFromContinuingOperations',
     'OperatingIncomeLossBeforeOtherIncomeExpense',
     'OperatingIncomeLossBeforeInterestAndIncomeTaxes',
+    'IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest',
     'IncomeLossFromOperations',
     'IncomeLossFromContinuingOperations',
+    'OperatingIncomeLossFromContinuingOperations',
 ]
 
 key_list_income = [
     'NetIncomeLossAvailableToCommonStockholdersBasic',
     'NetIncomeLoss',
     'NetIncomeLossFromContinuingOperationsAvailableToCommonShareholdersBasic',
+    'ProfitLoss',
+    'NetIncomeLossIncludingPortionAttributableToNoncontrollingInterest',
 ]
 
 key_list_assets = [
@@ -87,9 +104,11 @@ key_list_liability = [
 
 key_list_opex = [
     'OperatingExpenses',
-    'CostsAndExpenses',
     'OperatingCostsAndExpenses',
+    'CostsAndExpenses',
     'NoninterestExpense',
+    'GeneralAndAdministrativeExpense',
+    'EngineeringAndProductDevelopmentExpense',
     'ResearchAndDevelopmentExpense',
     'SellingGeneralAndAdministrativeExpense',
 ]
@@ -100,17 +119,23 @@ key_list_capex = [
     'PaymentsToAcquireProductiveAssets',
     'PaymentsForProceedsFromProductiveAssets',
     'PaymentsToAcquireOtherPropertyPlantAndEquipment',
+    'CapitalExpendituresIncurredButNotYetPaid',
 ]
 
 key_list_ocf = [
     'NetCashProvidedByUsedInOperatingActivities',
     'NetCashProvidedByUsedInOperatingActivitiesContinuingOperations',
     'NetCashProvidedByUsedInOperatingActivitiesNoncontrollingInterest',
+    'CashProvidedByUsedInOperatingActivities',
+    'NetCashProvidedByOperatingActivities',
+    'NetCashFlowFromOperatingActivities',
 ]
 
 key_list_eps = [
     'EarningsPerShareDiluted',
     'EarningsPerShareBasic',
+    'EarningsPerShareDilutedIncludingExtraordinaryItems',
+    'EarningsPerShareBasicIncludingExtraordinaryItems',
 ]
 
 key_lists = {
