@@ -76,7 +76,13 @@ class SEC_Filings:
                 if df_total_debt.empty:
                     df_debt_long = get_metric_df(self.facts, keylist.key_list_debt_long, quarters=10)
                     df_debt_short = get_metric_df(self.facts, keylist.key_list_debt_short, quarters=10)
-                    df_total_debt = pd.merge(df_debt_long, df_debt_short, on='filed', suffixes=('_long', '_short')).copy()
+                    df_debt_long = df_debt_long.infer_objects()
+                    df_debt_short = df_debt_short.infer_objects()
+                    df_total_debt = pd.merge(df_debt_long, df_debt_short, 
+                                             on='filed', how='outer', 
+                                             suffixes=('_long', '_short')).copy()
+                    df_total_debt = df_total_debt.infer_objects()
+                    df_total_debt = df_total_debt.fillna(0)
                     df_total_debt['val'] = df_total_debt['val_long'] + df_total_debt['val_short']
                     df_total_debt = df_total_debt[['filed', 'val']]
                 if df_total_debt.empty:
@@ -86,6 +92,8 @@ class SEC_Filings:
                     debt = df_total_debt.iloc[-1]['val']
                 else:
                     debt = nan
+                if not pd.isna(debt):
+                    debt = int(debt)
 
                 df_revenue = get_metric_df(self.facts, keylist.key_list_revenue, quarters=10)
                 revenue = df_revenue.iloc[-1]['val'] if not df_revenue.empty else nan
@@ -94,7 +102,14 @@ class SEC_Filings:
                 cogs = df_cogs.iloc[-1]['val'] if not df_cogs.empty else nan
 
                 df_gross_profit = get_metric_df(self.facts, keylist.key_list_gross_profit, quarters=10)
-                gross_profit = df_gross_profit.iloc[-1]['val'] if not df_gross_profit.empty else revenue - cogs
+                if not df_gross_profit.empty:
+                    gross_profit = df_gross_profit.iloc[-1]['val']
+                elif not df_gross_profit.empty and not df_cogs.empty:
+                    gross_profit = revenue - cogs
+                elif not df_revenue.empty:
+                    gross_profit = revenue
+                else:
+                    gross_profit = nan
 
                 df_operating_income = get_metric_df(self.facts, keylist.key_list_operating_income, quarters=10)
                 operating_income = df_operating_income.iloc[-1]['val'] if not df_operating_income.empty else nan
@@ -163,12 +178,17 @@ class SEC_Filings:
                     if not df_gprofit_hist.empty:
                         metric = df_gprofit_hist.tail(quarters).set_index('filed').copy()
                         return metric
+
                     df_revenue_hist = get_metric_df(self.facts, keylist=keylist.key_list_revenue, quarters=quarters * 4)
                     df_cogs_hist = get_metric_df(self.facts, keylist=keylist.key_list_cogs, quarters=quarters * 4)
                     if df_revenue_hist.empty and df_cogs_hist.empty:
                         print("Fallback failed. Gross Profit metric not found.")
                         return None
-                    df = pd.merge(df_revenue_hist, df_cogs_hist, on='filed', suffixes=('_rev', '_cogs')).copy()
+
+                    df = pd.merge(df_revenue_hist, df_cogs_hist, on='filed', how='inner', suffixes=('_rev', '_cogs')).copy()
+                    df = df.infer_objects()
+                    df = df.dropna(subset=['val_rev'])
+                    df['val_cogs'] = df['val_cogs'].fillna(0)
                     df['val'] = df['val_rev'] - df['val_cogs']
                     metric = df[['filed', 'val']].tail(quarters).copy()
                     metric.set_index('filed', inplace=True)
@@ -179,7 +199,11 @@ class SEC_Filings:
                     if df_total_debt_hist.empty:
                         df_debt_long = get_metric_df(self.facts, keylist.key_list_debt_long, quarters=quarters * 4)
                         df_debt_short = get_metric_df(self.facts, keylist.key_list_debt_short, quarters=quarters * 4)
-                        df_total_debt_hist = pd.merge(df_debt_long, df_debt_short, on='filed', suffixes=('_long', '_short')).copy()
+                        df_total_debt_hist = pd.merge(df_debt_long, df_debt_short, 
+                                                      on='filed', how='outer',
+                                                      suffixes=('_long', '_short')).copy()
+                        df_total_debt_hist = df_total_debt_hist.infer_objects()
+                        df_total_debt_hist = df_total_debt_hist.fillna(0)
                         df_total_debt_hist['val'] = df_total_debt_hist['val_long'] + df_total_debt_hist['val_short']
                         df_total_debt_hist = df_total_debt_hist[['filed', 'val']]
                     if df_total_debt_hist.empty:
@@ -195,7 +219,10 @@ class SEC_Filings:
                     if df_cash_hist.empty and df_debt_hist.empty:
                         print("Net Debt: required metrics not found.")
                         return None
-                    df = pd.merge(df_debt_hist, df_cash_hist, on='filed', suffixes=('_debt', '_cash')).copy()
+
+                    df = pd.merge(df_debt_hist, df_cash_hist, on='filed', how='outer', suffixes=('_debt', '_cash')).copy()
+                    df = df.infer_objects()
+                    df = df.fillna(0)
                     df['val'] = df['val_debt'] - df['val_cash']
                     metric = df[['filed', 'val']].tail(quarters).copy()
                     metric.set_index('filed', inplace=True)
@@ -207,7 +234,10 @@ class SEC_Filings:
                     if df_assets_hist.empty and df_liability_hist.empty:
                         print("Net Debt: required metrics not found.")
                         return None
-                    df = pd.merge(df_assets_hist, df_liability_hist, on='filed', suffixes=('_assets', '_liability')).copy()
+
+                    df = pd.merge(df_assets_hist, df_liability_hist, on='filed', how='outer', suffixes=('_assets', '_liability')).copy()
+                    df = df.infer_objects()
+                    df = df.fillna(0)
                     df['val'] = df['val_assets'] - df['val_liability']
                     metric = df[['filed', 'val']].tail(quarters).copy()
                     metric.set_index('filed', inplace=True)
@@ -219,7 +249,10 @@ class SEC_Filings:
                     if df_ocf_hist.empty and df_capex_hist.empty:
                         print("Net Debt: required metrics not found.")
                         return None
-                    df = pd.merge(df_ocf_hist, df_capex_hist, on='filed', suffixes=('_ocf', '_capex')).copy()
+
+                    df = pd.merge(df_ocf_hist, df_capex_hist, on='filed', how='outer', suffixes=('_ocf', '_capex')).copy()
+                    df = df.infer_objects()
+                    df = df.fillna(0)
                     df['val'] = df['val_ocf'] - df['val_capex']
                     metric = df[['filed', 'val']].tail(quarters).copy()
                     metric.set_index('filed', inplace=True)
@@ -230,6 +263,7 @@ class SEC_Filings:
                     if key is None:
                         print(f"Unknown metric type: {key}")
                         return None
+
                     df_metric_hist = get_metric_df(self.facts, keylist=key, quarters=quarters * 4)
                     metric = df_metric_hist.tail(quarters).copy()
                     metric.set_index('filed', inplace=True)
@@ -257,7 +291,11 @@ class SEC_Filings:
                 if df_total_debt.empty:
                     df_debt_long = get_metric_df(self.facts, keylist.key_list_debt_long, quarters=10)
                     df_debt_short = get_metric_df(self.facts, keylist.key_list_debt_short, quarters=10)
-                    df_total_debt = pd.merge(df_debt_long, df_debt_short, on='filed', suffixes=('_long', '_short')).copy()
+                    df_total_debt = pd.merge(df_debt_long, df_debt_short, 
+                                             on='filed', how='outer', 
+                                             suffixes=('_long', '_short')).copy()
+                    df_total_debt = df_total_debt.infer_objects()
+                    df_total_debt = df_total_debt.fillna(0)
                     df_total_debt['val'] = df_total_debt['val_long'] + df_total_debt['val_short']
                     df_total_debt = df_total_debt[['filed', 'val']]
                 if df_total_debt.empty:
@@ -277,13 +315,18 @@ class SEC_Filings:
 
                 if isinstance(df_ocf, pd.DataFrame) and isinstance(df_capex, pd.DataFrame):
                     if not df_ocf.empty and not df_capex.empty:
-                        df_fcf = pd.merge(df_ocf, df_capex, on='filed', suffixes=('_ocf', '_capex'))
+                        df_fcf = pd.merge(df_ocf, df_capex, 
+                                          on='filed', how='outer', 
+                                          suffixes=('_ocf', '_capex')).copy()
+                        df_fcf = df_fcf.infer_objects()
+                        df_fcf = df_fcf.fillna(0)
                         df_fcf['fcf'] = df_fcf['val_ocf'] - df_fcf['val_capex']
                         df_fcf.rename(columns={'filed': 'date'}, inplace=True)
                         df_fcf.set_index('date', inplace=True)
                     else:
                         df_fcf = None
                     return df_fcf, shares, net_debt
+
                 else:
                     print("get_dcf_metrics\nData Not Found")
                     return None, None, None
@@ -291,6 +334,7 @@ class SEC_Filings:
             else:
                 print("Error: filing data failed to initialize.")
                 return None, None, None
+
         except Exception as e:
             print(f"Failed to request company facts:\n{e}")
             return None, None, None
