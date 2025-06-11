@@ -250,3 +250,8 @@ By using the qemy application, you agree to the qemy Terms of Use ("Legal / Attr
 
 This project is licensed under the [Apache License 2.0](LICENSE).
 
+qemy™ is a trademark of Ryan A. Rashidian.
+The qemy name, logo, and related branding are not covered by the open-source license and may not be used without permission.
+
+See the [Notice](NOTICE) file for additional licensing details.
+
