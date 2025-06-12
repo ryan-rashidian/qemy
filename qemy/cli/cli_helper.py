@@ -12,7 +12,7 @@ def help():
     print_help_table(" Command Categories: ", [
         ("econ", "Enter: 'econ' for economic command table"),
         ("market", "Enter: 'market' for market command table"),
-        ("model", "Enter: 'model' for modeling command table"),
+        ("models", "Enter: 'model' for modeling command table"),
         ("plot", "Enter: 'plot' for plotting command table"),
     ])
     print_help_table(" Auxiliary Commands: ", [
