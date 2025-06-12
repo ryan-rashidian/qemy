@@ -1,6 +1,6 @@
 # qemy (prototype): command-line financial data engine for researchers and traders
 
-![Header Screenshot](assets/screenshots/qemy_welcome.png)
+![Header Screenshot](assets/qemy_welcome.png)
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
 
@@ -16,6 +16,7 @@ Suggestions are welcome!
 - [Feedback](https://github.com/ryan-rashidian/qemy/discussions/1)
 - [Ideas](https://github.com/ryan-rashidian/qemy/discussions/2)
 - [Report a Bug / Open an Issue](https://github.com/ryan-rashidian/qemy/issues/new)
+- [Development Log](DEVLOG.md)
 
 ---
 
@@ -25,7 +26,6 @@ Suggestions are welcome!
 - [Installation](#installation)
 - [Setup API Keys](#setup-api-keys)
 - [Usage](#usage)
-- [Development Notes](#development-notes)
 - [Legal / Attribution](#legal--attribution)
 - [License](#license)
 
@@ -38,7 +38,8 @@ Suggestions are welcome!
 - Chart: price history, model visualization, etc.
 - Model: DCF, Monte Carlo, linear regression, and more to come.
 - Info: help commands and guides within the qemy CLI.
-- (Planned) Filter: stock screening.
+
+See full [Roadmap](ROADMAP.md)
 
 Note: Filing data is currently limited to US Generally Accepted Accounting Principles (US-GAAP) format and all metrics are in USD for now. Support for International Financial Reporting Standard (IFRS) and currency conversion is planned. 
 
@@ -172,7 +173,7 @@ Alternatively, run the CLI manually with:
 source ~/path/to/qemyenv/bin/activate
 # Conda users: change above line to "conda activate qemyenv"
 cd ~/path/to/qemy # path to project root directory
-python -m qemy.cli
+python -m qemy.cli_main
 ```
 
 ### (Recommended) Download bulk data from SEC
@@ -187,38 +188,13 @@ This will download and unzip ~18GB of SEC filing data onto your machine, rather 
 
 ### Use CLI
 
-![Filing Screenshot](assets/screenshots/qemy_filing.png)
+![Filing Screenshot](assets/qemy_filing.png)
 
-![Monte Carlo Screenshot](assets/screenshots/qemy_mcarlo.png)
+![Monte Carlo Screenshot](assets/qemy_mcarlo.png)
 
 Proper documentation is being planned. For now, refer to the help commands for more information.
 
 - This program does not require paying any fees or subscriptions. There are paid subscriptions for Tiingo API available in order to increase data usage limitation. Be mindful of data usage/request limits for all APIs. More info and tracking is available on their websites.
-
----
-
-## Development Notes
-
-Known Issues:
-
-- [x] (Crash) Needs error handling when DCF model fails to find certain metrics.
-- [x] (Non-critical) Parsing logic in SEC_Filings class is slightly inaccurate. Filing data is not always in chronological order. The issue has been solved in testing, and a fix will be implemented soon. 
-- [x] (Non-critical) Total debt metric needs a pre-processing step to aggregate component metrics (short term, long term, current portion, etc.) when a single total debt value is not reported in the filing being parsed.
-- [x] (Non-critical) DCF model is not yet factoring a company's net debt metric into the calculation. Waiting for implementation of better parsing logic, referenced in the previous issue. 
-- [ ] (Non-critical) Total debt metric has been improved by previous fixes in terms of accuracy, but still skips quarters - resulting in incomplete historical data and often out-dated values when attempting to fetch 'latest' filing. The suspected cause of this issue is the potential that: not only can debt be reported differently for each company (in components, or in a single total), but debt may also be reported differently for each quarterly filing for a single company as well. Idea for fix: run current parsing logic on each individual quarterly filing, then combine and sort.      
-
-Ideas:
-
-- Cover all the basic metrics, ratios, etc. (e.g. Sharpe, PE, PEG, etc.)
-- Stock screening and filtering.
-- IFRS filing support in SEC_Filings parser and currency conversion. 
-- "Modes" - or organized sub-sections within the CLI for plots, models, etc. 
-- sklearn model that is trained on valuation data as features -> makes predictions and evaluates feature importance -> feature importance can be used to weigh different filtering/screening conditions. (Batch learning, train on demand, simple machine learning pipeline.)
-- For last idea to work, metrics will need to be properly pre-processed: scaled and normalized (z-score/min-max).      
-
-Note (2025-06-03):
-
-- This is my first serious project on GitHub. Earlier commits show my learning curve with git, and workflow habits. Since then, I've been refining my process. - Thanks for understanding.
 
 ---
 
