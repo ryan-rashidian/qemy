@@ -2,6 +2,30 @@ from qemy.core.models.dcf import get_dcf_eval
 from qemy.core.models.linear_r import linear_r
 from qemy.core.models.monte_carlo import monte_carlo_sim
 from qemy.utils import parse_arg
+from qemy.core.plugin_loader import load_plugins
+
+# test block
+def run_models(arg, model="linear_r"):
+    period, ticker = parse_arg.parse_arg_p_t(arg=arg, name='plot_lr')
+    if isinstance(period, str) and isinstance(ticker, str):
+        try:
+            registry = load_plugins()
+            model_func = registry.models.get(model)
+            if model_func:
+                results = model_func(ticker, period)
+                if isinstance(results, dict):
+                    print("\nPlugin Results:")
+                    for key, value in results.items():
+                        print(f"{key}: {value:.4f}")
+                else:
+                    print("Plugin failed to return results")
+            else:
+                print(f"Model '{model}' not found.")
+        except Exception as e:
+            print(f"Error in cli_model.py:\n{e}")
+    else:
+        print("Placeholder")
+## test block
 
 def dcf(arg):
     get_dcf_eval(arg)

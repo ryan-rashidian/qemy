@@ -9,7 +9,6 @@ from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot, cli_
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
-pd.set_option('display.float_format', '{:,.0f}'.format)
 
 #=============================================================================#
 
@@ -28,6 +27,9 @@ class QemyShell(cmd.Cmd):
         self.ticker_df.index.name = 'Metrics:'
 
 #================================== CORE =====================================#
+
+    def do_model(self, arg):
+        cli_model.run_models(arg=arg)
 
     def do_table(self, arg):
         cli_core.table(arg=arg, ticker_df=self.ticker_df)
@@ -250,10 +252,10 @@ class QemyShell(cmd.Cmd):
     def do_market(self, _):
         cli_helper.market()
 
-    def do_model(self, _):
+    def do_models(self, _):
         cli_helper.model()
 
-    def do_plot(self, _):
+    def do_plots(self, _):
         cli_helper.plot()
 
     def do_flags(self, _):
