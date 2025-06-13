@@ -1,6 +1,6 @@
 import pandas as pd
 from numbers import Number
-from qemy.utils import parse_arg
+from qemy.utils.parse_arg import parse_args
 from qemy.data.api_edgar import SEC_Filings
 
 pd.set_option('display.max_columns', None)
@@ -34,7 +34,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
         print("cli_edgar\nCould not fetch filing metrics, try another ticker.")
 
 def filing_metric(arg):
-    ticker, quarters, metric = parse_arg.parse_arg_t_q_m(arg=arg, name='fmetric')
+    ticker, quarters, metric = parse_args(arg_str=arg, expected_args=['ticker', 'quarter', 'metric'], prog_name='fmetric')
     if isinstance(ticker, str) and isinstance(metric, str) and quarters:
         try:
             metric.strip().lower()

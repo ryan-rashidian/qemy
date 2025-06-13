@@ -1,7 +1,7 @@
 import os
 from numbers import Number
 from qemy.utils.utils_cli import save_to_csv
-from qemy.utils import parse_arg
+from qemy.utils.parse_arg import parse_args
 
 #================================== CORE =====================================#
 
@@ -65,7 +65,7 @@ class WatchListManager:
                 print('Unknown command.')
 
 def table(arg, ticker_df):
-    save_state = parse_arg.parse_arg_s(arg=arg, name='table')
+    save_state, = parse_args(arg_str=arg, expected_args=['save'], prog_name='table')
     if isinstance(save_state, str):
         try:
             if save_state in ('Y', 'YES'):

@@ -1,6 +1,6 @@
 import pandas as pd
 from qemy.data import api_tiingo as tiingo
-from qemy.utils import parse_arg
+from qemy.utils.parse_arg import parse_args
 
 #================================== TIINGO ===================================#
 
@@ -22,7 +22,7 @@ def quote(arg):
         print(f"Error:\n{e}")
 
 def price(arg):
-    period, ticker = parse_arg.parse_arg_p_t(arg=arg, name='price')
+    period, ticker = parse_args(arg_str=arg, expected_args=['period', 'ticker'], prog_name='price')
     if isinstance(period, str) and isinstance(ticker, str):
         print(f"Fetching price info for: {ticker}...")
         data = tiingo.get_tiingo_prices(ticker=ticker, period=period)
