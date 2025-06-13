@@ -5,7 +5,7 @@ from qemy.utils.parse_arg import parse_args
 def run_models(arg):
     period, ticker, model, num, plot, save = parse_args(
         arg_str=arg, 
-        expected_args=['period', 'ticker', 'model', 'num', 'plot', 'save'], 
+        expected_args=['period', 'ticker_flag', 'model', 'num', 'plot', 'save'], 
         prog_name='run_model'
     )
     if not save:
