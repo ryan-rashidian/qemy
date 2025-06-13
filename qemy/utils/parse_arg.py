@@ -9,6 +9,7 @@ ARGUMENTS = {
     'num':      lambda p: p.add_argument('-n', '--num', default=1000, help="Placeholder"),
     'quarter':  lambda p: p.add_argument('-q', '--quarter', default='20', help="Placeholder"),
     'metric':   lambda p: p.add_argument('-m', '--metric', default='eps', help="Placeholder"),
+    'model':    lambda p: p.add_argument('-mod', '--model', default='dcf', help="Placeholder"),
 }
 
 def parse_args(arg_str, expected_args, prog_name='command'):
@@ -23,8 +24,16 @@ def parse_args(arg_str, expected_args, prog_name='command'):
         result = []
         for arg in expected_args:
             val = getattr(args, arg)
+
             if isinstance(val, str) and arg in ('ticker', 'metric', 'save'):
                 val = val.upper()
+
+            if arg in ('num'):
+                try:
+                    val = int(val)
+                except (ValueError, TypeError):
+                    val = None
+
             result.append(val)
         return tuple(result)
 
