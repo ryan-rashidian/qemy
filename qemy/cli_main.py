@@ -28,7 +28,7 @@ class QemyShell(cmd.Cmd):
 
 #================================== CORE =====================================#
 
-    def do_model(self, arg):
+    def do_m(self, arg):
         cli_model.run_models(arg=arg)
 
     def do_table(self, arg):
