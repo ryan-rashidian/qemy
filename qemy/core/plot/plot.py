@@ -11,16 +11,17 @@ project_root = Path(__file__).resolve().parents[3]
 export_dir = project_root / "exports" / "charts"
 export_dir.mkdir(parents=True, exist_ok=True)
 
-def plot_models(ticker, x_axis, y_axis, title='title', plot='scatter', save=False):
+def plot_models(ticker, title='title', save=False, plot_func=None):
     plt.figure(figsize=(14, 8))
-    if plot == 'scatter':
-        plt.scatter(x_axis, y_axis, alpha=0.4)
-    plt.plot(x_axis, y_axis, alpha=0.4, color='blue')
+    if plot_func:
+        plot_func()
+
     plt.title(f"{title} for {ticker}")
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.grid(True)
     plt.tight_layout()
+
     if save == True:
         output_path =  get_next_path(export_dir, name='modelchart', ext='png')
         plt.savefig(output_path)
