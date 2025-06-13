@@ -12,11 +12,7 @@ def run_models(arg):
         expected_args=['period', 'ticker', 'model', 'num', 'plot', 'save'], 
         prog_name='run_model'
     )
-    if plot:
-        plot = True
-    if isinstance(save, str) and save.lower() == 'yes':
-        save = True
-    else:
+    if not save:
         save = False
     arg_dict = {
         'ticker': ticker,

@@ -2,7 +2,7 @@ import shlex
 import argparse
 
 ARGUMENTS = {
-    'save':     lambda p: p.add_argument('-s', '--save', default='NO', help="Placeholder"),
+    'save':     lambda p: p.add_argument('-s', '--save', action='store_true', help="Placeholder"),
     'period':   lambda p: p.add_argument('-p', '--period', default='1Y', help="Placeholder"),
     'units':    lambda p: p.add_argument('-u', '--units', help="Placeholder"),
     'ticker':   lambda p: p.add_argument('ticker', help="Stock ticker symbol"),
@@ -10,7 +10,7 @@ ARGUMENTS = {
     'quarter':  lambda p: p.add_argument('-q', '--quarter', default='20', help="Placeholder"),
     'metric':   lambda p: p.add_argument('-m', '--metric', default='eps', help="Placeholder"),
     'model':    lambda p: p.add_argument('-mod', '--model', default='dcf', help="Placeholder"),
-    'plot':     lambda p: p.add_argument('-plt', '--plot', default=False, help="Placeholder"),
+    'plot':     lambda p: p.add_argument('-plt', '--plot', action='store_true', help="Placeholder"),
 }
 
 def parse_args(arg_str, expected_args, prog_name='command'):

@@ -68,7 +68,7 @@ def table(arg, ticker_df):
     save_state, = parse_args(arg_str=arg, expected_args=['save'], prog_name='table')
     if isinstance(save_state, str):
         try:
-            if save_state in ('Y', 'YES'):
+            if save_state:
                 save_to_csv(df=ticker_df)
                 print("File saved...\n /qemy/exports/tables/")
             else:
