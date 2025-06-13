@@ -12,6 +12,8 @@ def run_models(arg):
         expected_args=['period', 'ticker', 'model', 'num', 'plot', 'save'], 
         prog_name='run_model'
     )
+    if plot:
+        plot = True
     if isinstance(save, str) and save.lower() == 'yes':
         save = True
     else:
@@ -44,10 +46,8 @@ def run_models(arg):
                 print("Launching plot")
                 plot_models(
                     ticker = ticker, 
-                    x_axis = plot_data.get("x_axis"), 
-                    y_axis = plot_data.get("y_axis"), 
                     title = plot_data.get("title"),
-                    plot= plot,
+                    plot_func = plot_data.get("plot_func"),
                     save = save
                 )
 
