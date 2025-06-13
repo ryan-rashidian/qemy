@@ -10,7 +10,7 @@ Project Goal:
 
 A developer-first alternative to traditional financial platforms - minimalist, hackable, and designed for users who value customization, experimentation, and seamless integration of their own tools.
 
-  **Work in Progress**
+**Work in Progress**
 - Features may change, break, or get replaced as the project evolves.
 
 Suggestions are welcome!
@@ -36,6 +36,7 @@ Suggestions are welcome!
 ## Features
 
 - CLI: Command line interface entry point.
+- (In Progress) Plugin: use or create your own plugins for modeling.
 - Fetch: SEC filings, stock market data and macroeconomic indicators.
 - Chart: price history, model visualization, etc.
 - Model: DCF, Monte Carlo, linear regression, and more to come.
@@ -133,11 +134,7 @@ This will download and unzip ~18GB of SEC filing data onto your machine, rather 
 
 ### Use CLI
 
-![Filing Screenshot](assets/qemy_filing.png)
-
-![Monte Carlo Screenshot](assets/qemy_mcarlo.png)
-
-Proper documentation is being planned. For now, refer to the help commands for more information.
+Proper documentation is being planned. For now, refer to the help commands within the CLI for more information.
 
 - This program does not require paying any fees or subscriptions. There are paid subscriptions for Tiingo API available in order to increase data usage limitation. Be mindful of data usage/request limits for all APIs. More info and tracking is available on their websites.
 
