@@ -4,8 +4,6 @@ import pandas as pd
 from qemy.utils.filetools import get_next_path
 from qemy.data.api_tiingo import get_tiingo_prices
 from qemy.data import api_fred as fred
-from qemy.core.models.linear_r import linear_r
-from qemy.core.models.monte_carlo import monte_carlo_sim
 
 project_root = Path(__file__).resolve().parents[3]
 export_dir = project_root / "exports" / "charts"
@@ -49,44 +47,6 @@ def plot_price(ticker, period):
     plt.legend()
     plt.tight_layout()
     plt.show()
-
-def plot_lr(ticker, period):
-    x_ind, y_dep, alpha, beta, model = linear_r(ticker=ticker, period=period)
-    print(f"Alpha: {alpha:.6f}")
-    print(f"Beta: {beta:.4f}")
-
-    plt.figure(figsize=(14, 8))
-    plt.scatter(x_ind, y_dep, alpha=0.4, label='Returns')
-    plt.plot(x_ind, model.predict(x_ind), color='red', label='Regression Line')
-    plt.xlabel('SPY Daily Returns')
-    plt.ylabel(f"{ticker} Daily Returns")
-    plt.title(f"{ticker} vs SPY Beta Regression")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
-
-def plot_monte_carlo(ticker, period='1Y', num_simulations=1000, num_days=None, save=False):
-    simulations, end_mean, end_std, start_price = monte_carlo_sim(ticker=ticker, period=period, num_simulations=num_simulations, num_days=num_days)
-    if simulations is not None and end_mean is not None and end_std is not None:
-        print(f"Start price:   {start_price:.2f}")
-        print(f"End mean:      {end_mean:.2f}")
-        print(f"End std:       {end_std:.4f}")
-        plt.figure(figsize=(14, 8))
-        plt.plot(simulations.T, alpha=0.05, color='blue')
-        plt.title(f"{num_simulations} Monte Carlo Simulations for {ticker}")
-        plt.xlabel("Day")
-        plt.ylabel("Simulated Price")
-        plt.grid(True)
-        plt.tight_layout()
-        if save == True:
-            output_path =  get_next_path(export_dir, name='mcarlochart', ext='png')
-            plt.savefig(output_path)
-            plt.show()
-        else:
-            plt.show()
-    else:
-        print('Failed to load plot chart')
 
 def plot_cpi(period, save=False, units='pc1'):
     data = fred.get_cpi_inflation(period=period, units=units)

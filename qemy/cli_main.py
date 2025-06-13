@@ -148,27 +148,6 @@ class QemyShell(cmd.Cmd):
         print("Fetches daily closing prices for given ticker.")
         print("Usage: price <TICKER> -p <PERIOD>")
 
-#================================== MODEL ====================================#
-    
-    def do_dcf(self, arg):
-        cli_model.dcf(arg=arg)
-    def help_dcf(self):
-        print("Performs DCF model evaluation on given ticker.")
-        print("Usage: dcf <TICKER>")
-
-    def do_lr(self, arg):
-        cli_model.lr(arg=arg)
-    def help_lr(self):
-        print("Fetches daily closing prices for given ticker and performs linear calculation.")
-        print("Usage: lr <TICKER> -p <PERIOD>")
-        print("Uses SPY ETF Trust as dependent variable.")
-
-    def do_mcarlo(self, arg):
-        cli_model.monte_carlo(arg=arg)
-    def help_mcarlo(self):
-        print("Performs Monte Carlo simulations on given ticker's price history")
-        print("Usage: mcarlo AAPL -p 2Y -n 1000")
-
 #================================== PLOT =====================================#
 
     def do_plot_price(self, arg):
@@ -257,7 +236,7 @@ class QemyShell(cmd.Cmd):
     def do_market(self, _):
         cli_helper.market()
 
-    def do_models(self, _):
+    def do_plugins(self, _):
         cli_helper.model()
 
     def do_plots(self, _):
