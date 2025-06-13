@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from qemy.data.api_tiingo import get_tiingo_prices
 
@@ -34,8 +35,10 @@ def linear_r(ticker, period, **_):
             },
             "plot": {
                 "title": f"Linear Regression fit for {ticker} and SPY returns",
-                "x_axis": x_axis,
-                "y_axis": y_axis,
+                "plot_func": lambda: (
+                    plt.scatter(x_axis, y_axis, alpha=0.3),
+                    plt.plot(x_axis, model.predict(x_axis), color='red')
+                )
             },
         }
 

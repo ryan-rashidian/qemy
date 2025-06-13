@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from qemy.data.api_tiingo import get_tiingo_prices
 
 def monte_carlo_sim(ticker, period='1Y', num=1000, **_):
@@ -36,7 +37,13 @@ def monte_carlo_sim(ticker, period='1Y', num=1000, **_):
                     "End Mean": end_mean,
                     "End STD": end_std,
                     "Start Price": start_price,
-                }
+                },
+                "plot": {
+                    "title": f"{num }Monte Carlo Simulation for {ticker}",
+                    "plot_func": lambda: (
+                        plt.plot(simulations.T, alpha=0.05, color='blue'),
+                    )
+                },
             }
 
         else:
