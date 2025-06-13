@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from qemy.data.api_tiingo import get_tiingo_prices
 
-def linear_r(ticker, period):
+def linear_r(ticker, period, **_):
     try:
         ind_data = get_tiingo_prices(ticker=ticker, period=period)
         dep_data = get_tiingo_prices(ticker='SPY', period=period)
@@ -25,8 +25,8 @@ def linear_r(ticker, period):
         alpha = model.intercept_
         beta = model.coef_[0]
         return {
-            "alpha": alpha,
-            "beta": beta,
+            "Alpha": alpha,
+            "Beta": beta,
             #"model": model,
             #"x_ind": x_ind,
             #"y_dep": y_dep,

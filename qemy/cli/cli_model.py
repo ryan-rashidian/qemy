@@ -5,27 +5,35 @@ from qemy.core.plugin_loader import load_plugins
 from qemy.utils.parse_arg import parse_args
 
 # test block
-def run_models(arg, model="linear_r"):
-    #period, ticker = parse_arg.parse_arg_p_t(arg=arg, name='plot_lr')
-    period, ticker = parse_args(arg_str=arg, expected_args=['period', 'ticker'], prog_name='linear_r')
-    if isinstance(period, str) and isinstance(ticker, str):
-        try:
-            registry = load_plugins()
-            model_func = registry.models.get(model)
-            if model_func:
-                results = model_func(ticker, period)
-                if isinstance(results, dict):
-                    print("\nPlugin Results:")
-                    for key, value in results.items():
-                        print(f"{key}: {value:.4f}")
-                else:
-                    print("Plugin failed to return results")
+def run_models(arg):
+    period, ticker, model, num = parse_args(
+        arg_str=arg, 
+        expected_args=['period', 'ticker', 'model', 'num'], 
+        prog_name='run_model'
+    )
+    arg_dict = {
+        'ticker': ticker,
+        'period': period,
+        'num': num,
+    }
+
+    try:
+        registry = load_plugins()
+        model_func = registry.models.get(model)
+
+        if model_func:
+            results = model_func(**arg_dict)
+            if isinstance(results, dict):
+                print("\nPlugin Results:")
+                for key, value in results.items():
+                    print(f"{key}: {value:.4f}")
+
             else:
-                print(f"Model '{model}' not found.")
-        except Exception as e:
-            print(f"Error in cli_model.py:\n{e}")
-    else:
-        print("Placeholder")
+                print("Plugin failed to return results")
+        else:
+            print(f"Model '{model}' not found.")
+    except Exception as e:
+        print(f"Error in cli_model.py:\n{e}")
 ## test block
 
 def dcf(arg):
