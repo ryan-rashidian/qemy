@@ -237,7 +237,7 @@ class QemyShell(cmd.Cmd):
         cli_helper.market()
 
     def do_plugins(self, _):
-        cli_helper.model()
+        cli_helper.plugins()
 
     def do_plots(self, _):
         cli_helper.plot()

@@ -10,10 +10,10 @@ def print_help_table(title, commands):
 def help():
     print("\n qemy - Command Reference Table")
     print_help_table(" Command Categories: ", [
-        ("econ", "Enter: 'econ' for economic command table"),
-        ("market", "Enter: 'market' for market command table"),
-        ("models", "Enter: 'model' for modeling command table"),
-        ("plot", "Enter: 'plot' for plotting command table"),
+        ("econ", "Enter: 'econ' for economic help table"),
+        ("market", "Enter: 'market' for market help table"),
+        ("plugins", "Enter: 'plugins' for plugin help table"),
+        ("plot", "Enter: 'plot' for plotting help table"),
     ])
     print_help_table(" Auxiliary Commands: ", [
         ("clear", "or 'cls' to clear screen."),
@@ -59,12 +59,16 @@ def market():
     ])
     print("\n")
 
-def model():
-    print("\n qemy - Market Command Reference Table")
+def plugins():
+    print("\n qemy - Plugin Command Reference Table")
     print_help_table(" Model:", [
+        ("m", "Initiates plugin command"),
         ("dcf", "Performs DCF modeling"),
-        ("lr", "Linear Regression"),
+        ("linear_r", "Linear Regression"),
         ("mcarlo", "Monte Carlo simulation"),
+        ("Info", "Integratation of help commands for each plugin is still in development"),
+        ("Usage:", "m <MODEL>"),
+        ("Example:", "m dcf -t aapl"),
     ])
     print("\n")
 
@@ -97,10 +101,17 @@ def flags():
         ("Info:", "Specifies a start and end date based on the given period. Start = <Current-Date>, End = <Start - Period>"),
         ("Example:", "-p 3M"),
     ])
+    print_help_table(" -plt --plot", [
+        ("Info:", "True/False flag to enable plotting feature. Takes no arguments"),
+        ("Example:", "m mcarlo -t aapl -p 2y -plt"),
+    ])
+    print_help_table(" -t --ticker", [
+        ("Info:", "Takes ticker symbol as argument"),
+        ("Example:", "-t aapl"),
+    ])
     print_help_table(" -s --save", [
-        ("(yes/no)", "Requires yes or no argument."),
-        ("Info:", "Saves a .png or .csv of requested data into /exports/ directory."),
-        ("Example:", "-s yes")
+        ("Info:", "True/False flag to enable save feature. Takes no arguments."),
+        ("Example:", "m mcarlo -t aapl -p 2y -plt -s")
     ])
     print_help_table(" -u --units", [
         ("Unit arguments:", "lin, chg, ch1, pch, log, etc..."),
