@@ -2,15 +2,20 @@ from qemy.core.models.dcf import get_dcf_eval
 from qemy.core.models.linear_r import linear_r
 from qemy.core.models.monte_carlo import monte_carlo_sim
 from qemy.core.plugin_loader import load_plugins
+from qemy.core.plot.plot import plot_models
 from qemy.utils.parse_arg import parse_args
 
 # test block
 def run_models(arg):
-    period, ticker, model, num = parse_args(
+    period, ticker, model, num, plot, save = parse_args(
         arg_str=arg, 
-        expected_args=['period', 'ticker', 'model', 'num'], 
+        expected_args=['period', 'ticker', 'model', 'num', 'plot', 'save'], 
         prog_name='run_model'
     )
+    if isinstance(save, str) and save.lower() == 'yes':
+        save = True
+    else:
+        save = False
     arg_dict = {
         'ticker': ticker,
         'period': period,
@@ -20,16 +25,32 @@ def run_models(arg):
     try:
         registry = load_plugins()
         model_func = registry.models.get(model)
-
         if model_func:
             results = model_func(**arg_dict)
-            if isinstance(results, dict):
-                print("\nPlugin Results:")
-                for key, value in results.items():
-                    print(f"{key}: {value:.4f}")
-
-            else:
+            if not isinstance(results, dict):
                 print("Plugin failed to return results")
+                return
+
+            if "text" in results:
+                print("\nPlugin Results:")
+                for key, value in results["text"].items():
+                    if isinstance(value, (int, float)):
+                        print(f"{key}: {value:.4f}")
+                    else:
+                        print(f"{key}: {value}")
+
+            if "plot" in results and plot:
+                plot_data = results["plot"]
+                print("Launching plot")
+                plot_models(
+                    ticker = ticker, 
+                    x_axis = plot_data.get("x_axis"), 
+                    y_axis = plot_data.get("y_axis"), 
+                    title = plot_data.get("title"),
+                    plot= plot,
+                    save = save
+                )
+
         else:
             print(f"Model '{model}' not found.")
     except Exception as e:
