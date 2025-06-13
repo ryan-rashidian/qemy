@@ -1,15 +1,17 @@
-# qemy (prototype): command-line financial data engine for researchers and traders
+# Qemy (prototype): A developer-first CLI toolkit for financial data and modeling
 
 ![Header Screenshot](assets/qemy_welcome.png)
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
 
-qemy is a prototype financial data engine designed for market and economic analysis. It aims to simplify and automate research by providing SEC filings, stock market data, macroeconomic indicators, and the tools needed to analyze and visualize them — all within a convenient CLI. This repository contains the core data pipeline and command-line interface.
+Qemy is a modular, open-source financial research toolkit built in Python. It features clean access to financial and economic data, a flexible plugin system for running your own models and analysis, and a built in command-line interface - all in one place.
 
-**Work in Progress**
+Project Goal: 
 
-qemy is in early development. I'm building this as a personal tool first, and refining as I go.
-Features may change, break, or get replaced as the project evolves.
+A developer-first alternative to traditional financial platforms - minimalist, hackable, and designed for users who value customization, experimentation, and seamless integration of their own tools.
+
+  **Work in Progress**
+- Features may change, break, or get replaced as the project evolves.
 
 Suggestions are welcome!
 
@@ -53,11 +55,9 @@ Note: Filing data is currently limited to US Generally Accepted Accounting Princ
 git clone https://github.com/ryan-rashidian/qemy.git
 ```
 
-### Install qemy with dependencies
+### Install Qemy with dependencies
 
 It's recommended to use a Python venv or Conda.
-
-#### To install for regular use: 
 
 Navigate to project root:
 
@@ -65,59 +65,13 @@ Navigate to project root:
 cd qemy
 ```
 
-Then install qemy as a Python package:
+Then install Qemy as a Python package:
 
 ```bash
 pip install .
 ```
 
-#### For development:
-
-```bash
-pip install -e .
-pip install -r requirements-dev.txt
-```
-Optional - Setup Launch Script
-
-- Recommended for convenience.
-
-Step 1 - Set path to your venv in the bash script
-
-In the scripts directory, find the qemy-dev bash script and open with a text editor:
-
-```bash
-#!/bin/bash
-
-orig_dir=$(pwd)
-source ~/path/to/qemyenv/bin/activate # make sure this matches your venv activate path
-# Conda users: change above line to "conda activate qemyenv"
-cd ~/path/to/projectroot/qemy # match with your project root directory
-python -m qemy.cli_main
-deactivate 
-# Conda users: change above line to "conda deactivate"
-cd "$orig_dir"
-```
-
-Step 2 - Turn qemy script into an executable
-
-Also from scripts directory:
-
-```bash
-chmod +x qemy
-```
-
-Step 3 - Create Path in .bashrc
-
-```bash
-nano ~/.bashrc
-```
-
-Add the following to the bottom of your .bashrc. Replace "path/to/qemy/scripts" with your own: 
-
-```bash
-# PATH for Qemy
-export PATH="$HOME/path/to/qemy/scripts:$PATH"
-```
+[Developer Installation and Launch Script](docs/dev_setup.md)
 
 ---
 
@@ -129,7 +83,7 @@ API keys available free of charge. Sign up required for Tiingo API and Fred API:
 - https://www.tiingo.com/
 - https://www.sec.gov/search-filings/edgar-application-programming-interfaces (No sign up or API key required for EDGAR API. Users will be prompted for a "User Agent" during the setup wizard.)
 
-Run the CLI and qemy will guide you through an API key setup wizard on first launch.
+Run the CLI and Qemy will guide you through an API key setup wizard on first launch.
 
 - Refer to "Usage" below for info related to API usage and data limitations.
 
@@ -143,7 +97,7 @@ EDGAR_USER_AGENT=<your user agent> # EDGAR_USER_AGENT=john johndoe@example.com
 
 Make sure .env is included in .gitignore to keep your keys secure.
 
-IMPORTANT: Read "Legal / Attribution" before using qemy with any 3rd party API service.
+IMPORTANT: Read "Legal / Attribution" before using Qemy with any 3rd party API service.
 
 ---
 
@@ -151,7 +105,7 @@ IMPORTANT: Read "Legal / Attribution" before using qemy with any 3rd party API s
 
 ### Launch CLI
 
-To start the qemy command-line interface run:
+To start the Qemy command-line interface run:
 
 ```bash
 qemy
@@ -166,15 +120,6 @@ qemy-dev
 ```
 
 from any bash terminal or shell.
-
-Alternatively, run the CLI manually with:
-
-```bash
-source ~/path/to/qemyenv/bin/activate
-# Conda users: change above line to "conda activate qemyenv"
-cd ~/path/to/qemy # path to project root directory
-python -m qemy.cli_main
-```
 
 ### (Recommended) Download bulk data from SEC
 
@@ -200,13 +145,13 @@ Proper documentation is being planned. For now, refer to the help commands for m
 
 ## Legal / Attribution
 
-By using the qemy application, you agree to the qemy Terms of Use ("Legal / Attribution") below and Licensing terms.
+By using the Qemy application, you agree to the Qemy Terms of Use ("Legal / Attribution") below and Licensing terms.
 
 - Users are responsible for complying with the terms of any third-party APIs used.
-- qemy is not affiliated with the SEC or Federal Reserve.
-- qemy does not collect or transmit any user data, personal information, or API usage statistics.
+- Qemy is not affiliated with the SEC or Federal Reserve.
+- Qemy does not collect or transmit any user data, personal information, or API usage statistics.
 - Data may have errors, delays, or be incomplete.
-- 3rd party APIs sign ups must be done through their respective websites. qemy does not include a automated sign up process for 3rd party APIs.
+- 3rd party APIs sign ups must be done through their respective websites. Qemy does not include a automated sign up process for 3rd party APIs.
 
 ### SEC EDGAR
 
@@ -227,8 +172,8 @@ By using the qemy application, you agree to the qemy Terms of Use ("Legal / Attr
 
 This project is licensed under the [Apache License 2.0](LICENSE).
 
-qemy™ is a trademark of Ryan A. Rashidian.
-The qemy name, logo, and related branding are not covered by the open-source license and may not be used without permission.
+Qemy™ is a trademark of Ryan A. Rashidian.
+The Qemy name, logo, and related branding are not covered by the open-source license and may not be used without permission.
 
 See the [Notice](NOTICE) file for additional licensing details.
 
