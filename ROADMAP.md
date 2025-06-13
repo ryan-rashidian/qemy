@@ -1,8 +1,8 @@
 # Roadmap
 
-## qemy v0.1.0
+## Qemy v0.1.0
 
-The primary goal of v0.1.0 will be to create a developer facing MVP foundation for qemy, with a focus on codebase architecture and future scalability. User experience will be the focus of v0.2.0+.
+The primary goal of v0.1.0 will be to create a developer facing MVP foundation for Qemy, with a focus on codebase architecture and future scalability. User experience will be the focus of v0.2.0+.
 
 - [x] Basic CLI
 - [x] API financial data cleaning and visualization
