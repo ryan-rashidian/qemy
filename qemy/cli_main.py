@@ -5,7 +5,7 @@ import cmd
 import os
 import platform
 import pandas as pd
-from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot, cli_aux, cli_core, cli_model
+from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot, cli_aux, cli_core, cli_plugins
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -26,10 +26,15 @@ class QemyShell(cmd.Cmd):
         self.ticker_df = pd.DataFrame(index=metric_index) 
         self.ticker_df.index.name = 'Metrics:'
 
-#================================== CORE =====================================#
+#================================== PLUGINS ==================================#
 
     def do_m(self, arg):
-        cli_model.run_models(arg=arg)
+        cli_plugins.run_models(arg=arg)
+    def help_m(self):
+        print("Runs a given plugin model")
+        print("Usage: m <MODEL>")
+
+#================================== CORE =====================================#
 
     def do_table(self, arg):
         cli_core.table(arg=arg, ticker_df=self.ticker_df)
