@@ -36,7 +36,7 @@ Suggestions are welcome!
 ## Features
 
 - CLI: Command line interface entry point.
-- (In Progress) Plugin: use or create your own plugins for modeling.
+- Plugin: use or create your own plugins for modeling.
 - Fetch: SEC filings, stock market data and macroeconomic indicators.
 - Chart: price history, model visualization, etc.
 - Model: DCF, Monte Carlo, linear regression, and more to come.

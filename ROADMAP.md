@@ -13,8 +13,8 @@ The primary goal of v0.1.0 will be to create a developer facing MVP foundation f
     - Risk metrics (beta, Sharpe, Max DD, etc.)
     - Fundamental metrics (from Income Statement, Balance Sheet, and Cash Flow Statement) 
     - Macro metrics (CPI, GDP, Treasury Yields, etc.)
-- [ ] Plugin architecture for models, metrics, and tools 
-- [ ] Built-in plugins for:
+- [x] Plugin architecture for models and tools 
+- [x] Built-in plugins for:
     - Discounted Cash Flow (DCF)
     - Monte Carlo simulation
     - Linear regression

@@ -8,6 +8,7 @@
 - [x] (Non-critical) DCF model is not yet factoring a company's net debt metric into the calculation. Waiting for implementation of better parsing logic, referenced in the previous issue. 
 - [ ] (Non-critical) Total debt metric for filings still incomplete or outdated ~50% of time. Solutions known; Fixes are in progress.
 - [ ] (Non-critical) As a result of some testing, current filings metrics have ~90% success for accuracy (with exception of total debt, referenced in previous issue). Further refinement is needed and planned. Note: most inconsistent results in financial services sector.   
+- [ ] (UX) CLI commands are messy after adding several features - a full re-structure is needed and planned.  
 
 ## Ideas:
 
