@@ -34,7 +34,13 @@ def setup_wizard():
             f.write(f"TIINGO_API_KEY={tiingo_key}\n")
             f.write(f"EDGAR_USER_AGENT={edgar_agent}\n")
         temp_env_path.rename(env_path)
-        print(".env file created successfully!\n")
+        print(
+            " .env file created successfully!\n",
+            "\n Tip: use the bulk_refresh command to download SEC filings locally on your machine.\n",
+            "    - This is faster and helps avoid hitting SEC rate limits.\n",
+            "    - Otherwise, use '-r' or '--request' flags to fetch indicidual filings live.\n"
+            "      Be mindful of your usage - the SEC discourages frequent scraping.\n"
+        )
         load_dotenv(dotenv_path=env_path)
     except SystemExit:
         if temp_env_path.exists():
