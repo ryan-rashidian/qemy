@@ -10,6 +10,7 @@ ARGUMENTS = {
     'quarter':  lambda p: p.add_argument('-q', '--quarter', default='20', help="Placeholder"),
     'metric':   lambda p: p.add_argument('-m', '--metric', default='eps', help="Placeholder"),
     'model':    lambda p: p.add_argument('-mod', '--model', default='dcf', help="Placeholder"),
+    'plot':     lambda p: p.add_argument('-plt', '--plot', default=False, help="Placeholder"),
 }
 
 def parse_args(arg_str, expected_args, prog_name='command'):
