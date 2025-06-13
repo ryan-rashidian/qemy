@@ -31,10 +31,12 @@ def monte_carlo_sim(ticker, period='1Y', num=1000, **_):
             end_std = np.std(simulations[:, -1])
 
             return {
-                "# of Simulations": num,
-                "End Mean": end_mean,
-                "End STD": end_std,
-                "Start Price": start_price,
+                "text": {
+                    "# of Simulations": num,
+                    "End Mean": end_mean,
+                    "End STD": end_std,
+                    "Start Price": start_price,
+                }
             }
 
         else:

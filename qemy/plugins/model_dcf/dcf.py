@@ -42,17 +42,21 @@ def get_dcf_eval(ticker, **_):
                 equity_value = enterprise_value - net_debt
                 intrinsic_value_per_share = max(0, equity_value / shares_outstanding)
                 return {
-                    "Model Fit Confidence": r_squared,
-                    "Enterprise Value": enterprise_value,
-                    "Equity Value": equity_value,
-                    "Intrinsic Value Per Share": intrinsic_value_per_share,
+                    "text": {
+                        "Model Fit Confidence": r_squared,
+                        "Enterprise Value": enterprise_value,
+                        "Equity Value": equity_value,
+                        "Intrinsic Value Per Share": intrinsic_value_per_share,
+                    }
                 }
             else:
                 enterprise_value_per_share = max(0, enterprise_value / shares_outstanding)
                 return {
-                    "Model Fit Confidence": r_squared,
-                    "Enterprise Value": enterprise_value,
-                    "Enterprise Value Per Share": enterprise_value_per_share,
+                    "text": {
+                        "Model Fit Confidence": r_squared,
+                        "Enterprise Value": enterprise_value,
+                        "Enterprise Value Per Share": enterprise_value_per_share,
+                    }
                 }
 
         except Exception as e:
