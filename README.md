@@ -60,13 +60,7 @@ git clone https://github.com/ryan-rashidian/qemy.git
 
 It's recommended to use a Python venv or Conda.
 
-Navigate to project root:
-
-```bash
-cd qemy
-```
-
-Then install Qemy as a Python package:
+Navigate to project root, then install Qemy as a Python package:
 
 ```bash
 pip install .
@@ -113,14 +107,6 @@ qemy
 ```
 
 from any terminal or shell.
-
-If you setup the optional launch script, you can also run: 
-
-```bash
-qemy-dev
-```
-
-from any bash terminal or shell.
 
 ### (Recommended) Download bulk data from SEC
 
