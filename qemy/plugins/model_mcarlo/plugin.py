@@ -1,3 +1,5 @@
+
 def register(registry):
-    from qemy.plugins.model_mcarlo.mcarlo import monte_carlo_sim
-    registry.register_model("mcarlo", monte_carlo_sim)
+    from qemy.plugins.model_mcarlo.mcarlo import MCarloPlugin
+    registry.register_model(MCarloPlugin.name, MCarloPlugin)
+

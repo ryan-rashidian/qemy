@@ -18,11 +18,14 @@ def run_models(arg):
 
     try:
         registry = load_plugins()
-        model_func = registry.models.get(model)
-        if model_func:
-            results = model_func(**arg_dict)
+        model_cls = registry.models.get(model)
+        if model_cls:
+            print(f"\n[Plugin: {model_cls.name}]")
+            print(f"{model_cls.description} (v{model_cls.version})")
+            plugin_instance = model_cls(**arg_dict)
+            results = plugin_instance.run()
             if not isinstance(results, dict):
-                print("Plugin failed to return results")
+                print("\nPlugin failed to return results")
                 return
 
             if "text" in results:
