@@ -42,6 +42,7 @@ def parse_args(arg_str, expected_args, prog_name='command'):
             result.append(val)
         return tuple(result)
 
-    except SystemExit:
+    except (SystemExit, ValueError) as e:
+        print(f"Invalid Command, Error:\n{e}")
         return (None,) * len(expected_args)
 
