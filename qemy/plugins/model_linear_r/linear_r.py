@@ -2,12 +2,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-from qemy.data.api_tiingo import get_tiingo_prices
+from qemy.data.api_tiingo import get_prices
 
 def linear_r(ticker, period, **_):
     try:
-        ind_data = get_tiingo_prices(ticker=ticker, period=period)
-        dep_data = get_tiingo_prices(ticker='SPY', period=period)
+        ind_data = get_prices(ticker=ticker, period=period)
+        dep_data = get_prices(ticker='SPY', period=period)
 
         ind_df, dep_df = pd.DataFrame(ind_data), pd.DataFrame(dep_data)
         ind_df.set_index('date', inplace=True)

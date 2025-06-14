@@ -13,7 +13,7 @@ def help():
         ("econ", "Enter: 'econ' for economic help table"),
         ("market", "Enter: 'market' for market help table"),
         ("plugins", "Enter: 'plugins' for plugin help table"),
-        ("plot", "Enter: 'plot' for plotting help table"),
+        ("plots", "Enter: 'plots' for plotting help table"),
     ])
     print_help_table(" Auxiliary Commands: ", [
         ("clear", "or 'cls' to clear screen."),

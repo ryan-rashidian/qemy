@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from qemy.data.api_tiingo import get_tiingo_prices
+from qemy.data.api_tiingo import get_prices
 
 def monte_carlo_sim(ticker, period='1Y', num=1000, **_):
     try:
         num_days = None
-        data = get_tiingo_prices(ticker=ticker, period=period)
+        data = get_prices(ticker=ticker, period=period)
         data = pd.DataFrame(data)
 
         if isinstance(data, pd.DataFrame):
