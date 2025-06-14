@@ -28,10 +28,7 @@ def run_models(arg):
             if "text" in results:
                 print("\nPlugin Results:")
                 for key, value in results["text"].items():
-                    if isinstance(value, (int, float)):
-                        print(f"{key}: {value:.4f}")
-                    else:
-                        print(f"{key}: {value}")
+                    print(f"{key}: {value}")
 
             if "plot" in results and plot:
                 plot_data = results["plot"]

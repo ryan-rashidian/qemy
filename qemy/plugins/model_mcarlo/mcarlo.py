@@ -33,10 +33,11 @@ def monte_carlo_sim(ticker, period='1Y', num=1000, **_):
 
             return {
                 "text": {
+                    "Assumptions": f"Daily % Return mean: {past_mean:.6f}, STD: {past_std:.6f}",
+                    "Start Price": f"{start_price:.2f}",
                     "# of Simulations": num,
-                    "End Mean": end_mean,
-                    "End STD": end_std,
-                    "Start Price": start_price,
+                    "End Mean": f"{end_mean:.2f}",
+                    "End STD": f"{end_std:.2f}",
                 },
                 "plot": {
                     "title": f"{num }Monte Carlo Simulation for {ticker}",

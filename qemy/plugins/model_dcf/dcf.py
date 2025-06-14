@@ -43,10 +43,10 @@ def get_dcf_eval(ticker, **_):
                 intrinsic_value_per_share = max(0, equity_value / shares_outstanding)
                 return {
                     "text": {
-                        "Model Fit Confidence": r_squared,
-                        "Enterprise Value": enterprise_value,
-                        "Equity Value": equity_value,
-                        "Intrinsic Value Per Share": intrinsic_value_per_share,
+                        "Model Fit Confidence": f"{r_squared:.2%}",
+                        "Enterprise Value": f"{enterprise_value:.0f}",
+                        "Equity Value": f"{equity_value:.0f}",
+                        "Intrinsic Value Per Share": f"{intrinsic_value_per_share:.2f}",
                     }
                 }
             else:

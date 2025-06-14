@@ -30,8 +30,8 @@ def linear_r(ticker, period, **_):
 
         return {
             "text": {
-                "Alpha": alpha,
-                "Beta": beta,
+                "Alpha": f"{alpha:.4f}",
+                "Beta": f"{beta:.4f}",
             },
             "plot": {
                 "title": f"Linear Regression fit for {ticker} and SPY returns",
