@@ -18,7 +18,7 @@ def help():
     print_help_table(" Auxiliary Commands: ", [
         ("clear", "or 'cls' to clear screen."),
         ("exit", "or 'q' to exit qemy."),
-        ("calc", "Simple Calculator"),
+        ("calc", "Simple calculator with Python syntax"),
         ("bulk_refresh", "Downloads bulk filing data from SEC"),
         ("env_reset", "Deletes current .env file"),
     ])
@@ -68,7 +68,7 @@ def plugins():
         ("mcarlo", "Monte Carlo simulation"),
         ("Info", "Integratation of help commands for each plugin is still in development"),
         ("Usage:", "m <MODEL>"),
-        ("Example:", "m dcf -t aapl"),
+        ("Plugin Help:", "m <MODEL> -h"),
     ])
     print("\n")
 
