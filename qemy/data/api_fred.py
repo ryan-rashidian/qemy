@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-from datetime import date, timedelta
 from qemy.utils.utils_fetch import parse_period, safe_status_get
 
 class FREDData:
@@ -24,7 +23,7 @@ class FREDData:
             'observation_end': end_date,
             'frequency': frequency,
             'units': units,
-            'aggregation_method': aggregation,
+            'aggreation_model': aggregation,
         }
         if limit:
             params['limit'] = limit
@@ -46,7 +45,7 @@ class FREDData:
         return None
 
     def get_tbill_yield(self):
-        return self._fetch_series('GS1', period='1M', frequency='d', limit=1)
+        return self._fetch_series('GS1', period='1M', frequency='m', units='lin', limit=1)
 
     def get_cpi(self, period='1Y', units='pc1'):
         return self._fetch_series('CPIAUCSL', period, frequency='m', units=units)
