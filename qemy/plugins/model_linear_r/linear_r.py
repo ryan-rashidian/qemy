@@ -1,8 +1,9 @@
 import pandas as pd
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-from qemy.data.api_tiingo import get_prices
+from qemy.data.api_tiingo import StockMarket
 from qemy.core.plugin_base import BasePlugin
 
 class LinearRPlugin(BasePlugin):
@@ -12,8 +13,9 @@ class LinearRPlugin(BasePlugin):
 
     def run(self):
         try:
-            ind_data = get_prices(ticker=self.ticker, period=self.period)
-            dep_data = get_prices(ticker='SPY', period=self.period)
+            ind_data = StockMarket().get_prices(ticker=self.ticker, period=self.period)
+            time.sleep(0.5) # polite request
+            dep_data = StockMarket().get_prices(ticker='SPY', period=self.period)
 
             ind_df, dep_df = pd.DataFrame(ind_data), pd.DataFrame(dep_data)
             ind_df.set_index('date', inplace=True)
