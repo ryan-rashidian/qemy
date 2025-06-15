@@ -12,17 +12,17 @@ class MCarloPlugin(BasePlugin):
     def run(self):
         try:
             num_days = None
-            data = StockMarket().get_prices(ticker=self.ticker, period=self.period)
-            data = pd.DataFrame(data)
+            ticker_data = StockMarket().get_prices(ticker=self.ticker, period=self.period)
+            ticker_df = pd.DataFrame(ticker_data)
 
-            if isinstance(data, pd.DataFrame):
-                close_prices = np.array(data['close'])
+            if isinstance(ticker_df, pd.DataFrame):
+                close_prices = np.array(ticker_df['close'])
                 past_returns = (close_prices[1:] / close_prices[:-1]) - 1
                 past_mean = np.mean(past_returns)
                 past_std = np.std(past_returns)
 
                 if num_days is None:
-                    num_days = len(data['close'])
+                    num_days = len(ticker_df['close'])
                 start_price = close_prices[-1]
                 simulations = np.zeros((self.num, num_days))
 
@@ -54,11 +54,11 @@ class MCarloPlugin(BasePlugin):
                 }
 
             else:
-                print(f"Failed to retrieve price data for {self.ticker}")
+                self.log(f"Failed to retrieve price data for {self.ticker}")
                 return None
 
         except Exception as e:
-            print(f"core/models/monte_carlo.py Exception ERROR:\n{e}")
+            self.log(f"core/models/monte_carlo.py Exception ERROR:\n{e}")
             return None
 
     def help(self):

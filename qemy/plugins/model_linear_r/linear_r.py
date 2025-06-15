@@ -12,25 +12,25 @@ class LinearRPlugin(BasePlugin):
 
     def run(self):
         try:
-            ind_data = StockMarket().get_prices(ticker=self.ticker, period=self.period)
-            dep_data = StockMarket().get_prices(ticker='SPY', period=self.period)
+            ticker_data = StockMarket().get_prices(ticker=self.ticker, period=self.period)
+            spy_data = StockMarket().get_prices(ticker='SPY', period=self.period)
 
-            ind_df, dep_df = pd.DataFrame(ind_data), pd.DataFrame(dep_data)
-            ind_df.set_index('date', inplace=True)
-            ind_df.index = pd.to_datetime(ind_df.index)
-            dep_df.set_index('date', inplace=True)
-            dep_df.index = pd.to_datetime(dep_df.index)
-            data = pd.DataFrame({
-                self.ticker: ind_df['close'], 
-                'SPY': dep_df['close']
+            ticker_df, spy_df = pd.DataFrame(ticker_data), pd.DataFrame(spy_data)
+            ticker_df.set_index('date', inplace=True)
+            ticker_df.index = pd.to_datetime(ticker_df.index)
+            spy_df.set_index('date', inplace=True)
+            spy_df.index = pd.to_datetime(spy_df.index)
+            combined_df = pd.DataFrame({
+                self.ticker: ticker_df['close'], 
+                'SPY': spy_df['close']
             }).dropna()
-            returns = data.pct_change().dropna()
+            returns_df = combined_df.pct_change().dropna()
 
-            x_axis = np.array(returns['SPY']).reshape(-1, 1) 
-            y_axis = np.array(returns[self.ticker])
+            x_spy = np.array(returns_df['SPY']).reshape(-1, 1) 
+            y_ticker = np.array(returns_df[self.ticker])
 
             model = LinearRegression()
-            model.fit(X=x_axis, y=y_axis)
+            model.fit(X=x_spy, y=y_ticker)
             alpha = model.intercept_
             beta = model.coef_[0]
 
@@ -42,14 +42,14 @@ class LinearRPlugin(BasePlugin):
                 "plot": {
                     "title": f"Linear Regression fit for {self.ticker} and SPY returns",
                     "plot_func": lambda: (
-                        plt.scatter(x_axis, y_axis, alpha=0.3),
-                        plt.plot(x_axis, model.predict(x_axis), color='red')
+                        plt.scatter(x_spy, y_ticker, alpha=0.3),
+                        plt.plot(x_spy, model.predict(x_spy), color='red')
                     )
                 },
             }
 
         except Exception as e:
-            print(f"core/models/linear_r.py Exception ERROR:\n{e}")
+            self.log(f"core/models/linear_r.py Exception ERROR:\n{e}")
             return None 
 
     def help(self):

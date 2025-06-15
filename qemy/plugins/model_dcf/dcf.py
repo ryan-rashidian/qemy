@@ -10,25 +10,25 @@ class DCFPlugin(BasePlugin):
     version = "0.1.0"
 
     def run(self):
-        df, shares_outstanding, net_debt = SEC_Filings(ticker=self.ticker).get_dcf_metrics()
+        filing_df, shares_outstanding, net_debt = SEC_Filings(ticker=self.ticker).get_dcf_metrics()
 
-        if isinstance(df, pd.DataFrame) and shares_outstanding is not None:
+        if isinstance(filing_df, pd.DataFrame) and shares_outstanding is not None:
             try:
-                fcf = df['fcf'].rolling(window=4).mean().dropna().values
+                fcf_df = filing_df['fcf'].rolling(window=4).mean().dropna().values
 
-                if len(fcf) < 4:
+                if len(fcf_df) < 4:
                     self.log("Not enough FCF data to apply rolling average.")
                     return
 
-                x_axis = np.arange(len(fcf)).reshape(-1, 1)
-                y_axis = fcf
-                model = LinearRegression().fit(X=x_axis, y=y_axis)
+                x_time = np.arange(len(fcf_df)).reshape(-1, 1)
+                y_fcf = fcf_df
+                model = LinearRegression().fit(X=x_time, y=y_fcf)
 
-                future_x = np.arange(len(fcf), len(fcf) + 20).reshape(-1, 1)
+                future_x = np.arange(len(fcf_df), len(fcf_df) + 20).reshape(-1, 1)
                 fcf_forecast = model.predict(future_x)
                 fcf_forecast = np.clip(fcf_forecast, 0, None)
 
-                r_squared = model.score(x_axis, y_axis)
+                r_squared = model.score(x_time, y_fcf)
 
                 discount_rate = 0.09 / 4
                 quarters = np.arange(1, 21)
@@ -69,7 +69,7 @@ class DCFPlugin(BasePlugin):
                 self.log(f"core/models/dcf.py Exception ERROR:\n{e}")
                 return None
         else:
-            self.log(f"core/models/dcf.py ERROR:\n{df}\nShares outstanding: {shares_outstanding}")
+            self.log(f"core/models/dcf.py ERROR:\n{filing_df}\nShares outstanding: {shares_outstanding}")
             return None
 
     def help(self):
