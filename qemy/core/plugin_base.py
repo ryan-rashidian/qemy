@@ -13,6 +13,9 @@ class BasePlugin:
     def run(self):
         raise NotImplementedError("Plugin must use run() method")
 
+    def help(self):
+        return f"{self.name} - {self.description}\nNo help found"
+
     def log(self, message):
         print(f"[{self.name}] {message}")
         
