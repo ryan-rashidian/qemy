@@ -1,5 +1,5 @@
 import pandas as pd
-from qemy.data import api_tiingo as tiingo
+from qemy.data.api_tiingo import StockMarket
 from qemy.utils.parse_arg import parse_args
 
 #================================== TIINGO ===================================#
@@ -8,7 +8,7 @@ def quote(arg):
     try:
         ticker = arg.strip().upper()
         if isinstance(ticker, str):
-            data = tiingo.get_quote(tickers=ticker)
+            data = StockMarket().get_quote(tickers=ticker)
             if data and ticker in data:
                 quote_data = data[ticker]
                 quote = quote_data.get('last') or quote_data.get('tngoLast') or quote_data.get('mid')
@@ -25,7 +25,7 @@ def price(arg):
     period, ticker = parse_args(arg_str=arg, expected_args=['period', 'ticker'], prog_name='price')
     if isinstance(period, str) and isinstance(ticker, str):
         print(f"Fetching price info for: {ticker}...")
-        data = tiingo.get_prices(ticker=ticker, period=period)
+        data = StockMarket().get_prices(ticker=ticker, period=period)
         if data is None:
             print('Could not fetch data, please try another ticker or period.')
             return

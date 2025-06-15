@@ -2,7 +2,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 from qemy.utils.filetools import get_next_path
-from qemy.data.api_tiingo import get_prices
+from qemy.data.api_tiingo import StockMarket
 from qemy.data import api_fred as fred
 
 project_root = Path(__file__).resolve().parents[3]
@@ -28,7 +28,7 @@ def plot_models(ticker, title='title', save=False, plot_func=None):
         plt.show()
 
 def plot_price(ticker, period):
-    data = get_prices(ticker=ticker, period=period)
+    data = StockMarket().get_prices(ticker=ticker, period=period)
     df = pd.DataFrame(data)
     df['date'] = pd.to_datetime(df['date'])
 

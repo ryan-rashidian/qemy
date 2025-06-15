@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from qemy.data.api_tiingo import get_prices
+from qemy.data.api_tiingo import StockMarket
 from qemy.core.plugin_base import BasePlugin
 
 class MCarloPlugin(BasePlugin):
@@ -12,7 +12,7 @@ class MCarloPlugin(BasePlugin):
     def run(self):
         try:
             num_days = None
-            data = get_prices(ticker=self.ticker, period=self.period)
+            data = StockMarket().get_prices(ticker=self.ticker, period=self.period)
             data = pd.DataFrame(data)
 
             if isinstance(data, pd.DataFrame):
