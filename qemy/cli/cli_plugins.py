@@ -3,9 +3,12 @@ from qemy.core.plot.plot import plot_models
 from qemy.utils.parse_arg import parse_args
 
 def run_models(arg):
-    period, ticker, model, num, plot, save = parse_args(
+    period, ticker, model, num, plot, save, help = parse_args(
         arg_str=arg, 
-        expected_args=['period', 'ticker_flag', 'model', 'num', 'plot', 'save'], 
+        expected_args=[
+            'period', 'ticker_flag', 'model',
+            'num', 'plot', 'save', 'help'
+        ], 
         prog_name='run_model'
     )
     if not save:
@@ -23,6 +26,11 @@ def run_models(arg):
             print(f"\n[Plugin: {model_cls.name}]")
             print(f"{model_cls.description} (v{model_cls.version})")
             plugin_instance = model_cls(**arg_dict)
+
+            if help:
+                print(plugin_instance.help())
+                return
+
             results = plugin_instance.run()
             if not isinstance(results, dict):
                 print("\nPlugin failed to return results")
