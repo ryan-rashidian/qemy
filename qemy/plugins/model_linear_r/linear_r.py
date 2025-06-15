@@ -52,3 +52,11 @@ class LinearRPlugin(BasePlugin):
             print(f"core/models/linear_r.py Exception ERROR:\n{e}")
             return None 
 
+    def help(self):
+        return (
+            f"{self.name.upper()} Plugin Help:\n"
+            f"Description: {self.description}\n"
+            f"Version: {self.version}\n\n"
+            f"Usage: qemy> m linear_r -t <TICKER> -p <PERIOD>\n"
+        )
+    

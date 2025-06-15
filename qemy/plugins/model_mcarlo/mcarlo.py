@@ -61,3 +61,11 @@ class MCarloPlugin(BasePlugin):
             print(f"core/models/monte_carlo.py Exception ERROR:\n{e}")
             return None
 
+    def help(self):
+        return (
+            f"{self.name.upper()} Plugin Help:\n"
+            f"Description: {self.description}\n"
+            f"Version: {self.version}\n\n"
+            f"Usage: qemy> m mcarlo -t <TICKER> -p <PERIOD> -n <#SIMS>\n"
+        )
+    

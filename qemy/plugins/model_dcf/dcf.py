@@ -17,7 +17,7 @@ class DCFPlugin(BasePlugin):
                 fcf = df['fcf'].rolling(window=4).mean().dropna().values
 
                 if len(fcf) < 4:
-                    print("Not enough FCF data to apply rolling average.")
+                    self.log("Not enough FCF data to apply rolling average.")
                     return
 
                 x_axis = np.arange(len(fcf)).reshape(-1, 1)
@@ -66,9 +66,17 @@ class DCFPlugin(BasePlugin):
                     }
 
             except Exception as e:
-                print(f"core/models/dcf.py Exception ERROR:\n{e}")
+                self.log(f"core/models/dcf.py Exception ERROR:\n{e}")
                 return None
         else:
-            print(f"core/models/dcf.py ERROR:\n{df}\nShares outstanding: {shares_outstanding}")
+            self.log(f"core/models/dcf.py ERROR:\n{df}\nShares outstanding: {shares_outstanding}")
             return None
 
+    def help(self):
+        return (
+            f"{self.name.upper()} Plugin Help:\n"
+            f"Description: {self.description}\n"
+            f"Version: {self.version}\n\n"
+            f"Usage: qemy> m dcf -t <TICKER>\n"
+        )
+    
