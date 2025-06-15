@@ -1,5 +1,4 @@
 import pandas as pd
-import time
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
@@ -14,7 +13,6 @@ class LinearRPlugin(BasePlugin):
     def run(self):
         try:
             ind_data = StockMarket().get_prices(ticker=self.ticker, period=self.period)
-            time.sleep(0.5) # polite request
             dep_data = StockMarket().get_prices(ticker='SPY', period=self.period)
 
             ind_df, dep_df = pd.DataFrame(ind_data), pd.DataFrame(dep_data)
