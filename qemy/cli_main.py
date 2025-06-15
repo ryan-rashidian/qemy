@@ -42,15 +42,12 @@ class QemyShell(cmd.Cmd):
         print("Fetches table of current filings")
         print("Usage: table")
 
-    def do_wl(self, _):
-        try:
-            ticker_list = cli_core.WatchListManager(ticker_list=self.ticker_list.copy()).run()
-            if ticker_list:
-                self.ticker_list = ticker_list
-            else:
-                return
-        except Exception as e:
-            print(f"Failed to load watchlist, Error:\n{e}")
+    def do_wl(self, arg):
+        ticker_list = cli_core.watch_list(arg=arg, ticker_list=self.ticker_list.copy())
+        if ticker_list:
+            self.ticker_list = ticker_list
+        else:
+            return
     def help_wl(self):
         print("Starts watchlist editor.")
         print("Usage: watchlist")
