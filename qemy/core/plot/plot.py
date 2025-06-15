@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from qemy.utils.filetools import get_next_path
 from qemy.data.api_tiingo import StockMarket
-from qemy.data import api_fred as fred
+from qemy.data.api_fred import FREDData
 
 project_root = Path(__file__).resolve().parents[3]
 export_dir = project_root / "exports" / "charts"
@@ -49,7 +49,7 @@ def plot_price(ticker, period):
     plt.show()
 
 def plot_cpi(period, save=False, units='pc1'):
-    data = fred.get_cpi_inflation(period=period, units=units)
+    data = FREDData().get_cpi(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
@@ -68,7 +68,7 @@ def plot_cpi(period, save=False, units='pc1'):
         plt.show()
     
 def plot_gdp(period, save=False, units='pc1'):
-    data = fred.get_gdp(period=period, units=units)
+    data = FREDData().get_gdp(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
@@ -87,7 +87,7 @@ def plot_gdp(period, save=False, units='pc1'):
         plt.show()
 
 def plot_sentiment(period, save=False, units='pch'):
-    data = fred.get_sentiment(period=period, units=units)
+    data = FREDData().get_sentiment(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
@@ -106,7 +106,7 @@ def plot_sentiment(period, save=False, units='pch'):
         plt.show()
 
 def plot_nfp(period, save=False, units='pc1'):
-    data = fred.get_nf_payrolls(period=period, units=units)
+    data = FREDData().get_nf_payrolls(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
@@ -125,7 +125,7 @@ def plot_nfp(period, save=False, units='pc1'):
         plt.show()
 
 def plot_interest(period, save=False, units='pc1'):
-    data = fred.get_interest(period=period, units=units)
+    data = FREDData().get_interest_rate(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
@@ -144,7 +144,7 @@ def plot_interest(period, save=False, units='pc1'):
         plt.show()
 
 def plot_jobc(period, save=False, units='pc1'):
-    data = fred.get_jobless_claims(period=period, units=units)
+    data = FREDData().get_jobless_claims(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
@@ -163,7 +163,7 @@ def plot_jobc(period, save=False, units='pc1'):
         plt.show()
 
 def plot_unemployment(period, save=False, units='pc1'):
-    data = fred.get_unemployment(period=period, units=units)
+    data = FREDData().get_unemployment(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
@@ -182,7 +182,7 @@ def plot_unemployment(period, save=False, units='pc1'):
         plt.show()
 
 def plot_ind_prod(period, save=False, units='pc1'):
-    data = fred.get_ind_prod(period=period, units=units)
+    data = FREDData().get_industrial_production(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))
@@ -201,7 +201,7 @@ def plot_ind_prod(period, save=False, units='pc1'):
         plt.show()
 
 def plot_netex(period, save=False, units='lin'):
-    data = fred.get_netex(period=period, units=units)
+    data = FREDData().get_net_exports(period=period, units=units)
     df = pd.DataFrame(data)
 
     plt.figure(figsize=(14, 8))

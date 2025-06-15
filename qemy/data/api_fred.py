@@ -3,261 +3,75 @@ import pandas as pd
 from datetime import date, timedelta
 from qemy.utils.utils_fetch import parse_period, safe_status_get
 
-FRED_API_KEY = os.getenv('FRED_API_KEY')
+class FREDData:
+    def __init__(self):
+        self.API_KEY = os.getenv('FRED_API_KEY')
+        self.url = 'https://api.stlouisfed.org/fred/series/observations'
 
-def get_tbill_yield():
-    end_date = date.today()
-    start_date = end_date - timedelta(days=30)
-    url = 'https://api.stlouisfed.org/fred/series/observations'
-    params = {
-        'series_id': 'GS1',
-        'api_key': FRED_API_KEY,
-        'file_type': 'json',
-        'sort_order': 'desc',
-        'limit': 1,
-        'observation_start': start_date.isoformat(),
-        'observation_end': end_date.isoformat(),
-    }
-    try:
-        data = safe_status_get(url=url, params=params)
-        if data:
-            tbill = data['observations'][0] 
-            return tbill['value']
-    except Exception as e:
-        print(f"Failed to request data. Error code:\n{e}")
+    def _fetch_series(
+            self, series_id, period='1Y', 
+            frequency='m', units='pc1', 
+            aggregation='avg', limit=None
+    ):
 
-def get_cpi_inflation(period='1Y', units ='pc1'):
-    start_date, end_date = parse_period(period)
-    url = 'https://api.stlouisfed.org/fred/series/observations'
-    params = {
-        'series_id': 'CPIAUCSL',
-        'api_key': FRED_API_KEY,
-        'file_type': 'json',
-        'sort_order': 'desc',
-        'observation_start': start_date,
-        'observation_end': end_date,
-        'frequency': 'm',
-        'aggregation_method': 'avg',
-        'units': units,
-    }
-    try:
-        data = safe_status_get(url=url, params=params)
-        if data:
-            df = pd.DataFrame(data['observations'])
-            df['date'] = pd.to_datetime(df['date'])
-            df.set_index('date', inplace=True)
-            df['value'] = df['value'].astype(float)
-            df = df.drop('realtime_start', axis=1)
-            df = df.drop('realtime_end', axis=1)
-            return df
-    except Exception as e:
-        print(f"Failed to request data. Error code:\n{e}")
+        start_date, end_date = parse_period(period)
+        params = {
+            'series_id': series_id,
+            'api_key': self.API_KEY,
+            'file_type': 'json',
+            'sort_order': 'desc',
+            'observation_start': start_date,
+            'observation_end': end_date,
+            'frequency': frequency,
+            'units': units,
+            'aggregation_method': aggregation,
+        }
+        if limit:
+            params['limit'] = limit
 
-def get_gdp(period='1Y', units='pc1'):
-    start_date, end_date = parse_period(period)
-    url = 'https://api.stlouisfed.org/fred/series/observations'
-    params = {
-        'series_id': 'GDP',
-        'api_key': FRED_API_KEY,
-        'file_type': 'json',
-        'sort_order': 'desc',
-        'observation_start': start_date,
-        'observation_end': end_date,
-        'frequency': 'q',
-        'units': units,
-    }
-    try:
-        data = safe_status_get(url=url, params=params)
-        if data:
-            df = pd.DataFrame(data['observations'])
-            df['date'] = pd.to_datetime(df['date'])
-            df.set_index('date', inplace=True)
-            df['value'] = df['value'].astype(float)
-            df = df.drop('realtime_start', axis=1)
-            df = df.drop('realtime_end', axis=1)
-            return df
-    except Exception as e:
-        print(f"Failed to request data. Error code:\n{e}")
+        try:
+            fred_data = safe_status_get(url=self.url, params=params)
+            if fred_data and fred_data.get('observations'):
+                obs_df = pd.DataFrame(fred_data['observations'])
+                obs_df['date'] = pd.to_datetime(obs_df['date'])
+                obs_df.set_index('date', inplace=True)
+                obs_df['value'] = pd.to_numeric(obs_df['value'], errors='coerce')
+                return obs_df.drop(
+                    columns=['realtime_start', 'realtime_end'], 
+                    errors='ignore'
+                )
 
-def get_sentiment(period='1Y', units='pch'):
-    start_date, end_date = parse_period(period)
-    url = 'https://api.stlouisfed.org/fred/series/observations'
-    params = {
-        'series_id': 'UMCSENT',
-        'api_key': FRED_API_KEY,
-        'file_type': 'json',
-        'sort_order': 'desc',
-        'observation_start': start_date,
-        'observation_end': end_date,
-        'frequency': 'm',
-        'units': units,
-    }
-    try:
-        data = safe_status_get(url=url, params=params)
-        if data:
-            df = pd.DataFrame(data['observations'])
-            df['date'] = pd.to_datetime(df['date'])
-            df.set_index('date', inplace=True)
-            df['value'] = df['value'].astype(float)
-            df = df.drop('realtime_start', axis=1)
-            df = df.drop('realtime_end', axis=1)
-            return df
-    except Exception as e:
-        print(f"Failed to request data. Error code:\n{e}")
+        except Exception as e:
+            print(f"data/api_fred.py Error:\n{e}")
+        return None
 
-def get_nf_payrolls(period='1Y', units='pc1'):
-    start_date, end_date = parse_period(period)
-    url = 'https://api.stlouisfed.org/fred/series/observations'
-    params = {
-        'series_id': 'PAYEMS',
-        'api_key': FRED_API_KEY,
-        'file_type': 'json',
-        'sort_order': 'desc',
-        'observation_start': start_date,
-        'observation_end': end_date,
-        'frequency': 'm',
-        'units': units,
-    }
-    try:
-        data = safe_status_get(url=url, params=params)
-        if data:
-            df = pd.DataFrame(data['observations'])
-            df['date'] = pd.to_datetime(df['date'])
-            df.set_index('date', inplace=True)
-            #df['value'] = df['value'].astype(float)
-            df = df.drop('realtime_start', axis=1)
-            df = df.drop('realtime_end', axis=1)
-            return df
-    except Exception as e:
-        print(f"Failed to request data. Error code:\n{e}")
-        
-def get_interest(period='1Y', units='pc1'):
-    start_date, end_date = parse_period(period)
-    url = 'https://api.stlouisfed.org/fred/series/observations'
-    params = {
-        'series_id': 'DFF',
-        'api_key': FRED_API_KEY,
-        'file_type': 'json',
-        'sort_order': 'desc',
-        'observation_start': start_date,
-        'observation_end': end_date,
-        'frequency': 'd',
-        'units': units,
-    }
-    try:
-        data = safe_status_get(url=url, params=params)
-        if data:
-            df = pd.DataFrame(data['observations'])
-            df['date'] = pd.to_datetime(df['date'])
-            df.set_index('date', inplace=True)
-            df['value'] = df['value'].astype(float)
-            df = df.drop('realtime_start', axis=1)
-            df = df.drop('realtime_end', axis=1)
-            return df
-    except Exception as e:
-        print(f"Failed to request data. Error code:\n{e}")
+    def get_tbill_yield(self):
+        return self._fetch_series('GS1', period='1M', frequency='d', limit=1)
 
-def get_jobless_claims(period='1Y', units='pc1'):
-    start_date, end_date = parse_period(period)
-    url = 'https://api.stlouisfed.org/fred/series/observations'
-    params = {
-        'series_id': 'ICSA',
-        'api_key': FRED_API_KEY,
-        'file_type': 'json',
-        'sort_order': 'desc',
-        'observation_start': start_date,
-        'observation_end': end_date,
-        'frequency': 'w',
-        'units': units,
-    }
-    try:
-        data = safe_status_get(url=url, params=params)
-        if data:
-            df = pd.DataFrame(data['observations'])
-            df['date'] = pd.to_datetime(df['date'])
-            df.set_index('date', inplace=True)
-            df['value'] = df['value'].astype(float)
-            df = df.drop('realtime_start', axis=1)
-            df = df.drop('realtime_end', axis=1)
-            return df
-    except Exception as e:
-        print(f"Failed to request data. Error code:\n{e}")
+    def get_cpi(self, period='1Y', units='pc1'):
+        return self._fetch_series('CPIAUCSL', period, frequency='m', units=units)
 
-def get_unemployment(period='1Y', units= 'pc1'):
-    start_date, end_date = parse_period(period)
-    url = 'https://api.stlouisfed.org/fred/series/observations'
-    params = {
-        'series_id': 'UNRATE',
-        'api_key': FRED_API_KEY,
-        'file_type': 'json',
-        'sort_order': 'desc',
-        'observation_start': start_date,
-        'observation_end': end_date,
-        'frequency': 'm',
-        'units': units,
-    }
-    try:
-        data = safe_status_get(url=url, params=params)
-        if data:
-            df = pd.DataFrame(data['observations'])
-            df['date'] = pd.to_datetime(df['date'])
-            df.set_index('date', inplace=True)
-            df['value'] = df['value'].astype(float)
-            df = df.drop('realtime_start', axis=1)
-            df = df.drop('realtime_end', axis=1)
-            return df
-    except Exception as e:
-        print(f"Failed to request data. Error code:\n{e}")
+    def get_gdp(self, period='1Y', units='pc1'):
+        return self._fetch_series('GDP', period, frequency='q', units=units)
 
-def get_ind_prod(period='1Y', units='pc1'):
-    start_date, end_date = parse_period(period)
-    url = 'https://api.stlouisfed.org/fred/series/observations'
-    params = {
-        'series_id': 'INDPRO',
-        'api_key': FRED_API_KEY,
-        'file_type': 'json',
-        'sort_order': 'desc',
-        'observation_start': start_date,
-        'observation_end': end_date,
-        'frequency': 'm',
-        'units': units,
-    }
-    try:
-        data = safe_status_get(url=url, params=params)
-        if data:
-            df = pd.DataFrame(data['observations'])
-            df['date'] = pd.to_datetime(df['date'])
-            df.set_index('date', inplace=True)
-            df['value'] = df['value'].astype(float)
-            df = df.drop('realtime_start', axis=1)
-            df = df.drop('realtime_end', axis=1)
-            return df
-    except Exception as e:
-        print(f"Failed to request data. Error code:\n{e}")
+    def get_sentiment(self, period='1Y', units='pch'):
+        return self._fetch_series('UMCSENT', period, frequency='m', units=units)
 
-def get_netex(period='1Y', units='lin'): 
-    start_date, end_date = parse_period(period)
-    url = 'https://api.stlouisfed.org/fred/series/observations'
-    params = {
-        'series_id': 'NETEXC',
-        'api_key': FRED_API_KEY,
-        'file_type': 'json',
-        'sort_order': 'desc',
-        'observation_start': start_date,
-        'observation_end': end_date,
-        'frequency': 'q',
-        'units': units,
-    }
-    try:
-        data = safe_status_get(url=url, params=params)
-        if data:
-            df = pd.DataFrame(data['observations'])
-            df['date'] = pd.to_datetime(df['date']) 
-            df.set_index('date', inplace=True)
-            df['value'] = df['value'].astype(float)
-            df = df.drop('realtime_start', axis=1)
-            df = df.drop('realtime_end', axis=1)
-            return df
-    except Exception as e:
-        print(f"Failed to request data. Error code:\n{e}")
+    def get_nf_payrolls(self, period='1Y', units='pc1'):
+        return self._fetch_series('PAYEMS', period, frequency='m', units=units)
+
+    def get_interest_rate(self, period='1Y', units='pc1'):
+        return self._fetch_series('DFF', period, frequency='d', units=units)
+
+    def get_jobless_claims(self, period='1Y', units='pc1'):
+        return self._fetch_series('ICSA', period, frequency='w', units=units)
+
+    def get_unemployment(self, period='1Y', units='pc1'):
+        return self._fetch_series('UNRATE', period, frequency='m', units=units)
+
+    def get_industrial_production(self, period='1Y', units='pc1'):
+        return self._fetch_series('INDPRO', period, frequency='m', units=units)
+
+    def get_net_exports(self, period='1Y', units='lin'):
+        return self._fetch_series('NETEXC', period, frequency='q', units=units)        
 

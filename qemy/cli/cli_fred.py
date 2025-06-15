@@ -1,11 +1,11 @@
-from qemy.data import api_fred as fred
+from qemy.data.api_fred import FREDData
 from qemy.utils.parse_arg import parse_args
 
 #================================== FRED =====================================#
 
 def rfr():
     try:
-        print(fred.get_tbill_yield())
+        print(FREDData().get_tbill_yield())
     except Exception as e:
         print(f"Could not fetch data ERROR:\n{e}")
 
@@ -14,7 +14,7 @@ def cpi(arg):
     units = 'pc1' if units is None else units
     if isinstance(period, str):
         try:
-            print(fred.get_cpi_inflation(period=period, units=units))
+            print(FREDData().get_cpi(period=period, units=units))
         except Exception as e:
             print(f"Could not fetch data ERROR:\n{e}")
     else:
@@ -25,7 +25,7 @@ def gdp(arg):
     units = 'pc1' if units is None else units
     if isinstance(period, str):
         try:
-            print(fred.get_gdp(period=period, units=units))
+            print(FREDData().get_gdp(period=period, units=units))
         except Exception as e:
             print(f"Could not fetch data ERROR:\n{e}")
     else:
@@ -36,7 +36,7 @@ def sent(arg):
     units = 'pch' if units is None else units
     if isinstance(period, str):
         try:
-            print(fred.get_sentiment(period=period, units=units))
+            print(FREDData().get_sentiment(period=period, units=units))
         except Exception as e:
             print(f"Could not fetch data ERROR:\n{e}")
     else:
@@ -47,7 +47,7 @@ def nfp(arg):
     units = 'pc1' if units is None else units
     if isinstance(period, str):
         try:
-            print(fred.get_nf_payrolls(period=period, units=units))
+            print(FREDData().get_nf_payrolls(period=period, units=units))
         except Exception as e:
             print(f"Could not fetch data ERROR:\n{e}")
     else:
@@ -58,7 +58,7 @@ def interest(arg):
     units = 'pc1' if units is None else units
     if isinstance(period, str):
         try:
-            print(fred.get_interest(period=period, units=units))
+            print(FREDData().get_interest_rate(period=period, units=units))
         except Exception as e:
             print(f"Could not fetch data ERROR:\n{e}")
     else:
@@ -69,7 +69,7 @@ def jobc(arg):
     units = 'pc1' if units is None else units
     if isinstance(period, str):
         try:
-            print(fred.get_jobless_claims(period=period, units=units))
+            print(FREDData().get_jobless_claims(period=period, units=units))
         except Exception as e:
             print(f"Could not fetch data ERROR:\n{e}")
     else:
@@ -80,7 +80,7 @@ def unem(arg):
     units = 'pc1' if units is None else units
     if isinstance(period, str):
         try:
-            print(fred.get_unemployment(period=period, units=units))
+            print(FREDData().get_unemployment(period=period, units=units))
         except Exception as e:
             print(f"Could not fetch data ERROR:\n{e}")
     else:
@@ -91,7 +91,7 @@ def indp(arg):
     units = 'pc1' if units is None else units
     if isinstance(period, str):
         try:
-            print(fred.get_ind_prod(period=period, units=units))
+            print(FREDData().get_industrial_production(period=period, units=units))
         except Exception as e:
             print(f"Could not fetch data ERROR:\n{e}")
     else:
@@ -102,7 +102,7 @@ def netex(arg):
     units = 'lin' if units is None else units 
     if isinstance(period, str) and isinstance(units, str):
         try:
-            print(fred.get_netex(period=period, units=units.lower()))
+            print(FREDData().get_net_exports(period=period, units=units.lower()))
         except Exception as e:
             print(f"Could not fetch data ERROR:\n{e}")
     else:

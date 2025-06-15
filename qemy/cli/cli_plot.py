@@ -5,6 +5,7 @@ from qemy.utils.parse_arg import parse_args
 
 def plot_price(arg):
     period, ticker = parse_args(arg_str=arg, expected_args=['period', 'ticker'], prog_name='plot_price')
+
     if isinstance(period, str) and isinstance(ticker, str):
         print(f"Fetching plot chart for: {ticker} daily closing prices, log scaled...")
         try:
@@ -14,38 +15,16 @@ def plot_price(arg):
     else:
         print('For valid syntax, Try: plot_price AAPL -p 3M')
 
-def plot_lr(arg):
-    period, ticker = parse_args(arg_str=arg, expected_args=['period', 'ticker'], prog_name='plot_lr')
-    if isinstance(period, str) and isinstance(ticker, str):
-        print(f"Fetching plot chart for: {ticker} daily closing prices...")
-        try:
-            plot.plot_lr(ticker=ticker, period=period)
-        except Exception as e:
-            print(f"Could not fetch plot chart, please try another ticker. Error:\n{e}")
-    else:
-        print('For valid syntax, Try: price_plot AAPL -p 3M')
-
-def plot_monte_carlo(arg):
-    period, ticker, num = parse_args(arg_str=arg, expected_args=['period', 'ticker', 'num'], prog_name='plot_mcarlo')
-    if isinstance(period, str) and isinstance(ticker, str) and num:
-        num = int(num)
-        try:
-            plot.plot_monte_carlo(ticker=ticker, period=period, num_simulations=num)
-        except Exception as e:
-            print(f"Error:\n{e}")
-    else:
-        print('For valid syntax, Try: monte_carlo -p 2Y -n 1000')
-
 def plot_cpi(arg):
     period, save_state, units = parse_args(arg_str=arg, expected_args=['period', 'save', 'units'], prog_name='plot_cpi')
+    if not save_state:
+        save_state = False
     units = 'pc1' if units is None else units
-    if isinstance(period, str) and isinstance(save_state, str):
+    
+    if isinstance(period, str):
         print(f"Fetching plot chart for CPI inflation: % Change from Year Ago...")
         try:
-            if save_state in ('Y', 'YES'):
-                plot.plot_cpi(period=period, save=True, units=units)
-            else:
-                plot.plot_cpi(period=period, save=False, units=units)
+            plot.plot_cpi(period=period, save=save_state, units=units)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
@@ -53,14 +32,14 @@ def plot_cpi(arg):
 
 def plot_gdp(arg):
     period, save_state, units = parse_args(arg_str=arg, expected_args=['period', 'save', 'units'], prog_name='plot_gdp')
+    if not save_state:
+        save_state = False
     units = 'pc1' if units is None else units
-    if isinstance(period, str) and isinstance(save_state, str):
+
+    if isinstance(period, str):
         print(f"Fetching plot chart for GDP: % Change from Year Ago...")
         try:
-            if save_state in ('Y', 'YES'):
-                plot.plot_gdp(period=period, save=True, units=units)
-            else:
-                plot.plot_gdp(period=period, save=False, units=units)
+            plot.plot_gdp(period=period, save=save_state, units=units)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
@@ -68,14 +47,14 @@ def plot_gdp(arg):
 
 def plot_sent(arg):
     period, save_state, units = parse_args(arg_str=arg, expected_args=['period', 'save', 'units'], prog_name='plot_sent')
+    if not save_state:
+        save_state = False
     units = 'pch' if units is None else units
-    if isinstance(period, str) and isinstance(save_state, str):
+
+    if isinstance(period, str):
         print(f"Fetching plot chart for Sentiment: % Change...")
         try:
-            if save_state in ('Y', 'YES'):
-                plot.plot_sentiment(period=period, save=True, units=units)
-            else:
-                plot.plot_sentiment(period=period, save=False, units=units)
+            plot.plot_sentiment(period=period, save=save_state, units=units)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
@@ -83,14 +62,14 @@ def plot_sent(arg):
 
 def plot_nfp(arg):
     period, save_state, units = parse_args(arg_str=arg, expected_args=['period', 'save', 'units'], prog_name='plot_nfp')
+    if not save_state:
+        save_state = False
     units = 'pc1' if units is None else units
-    if isinstance(period, str) and isinstance(save_state, str):
+
+    if isinstance(period, str):
         print(f"Fetching plot chart for Non-Farm Payrolls: % Change from Year Ago...")
         try:
-            if save_state in ('Y', 'YES'):
-                plot.plot_nfp(period=period, save=True, units=units)
-            else:
-                plot.plot_nfp(period=period, save=False, units=units)
+            plot.plot_nfp(period=period, save=save_state, units=units)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
@@ -98,14 +77,14 @@ def plot_nfp(arg):
 
 def plot_interest(arg):
     period, save_state, units = parse_args(arg_str=arg, expected_args=['period', 'save', 'units'], prog_name='plot_interest')
+    if not save_state:
+        save_state = False
     units = 'pc1' if units is None else units
-    if isinstance(period, str) and isinstance(save_state, str):
+
+    if isinstance(period, str):
         print(f"Fetching plot chart for Interest rates: % Change from Year Ago...")
         try:
-            if save_state in ('Y', 'YES'):
-                plot.plot_interest(period=period, save=True, units=units)
-            else:
-                plot.plot_interest(period=period, save=False, units=units)
+            plot.plot_interest(period=period, save=save_state, units=units)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
@@ -113,14 +92,14 @@ def plot_interest(arg):
 
 def plot_jobc(arg):
     period, save_state, units = parse_args(arg_str=arg, expected_args=['period', 'save', 'units'], prog_name='plot_jobc')
+    if not save_state:
+        save_state = False
     units = 'pc1' if units is None else units
-    if isinstance(period, str) and isinstance(save_state, str):
+
+    if isinstance(period, str):
         print(f"Fetching plot chart for Jobless Claims: % Change from Year Ago...")
         try:
-            if save_state in ('Y', 'YES'):
-                plot.plot_jobc(period=period, save=True, units=units)
-            else:
-                plot.plot_jobc(period=period, save=False, units=units)
+            plot.plot_jobc(period=period, save=save_state, units=units)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
@@ -128,14 +107,14 @@ def plot_jobc(arg):
 
 def plot_unem(arg):
     period, save_state, units = parse_args(arg_str=arg, expected_args=['period', 'save', 'units'], prog_name='plot_unem')
+    if not save_state:
+        save_state = False
     units = 'pc1' if units is None else units
-    if isinstance(period, str) and isinstance(save_state, str):
+
+    if isinstance(period, str):
         print(f"Fetching plot chart for Unemployment rate: % Change from Year Ago...")
         try:
-            if save_state in ('Y', 'YES'):
-                plot.plot_unemployment(period=period, save=True, units=units)
-            else:
-                plot.plot_unemployment(period=period, save=False, units=units)
+            plot.plot_unemployment(period=period, save=save_state, units=units)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
@@ -143,14 +122,14 @@ def plot_unem(arg):
 
 def plot_indp(arg):
     period, save_state, units = parse_args(arg_str=arg, expected_args=['period', 'save', 'units'], prog_name='plot_indp')
+    if not save_state:
+        save_state = False
     units = 'pc1' if units is None else units
-    if isinstance(period, str) and isinstance(save_state, str):
+
+    if isinstance(period, str):
         print(f"Fetching plot chart for Industrial Production: % Change from Year Ago...")
         try:
-            if save_state in ('Y', 'YES'):
-                plot.plot_ind_prod(period=period, save=True, units=units)
-            else:
-                plot.plot_ind_prod(period=period, save=False, units=units)
+            plot.plot_ind_prod(period=period, save=save_state, units=units)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
@@ -158,14 +137,14 @@ def plot_indp(arg):
 
 def plot_netex(arg):
     period, save_state, units = parse_args(arg_str=arg, expected_args=['period', 'save', 'units'], prog_name='plot_netex')
+    if not save_state:
+        save_state = False
     units = 'lin' if units is None else units
-    if isinstance(period, str) and isinstance(save_state, str):
+
+    if isinstance(period, str):
         print(f"Fetching plot chart for Real Net Exports of Goods and Services...")
         try:
-            if save_state in ('Y', 'YES'):
-                plot.plot_netex(period=period, save=True, units=units)
-            else:
-                plot.plot_netex(period=period, save=False, units=units)
+            plot.plot_netex(period=period, save=save_state, units=units)
         except Exception as e:
             print(f"Could not fetch plot chart. ERROR:\n{e}")
     else:
