@@ -153,18 +153,6 @@ class QemyShell(cmd.Cmd):
         print("Fetches plot chart of log scaled daily prices for given ticker.")
         print("Usage: plot_price <TICKER> -p <PERIOD>")
 
-    def do_plot_lr(self, arg):
-        cli_plot.plot_lr(arg=arg)
-    def help_plot_lr(self):
-        print("Fetches linear regression plot chart for given ticker and SPY.")
-        print("Usage: plot_lr <TICKER> -p <PERIOD>")
-
-    def do_plot_mcarlo(self, arg):
-        cli_plot.plot_monte_carlo(arg=arg)
-    def help_plot_mcarlo(self):
-        print("Performs and plots Monte Carlo simulations on given ticker's price history")
-        print("Usage: plot_mcarlo AAPL -p 2Y -n 1000")
-
     def do_plot_cpi(self, arg):
         cli_plot.plot_cpi(arg=arg)
     def help_plot_cpi(self):
