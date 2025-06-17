@@ -10,6 +10,7 @@ ARGUMENTS = {
     'num':           lambda p: p.add_argument('-n', '--num', default=1000),
     'quarter':       lambda p: p.add_argument('-q', '--quarter', default='20'),
     'metric':        lambda p: p.add_argument('-m', '--metric', default='eps'),
+    'metric_p':      lambda p: p.add_argument('metric_p'),
     'model':         lambda p: p.add_argument('model'),
     'plot':          lambda p: p.add_argument('-plt', '--plot', action='store_true'),
     'help':          lambda p: p.add_argument('-h', '--help', action='store_true'),
@@ -32,7 +33,7 @@ def parse_args(arg_str, expected_args, prog_name='command'):
             else:
                 val = getattr(args, arg, None)
 
-            if isinstance(val, str) and arg in ('ticker', 'ticker_flag', 'metric', 'save'):
+            if isinstance(val, str) and arg in ('ticker', 'ticker_flag', 'metric', 'metric_p', 'save'):
                 val = val.upper()
 
             if arg in ('num',) and val is not None:
@@ -50,9 +51,14 @@ def parse_args(arg_str, expected_args, prog_name='command'):
 
 def parse_args_help(arg_str, expected_args, prog_name='command', help_func=None):
     tokens = shlex.split(arg_str)
-    if '-h' in tokens or '--help' in tokens:
+
+    has_help = '-h' in tokens or '--help' in tokens
+    has_command = next((t for t in tokens if not t.startswith('-')), None)
+
+    if has_help and has_command is None:
         if help_func:
             help_func()
         return '__HELP__'
+
     return parse_args(arg_str, expected_args, prog_name)
 
