@@ -71,65 +71,8 @@ class QemyShell(cmd.Cmd):
 
 #================================== FRED =====================================#
 
-    def do_rfr(self, _):
-        cli_fred.rfr()
-    def help_rfr(self):
-        print("Fetches latest 1 year T-Bill yield.")
-        print("Usage: rfr")
-
-    def do_cpi(self, arg):
-        cli_fred.cpi(arg=arg)
-    def help_cpi(self):
-        print("Fetches monthly CPI data.")
-        print("Usage: cpi -p <PERIOD>")
-
-    def do_gdp(self, arg):
-        cli_fred.gdp(arg=arg)
-    def help_gdp(self):
-        print("Fetches quarterly GDP data.")
-        print("Usage: gdp -p <PERIOD>")
-
-    def do_sent(self, arg):
-        cli_fred.sent(arg=arg)
-    def help_sent(self):
-        print("Fetches Cosumer Sentiment index data.")
-        print("Usage: sent -p <PERIOD>")
-
-    def do_nfp(self, arg):
-        cli_fred.nfp(arg=arg)
-    def help_nfp(self):
-        print("Fetches Nonfarm Payroll data.")
-        print("Usage: nfp -p <PERIOD>")
-
-    def do_interest(self, arg):
-        cli_fred.interest(arg=arg)
-    def help_interest(self):
-        print("Fetches Interest RED rate data.")
-        print("Usage: Interest -p <PERIOD>")
-
-    def do_jobc(self, arg):
-        cli_fred.jobc(arg=arg)
-    def help_jobc(self):
-        print("Fetches Jobless Claim data.")
-        print("Usage: jobc -p <PERIOD>")
-
-    def do_unem(self, arg):
-        cli_fred.unem(arg=arg)
-    def help_unem(self):
-        print("Fetches Unemployment data.")
-        print("Usage: unem -p <PERIOD>")
-
-    def do_indp(self, arg):
-        cli_fred.indp(arg=arg)
-    def help_indp(self):
-        print("Fetches Industrial Production data.")
-        print("Usage: indp -p <PERIOD>")
-
-    def do_netex(self, arg):
-        cli_fred.netex(arg=arg)
-    def help_netex(self):
-        print("Fetches Real Net Exports of Goods and Services data.")
-        print("Usage: netex -p <PERIOD>")
+    def do_fred(self, arg):
+        cli_fred.FREDCmd(arg=arg).run()
 
 #================================== TIINGO ===================================#
 
