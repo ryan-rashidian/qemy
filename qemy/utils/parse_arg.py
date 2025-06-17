@@ -12,7 +12,8 @@ ARGUMENTS = {
     'metric':        lambda p: p.add_argument('-m', '--metric', default='eps'),
     'model':         lambda p: p.add_argument('model'),
     'plot':          lambda p: p.add_argument('-plt', '--plot', action='store_true'),
-    'help':          lambda p: p.add_argument('-h', '--help', action='store_true')
+    'help':          lambda p: p.add_argument('-h', '--help', action='store_true'),
+    'request':       lambda p: p.add_argument('-r', '--request', action='store_true')
 }
 
 def parse_args(arg_str, expected_args, prog_name='command'):
@@ -46,4 +47,12 @@ def parse_args(arg_str, expected_args, prog_name='command'):
     except (SystemExit, ValueError) as e:
         print(f"Invalid Command, Error:\n{e}")
         return (None,) * len(expected_args)
+
+def parse_args_help(arg_str, expected_args, prog_name='command', help_func=None):
+    tokens = shlex.split(arg_str)
+    if '-h' in tokens or '--help' in tokens:
+        if help_func:
+            help_func()
+        return '__HELP__'
+    return parse_args(arg_str, expected_args, prog_name)
 
