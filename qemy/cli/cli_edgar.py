@@ -16,13 +16,11 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
         prog_name='filing', 
         help_func=lambda: print_help_table(" f ", [
             ("Info:", "Fetches SEC filing data for given ticker"),
-            ("Usage:", "f -t <TICKER>\n"),
+            ("Usage:", "f <TICKER>\n"),
         ])
     )
-
     if parse_result == '__HELP__':
         return
-
     ticker, request, _ = parse_result
 
     if not request:
@@ -46,13 +44,18 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
         print(f"failed to find {ticker}")
 
 def filing_metric(arg):
-    ticker, quarters, metric, help = parse_args(arg_str=arg, expected_args=['ticker', 'quarter', 'metric', 'help'], prog_name='fmetric')
-    
-    if help:
-        return print_help_table(" fmetric ", [
+    parse_result = parse_args_help(
+        arg_str=arg, 
+        expected_args=['ticker', 'quarter', 'metric', 'help'], 
+        prog_name='fmetric', 
+        help_func=lambda: print_help_table(" fmetric ", [
             ("Info:", "Fetches SEC filing data for given ticker and metric"),
-            ("Usage:", "fmetric -t <TICKER> -m <METRIC>\n"),
+            ("Usage:", "fmetric <TICKER> -m <METRIC>\n"),
         ])
+    )
+    if parse_result == '__HELP__':
+        return
+    ticker, quarters, metric, _ = parse_result
 
     if isinstance(ticker, str) and isinstance(metric, str) and quarters:
         try:
