@@ -30,8 +30,7 @@ def table(arg, ticker_df):
         return print_help_table(" table ", [
             ("Info:", "Displays a table of every filing fetched during current session."), 
             ("-s --save", "Saves current working table as a .csv file."),
-            ("Usage:", "qemy> table"),
-            ("Example:", "qemy> table -s\n"),
+            ("Usage:", "qemy> table\n"),
         ])
 
     try:
