@@ -1,7 +1,8 @@
 import pandas as pd
 from numbers import Number
-from qemy.utils.parse_arg import parse_args
+from qemy.utils.parse_arg import parse_args_help
 from qemy.data.api_edgar import SEC_Filings
+from qemy.cli.cli_helper import print_help_table
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -9,32 +10,50 @@ pd.set_option('display.max_rows', None)
 #================================== EDGAR ====================================#
 
 def filing(arg, ticker_df) -> pd.DataFrame | None:
-    if ' -r' in arg:
-        ticker = arg.replace('-r', '').strip().upper() 
-        use_requests = True
-    elif ' --request' in arg:
-        ticker = arg.replace('--request', '').strip().upper() 
-        use_requests = True
+    parse_result = parse_args_help(
+        arg_str=arg, 
+        expected_args=['ticker', 'request', 'help'], 
+        prog_name='filing', 
+        help_func=lambda: print_help_table(" f ", [
+            ("Info:", "Fetches SEC filing data for given ticker"),
+            ("Usage:", "f -t <TICKER>\n"),
+        ])
+    )
+
+    if parse_result == '__HELP__':
+        return
+
+    ticker, request, _ = parse_result
+
+    if not request:
+        request = False
+    if isinstance(ticker, str):
+        print(f"Fetching latest 10K/10Q/20F filing metrics for {ticker}")
+        try:
+            filing_df = SEC_Filings(ticker=ticker, use_requests=request).get_metrics() 
+            if isinstance(filing_df, pd.DataFrame): 
+                ticker_df[ticker] = filing_df[ticker]
+                print(filing_df.to_string(justify='left', formatters={
+                    ticker: lambda x: f"{x:,}" if isinstance(x, Number) else x
+                }))
+                if isinstance(ticker_df, pd.DataFrame):
+                    return ticker_df
+                else:
+                    return None
+        except:
+            print("cli_edgar\nCould not fetch filing metrics, try another ticker.")
     else:
-        ticker = arg.strip().upper()
-        use_requests = False
-    print(f"Fetching latest 10K/10Q/20F filing metrics for {ticker}")
-    try:
-        filing_df = SEC_Filings(ticker=ticker, use_requests=use_requests).get_metrics() 
-        if isinstance(filing_df, pd.DataFrame): 
-            ticker_df[ticker] = filing_df[ticker]
-            print(filing_df.to_string(justify='left', formatters={
-                ticker: lambda x: f"{x:,}" if isinstance(x, Number) else x
-            }))
-            if isinstance(ticker_df, pd.DataFrame):
-                return ticker_df
-            else:
-                return None
-    except:
-        print("cli_edgar\nCould not fetch filing metrics, try another ticker.")
+        print(f"failed to find {ticker}")
 
 def filing_metric(arg):
-    ticker, quarters, metric = parse_args(arg_str=arg, expected_args=['ticker', 'quarter', 'metric'], prog_name='fmetric')
+    ticker, quarters, metric, help = parse_args(arg_str=arg, expected_args=['ticker', 'quarter', 'metric', 'help'], prog_name='fmetric')
+    
+    if help:
+        return print_help_table(" fmetric ", [
+            ("Info:", "Fetches SEC filing data for given ticker and metric"),
+            ("Usage:", "fmetric -t <TICKER> -m <METRIC>\n"),
+        ])
+
     if isinstance(ticker, str) and isinstance(metric, str) and quarters:
         try:
             metric.strip().lower()
@@ -51,5 +70,5 @@ def filing_metric(arg):
         except:
             print("cli_edgar\nCould not fetch metric, try another ticker")
     else:
-        print("For valid syntax, try: fmetric <TICKER> -q 20 -m EPS")
+        print("For valid syntax, try: fmetric -t <TICKER> -q 20 -m EPS")
 
