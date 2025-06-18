@@ -29,7 +29,7 @@ def help():
         ("info", "Adding soon."),
         ("manual", "In progress/planned."),
     ])
-    print("\nEnter 'help <COMMAND>' for more details.\n")
+    print("\nEnter '<COMMAND> -h' for more details.\n")
 
 def econ():
     print("\n qemy - Economic Command Reference Table")
@@ -75,18 +75,18 @@ def plugins():
 def plot():
     print("\n qemy - Plotting Command Reference Table")
     print_help_table(" Plot:", [
-        ("plot_cpi", ""),
-        ("plot_gdp", ""),
-        ("plot_indp", ""),
-        ("plot_interest", ""),
-        ("plot_jobc", ""),
-        ("plot_lr", ""),
-        ("plot_mcarlo", ""),
-        ("plot_netex", ""),
-        ("plot_nfp", ""),
-        ("plot_price", ""),
-        ("plot_sent", ""),
-        ("plot_unem", ""),
+        ("plot", "Initiates plot command"),
+        ("gdp", ""),
+        ("indp", ""),
+        ("interest", ""),
+        ("jobc", ""),
+        ("lr", ""),
+        ("mcarlo", ""),
+        ("netex", ""),
+        ("nfp", ""),
+        ("price", ""),
+        ("sent", ""),
+        ("unem", ""),
     ])
     print("\n")
 
