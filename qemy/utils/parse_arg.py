@@ -14,7 +14,8 @@ ARGUMENTS = {
     'model':         lambda p: p.add_argument('model'),
     'plot':          lambda p: p.add_argument('-plt', '--plot', action='store_true'),
     'help':          lambda p: p.add_argument('-h', '--help', action='store_true'),
-    'request':       lambda p: p.add_argument('-r', '--request', action='store_true')
+    'request':       lambda p: p.add_argument('-r', '--request', action='store_true'),
+    'plot':          lambda p: p.add_argument('plot')
 }
 
 def parse_args(arg_str, expected_args, prog_name='command'):
@@ -36,7 +37,7 @@ def parse_args(arg_str, expected_args, prog_name='command'):
                 val = getattr(args, arg, None)
 
             if isinstance(val, str) and arg in (
-                'ticker', 'ticker_flag', 'metric', 'metric_p', 'save'
+                'ticker', 'ticker_flag', 'metric', 'metric_p', 'save', 'plot'
             ):
                 val = val.upper()
 
