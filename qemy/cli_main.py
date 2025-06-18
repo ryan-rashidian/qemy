@@ -195,8 +195,8 @@ class QemyShell(cmd.Cmd):
         print("Exiting... Goodbye!")
         return True
 
-    def do_bulk_refresh(self, _):
-        cli_aux.bulk_refresh()
+    def do_bulk_refresh(self, arg):
+        cli_aux.bulk_refresh(arg=arg)
     def help_bulk_refresh(self):
         print("Re-downloads bulk data from SEC EDGAR API with latest filings.")
         print("Note: every bulk_refresh will download and unzip ~20GB of filing data.")
@@ -212,8 +212,8 @@ class QemyShell(cmd.Cmd):
         print("Simple calculator with Python syntax")
         print("Example: calc 2 + 2")
 
-    def do_env_reset(self, _):
-        cli_aux.env_reset()
+    def do_env_reset(self, arg):
+        cli_aux.env_reset(arg=arg)
     def help_env_reset(self):
         print("Deletes the .env files containing your current API keys and User Agent information.")
         print("This command will also exit qemy, and users will have to complete the setup wizard again.")
