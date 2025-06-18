@@ -19,6 +19,7 @@ ARGUMENTS = {
 
 def parse_args(arg_str, expected_args, prog_name='command'):
     parser = argparse.ArgumentParser(prog=prog_name, add_help=False)
+
     for arg in expected_args:
         if arg not in ARGUMENTS:
             raise ValueError(f"Unknown arg type: {arg}")
@@ -27,13 +28,16 @@ def parse_args(arg_str, expected_args, prog_name='command'):
     try:
         args = parser.parse_args(shlex.split(arg_str))
         result = []
+
         for arg in expected_args:
             if arg == 'ticker_flag':
                 val = getattr(args, 'ticker', None)
             else:
                 val = getattr(args, arg, None)
 
-            if isinstance(val, str) and arg in ('ticker', 'ticker_flag', 'metric', 'metric_p', 'save'):
+            if isinstance(val, str) and arg in (
+                'ticker', 'ticker_flag', 'metric', 'metric_p', 'save'
+            ):
                 val = val.upper()
 
             if arg in ('num',) and val is not None:
@@ -49,7 +53,12 @@ def parse_args(arg_str, expected_args, prog_name='command'):
         print(f"Invalid Command, Error:\n{e}")
         return (None,) * len(expected_args)
 
-def parse_args_help(arg_str, expected_args, prog_name='command', help_func=None):
+def parse_args_help(
+        arg_str, expected_args, 
+        prog_name='command', 
+        help_func=None, 
+        no_flag=False
+):
     tokens = shlex.split(arg_str)
 
     has_help = '-h' in tokens or '--help' in tokens
@@ -59,6 +68,9 @@ def parse_args_help(arg_str, expected_args, prog_name='command', help_func=None)
         if help_func:
             help_func()
         return '__HELP__'
+
+    if no_flag:
+        return None
 
     return parse_args(arg_str, expected_args, prog_name)
 
