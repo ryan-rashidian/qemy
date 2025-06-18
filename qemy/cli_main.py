@@ -68,6 +68,9 @@ class QemyShell(cmd.Cmd):
 
 #================================== PLOT =====================================#
 
+    def do_plot(self, arg):
+        cli_plot.PlotCmd(arg=arg).run()
+
     def do_plot_price(self, arg):
         cli_plot.plot_price(arg=arg)
     def help_plot_price(self):
