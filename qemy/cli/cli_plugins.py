@@ -18,6 +18,9 @@ def run_models(arg):
     )
     if parse_result == '__HELP__':
         return
+    if not isinstance(parse_result, tuple):
+        raise ValueError("Unexpected parsing result")
+
     period, ticker, model, num, plot, save, help = parse_result
 
     if not save:

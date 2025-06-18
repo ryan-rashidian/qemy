@@ -21,6 +21,9 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
     )
     if parse_result == '__HELP__':
         return
+    if not isinstance(parse_result, tuple):
+        raise ValueError("Unexpected parsing result")
+
     ticker, request, _ = parse_result
 
     if not request:
@@ -55,6 +58,9 @@ def filing_metric(arg):
     )
     if parse_result == '__HELP__':
         return
+    if not isinstance(parse_result, tuple):
+        raise ValueError("Unexpected parsing result")
+
     ticker, quarters, metric, _ = parse_result
 
     if isinstance(ticker, str) and isinstance(metric, str) and quarters:

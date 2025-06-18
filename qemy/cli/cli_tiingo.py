@@ -17,6 +17,9 @@ def quote(arg):
     )
     if parse_result == '__HELP__':
         return
+    if not isinstance(parse_result, tuple):
+        raise ValueError("Unexpected parsing result")
+
     ticker, _ = parse_result
 
     if isinstance(ticker, str):
@@ -43,6 +46,9 @@ def price(arg):
     )
     if parse_result == '__HELP__':
         return
+    if not isinstance(parse_result, tuple):
+        raise ValueError("Unexpected parsing result")
+
     period, ticker, _ = parse_result
 
     if isinstance(period, str) and isinstance(ticker, str):

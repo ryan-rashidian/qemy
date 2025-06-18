@@ -6,7 +6,7 @@ from qemy.cli.cli_helper import print_help_table
 class FREDCmd:
     def __init__(self, arg):
         self.help_requested = False
-        parse_results = parse_args_help(
+        parse_result = parse_args_help(
             arg_str=arg, 
             expected_args=['metric_p', 'period', 'units', 'help'], 
             prog_name='FREDCmd',
@@ -14,10 +14,13 @@ class FREDCmd:
                 ("", ""),
             ])
         )
-        if parse_results == '__HELP__':
+        if parse_result == '__HELP__':
             self.help_requested = True
             return
-        self.metric, self.period, self.units, self.help = parse_results
+        if not isinstance(parse_result, tuple):
+            raise ValueError("Unexpected parsing result")
+
+        self.metric, self.period, self.units, self.help = parse_result
 
     def rfr(self):
         if self.help:
