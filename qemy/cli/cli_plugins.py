@@ -1,16 +1,25 @@
 from qemy.core.plugin_loader import load_plugins
 from qemy.core.plot.plot import plot_models
-from qemy.utils.parse_arg import parse_args
+from qemy.utils.parse_arg import parse_args_help
+from qemy.cli.cli_helper import print_help_table
 
 def run_models(arg):
-    period, ticker, model, num, plot, save, help = parse_args(
+    parse_result = parse_args_help(
         arg_str=arg, 
         expected_args=[
             'period', 'ticker_flag', 'model',
             'num', 'plot', 'save', 'help'
         ], 
-        prog_name='run_model'
+        prog_name='run_model',
+        help_func=lambda: print_help_table(" m ", [
+            ("Info:", "Loads a given plugin"),
+            ("Usage:", "m <plugin>\n"),
+        ])
     )
+    if parse_result == '__HELP__':
+        return
+    period, ticker, model, num, plot, save, help = parse_result
+
     if not save:
         save = False
     arg_dict = {
