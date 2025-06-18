@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 from qemy.data import api_edgar_bulk as bulk
-from qemy.utils.parse_arg import parse_args
+from qemy.utils.parse_arg import parse_args, parse_args_help
 from qemy.cli.cli_helper import print_help_table
 
 def bulk_refresh(arg):
@@ -19,6 +19,26 @@ def bulk_refresh(arg):
                 bulk.bulk_refresh()
             except Exception as e:
                 print(f"cli_edgar\nBulk refresh failed. Error:\n{e}")
+
+def calc(arg):
+    parse_results = parse_args_help(
+        arg_str=arg, 
+        expected_args=['help'], 
+        prog_name='calc',
+        no_flag=True,
+        help_func=lambda: print_help_table(" calc ", [
+            ("Info:", "Simple calculator with Python syntax"),
+            ("Example:", "calc 2 + 2\n"),
+        ])
+    )
+    if parse_results == '__HELP__':
+        return
+
+    try:
+        result = eval(arg, {"__builtins__": {}}, {})
+        print(result)
+    except:
+        print("Invalid expression")
 
 def env_reset(arg):
     help = parse_args(arg_str=arg, expected_args=['help'], prog_name='bulk_refresh')

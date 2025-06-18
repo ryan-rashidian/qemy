@@ -132,7 +132,7 @@ class QemyShell(cmd.Cmd):
 
     def do_help(self, arg):
         if arg:
-            super().do_help(arg)
+            super().do_help(arg) # temporary until full -h refactor
         else:
             cli_helper.help()
 
@@ -177,14 +177,7 @@ class QemyShell(cmd.Cmd):
         cli_aux.bulk_refresh(arg=arg)
 
     def do_calc(self, arg):
-        try:
-            result = eval(arg, {"__builtins__": {}}, {})
-            print(result)
-        except:
-            print("Invalid expression")
-    def help_calc(self):
-        print("Simple calculator with Python syntax")
-        print("Example: calc 2 + 2")
+        cli_aux.calc(arg=arg)
 
     def do_env_reset(self, arg):
         cli_aux.env_reset(arg=arg)
