@@ -30,17 +30,11 @@ class QemyShell(cmd.Cmd):
 
     def do_m(self, arg):
         cli_plugins.run_models(arg=arg)
-    def help_m(self):
-        print("Runs a given plugin model")
-        print("Usage: m <MODEL>")
 
 #================================== CORE =====================================#
 
     def do_table(self, arg):
         cli_core.table(arg=arg, ticker_df=self.ticker_df)
-    def help_table(self):
-        print("Fetches table of current filings")
-        print("Usage: table")
 
     def do_wl(self, arg):
         ticker_list = cli_core.watch_list(arg=arg, ticker_list=self.ticker_list.copy())
@@ -48,9 +42,6 @@ class QemyShell(cmd.Cmd):
             self.ticker_list = ticker_list
         else:
             return
-    def help_wl(self):
-        print("Starts watchlist editor.")
-        print("Usage: watchlist")
 
 #================================== EDGAR ====================================#
 
@@ -58,16 +49,9 @@ class QemyShell(cmd.Cmd):
         df_return = cli_edgar.filing(arg=arg, ticker_df=self.ticker_df)
         if isinstance(df_return, pd.DataFrame):
             self.ticker_df = df_return
-    def help_f(self):
-        print("Fetches latest 10K/10Q/20F metrics for given ticker.")
-        print("Usage: filing <TICKER>\nFlags:")
-        print("(-r --request) --- Fetches filing data directly from SEC EDGAR API.")
 
     def do_fmetric(self, arg):
         cli_edgar.filing_metric(arg=arg)
-    def help_fmetric(self):
-        print("Fetches --metric history from 10K/10Q/20F filings for given ticker.")
-        print("Usage: fmetric <TICKER> -m <METRIC> -q <#_Of_Quarters>")
 
 #================================== FRED =====================================#
 
@@ -78,15 +62,9 @@ class QemyShell(cmd.Cmd):
 
     def do_quote(self, arg):
         cli_tiingo.quote(arg=arg)
-    def help_quote(self):
-        print("Fetches latest price quote for given ticker.")
-        print("Usage: quote <TICKER>")
 
     def do_price(self, arg):
         cli_tiingo.price(arg=arg)
-    def help_price(self):
-        print("Fetches daily closing prices for given ticker.")
-        print("Usage: price <TICKER> -p <PERIOD>")
 
 #================================== PLOT =====================================#
 
@@ -197,10 +175,6 @@ class QemyShell(cmd.Cmd):
 
     def do_bulk_refresh(self, arg):
         cli_aux.bulk_refresh(arg=arg)
-    def help_bulk_refresh(self):
-        print("Re-downloads bulk data from SEC EDGAR API with latest filings.")
-        print("Note: every bulk_refresh will download and unzip ~20GB of filing data.")
-        print("All previous bulk data will be overwritten.")
 
     def do_calc(self, arg):
         try:
@@ -214,9 +188,6 @@ class QemyShell(cmd.Cmd):
 
     def do_env_reset(self, arg):
         cli_aux.env_reset(arg=arg)
-    def help_env_reset(self):
-        print("Deletes the .env files containing your current API keys and User Agent information.")
-        print("This command will also exit qemy, and users will have to complete the setup wizard again.")
 
 #=============================================================================#
 
