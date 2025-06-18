@@ -8,7 +8,7 @@ class PlotCmd:
         self.help_requested = False
         parse_result = parse_args_help(
             arg_str=arg, 
-            expected_args=['period', 'ticker_flag', 'save', 'units', 'plot', 'help'], 
+            expected_args=['period', 'ticker_flag', 'save', 'units', 'plot_p', 'help'], 
             prog_name='FREDCmd',
             help_func=lambda: print_help_table(" plot ", [
                 ("Available Commands:", ""),
