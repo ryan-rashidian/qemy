@@ -71,66 +71,6 @@ class QemyShell(cmd.Cmd):
     def do_plot(self, arg):
         cli_plot.PlotCmd(arg=arg).run()
 
-    def do_plot_price(self, arg):
-        cli_plot.plot_price(arg=arg)
-    def help_plot_price(self):
-        print("Fetches plot chart of log scaled daily prices for given ticker.")
-        print("Usage: plot_price <TICKER> -p <PERIOD>")
-
-    def do_plot_cpi(self, arg):
-        cli_plot.plot_cpi(arg=arg)
-    def help_plot_cpi(self):
-        print("Fetches plot chart for CPI inflation.")
-        print("Usage: plot_cpi -p <PERIOD>")
-
-    def do_plot_gdp(self, arg):
-        cli_plot.plot_gdp(arg=arg)
-    def help_plot_gdp(self):
-        print("Fetches plot chart for GDP.")
-        print("Usage: plot_gdp -p <PERIOD>")
-
-    def do_plot_sent(self, arg):
-        cli_plot.plot_sent(arg=arg)
-    def help_plot_sent(self):
-        print("Fetches plot chart for Sentiment index.")
-        print("Usage: plot_sent -p <PERIOD>")
-
-    def do_plot_nfp(self, arg):
-        cli_plot.plot_nfp(arg=arg)
-    def help_plot_nfp(self):
-        print("Fetches plot chart for Non-Farm Payroll.")
-        print("Usage: plot_nfp -p <PERIOD>")
-
-    def do_plot_interest(self, arg):
-        cli_plot.plot_interest(arg=arg)
-    def help_plot_interest(self):
-        print("Fetches plot chart for Interest FED rate.")
-        print("Usage: plot_interest -p <PERIOD>")
-
-    def do_plot_jobc(self, arg):
-        cli_plot.plot_jobc(arg=arg)
-    def help_plot_jobc(self):
-        print("Fetches plot chart for Jobless Claims.")
-        print("Usage: plot_jobc -p <PERIOD>")
-
-    def do_plot_unem(self, arg):
-        cli_plot.plot_unem(arg=arg)
-    def help_plot_unem(self):
-        print("Fetches plot chart for Unemployment rate.")
-        print("Usage: plot_unem -p <PERIOD>")
-
-    def do_plot_indp(self, arg):
-        cli_plot.plot_indp(arg=arg)
-    def help_plot_indp(self):
-        print("Fetches plot chart for Industrial Production.")
-        print("Usage: plot_indp -p <PERIOD>")
-
-    def do_plot_netex(self, arg):
-        cli_plot.plot_netex(arg=arg)
-    def help_plot_netex(self):
-        print("Fetches plot chart for Real Net Exports of Goods and Services.")
-        print("Usage: plot_netex -p <PERIOD>")
-
 #================================== HELPER ===================================#
 
     def do_help(self, arg):
