@@ -1,4 +1,4 @@
-import os
+import config as cfg
 import time
 import json
 from math import nan
@@ -10,14 +10,14 @@ from qemy.utils.parse_filing import get_metric_df
 
 class SEC_Filings:
     def __init__(self, ticker, use_requests=False):
-        self.HEADERS = {'User-Agent': os.getenv('EDGAR_USER_AGENT')} 
+        self.HEADERS = {'User-Agent': cfg.EDGAR_USER_AGENT} 
         self.ticker = ticker.upper().strip()
         self.cik = None
         self.facts = None
 
         try:
             if use_requests:
-                url = 'https://www.sec.gov/files/company_tickers.json'
+                url = cfg.EDGAR_CIK_URL
                 cik_data = safe_status_get(url=url, headers=self.HEADERS)
                 if cik_data:
                     for entry in cik_data.values():
@@ -25,12 +25,17 @@ class SEC_Filings:
                             self.cik = str(entry['cik_str']).zfill(10) 
                 if self.cik is None:
                     print('Failed to request ticker symbol cik.')
+
                 else:
                     print('Sending request to SEC EDGAR API...')
                     time.sleep(1) # be polite to SEC server
-                    self.facts = safe_status_get(url=f"https://data.sec.gov/api/xbrl/companyfacts/CIK{self.cik}.json", headers=self.HEADERS)
+                    self.facts = safe_status_get(
+                        url=f"{cfg.EDGAR_FACTS_URL}{self.cik}.json", 
+                        headers=self.HEADERS
+                    )
                     if self.facts is None:
                         print("Failed to fetch filing data from SEC.")
+
             else:
                 root_dir = Path(__file__).resolve().parents[2]
                 bulk_cik_path = root_dir / 'bulk_data' / 'company_tickers.json'
@@ -42,6 +47,7 @@ class SEC_Filings:
                                 self.cik = str(entry['cik_str']).zfill(10) 
                 if self.cik is None:
                     print('Failed to request ticker symbol cik.')
+
                 else:
                     bulk_data_path = root_dir / 'bulk_data' / 'companyfacts' / f"CIK{self.cik}.json"
                     if not bulk_data_path.exists():
@@ -51,8 +57,9 @@ class SEC_Filings:
                         self.facts = json.load(f)
                     if self.facts is None:
                         print("Failed to fetch filing from bulk SEC data.")
+
         except Exception as e:
-            print(f"Failed to request data. Use request option if you have not downloaded the bulk data.\nError code:\n{e}")
+            print(f"No bulk data.\nError code:\n{e}")
     
     def get_metrics(self) -> pd.DataFrame | None:
         try:
@@ -76,13 +83,17 @@ class SEC_Filings:
                 if df_total_debt.empty:
                     df_debt_long = get_metric_df(self.facts, keylist.key_list_debt_long, quarters=10)
                     df_debt_short = get_metric_df(self.facts, keylist.key_list_debt_short, quarters=10)
+
                     df_debt_long = df_debt_long.infer_objects()
                     df_debt_short = df_debt_short.infer_objects()
-                    df_total_debt = pd.merge(df_debt_long, df_debt_short, 
-                                             on='filed', how='outer', 
-                                             suffixes=('_long', '_short')).copy()
+                    df_total_debt = pd.merge(
+                        df_debt_long, df_debt_short, 
+                        on='filed', how='outer', 
+                        suffixes=('_long', '_short')
+                    ).copy()
                     df_total_debt = df_total_debt.infer_objects()
                     df_total_debt = df_total_debt.fillna(0)
+
                     df_total_debt['val'] = df_total_debt['val_long'] + df_total_debt['val_short']
                     df_total_debt = df_total_debt[['filed', 'val']]
                 if df_total_debt.empty:
@@ -194,10 +205,15 @@ class SEC_Filings:
                         print("Fallback failed. Gross Profit metric not found.")
                         return None
 
-                    df_combined = pd.merge(df_revenue_hist, df_cogs_hist, on='filed', how='inner', suffixes=('_rev', '_cogs')).copy()
+                    df_combined = pd.merge(
+                        df_revenue_hist, df_cogs_hist, 
+                        on='filed', how='inner', 
+                        suffixes=('_rev', '_cogs')
+                    ).copy()
                     df_combined = df_combined.infer_objects()
                     df_combined = df_combined.dropna(subset=['val_rev'])
                     df_combined['val_cogs'] = df_combined['val_cogs'].fillna(0)
+
                     df_combined['val'] = df_combined['val_rev'] - df_combined['val_cogs']
                     df_gprofit_quarters = df_combined[['filed', 'val']].tail(quarters).copy()
                     df_gprofit_quarters.set_index('filed', inplace=True)
@@ -208,15 +224,20 @@ class SEC_Filings:
                     if df_total_debt_hist.empty:
                         df_debt_long = get_metric_df(self.facts, keylist.key_list_debt_long, quarters=quarters * 4)
                         df_debt_short = get_metric_df(self.facts, keylist.key_list_debt_short, quarters=quarters * 4)
-                        df_total_debt_hist = pd.merge(df_debt_long, df_debt_short, 
-                                                      on='filed', how='outer',
-                                                      suffixes=('_long', '_short')).copy()
+
+                        df_total_debt_hist = pd.merge(
+                            df_debt_long, df_debt_short, 
+                            on='filed', how='outer',
+                            suffixes=('_long', '_short')
+                        ).copy()
                         df_total_debt_hist = df_total_debt_hist.infer_objects()
                         df_total_debt_hist = df_total_debt_hist.fillna(0)
+
                         df_total_debt_hist['val'] = df_total_debt_hist['val_long'] + df_total_debt_hist['val_short']
                         df_total_debt_hist = df_total_debt_hist[['filed', 'val']]
                     if df_total_debt_hist.empty:
                         df_total_debt_hist = get_metric_df(self.facts, keylist.key_list_debt_fallbacks, quarters=quarters * 4)
+
                     df_total_debt_hist = df_total_debt_hist.sort_values('filed').reset_index(drop=True)
                     df_debt_quarters = df_total_debt_hist[['filed', 'val']].tail(quarters).copy()
                     df_debt_quarters.set_index('filed', inplace=True)
@@ -229,9 +250,14 @@ class SEC_Filings:
                         print("Net Debt: required metrics not found.")
                         return None
 
-                    df_combined = pd.merge(df_debt_hist, df_cash_hist, on='filed', how='outer', suffixes=('_debt', '_cash')).copy()
+                    df_combined = pd.merge(
+                        df_debt_hist, df_cash_hist, 
+                        on='filed', how='outer', 
+                        suffixes=('_debt', '_cash')
+                    ).copy()
                     df_combined = df_combined.infer_objects()
                     df_combined = df_combined.fillna(0)
+
                     df_combined['val'] = df_combined['val_debt'] - df_combined['val_cash']
                     df_netdebt_quarters = df_combined[['filed', 'val']].tail(quarters).copy()
                     df_netdebt_quarters.set_index('filed', inplace=True)
@@ -244,9 +270,14 @@ class SEC_Filings:
                         print("Net Debt: required metrics not found.")
                         return None
 
-                    df_combined = pd.merge(df_assets_hist, df_liability_hist, on='filed', how='outer', suffixes=('_assets', '_liability')).copy()
+                    df_combined = pd.merge(
+                        df_assets_hist, df_liability_hist, 
+                        on='filed', how='outer', 
+                        suffixes=('_assets', '_liability')
+                    ).copy()
                     df_combined = df_combined.infer_objects()
                     df_combined = df_combined.fillna(0)
+
                     df_combined['val'] = df_combined['val_assets'] - df_combined['val_liability']
                     df_equity_quarters = df_combined[['filed', 'val']].tail(quarters).copy()
                     df_equity_quarters.set_index('filed', inplace=True)
@@ -259,9 +290,14 @@ class SEC_Filings:
                         print("Net Debt: required metrics not found.")
                         return None
 
-                    df_combined = pd.merge(df_ocf_hist, df_capex_hist, on='filed', how='outer', suffixes=('_ocf', '_capex')).copy()
+                    df_combined = pd.merge(
+                        df_ocf_hist, df_capex_hist, 
+                        on='filed', how='outer', 
+                        suffixes=('_ocf', '_capex')
+                    ).copy()
                     df_combined = df_combined.infer_objects()
                     df_combined = df_combined.fillna(0)
+
                     df_combined['val'] = df_combined['val_ocf'] - df_combined['val_capex']
                     df_fcf_quarters = df_combined[['filed', 'val']].tail(quarters).copy()
                     df_fcf_quarters.set_index('filed', inplace=True)

@@ -1,4 +1,4 @@
-import os
+import config as cfg
 import time
 import shutil
 import zipfile
@@ -16,11 +16,11 @@ def bulk_refresh():
         shutil.rmtree(unzipped_dir)
         print("Removed.")
 
-    companyfacts_url = "https://www.sec.gov/Archives/edgar/daily-index/xbrl/companyfacts.zip"
-    cik_tickers_url = "https://www.sec.gov/files/company_tickers.json"
+    companyfacts_url = cfg.EDGAR_ZIP_URL
+    cik_tickers_url = cfg.EDGAR_CIK_URL
     companyfacts_zip = bulk_dir / "companyfacts.zip"
     cik_tickers_json = bulk_dir / "company_tickers.json"
-    headers = {"User-Agent": os.getenv('EDGAR_USER_AGENT')} 
+    headers = {"User-Agent": cfg.EDGAR_USER_AGENT} 
 
     print("Downloading bulk filing data...")
     success = safe_status_download(url=companyfacts_url, headers=headers, dest_path=companyfacts_zip)

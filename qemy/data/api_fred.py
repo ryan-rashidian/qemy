@@ -1,11 +1,11 @@
-import os
+import config as cfg
 import pandas as pd
 from qemy.utils.utils_fetch import parse_period, safe_status_get
 
 class FREDData:
     def __init__(self):
-        self.API_KEY = os.getenv('FRED_API_KEY')
-        self.url = 'https://api.stlouisfed.org/fred/series/observations'
+        self.API_KEY = cfg.FRED_API_KEY
+        self.url = cfg.FRED_URL
 
     def _fetch_series(
             self, series_id, period='1Y', 
