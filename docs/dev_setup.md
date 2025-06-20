@@ -2,14 +2,15 @@
 
 ```bash
 pip install -e .
+# or
 pip install -r requirements-dev.txt
 ```
 
-Optional - Setup Launch Script
+## Optional - Setup Launch Script
 
 - Recommended for convenience.
 
-Step 1 - Set path to your venv in the bash script
+### Step 1 - Set path to your venv in the bash script
 
 In the scripts directory, find the qemy-dev bash script and open with a text editor:
 
@@ -26,7 +27,7 @@ deactivate
 cd "$orig_dir"
 ```
 
-Step 2 - Turn qemy script into an executable
+### Step 2 - Turn qemy script into an executable
 
 Also from scripts directory:
 
@@ -34,7 +35,7 @@ Also from scripts directory:
 chmod +x qemy
 ```
 
-Step 3 - Create Path in .bashrc
+### Step 3 - Create Path in .bashrc
 
 ```bash
 nano ~/.bashrc
