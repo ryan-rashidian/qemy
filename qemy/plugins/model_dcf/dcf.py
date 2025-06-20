@@ -1,3 +1,4 @@
+from math import nan
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
@@ -9,12 +10,29 @@ class DCFPlugin(BasePlugin):
     description = "Discounted Cash Flow Valuation Model"
     version = "0.1.0"
 
+    def _get_dcf_metrics(self):
+        try:
+
+            df_shares = SEC_Filings(ticker=self.ticker).get_metric_history(key='shares', quarters=40)
+            shares = df_shares.iloc[-1]['val'] if not df_shares.empty else nan
+
+            df_net_debt = SEC_Filings(ticker=self.ticker).get_metric_history(key='netdebt', quarters=20)
+            net_debt = df_net_debt.iloc[-1]['val'] if not df_net_debt.empty else nan
+
+            df_fcf = SEC_Filings(ticker=self.ticker).get_metric_history(key='fcf', quarters=20)
+
+            return df_fcf, shares, net_debt
+
+        except Exception as e:
+            print(f"Failed to request SEC_Filings:\n{e}")
+            return None, None, None
+
     def run(self):
-        filing_df, shares_outstanding, net_debt = SEC_Filings(ticker=self.ticker).get_dcf_metrics()
+        filing_df, shares_outstanding, net_debt = self._get_dcf_metrics()
 
         if isinstance(filing_df, pd.DataFrame) and shares_outstanding is not None:
             try:
-                fcf_df = filing_df['fcf'].rolling(window=4).mean().dropna().values
+                fcf_df = filing_df['val'].rolling(window=4).mean().dropna().values
 
                 if len(fcf_df) < 4:
                     self.log("Not enough FCF data to apply rolling average.")
@@ -66,10 +84,10 @@ class DCFPlugin(BasePlugin):
                     }
 
             except Exception as e:
-                self.log(f"core/models/dcf.py Exception ERROR:\n{e}")
+                self.log(f"dcf.py Exception ERROR:\n{e}")
                 return None
         else:
-            self.log(f"core/models/dcf.py ERROR:\n{filing_df}\nShares outstanding: {shares_outstanding}")
+            self.log(f"dcf.py ERROR:\n{filing_df}\nShares outstanding: {shares_outstanding}")
             return None
 
     def help(self):
