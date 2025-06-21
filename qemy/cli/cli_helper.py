@@ -34,6 +34,7 @@ def help():
 def econ():
     print("\n qemy - Economic Command Reference Table")
     print_help_table(" Econ: ", [
+        ("'fred' Commands:", ""),
         ("cpi", "Fetches data for - Consumer Price Index"),
         ("gdp", "Fetches data for - Gross Domestic Product"),
         ("indp", "Fetches data for - Industrial Production: Total Index"),
@@ -44,12 +45,15 @@ def econ():
         ("rfr", "Fetches data for - Risk Free Rate: 1 Year T-Bill yield"),
         ("sent", "Fetches data for - Consumer Sentiment"),
         ("unem", "Fetches data for - Unemployment Rate"),
+        ("Info:", "Fetches data from FRED"),
+        ("Usage:", "fred <COMMAND> -p <PERIOD> -u <UNITS>"),
+        ("Example:", "fred cpi -p 5y -u pc1"),
     ])
     print("\n")
 
 def market():
     print("\n qemy - Market Command Reference Table")
-    print_help_table(" Market:", [
+    print_help_table(" Market: ", [
         ("f", "Fetches latest SEC filing (10K/10Q/20F)"),
         ("fmetric", "Fetches filing history for given metric"),
         ("price", "Fetches stock price data"),
@@ -61,7 +65,7 @@ def market():
 
 def plugins():
     print("\n qemy - Plugin Command Reference Table")
-    print_help_table(" Model:", [
+    print_help_table(" Model: ", [
         ("m", "Initiates plugin command"),
         ("dcf", "Performs DCF modeling"),
         ("linear_r", "Linear Regression"),
@@ -73,8 +77,8 @@ def plugins():
 
 def plot():
     print("\n qemy - Plotting Command Reference Table")
-    print_help_table(" Plot:", [
-        ("plot", "Initiates plot command"),
+    print_help_table(" Plot: ", [
+        ("'plot' Commands:", ""),
         ("Commands:", ""),
         ("gdp", ""),
         ("indp", ""),
@@ -87,18 +91,21 @@ def plot():
         ("price", ""),
         ("sent", ""),
         ("unem", ""),
+        ("Info:", "Plot data with matplotlib"),
+        ("Usage:", "plot <COMMAND>"),
+        ("Example:", "plot price -t aapl -p 2y"),
     ])
     print("\n")
 
 def flags():
     print("\n qemy - Flags")
     print(" Basic Syntax: <FLAG> <ARGUMENT>")
-    print_help_table(" -h --help", [
+    print_help_table(" -h --help ", [
         ("Info:", "Display the help info for a command."),
         ("Usage:", "<COMMAND> -h"),
         ("Example:", "price -h"),
     ])
-    print_help_table(" -p --period", [
+    print_help_table(" -p --period ", [
         ("D", "Day"),
         ("W", "Week"),
         ("M", "Month"),
@@ -107,43 +114,43 @@ def flags():
         ("Usage:", "-p <PERIOD>"),
         ("Example:", "-p 3M"),
     ])
-    print_help_table(" -plt --plot", [
+    print_help_table(" -plt --plot ", [
         ("Info:", "True/False flag to enable plotting feature. Takes no arguments."),
         ("Usage:", "-plt"),
         ("Example:", "m mcarlo -t aapl -p 2y -plt"),
     ])
-    print_help_table(" -q --quarter", [
+    print_help_table(" -q --quarter ", [
         ("Info:", "Specify number of quarters for SEC filings. 4 = 1 Year."),
         ("Usage:", "-q <QUARTERS>"),
         ("Example:", "fmetric <TICKER> -m <METRIC> -q <QUARTERS>"),
     ])
-    print_help_table(" -r --request", [
+    print_help_table(" -r --request ", [
         ("Info:", "Used to manually send a request to SEC servers."),
         ("Usage:", "-r"),
         ("Example:", "f aapl -r"),
     ])
-    print_help_table(" -t --ticker", [
+    print_help_table(" -t --ticker ", [
         ("Info:", "Takes ticker symbol as argument."),
         ("Usage:", "-t <TICKER>"),
         ("Example:", "-t aapl"),
     ])
-    print_help_table(" -s --save", [
+    print_help_table(" -s --save ", [
         ("Info:", "True/False flag to enable save feature. Takes no arguments."),
         ("Usage:", "-s"),
         ("Example:", "m mcarlo -t aapl -p 2y -plt -s"),
     ])
-    print_help_table(" -u --units", [
+    print_help_table(" -u --units ", [
         ("Unit arguments:", "lin, chg, ch1, pch, log, etc..."),
         ("Info:", "Transforms data values to given unit type. Enter 'units' for a list and explanation of each argument."),
         ("Usage:", "-u <UNIT>"),
         ("Example:", "-u log"),
     ])
-    print_help_table(" -m --metric", [
+    print_help_table(" -m --metric ", [
         ("Info:", "Specify the metric type"),
         ("Usage:", "-m <METRIC>"),
         ("Example:", "fmetric aapl -m eps"),
     ])
-    print_help_table(" -n --nums", [
+    print_help_table(" -n --nums ", [
         ("Integer", "Requires integer as argument."),
         ("Info:", "Takes integer argument to specify # of tests to run."),
         ("Usage:", "-n <NUM>"),
@@ -153,7 +160,7 @@ def flags():
 
 def units():
     print("\n qemy - Units")
-    print_help_table("Arguments", [
+    print_help_table(" Arguments ", [
         ("lin", "Default/No transformation"),
         ("chg", "Change"),
         ("ch1", "Change from Year Ago"),
@@ -168,7 +175,7 @@ def units():
 
 def metrics():
     print("\n qemy - Metrics")
-    print_help_table("Arguments", [
+    print_help_table(" Arguments ", [
         ("assets", "Total Assets"),
         ("capex", "Capital Expenditure"),
         ("cash", "Total Cash"),
@@ -191,7 +198,7 @@ def metrics():
 
 def info(): ### place holder
     print("\n qemy - Information")
-    print_help_table(" Usage", [
+    print_help_table(" Usage ", [
         ("", ""),
         ("", ""),
     ])
