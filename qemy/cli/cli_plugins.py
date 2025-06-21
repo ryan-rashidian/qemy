@@ -1,27 +1,31 @@
 from qemy.core.plugin_loader import load_plugins
 from qemy.core.plot.plot import plot_models
-from qemy.utils.parse_arg import parse_args_help
+from qemy.utils.parse_arg import parse_args_cli, check_help
 from qemy.cli.cli_helper import print_help_table
 
 def run_models(arg):
-    parse_result = parse_args_help(
+    if check_help(
+        arg_str=arg,
+        help_func=lambda: print_help_table(" m ", [
+            ("Info:", "Loads a given plugin"),
+            ("Usage:", "m <plugin>\n"),
+        ])
+    ):
+        return
+
+    core_args, plugin_kwargs, other_args = parse_args_cli(
         arg_str=arg, 
         expected_args=[
             'period', 'ticker_flag', 'model',
             'num', 'plot', 'save', 'help'
         ], 
-        prog_name='run_model',
-        help_func=lambda: print_help_table(" m ", [
-            ("Info:", "Loads a given plugin"),
-            ("Usage:", "m <plugin>\n"),
-        ])
+        prog_name='run_model'
     )
-    if parse_result == '__HELP__':
-        return
-    if not isinstance(parse_result, tuple):
-        raise ValueError("Unexpected parsing result")
 
-    period, ticker, model, num, plot, save, help = parse_result
+    if other_args:
+        print(f"Unexpected Command: {other_args}")
+
+    period, ticker, model, num, plot, save, help = core_args
 
     if not save:
         save = False
@@ -37,7 +41,7 @@ def run_models(arg):
         if model_cls:
             print(f"\n[Plugin: {model_cls.name}]")
             print(f"{model_cls.description} (v{model_cls.version})")
-            plugin_instance = model_cls(**arg_dict)
+            plugin_instance = model_cls(**arg_dict, **plugin_kwargs)
 
             if help:
                 print(plugin_instance.help())
