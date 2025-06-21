@@ -1,4 +1,5 @@
 from qemy.core.plot import plot
+from qemy.core.plot.plot_fred import PlotFRED
 from qemy.utils.parse_arg import check_help, parse_args_cli
 from qemy.cli.cli_helper import print_help_table
 
@@ -60,7 +61,7 @@ class PlotCmd:
         if isinstance(self.period, str):
             print(f"Fetching plot chart for CPI inflation: % Change from Year Ago...")
             try:
-                plot.plot_cpi(period=self.period, save=self.save_state, units=self.units)
+                PlotFRED().plot_cpi(period=self.period, save=self.save_state, units=self.units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -74,7 +75,7 @@ class PlotCmd:
         if isinstance(self.period, str):
             print(f"Fetching plot chart for GDP: % Change from Year Ago...")
             try:
-                plot.plot_gdp(period=self.period, save=self.save_state, units=self.units)
+                PlotFRED().plot_gdp(period=self.period, save=self.save_state, units=self.units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -88,7 +89,7 @@ class PlotCmd:
         if isinstance(self.period, str):
             print(f"Fetching plot chart for Sentiment: % Change...")
             try:
-                plot.plot_sentiment(period=self.period, save=self.save_state, units=self.units)
+                PlotFRED().plot_sentiment(period=self.period, save=self.save_state, units=self.units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -102,7 +103,7 @@ class PlotCmd:
         if isinstance(self.period, str):
             print(f"Fetching plot chart for Non-Farm Payrolls: % Change from Year Ago...")
             try:
-                plot.plot_nfp(period=self.period, save=self.save_state, units=self.units)
+                PlotFRED().plot_nfp(period=self.period, save=self.save_state, units=self.units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -116,7 +117,7 @@ class PlotCmd:
         if isinstance(self.period, str):
             print(f"Fetching plot chart for Interest rates: % Change from Year Ago...")
             try:
-                plot.plot_interest(period=self.period, save=self.save_state, units=self.units)
+                PlotFRED().plot_interest(period=self.period, save=self.save_state, units=self.units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -130,7 +131,7 @@ class PlotCmd:
         if isinstance(self.period, str):
             print(f"Fetching plot chart for Jobless Claims: % Change from Year Ago...")
             try:
-                plot.plot_jobc(period=self.period, save=self.save_state, units=self.units)
+                PlotFRED().plot_jobc(period=self.period, save=self.save_state, units=self.units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -144,7 +145,7 @@ class PlotCmd:
         if isinstance(self.period, str):
             print(f"Fetching plot chart for Unemployment rate: % Change from Year Ago...")
             try:
-                plot.plot_unemployment(period=self.period, save=self.save_state, units=self.units)
+                PlotFRED().plot_unem(period=self.period, save=self.save_state, units=self.units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -158,7 +159,7 @@ class PlotCmd:
         if isinstance(self.period, str):
             print(f"Fetching plot chart for Industrial Production: % Change from Year Ago...")
             try:
-                plot.plot_ind_prod(period=self.period, save=self.save_state, units=self.units)
+                PlotFRED().plot_indp(period=self.period, save=self.save_state, units=self.units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
@@ -172,7 +173,7 @@ class PlotCmd:
         if isinstance(self.period, str):
             print(f"Fetching plot chart for Real Net Exports of Goods and Services...")
             try:
-                plot.plot_netex(period=self.period, save=self.save_state, units=self.units)
+                PlotFRED().plot_netex(period=self.period, save=self.save_state, units=self.units)
             except Exception as e:
                 print(f"Could not fetch plot chart. ERROR:\n{e}")
         else:
