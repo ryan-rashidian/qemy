@@ -19,6 +19,8 @@ Suggestions are welcome!
 - [Ideas](https://github.com/ryan-rashidian/qemy/discussions/2)
 - [Report a Bug / Open an Issue](https://github.com/ryan-rashidian/qemy/issues/new)
 - [Development Log](DEVLOG.md)
+- [Roadmap](ROADMAP.md)
+- [Contribute](CONTRIBUTING.md)
 
 ---
 
@@ -36,10 +38,10 @@ Suggestions are welcome!
 ## Features
 
 - CLI: Command line interface entry point.
-- Plugin: use or create your own plugins for modeling.
 - Fetch: SEC filings, stock market data and macroeconomic indicators.
 - Chart: price history, model visualization, etc.
 - Model: DCF, Monte Carlo, linear regression, and more to come.
+- Plugins: use or [create](CONTRIBUTING.md) your own plugins.
 - Info: help commands and guides within the qemy CLI.
 
 See full [Roadmap](ROADMAP.md)
@@ -81,16 +83,6 @@ API keys available free of charge. Sign up required for Tiingo API and Fred API:
 Run the CLI and Qemy will guide you through an API key setup wizard on first launch.
 
 - Refer to "Usage" below for info related to API usage and data limitations.
-
-Or manually create a .env file in project root directory and add API keys like this:
-
-```env
-TIINGO_API_KEY=<your_key_here>
-FRED_API_KEY=<your_key_here>
-EDGAR_USER_AGENT=<your user agent> # EDGAR_USER_AGENT=john johndoe@example.com
-```
-
-Make sure .env is included in .gitignore to keep your keys secure.
 
 IMPORTANT: Read "Legal / Attribution" before using Qemy with any 3rd party API service.
 
