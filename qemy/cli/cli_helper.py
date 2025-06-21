@@ -10,10 +10,10 @@ def print_help_table(title, commands):
 def help():
     print("\n qemy - Command Reference Table")
     print_help_table(" Command Categories: ", [
-        ("econ", "Enter: 'econ' for economic help table"),
-        ("market", "Enter: 'market' for market help table"),
-        ("plugins", "Enter: 'plugins' for plugin help table"),
-        ("plots", "Enter: 'plots' for plotting help table"),
+        ("econ",    "Enter: 'econ'    to list related commands"),
+        ("market",  "Enter: 'market'  to list related commands"),
+        ("plugins", "Enter: 'plugins' to list related commands"),
+        ("plots",   "Enter: 'plots'   to list related commands"),
     ])
     print_help_table(" Auxiliary Commands: ", [
         ("clear", "or 'cls' to clear screen."),
@@ -66,7 +66,6 @@ def plugins():
         ("dcf", "Performs DCF modeling"),
         ("linear_r", "Linear Regression"),
         ("mcarlo", "Monte Carlo simulation"),
-        ("Info", "Integratation of help commands for each plugin is still in development"),
         ("Usage:", "m <MODEL>"),
         ("Plugin Help:", "m <MODEL> -h"),
     ])
@@ -76,6 +75,7 @@ def plot():
     print("\n qemy - Plotting Command Reference Table")
     print_help_table(" Plot:", [
         ("plot", "Initiates plot command"),
+        ("Commands:", ""),
         ("gdp", ""),
         ("indp", ""),
         ("interest", ""),
