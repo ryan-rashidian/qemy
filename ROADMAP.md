@@ -19,4 +19,5 @@ The primary goal of v0.1.0 will be to create a developer facing MVP foundation f
     - Monte Carlo simulation
     - Linear regression
 - [ ] Refactor and clean codebase 
+- [ ] SDK (Software Development Kit) MVP
 
