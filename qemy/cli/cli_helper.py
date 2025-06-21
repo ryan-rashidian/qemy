@@ -93,34 +93,60 @@ def plot():
 def flags():
     print("\n qemy - Flags")
     print(" Basic Syntax: <FLAG> <ARGUMENT>")
+    print_help_table(" -h --help", [
+        ("Info:", "Display the help info for a command."),
+        ("Usage:", "<COMMAND> -h"),
+        ("Example:", "price -h"),
+    ])
     print_help_table(" -p --period", [
         ("D", "Day"),
         ("W", "Week"),
         ("M", "Month"),
         ("Y", "Year"),
         ("Info:", "Specifies a start and end date based on the given period. Start = <Current-Date>, End = <Start - Period>"),
+        ("Usage:", "-p <PERIOD>"),
         ("Example:", "-p 3M"),
     ])
     print_help_table(" -plt --plot", [
-        ("Info:", "True/False flag to enable plotting feature. Takes no arguments"),
+        ("Info:", "True/False flag to enable plotting feature. Takes no arguments."),
+        ("Usage:", "-plt"),
         ("Example:", "m mcarlo -t aapl -p 2y -plt"),
     ])
+    print_help_table(" -q --quarter", [
+        ("Info:", "Specify number of quarters for SEC filings. 4 = 1 Year."),
+        ("Usage:", "-q <QUARTERS>"),
+        ("Example:", "fmetric <TICKER> -m <METRIC> -q <QUARTERS>"),
+    ])
+    print_help_table(" -r --request", [
+        ("Info:", "Used to manually send a request to SEC servers."),
+        ("Usage:", "-r"),
+        ("Example:", "f aapl -r"),
+    ])
     print_help_table(" -t --ticker", [
-        ("Info:", "Takes ticker symbol as argument"),
+        ("Info:", "Takes ticker symbol as argument."),
+        ("Usage:", "-t <TICKER>"),
         ("Example:", "-t aapl"),
     ])
     print_help_table(" -s --save", [
         ("Info:", "True/False flag to enable save feature. Takes no arguments."),
-        ("Example:", "m mcarlo -t aapl -p 2y -plt -s")
+        ("Usage:", "-s"),
+        ("Example:", "m mcarlo -t aapl -p 2y -plt -s"),
     ])
     print_help_table(" -u --units", [
         ("Unit arguments:", "lin, chg, ch1, pch, log, etc..."),
         ("Info:", "Transforms data values to given unit type. Enter 'units' for a list and explanation of each argument."),
+        ("Usage:", "-u <UNIT>"),
         ("Example:", "-u log"),
     ])
-    print_help_table(" -n -nums", [
+    print_help_table(" -m --metric", [
+        ("Info:", "Specify the metric type"),
+        ("Usage:", "-m <METRIC>"),
+        ("Example:", "fmetric aapl -m eps"),
+    ])
+    print_help_table(" -n --nums", [
         ("Integer", "Requires integer as argument."),
         ("Info:", "Takes integer argument to specify # of tests to run."),
+        ("Usage:", "-n <NUM>"),
         ("Example:", "-n 1000"),
     ])
     print("\n")
