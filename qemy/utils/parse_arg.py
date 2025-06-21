@@ -54,6 +54,62 @@ def parse_args(arg_str, expected_args, prog_name='command'):
         print(f"Invalid Command, Error:\n{e}")
         return (None,) * len(expected_args)
 
+def parse_args_cli(arg_str, expected_args, prog_name='command'):
+    parser = argparse.ArgumentParser(prog=prog_name, add_help=False)
+    for arg in expected_args:
+        if arg not in ARGUMENTS:
+            raise ValueError(f"Unknown core arg: {arg}")
+        ARGUMENTS[arg](parser)
+
+    tokens = shlex.split(arg_str)
+    known_args, unknown_args = parser.parse_known_args(tokens)
+
+    core_args = []
+    for arg in expected_args:
+        if arg == 'ticker_flag':
+            val = getattr(known_args, 'ticker', None)
+        else:
+            val = getattr(known_args, arg, None)
+
+        if isinstance(val, str) and arg in (
+            'ticker', 'ticker_flag', 'metric', 'metric_p', 'save', 'plot_p'
+        ):
+            val = val.upper()
+
+        if arg == 'num' and val is not None:
+            try:
+                val = int(val)
+            except (ValueError, TypeError):
+                val = None
+
+        core_args.append(val)
+
+    it = iter(unknown_args)
+    plugin_kwargs = {}
+    other_args = []
+    for k in it:
+        if not k.startswith('--'):
+            other_args.append(k)
+            continue
+        key = k.lstrip('-').replace('-', '_')
+        try:
+            val = next(it)
+            plugin_kwargs[key] = val
+        except StopIteration:
+            plugin_kwargs[key] = True
+
+    return tuple(core_args), plugin_kwargs, other_args
+
+def check_help(arg_str, help_func=None):
+    tokens = shlex.split(arg_str)
+    has_help = '-h' in tokens or '--help' in tokens
+    has_command = next((t for t in tokens if not t.startswith('-')), None)
+    if has_help and has_command is None:
+        if help_func:
+            help_func()
+        return True
+    return False
+
 def parse_args_help(
         arg_str, expected_args, 
         prog_name='command', 
