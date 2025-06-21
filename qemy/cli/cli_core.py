@@ -1,16 +1,15 @@
 from numbers import Number
 from qemy.utils.utils_cli import save_to_csv
-from qemy.utils.parse_arg import parse_args
+from qemy.utils.parse_arg import check_help, parse_args_cli
 from qemy.core.watch_list import WatchListManager
 from qemy.cli.cli_helper import print_help_table
 
 #================================== CORE =====================================#
 
 def watch_list(arg, ticker_list):
-    help, = parse_args(arg_str=arg, expected_args=['help'], prog_name='watchlist')
-
-    if help:
-        return print_help_table(" wl ", [
+    if check_help(
+        arg_str=arg,
+        help_func=lambda: print_help_table(" wl ", [
             ("Info:", "Launches Watchlist manager"),
             ("Usage:", "qemy> wl"),
             ("Commands:", ""),
@@ -20,19 +19,29 @@ def watch_list(arg, ticker_list):
             ("'exit', 'q'", "Exits Watchlist manager"),
             ("Example:", "qemy>wl> add <TICKER>\n"),
         ])
-    else:
-        WatchListManager(ticker_list=ticker_list).run()
+    ):
+        return
+
+    WatchListManager(ticker_list=ticker_list).run()
 
 def table(arg, ticker_df):
-    save_state, help = parse_args(arg_str=arg, expected_args=['save', 'help'], prog_name='table')
-
-    if help:
-        return print_help_table(" table ", [
+    if check_help(
+        arg_str=arg,
+        help_func=lambda: print_help_table(" table ", [
             ("Info:", "Displays a table of every filing fetched during current session."), 
             ("-s --save", "Saves current working table as a .csv file."),
             ("Usage:", "qemy> table\n"),
         ])
+    ):
+        return
 
+    core_args, plugin_kwargs, other_args = parse_args_cli(arg_str=arg, expected_args=['save'], prog_name='table')
+
+    if plugin_kwargs or other_args:
+        print(f"Unexpected command: {other_args} {plugin_kwargs}")
+        return
+
+    save_state, = core_args
     try:
         if save_state:
             save_to_csv(df=ticker_df)

@@ -1,26 +1,31 @@
 import pandas as pd
 from qemy.data.api_tiingo import StockMarket
-from qemy.utils.parse_arg import parse_args_help
+from qemy.utils.parse_arg import parse_args_cli, check_help
 from qemy.cli.cli_helper import print_help_table
 
 #================================== TIINGO ===================================#
 
 def quote(arg):
-    parse_result = parse_args_help(
-        arg_str=arg, 
-        expected_args=['ticker', 'help'], 
-        prog_name='quote', 
+    if check_help(
+        arg_str=arg,
         help_func=lambda: print_help_table(" quote ", [
             ("Info:", "Fetches Price Quote data for given ticker"),
             ("Usage:", "quote <TICKER>\n"),
         ])
-    )
-    if parse_result == '__HELP__':
+    ):
         return
-    if not isinstance(parse_result, tuple):
-        raise ValueError("Unexpected parsing result")
 
-    ticker, _ = parse_result
+    core_args, plugin_kwargs, other_args = parse_args_cli(
+        arg_str=arg, 
+        expected_args=['ticker'], 
+        prog_name='quote', 
+    )
+
+    if plugin_kwargs or other_args:
+        print(f"Unexpected command: {other_args} {plugin_kwargs}")
+        return
+
+    ticker, = core_args
 
     if isinstance(ticker, str):
         data = StockMarket().get_quote(tickers=ticker)
@@ -35,21 +40,25 @@ def quote(arg):
         print("For valid syntax Try: quote <TICKER>")
 
 def price(arg):
-    parse_result = parse_args_help(
-        arg_str=arg, 
-        expected_args=['period', 'ticker', 'help'], 
-        prog_name='price', 
+    if check_help(
+        arg_str=arg,
         help_func=lambda: print_help_table(" price ", [
             ("Info:", "Fetches Price data for given ticker"),
             ("Usage:", "price <TICKER> -p <PERIOD>\n"),
         ])
-    )
-    if parse_result == '__HELP__':
+    ):
         return
-    if not isinstance(parse_result, tuple):
-        raise ValueError("Unexpected parsing result")
+    core_args, plugin_kwargs, other_args = parse_args_cli(
+        arg_str=arg, 
+        expected_args=['period', 'ticker'], 
+        prog_name='price', 
+    )
 
-    period, ticker, _ = parse_result
+    if plugin_kwargs or other_args:
+        print(f"Unexpected command: {other_args} {plugin_kwargs}")
+        return
+
+    period, ticker = core_args
 
     if isinstance(period, str) and isinstance(ticker, str):
         print(f"Fetching price info for: {ticker}...")

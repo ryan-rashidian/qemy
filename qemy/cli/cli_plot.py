@@ -1,15 +1,15 @@
 from qemy.core.plot import plot
-from qemy.utils.parse_arg import parse_args_help
+from qemy.utils.parse_arg import check_help, parse_args_cli
 from qemy.cli.cli_helper import print_help_table
 
 #================================== PLOT =====================================#
 class PlotCmd:
     def __init__(self, arg):
         self.help_requested = False
-        parse_result = parse_args_help(
-            arg_str=arg, 
-            expected_args=['period', 'ticker_flag', 'save', 'units', 'plot_p', 'help'], 
-            prog_name='FREDCmd',
+        self.failed = False
+
+        if check_help(
+            arg_str=arg,
             help_func=lambda: print_help_table(" plot ", [
                 ("Available Commands:", ""),
                 ("price", ""),
@@ -24,14 +24,23 @@ class PlotCmd:
                 ("netex", ""),
                 ("Usage:", "plot <COMMAND>\n"),
             ])
-        )
-        if parse_result == '__HELP__':
+        ):
             self.help_requested = True
             return
-        if not isinstance(parse_result, tuple):
-            raise ValueError("Unexpected parsing result")
 
-        self.period, self.ticker, self.save_state, self.units, self.plot, self.help = parse_result
+
+        core_args, plugin_kwargs, other_args = parse_args_cli(
+            arg_str=arg, 
+            expected_args=['period', 'ticker_flag', 'save', 'units', 'plot_p', 'help'], 
+            prog_name='FREDCmd',
+        )
+
+        if plugin_kwargs or other_args:
+            print(f"Unexpected command: {other_args} {plugin_kwargs}")
+            self.failed = True
+            return
+        
+        self.period, self.ticker, self.save_state, self.units, self.plot, self.help = core_args
 
     def price(self):
         if isinstance(self.period, str) and isinstance(self.ticker, str):
@@ -170,7 +179,7 @@ class PlotCmd:
             print('For valid syntax, Try: plot_netex -p 3M -s yes')
 
     def run(self):
-        if self.help_requested:
+        if self.help_requested or self.failed:
             return
         elif self.plot == 'PRICE':
             self.price()

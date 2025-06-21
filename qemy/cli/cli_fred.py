@@ -1,26 +1,34 @@
 from qemy.data.api_fred import FREDData
-from qemy.utils.parse_arg import parse_args_help
+from qemy.utils.parse_arg import parse_args_cli, check_help
 from qemy.cli.cli_helper import print_help_table
 
 #================================== FRED =====================================#
 class FREDCmd:
     def __init__(self, arg):
         self.help_requested = False
-        parse_result = parse_args_help(
+        self.failed = False
+
+        if check_help(
             arg_str=arg, 
-            expected_args=['metric_p', 'period', 'units', 'help'], 
-            prog_name='FREDCmd',
-            help_func=lambda: print_help_table("", [
-                ("", ""),
+            help_func=lambda: print_help_table(" fred ", [
+                ("rfr", "\n"),
             ])
-        )
-        if parse_result == '__HELP__':
+        ):
             self.help_requested = True
             return
-        if not isinstance(parse_result, tuple):
-            raise ValueError("Unexpected parsing result")
 
-        self.metric, self.period, self.units, self.help = parse_result
+        core_args, plugin_kwargs, other_args = parse_args_cli(
+            arg_str=arg, 
+            expected_args=['metric_p', 'period', 'units', 'help'], 
+            prog_name='fred'
+        )
+        
+        if plugin_kwargs or other_args:
+            print(f"Unexpected command: {other_args} {plugin_kwargs}")
+            self.failed = True
+            return
+
+        self.metric, self.period, self.units, self.help = core_args
 
     def rfr(self):
         if self.help:
@@ -189,7 +197,7 @@ class FREDCmd:
                 print('For valid syntax, Try: netex -p 1Y')
 
     def run(self):
-        if self.help_requested:
+        if self.help_requested or self.failed:
             return
 
         if self.metric == 'RFR':
