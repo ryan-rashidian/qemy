@@ -3,12 +3,10 @@ import time
 import shutil
 import zipfile
 import json
-from pathlib import Path
 from qemy.utils.utils_fetch import safe_status_get, safe_status_download
 
 def bulk_refresh():
-    bulk_dir = Path("bulk_data")
-    bulk_dir.mkdir(exist_ok=True)
+    bulk_dir = cfg.BULK_DIR
 
     unzipped_dir = bulk_dir / "companyfacts"
     if unzipped_dir.exists() and unzipped_dir.is_dir():
