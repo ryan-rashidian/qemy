@@ -148,7 +148,7 @@ self.args = {'flag', True}
 
 **Work in Progress**
 
-- matplotlib is integrated through the "plot" dictionary key and its nested "plot_func" key - which should hold a function performing a pyplot.plot() as its value ([example](#`plugin.py`) shown above)
+- matplotlib is integrated through the "plot" dictionary key and its nested "plot_func" key - which should hold a function performing a pyplot.plot() as its value (example shown above)
 - scikit-learn, numpy and pandas libraries are available in the Qemy Python environment for your plugin as well
 - For now, please reference modules in qemy/data/ or use existing plugins as examples for how to use the core codebase of Qemy to build your plugin. A full guide will be made after the foundation of the SDK is complete due to ongoing changes. Thank you for your interest!
 
