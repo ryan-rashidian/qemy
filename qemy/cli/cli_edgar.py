@@ -14,7 +14,8 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
         arg_str=arg,
         help_func=lambda: print_help_table(" f ", [
             ("Info:", "Fetches SEC filing data for given ticker"),
-            ("Usage:", "f <TICKER>\n"),
+            ("Usage:", "f <TICKER>"),
+            ("Example:", "f aapl\n"),
         ])
     ):
         return
@@ -59,7 +60,8 @@ def filing_metric(arg):
         arg_str=arg,
         help_func=lambda: print_help_table(" fmetric ", [
             ("Info:", "Fetches SEC filing data for given ticker and metric"),
-            ("Usage:", "fmetric <TICKER> -m <METRIC>\n"),
+            ("Usage:", "fmetric <TICKER> -m <METRIC> -q <QUARTERS>"),
+            ("Example:", "fmetric aapl -m eps -q 20\n"),
         ])
     ):
         return

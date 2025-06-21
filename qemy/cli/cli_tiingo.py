@@ -10,7 +10,8 @@ def quote(arg):
         arg_str=arg,
         help_func=lambda: print_help_table(" quote ", [
             ("Info:", "Fetches Price Quote data for given ticker"),
-            ("Usage:", "quote <TICKER>\n"),
+            ("Usage:", "quote <TICKER>"),
+            ("Example:", "quote aapl\n"),
         ])
     ):
         return
@@ -44,7 +45,8 @@ def price(arg):
         arg_str=arg,
         help_func=lambda: print_help_table(" price ", [
             ("Info:", "Fetches Price data for given ticker"),
-            ("Usage:", "price <TICKER> -p <PERIOD>\n"),
+            ("Usage:", "price <TICKER> -p <PERIOD>"),
+            ("Example:", "price aapl -p 1y\n"),
         ])
     ):
         return

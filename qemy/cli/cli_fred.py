@@ -10,8 +10,18 @@ class FREDCmd:
 
         if check_help(
             arg_str=arg, 
-            help_func=lambda: print_help_table(" fred ", [
-                ("rfr", "\n"),
+            help_func=lambda: print_help_table(" fred commands ", [
+                ("cpi", ""),
+                ("gdp", ""),
+                ("indp", ""),
+                ("interest", ""),
+                ("jobc", ""),
+                ("netex", ""),
+                ("nfp", ""),
+                ("rfr", ""),
+                ("sent", ""),
+                ("unem", ""),
+                ("For More Info:", "fred <COMMAND> -h\n"),
             ])
         ):
             self.help_requested = True
