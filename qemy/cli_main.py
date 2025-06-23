@@ -13,7 +13,7 @@ pd.set_option('display.max_rows', None)
 #=============================================================================#
 
 class QemyShell(cmd.Cmd):
-    intro = "Welcome to qemy. Type help or ? to list commands.\n"
+    intro = "Qemy v0.1.0\nType \"help\" or \"?\" for more information.\n"
     prompt = "qemy> "
     def __init__(self):
         metric_index = pd.Index([
