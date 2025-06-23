@@ -46,7 +46,7 @@ class MCarloPlugin(BasePlugin):
                         "End STD": f"{end_std:.2f}",
                     },
                     "plot": {
-                        "title": f"{self.num}Monte Carlo Simulation for {self.ticker}",
+                        "title": f"{self.num} Monte Carlo Simulation for {self.ticker}",
                         "plot_func": lambda: (
                             plt.plot(simulations.T, alpha=0.05, color='blue'),
                         )

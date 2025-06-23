@@ -8,7 +8,7 @@ def plot_models(ticker, title='title', save=False, plot_func=None):
     if plot_func:
         plot_func()
 
-    plt.title(f"{title} for {ticker}")
+    plt.title(title)
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.grid(True)
