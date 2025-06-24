@@ -1,11 +1,11 @@
 from qemy.utils.env_setup import setup_wizard
-setup_wizard() # First time setup + fills API_KEY variables
-# Must run setup_wizard before importing qemy modules
 import cmd
 import os
 import platform
 import pandas as pd
 from qemy.cli import cli_helper, cli_fred, cli_edgar, cli_tiingo, cli_plot, cli_aux, cli_core, cli_plugins
+
+setup_wizard()
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
