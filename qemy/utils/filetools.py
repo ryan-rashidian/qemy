@@ -1,7 +1,7 @@
 from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
-import config as cfg
+from qemy import _config as cfg
 
 def get_next_path(base_dir: Path, name="file", ext="png") -> Path:
     i = 1

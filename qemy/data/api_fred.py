@@ -1,5 +1,5 @@
-import config as cfg
 import pandas as pd
+from qemy import _config as cfg
 from qemy.utils.utils_fetch import parse_period, safe_status_get
 
 class FREDData:

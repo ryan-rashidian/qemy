@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-import config as cfg
+from qemy import _config as cfg
 from qemy.utils.filetools import save_to_png
 from qemy.data.api_fred import FREDData
 

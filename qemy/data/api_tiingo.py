@@ -1,4 +1,4 @@
-import config as cfg
+from qemy import _config as cfg
 from qemy.utils.utils_fetch import parse_period, safe_status_get
 
 class StockMarket:

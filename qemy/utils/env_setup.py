@@ -1,6 +1,6 @@
 import sys
-from pathlib import Path
 from dotenv import load_dotenv
+from qemy import _config as cfg
 
 def setup_input(prompt):
     user_input = input(prompt).strip()
@@ -10,10 +10,7 @@ def setup_input(prompt):
         return user_input
 
 def setup_wizard():
-    if getattr(sys, 'frozen', False):
-        project_root = Path(sys.executable).resolve().parent
-    else:
-        project_root = Path(__file__).resolve().parents[2]
+    project_root = cfg.PROJECT_ROOT
     env_path = project_root / '.env'
     temp_env_path = project_root / '.env.tmp'
     if env_path.exists():

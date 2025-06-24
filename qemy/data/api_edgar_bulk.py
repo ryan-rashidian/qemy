@@ -1,8 +1,8 @@
-import config as cfg
 import time
 import shutil
 import zipfile
 import json
+from qemy import _config as cfg
 from qemy.utils.utils_fetch import safe_status_get, safe_status_download
 
 def bulk_refresh():
