@@ -24,6 +24,7 @@ The primary goal of v0.1.0 will be to create a developer facing MVP foundation f
 
 - [ ] Refined SEC parsing
 - [ ] Refined SDK
+- [ ] Finished CONTRIBUTING.md guide
 - [ ] Separate financial statements for SEC filings
 - [ ] Support for IFRS filing format
 - [ ] Stock screening and filtering
