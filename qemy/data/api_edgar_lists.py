@@ -104,6 +104,15 @@ key_list_liability = [
     'LiabilitiesCurrent',
 ]
 
+key_list_equity = [
+    'StockholdersEquity',
+    'CommonStockEquity',
+    'TotalEquity',
+    'StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest',
+    'PartnersCapital',
+    'MemberEquity',
+]
+
 key_list_opex = [
     'OperatingExpenses',
     'OperatingCostsAndExpenses',
