@@ -58,6 +58,7 @@ def market():
         ("fmetric", "Fetches filing history for given metric"),
         ("price", "Fetches stock price data"),
         ("quote", "Fetches latest price quote"),
+        ("ratio", "Fetches given ratio for given ticker"),
         ("table", "Shows and saves current filings"),
         ("wl", "Show, edit and save current tickers"),
     ])
