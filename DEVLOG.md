@@ -4,9 +4,7 @@
 
 - [ ] (Non-critical) Total debt metric for filings still incomplete or outdated ~50% of time. Solutions known; Fixes are in progress.
 - [ ] (Non-critical) As a result of some testing, current filings metrics have ~90% success for accuracy (with exception of total debt, referenced in previous issue). Further refinement is needed and planned. Note: most inconsistent results in financial services sector.   
-- [ ] (Non-critical) P/E ratio assumes that 10k filings are reporting a cumulative eps, which is not always the case. It needs to factor in cases where: 
-    - 1. Last 10k filing reported a quarterly eps, and there IS a cumulative eps reported within the previous 3 10q filings. 
-    - 2. Last 10k filing reported a quarterly eps, and there IS NOT a cumulative eps reported within the previous 3 10q filings.
+- [ ] (Non-critical) P/E ratio module does not always properly identify whether the eps reported in a SEC filing is cumulative, or quarterly. More refinement needed. 
 
 ## Ideas:
 
