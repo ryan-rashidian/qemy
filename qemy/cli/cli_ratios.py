@@ -38,6 +38,16 @@ class RatiosCmd:
             ])
         else:
             print(rat.ratio_pe(ticker=self.ticker))
+    
+    def _pb(self):
+        if self.help:
+            print_help_table(" pb ", [
+                ("Info:", "Fetches P/B ratio for given ticker"),
+                ("Usage:", "ratio pb -t <TICKER>\n"),
+            ])
+        else:
+            print(rat.ratio_pb(ticker=self.ticker))
+        
 
     def run(self):
         if self.help_requested or self.failed:
@@ -45,6 +55,8 @@ class RatiosCmd:
 
         if self.metric == 'PE':
             self._pe()
+        if self.metric == 'PB':
+            self._pb()
         else:
             print("Ratio: Incorrect metric")
 
