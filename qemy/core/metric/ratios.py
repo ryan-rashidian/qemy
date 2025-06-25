@@ -15,17 +15,17 @@ def ratio_pe(ticker):
         after_10k = eps_df.iloc[last_10k_pos + 1:]
         
         if len(after_10k) == 0:
-            print("0")
+            #print("0") # for debug
             ttm_eps = last_10k_row['val']
 
         elif len(after_10k) == 1:
-            print("1")
+            #print("1") # for debug
             q1 = after_10k.iloc[0]['val']
             q1_last_year = eps_df.iloc[last_10k_pos - 3]['val'] if last_10k_pos - 3 >= 0 else 0
             ttm_eps = last_10k_row['val'] + q1 - q1_last_year
 
         elif len(after_10k) == 2:
-            print("2")
+            #print("2") # for debug
             q1 = after_10k.iloc[0]['val']
             q2 = after_10k.iloc[1]['val']
             q1_last_year = eps_df.iloc[last_10k_pos - 3]['val'] if last_10k_pos - 3 >= 0 else 0
@@ -33,7 +33,7 @@ def ratio_pe(ticker):
             ttm_eps = last_10k_row['val'] + q1 + q2 - q1_last_year - q2_last_year
 
         elif len(after_10k) == 3:
-            print("3")
+            #print("3") # for debug
             q3 = after_10k.iloc[2]['val']
             q3_last_year = eps_df.iloc[last_10k_pos - 1]['val'] if last_10k_pos - 1 >= 0 else 0
             ttm_eps = last_10k_row['val'] + q3 - q3_last_year
