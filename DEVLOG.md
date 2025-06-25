@@ -8,7 +8,6 @@
 
 ## Ideas:
 
-- Cover all the basic metrics, ratios, etc. (e.g. Sharpe, PE, PEG, etc.)
 - Stock screening and filtering.
 - Separate filing commands: 'Income Statement', 'Balance Sheet', 'Cash Flow Statement' 
 - IFRS filing support in SEC_Filings parser and currency conversion. 

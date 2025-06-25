@@ -7,7 +7,7 @@ The primary goal of v0.1.0 will be to create a developer facing MVP foundation f
 - [x] Basic CLI
 - [x] API financial data cleaning and visualization
 - [x] SEC filing parser MVP
-- [ ] Basic metrics:
+- [x] Basic metrics:
     - Ratios (P/E, PEG, Sharpe, etc.)
     - Price and performance metrics
     - Fundamental metrics (from financial statements) 
@@ -24,10 +24,14 @@ The primary goal of v0.1.0 will be to create a developer facing MVP foundation f
 
 - [ ] Refined SEC parsing
 - [ ] Refined SDK
-- [ ] Finished CONTRIBUTING.md guide
+- [ ] More Metrics
+- [ ] Finish CONTRIBUTING.md guide
 - [ ] Separate financial statements for SEC filings
 - [ ] Support for IFRS filing format
+- [ ] Refactor and clean codebase 
+
+## Planned Updates
+
 - [ ] Stock screening and filtering
 - [ ] Scale and normalize data preprocessing 
-- [ ] Refactor and clean codebase 
 

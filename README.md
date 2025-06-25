@@ -38,11 +38,11 @@ Suggestions are welcome!
 ## Features
 
 - CLI: Command line interface entry point.
-- Fetch: SEC filings, stock market data and macroeconomic indicators.
-- Chart: price history, model visualization, etc.
-- Model: DCF, Monte Carlo, linear regression, and more to come.
+- Data: SEC filings, stock market data and macroeconomic indicators.
+- Metrics: Ratios, risk, performance and fundamental metrics.
+- Tools: Plot or export data for analysis.
+- Models: DCF, Monte Carlo, linear regression, and more to come.
 - Plugins: use or [create](CONTRIBUTING.md) your own plugins.
-- Info: help commands and guides within the qemy CLI.
 
 See full [Roadmap](ROADMAP.md)
 
