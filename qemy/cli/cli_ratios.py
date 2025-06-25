@@ -10,7 +10,9 @@ class RatiosCmd:
         if check_help(
             arg_str=arg, 
             help_func=lambda: print_help_table(" ratio commands ", [
-                ("pe", ""),
+                ("pe", "P/E Ratio"),
+                ("pb", "P/B Ratio"),
+                ("sharpe", "Sharpe Ratio"),
                 ("For More Info:", "ratio <COMMAND> -h\n"),
             ])
         ):
@@ -19,7 +21,7 @@ class RatiosCmd:
 
         core_args, plugin_kwargs, other_args = parse_args_cli(
             arg_str=arg, 
-            expected_args=['metric_p', 'ticker_flag', 'help'], 
+            expected_args=['metric_p', 'ticker_flag', 'period', 'help'], 
             prog_name='ratios', 
         )
 
@@ -28,7 +30,7 @@ class RatiosCmd:
             self.failed = True
             return
 
-        self.metric, self.ticker, self.help = core_args
+        self.metric, self.ticker, self.period, self.help = core_args
 
     def _pe(self):
         if self.help:
@@ -47,6 +49,15 @@ class RatiosCmd:
             ])
         else:
             print(rat.ratio_pb(ticker=self.ticker))
+
+    def _sharpe(self):
+        if self.help:
+            print_help_table(" sharpe ", [
+                ("Info:", "Fetches Sharpe ratio for given ticker"),
+                ("Usage:", "ratio sharpe -t <TICKER> -p <PERIOD>\n"),
+            ])
+        else:
+            print(rat.ratio_sharpe(ticker=self.ticker, period=self.period))
         
 
     def run(self):
@@ -57,6 +68,8 @@ class RatiosCmd:
             self._pe()
         if self.metric == 'PB':
             self._pb()
+        if self.metric == 'SHARPE':
+            self._sharpe()
         else:
             print("Ratio: Incorrect metric")
 
