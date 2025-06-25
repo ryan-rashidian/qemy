@@ -143,6 +143,9 @@ class SEC_Filings:
                 df_liability = get_metric_df(self.facts, keylist.key_list_liability, quarters=10)
                 liability = df_liability.iloc[-1]['val'] if not df_liability.empty else nan
 
+                df_equity = get_metric_df(self.facts, keylist.key_list_equity, quarters=10)
+                equity = df_equity.iloc[-1]['val'] if not df_equity.empty else assets - liability
+
                 df_opex = get_metric_df(self.facts, keylist.key_list_opex, quarters=10)
                 opex = df_opex.iloc[-1]['val'] if not df_opex.empty else nan
 
@@ -169,7 +172,7 @@ class SEC_Filings:
                     ['Net Income', income],
                     ['Assets', assets],
                     ['Liabilities', liability],
-                    ['Equity', assets - liability],
+                    ['Equity', equity],
                     ['OpEx', opex],
                     ['CapEx', capex],
                     ['OCF', ocf],
@@ -264,24 +267,31 @@ class SEC_Filings:
                     return df_netdebt_quarters
 
                 if key == 'equity':
-                    df_assets_hist = get_metric_df(self.facts, keylist=keylist.key_list_assets, quarters=quarters * 4)
-                    df_liability_hist = get_metric_df(self.facts, keylist=keylist.key_list_liability, quarters=quarters * 4)
-                    if df_assets_hist.empty and df_liability_hist.empty:
-                        print("Net Debt: required metrics not found.")
-                        return None
-
-                    df_combined = pd.merge(
-                        df_assets_hist, df_liability_hist, 
-                        on='filed', how='outer', 
-                        suffixes=('_assets', '_liability')
-                    ).copy()
-                    df_combined = df_combined.infer_objects()
-                    df_combined = df_combined.fillna(0)
-
-                    df_combined['val'] = df_combined['val_assets'] - df_combined['val_liability']
-                    df_equity_quarters = df_combined[['filed', 'val']].tail(quarters).copy()
+                    df_equity = get_metric_df(self.facts, keylist.key_list_equity, quarters=quarters * 4)
+                    df_equity_quarters = df_equity.tail(quarters).copy()
                     df_equity_quarters.set_index('filed', inplace=True)
-                    return df_equity_quarters
+                    if not df_equity_quarters.empty:
+                        return df_equity_quarters
+
+                    else:
+                        df_assets_hist = get_metric_df(self.facts, keylist=keylist.key_list_assets, quarters=quarters * 4)
+                        df_liability_hist = get_metric_df(self.facts, keylist=keylist.key_list_liability, quarters=quarters * 4)
+                        if df_assets_hist.empty and df_liability_hist.empty:
+                            print("Net Debt: required metrics not found.")
+                            return None
+
+                        df_combined = pd.merge(
+                            df_assets_hist, df_liability_hist, 
+                            on='filed', how='outer', 
+                            suffixes=('_assets', '_liability')
+                        ).copy()
+                        df_combined = df_combined.infer_objects()
+                        df_combined = df_combined.fillna(0)
+
+                        df_combined['val'] = df_combined['val_assets'] - df_combined['val_liability']
+                        df_equity_quarters = df_combined[['filed', 'val']].tail(quarters).copy()
+                        df_equity_quarters.set_index('filed', inplace=True)
+                        return df_equity_quarters
 
                 if key == 'fcf':
                     df_ocf_hist = get_metric_df(self.facts, keylist=keylist.key_list_ocf, quarters=quarters * 4)
