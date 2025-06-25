@@ -77,8 +77,29 @@ def ratio_pe(ticker):
             f"P/E Ratio: {pe_ratio}"
         )
 
-def ratio_pb():
-    return
+def ratio_pb(ticker):
+    equity_df = SEC_Filings(ticker=ticker).get_metric_history(key='equity')
+    book_value = equity_df.iloc[-1]['val']
+
+    shares_df = SEC_Filings(ticker=ticker).get_metric_history(key='shares')
+    shares_outstanding = shares_df.iloc[-1]['val']
+
+    bvps = round(book_value / shares_outstanding, 2)
+
+    try: 
+        price_data = StockMarket().get_prices(ticker=ticker)
+        price_df = pd.DataFrame(price_data)
+        price_per_share = price_df.iloc[-1]['close']
+    except:
+        return f"No price data found for: {ticker}"
+
+    pb_ratio = round(price_per_share / bvps, 2)
+    return (
+        f"{ticker}\n"
+        f"Price: {price_per_share}\n"
+        f"BVPS: {bvps}\n"
+        f"P/B Ratio: {pb_ratio}"
+    )
 
 def ratio_roe():
     return
