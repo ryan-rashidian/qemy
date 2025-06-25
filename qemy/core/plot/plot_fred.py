@@ -8,7 +8,7 @@ class PlotFRED:
     def __init__(self):
         self.export_dir = cfg.EXPORT_CHART_DIR
 
-    def plot(self, fred_func, period, units, label, title, y_label, filename, save):
+    def _plot(self, fred_func, period, units, label, title, y_label, filename, save):
         fred_data = fred_func(period=period, units=units)
         fred_df = pd.DataFrame(fred_data)
 
@@ -26,7 +26,7 @@ class PlotFRED:
         plt.show()
 
     def plot_cpi(self, period, save=False, units='pc1'):
-        self.plot(
+        self._plot(
             fred_func=FREDData().get_cpi,
             period=period, units=units,
             label="CPI Inflation",
@@ -37,7 +37,7 @@ class PlotFRED:
         )
 
     def plot_gdp(self, period, save=False, units='pc1'):
-        self.plot(
+        self._plot(
             fred_func=FREDData().get_gdp,
             period=period, units=units,
             label="Gross Domestic Product",
@@ -48,7 +48,7 @@ class PlotFRED:
         )
 
     def plot_sentiment(self, period, save=False, units='pch'):
-        self.plot(
+        self._plot(
             fred_func=FREDData().get_sentiment,
             period=period, units=units,
             label="Consumer Sentiment Index",
@@ -59,7 +59,7 @@ class PlotFRED:
         )
 
     def plot_nfp(self, period, save=False, units='pc1'):
-        self.plot(
+        self._plot(
             fred_func=FREDData().get_nf_payrolls,
             period=period, units=units,
             label="Nonfarm Payrolls",
@@ -70,7 +70,7 @@ class PlotFRED:
         )
 
     def plot_interest(self, period, save=False, units='pc1'):
-        self.plot(
+        self._plot(
             fred_func=FREDData().get_interest_rate,
             period=period, units=units,
             label="Fed Interest Rate",
@@ -81,7 +81,7 @@ class PlotFRED:
         )
 
     def plot_jobc(self, period, save=False, units='pc1'):
-        self.plot(
+        self._plot(
             fred_func=FREDData().get_jobless_claims,
             period=period, units=units,
             label="Jobless Claims",
@@ -92,7 +92,7 @@ class PlotFRED:
         )
 
     def plot_unem(self, period, save=False, units='pc1'):
-        self.plot(
+        self._plot(
             fred_func=FREDData().get_unemployment,
             period=period, units=units,
             label="Unemployment Rate",
@@ -103,7 +103,7 @@ class PlotFRED:
         )
 
     def plot_indp(self, period, save=False, units='pc1'):
-        self.plot(
+        self._plot(
             fred_func=FREDData().get_industrial_production,
             period=period, units=units,
             label="Industrial Production",
@@ -114,7 +114,7 @@ class PlotFRED:
         )
 
     def plot_netex(self, period, save=False, units='lin'):
-        self.plot(
+        self._plot(
             fred_func=FREDData().get_net_exports,
             period=period, units=units,
             label="Net Exports",

@@ -4,21 +4,21 @@ class WatchListManager:
     def __init__(self, ticker_list):
         self.tickers = ticker_list
 
-    def add(self, ticker):
+    def _add(self, ticker):
         if ticker not in self.tickers:
             self.tickers.append(ticker)
             print(f"Adding: {ticker}")
         else:
             print(f"{ticker} is already in the list.")
 
-    def remove(self, ticker):
+    def _remove(self, ticker):
         if ticker in self.tickers:
             self.tickers.remove(ticker)
             print(f"Removing: {ticker}")
         else:
             print(f"{ticker} not found in the list.")
 
-    def show(self):
+    def _show(self):
         print("Current tickers:")
         for t in self.tickers:
             print(f"- {t}")
@@ -32,14 +32,14 @@ class WatchListManager:
                 ticker = user_input.split()[1:]
                 ticker = [s.strip() for s in ticker]
                 for t in ticker:
-                    self.add(t)
+                    self._add(t)
             elif user_input.startswith('REMOVE'):
                 ticker = user_input.split()[1:]
                 ticker = [s.strip() for s in ticker]
                 for t in ticker:
-                    self.remove(t)
+                    self._remove(t)
             elif user_input == 'SHOW':
-                self.show()
+                self._show()
             elif user_input == 'CLEAR':
                 os.system('clear')
             elif user_input in ('EXIT', 'Q'):

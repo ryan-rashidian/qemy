@@ -2,7 +2,7 @@ import sys
 from dotenv import load_dotenv
 from qemy import _config as cfg
 
-def setup_input(prompt):
+def _setup_input(prompt):
     user_input = input(prompt).strip()
     if user_input.lower() in ('exit', 'q'):
         sys.exit()
@@ -21,11 +21,11 @@ def setup_wizard():
     print(" Type: 'exit' or 'q' to exit this setup at any time.")
 
     try:
-        fred_key = setup_input(" Enter your FRED API key: ")
-        tiingo_key = setup_input(" Enter your Tiingo API key: ")
+        fred_key = _setup_input(" Enter your FRED API key: ")
+        tiingo_key = _setup_input(" Enter your Tiingo API key: ")
         print(" Enter a 'User Agent' to identify yourself to EDGAR API")
         print(" - e.g. john johndoe@example.com")
-        edgar_agent = setup_input("Enter a 'User Agent': ")
+        edgar_agent = _setup_input("Enter a 'User Agent': ")
         with temp_env_path.open('w') as f:
             f.write(f"FRED_API_KEY={fred_key}\n")
             f.write(f"TIINGO_API_KEY={tiingo_key}\n")
