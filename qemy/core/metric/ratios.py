@@ -7,39 +7,49 @@ def ratio_pe(ticker):
 
     if isinstance(eps_df, pd.DataFrame):
         ttm_eps = None
-        eps_10k_df = eps_df[eps_df['form'] == '10-K']
-        last_10k_row = eps_10k_df.iloc[-1]
-        last_10k_index = eps_10k_df.index[-1]
-        last_10k_pos = eps_10k_df.index.get_loc(last_10k_index)
-        last_10k_pos = eps_df.index.get_indexer_for([last_10k_index])[-1]
-        after_10k = eps_df.iloc[last_10k_pos + 1:]
-        
-        if len(after_10k) == 0:
-            #print("0") # for debug
-            ttm_eps = last_10k_row['val']
 
-        elif len(after_10k) == 1:
-            #print("1") # for debug
-            q1 = after_10k.iloc[0]['val']
-            q1_last_year = eps_df.iloc[last_10k_pos - 3]['val'] if last_10k_pos - 3 >= 0 else 0
-            ttm_eps = last_10k_row['val'] + q1 - q1_last_year
+        eps_1y_df = eps_df['val'].tail(4).copy()
+        sample_df = eps_df['val'].tail(6).copy()
+        max_eps = eps_1y_df.max()
+        mean_eps_others = sample_df[sample_df != max_eps].mean()
 
-        elif len(after_10k) == 2:
-            #print("2") # for debug
-            q1 = after_10k.iloc[0]['val']
-            q2 = after_10k.iloc[1]['val']
-            q1_last_year = eps_df.iloc[last_10k_pos - 3]['val'] if last_10k_pos - 3 >= 0 else 0
-            q2_last_year = eps_df.iloc[last_10k_pos - 2]['val'] if last_10k_pos - 2 >= 0 else 0
-            ttm_eps = last_10k_row['val'] + q1 + q2 - q1_last_year - q2_last_year
+        if max_eps >= 1.9 * mean_eps_others:
+            cumulative_idx = eps_1y_df.idxmax()
+            cumulative_pos = eps_df.index.get_indexer_for([cumulative_idx])[0]
+            after_cumulative_df = eps_df.iloc[cumulative_pos + 1:]
+            n_quarters = len(after_cumulative_df)
 
-        elif len(after_10k) == 3:
-            #print("3") # for debug
-            q3 = after_10k.iloc[2]['val']
-            q3_last_year = eps_df.iloc[last_10k_pos - 1]['val'] if last_10k_pos - 1 >= 0 else 0
-            ttm_eps = last_10k_row['val'] + q3 - q3_last_year
+            if n_quarters == 0:
+                print("0")
+                ttm_eps = max_eps
+
+            elif n_quarters == 1:
+                print("1")
+                q1 = after_cumulative_df.iloc[0]['val']
+                q1_last_year = eps_df.iloc[cumulative_pos - 3]['val'] if cumulative_pos - 3 >= 0 else 0
+                ttm_eps = max_eps + q1 - q1_last_year
+
+            elif n_quarters == 2:
+                print("2")
+                q1 = after_cumulative_df.iloc[0]['val']
+                q2 = after_cumulative_df.iloc[1]['val']
+                q1_last_year = eps_df.iloc[cumulative_pos - 3]['val'] if cumulative_pos - 3 >= 0 else 0
+                q2_last_year = eps_df.iloc[cumulative_pos - 2]['val'] if cumulative_pos - 2 >= 0 else 0
+                ttm_eps = max_eps + q1 + q2 - q1_last_year - q2_last_year
+
+            elif n_quarters == 3:
+                print("3")
+                q1 = after_cumulative_df.iloc[0]['val']
+                q2 = after_cumulative_df.iloc[1]['val']
+                q3 = after_cumulative_df.iloc[2]['val']
+                q1_last_year = eps_df.iloc[cumulative_pos - 3]['val'] if cumulative_pos - 3 >= 0 else 0
+                q2_last_year = eps_df.iloc[cumulative_pos - 2]['val'] if cumulative_pos - 2 >= 0 else 0
+                q3_last_year = eps_df.iloc[cumulative_pos - 1]['val'] if cumulative_pos - 1 >= 0 else 0
+                ttm_eps = max_eps + q1 + q2 + q3 - q1_last_year - q2_last_year - q3_last_year
 
         else:
-            return "N/A 1/2"
+            print("else")
+            ttm_eps = eps_1y_df.mean()
 
         if ttm_eps is None or ttm_eps == 0:
             return "N/A 1"
@@ -48,6 +58,7 @@ def ratio_pe(ticker):
         return "N/A 2"
 
     price_data = StockMarket().get_prices(ticker=ticker)
+
     try: 
         price_df = pd.DataFrame(price_data)
         price = price_df.iloc[-1]['close']
@@ -55,11 +66,15 @@ def ratio_pe(ticker):
         return "N/A 3"
 
     if price and ttm_eps:
+        pe_ratio = round(price / ttm_eps, 2)
+        if pe_ratio >= 200:
+            ttm_eps = eps_1y_df.sum()
+            pe_ratio = round(price / ttm_eps, 2)
         return (
             f"{ticker}\n"
             f"Price: {price:.2f}\n"
             f"TTM EPS: {ttm_eps:.2f}\n"
-            f"P/E Ratio: {round(price / ttm_eps, 2)}"
+            f"P/E Ratio: {pe_ratio}"
         )
 
 def ratio_pb():
