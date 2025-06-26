@@ -61,7 +61,6 @@ def run_models(arg):
                 plot_data = results["plot"]
                 print("Launching plot")
                 plot_models(
-                    ticker = ticker, 
                     title = plot_data.get("title"),
                     plot_func = plot_data.get("plot_func"),
                     save = save
