@@ -97,9 +97,6 @@ class QemyShell(cmd.Cmd):
     def do_plugins(self, _):
         cli_helper.plugins()
 
-    def do_plots(self, _):
-        cli_helper.plot()
-
     def do_flags(self, _):
         cli_helper.flags()
 
