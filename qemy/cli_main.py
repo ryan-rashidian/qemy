@@ -6,7 +6,7 @@ import pandas as pd
 from qemy.cli import (
     cli_helper, cli_fred, cli_edgar, cli_tiingo, 
     cli_plot, cli_aux, cli_core, cli_plugins, 
-    cli_ratios
+    cli_metric
 )
 
 setup_wizard()
@@ -75,10 +75,10 @@ class QemyShell(cmd.Cmd):
     def do_plot(self, arg):
         cli_plot.PlotCmd(arg=arg).run()
 
-#================================== RATIOS ===================================#
+#================================== METRIC ===================================#
     
-    def do_ratio(self, arg):
-        cli_ratios.RatiosCmd(arg=arg).run()
+    def do_metric(self, arg):
+        cli_metric.RatiosCmd(arg=arg).run()
 
 #================================== HELPER ===================================#
 

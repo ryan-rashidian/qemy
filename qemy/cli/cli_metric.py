@@ -1,4 +1,4 @@
-from qemy.core.metric import ratios as rat
+from qemy.core.metric import value, risk
 from qemy.utils.parse_arg import parse_args_cli, check_help
 from qemy.cli.cli_helper import print_help_table
 
@@ -39,7 +39,7 @@ class RatiosCmd:
                 ("Usage:", "ratio pe -t <TICKER>\n"),
             ])
         else:
-            print(rat.ratio_pe(ticker=self.ticker))
+            print(value.ratio_pe(ticker=self.ticker))
     
     def _pb(self):
         if self.help:
@@ -48,7 +48,7 @@ class RatiosCmd:
                 ("Usage:", "ratio pb -t <TICKER>\n"),
             ])
         else:
-            print(rat.ratio_pb(ticker=self.ticker))
+            print(value.ratio_pb(ticker=self.ticker))
 
     def _sharpe(self):
         if self.help:
@@ -57,7 +57,7 @@ class RatiosCmd:
                 ("Usage:", "ratio sharpe -t <TICKER> -p <PERIOD>\n"),
             ])
         else:
-            print(rat.ratio_sharpe(ticker=self.ticker, period=self.period))
+            print(risk.ratio_sharpe(ticker=self.ticker, period=self.period))
         
 
     def run(self):
