@@ -43,5 +43,3 @@ def sortino(ticker):
 def calmar(ticker):
     return
 
-def cagr(ticker):
-    return
