@@ -9,11 +9,11 @@ class RatiosCmd:
 
         if check_help(
             arg_str=arg, 
-            help_func=lambda: print_help_table(" ratio commands ", [
+            help_func=lambda: print_help_table(" metric commands ", [
                 ("pe", "P/E Ratio"),
                 ("pb", "P/B Ratio"),
                 ("sharpe", "Sharpe Ratio"),
-                ("For More Info:", "ratio <COMMAND> -h\n"),
+                ("For More Info:", "metric <COMMAND> -h\n"),
             ])
         ):
             self.help_requested = True
