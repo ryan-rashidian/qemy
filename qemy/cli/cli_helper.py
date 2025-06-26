@@ -13,7 +13,7 @@ def help():
         ("econ",    "Enter: 'econ'    to list related commands"),
         ("market",  "Enter: 'market'  to list related commands"),
         ("plugins", "Enter: 'plugins' to list related commands"),
-        ("plots",   "Enter: 'plots'   to list related commands"),
+        ("plot",    "Enter: 'plot -h' to list related commands"),
     ])
     print_help_table(" Auxiliary Commands: ", [
         ("clear", "or 'cls' to clear screen."),
@@ -73,28 +73,6 @@ def plugins():
         ("mcarlo", "Monte Carlo simulation"),
         ("Usage:", "m <MODEL>"),
         ("Plugin Help:", "m <MODEL> -h"),
-    ])
-    print("\n")
-
-def plot():
-    print("\n qemy - Plotting Command Reference Table")
-    print_help_table(" Plot: ", [
-        ("'plot' Commands:", ""),
-        ("Commands:", ""),
-        ("gdp", ""),
-        ("indp", ""),
-        ("interest", ""),
-        ("jobc", ""),
-        ("lr", ""),
-        ("mcarlo", ""),
-        ("netex", ""),
-        ("nfp", ""),
-        ("price", ""),
-        ("sent", ""),
-        ("unem", ""),
-        ("Info:", "Plot data with matplotlib"),
-        ("Usage:", "plot <COMMAND>"),
-        ("Example:", "plot price -t aapl -p 2y"),
     ])
     print("\n")
 
