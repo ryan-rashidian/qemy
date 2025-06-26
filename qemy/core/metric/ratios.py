@@ -21,17 +21,17 @@ def ratio_pe(ticker):
             n_quarters = len(after_cumulative_df)
 
             if n_quarters == 0:
-                print("0")
+                #print("0")
                 ttm_eps = max_eps
 
             elif n_quarters == 1:
-                print("1")
+                #print("1")
                 q1 = after_cumulative_df.iloc[0]['val']
                 q1_last_year = eps_df.iloc[cumulative_pos - 3]['val'] if cumulative_pos - 3 >= 0 else 0
                 ttm_eps = max_eps + q1 - q1_last_year
 
             elif n_quarters == 2:
-                print("2")
+                #print("2")
                 q1 = after_cumulative_df.iloc[0]['val']
                 q2 = after_cumulative_df.iloc[1]['val']
                 q1_last_year = eps_df.iloc[cumulative_pos - 3]['val'] if cumulative_pos - 3 >= 0 else 0
@@ -39,7 +39,7 @@ def ratio_pe(ticker):
                 ttm_eps = max_eps + q1 + q2 - q1_last_year - q2_last_year
 
             elif n_quarters == 3:
-                print("3")
+                #print("3")
                 q1 = after_cumulative_df.iloc[0]['val']
                 q2 = after_cumulative_df.iloc[1]['val']
                 q3 = after_cumulative_df.iloc[2]['val']
@@ -49,7 +49,7 @@ def ratio_pe(ticker):
                 ttm_eps = max_eps + q1 + q2 + q3 - q1_last_year - q2_last_year - q3_last_year
 
         else:
-            print("else")
+            #print("else")
             ttm_eps = eps_1y_df.mean()
 
         if ttm_eps is None or ttm_eps == 0:

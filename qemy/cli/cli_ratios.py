@@ -66,9 +66,9 @@ class RatiosCmd:
 
         if self.metric == 'PE':
             self._pe()
-        if self.metric == 'PB':
+        elif self.metric == 'PB':
             self._pb()
-        if self.metric == 'SHARPE':
+        elif self.metric == 'SHARPE':
             self._sharpe()
         else:
             print("Ratio: Incorrect metric")
