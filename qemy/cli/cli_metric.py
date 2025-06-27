@@ -1,4 +1,4 @@
-from qemy.core.metric import value, risk
+from qemy.core.metric import value, risk, growth
 from qemy.utils.parse_arg import parse_args_cli, check_help
 from qemy.cli.cli_helper import print_help_table
 
@@ -13,6 +13,8 @@ class MetricCmd:
                 ("pe", "P/E Ratio"),
                 ("pb", "P/B Ratio"),
                 ("sharpe", "Sharpe Ratio"),
+                ("maxdd", "Max Drawdown"),
+                ("cagr", "Compounded Annual Growth Rate"),
                 ("For More Info:", "metric <COMMAND> -h\n"),
             ])
         ):
@@ -68,6 +70,15 @@ class MetricCmd:
         else:
             print(risk.max_dd(ticker=self.ticker, period=self.period))
 
+    def _cagr(self):
+        if self.help:
+            print_help_table(" cagr ", [
+                ("Info:", "Fetches Compounded Annual Growth Rate for given ticker"),
+                ("Usage:", "metric cagr -t <TICKER> -p <PERIOD>\n"),
+            ])
+        else:
+            print(growth.cagr(ticker=self.ticker, period=self.period))
+
     def run(self):
         if self.help_requested or self.failed:
             return
@@ -80,6 +91,8 @@ class MetricCmd:
             self._sharpe()
         elif self.metric == 'MAXDD':
             self._maxdd()
+        elif self.metric == 'CAGR':
+            self._cagr()
         else:
             print("metric: Incorrect metric")
 
