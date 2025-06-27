@@ -32,11 +32,12 @@ class LinearRPlugin(BasePlugin):
             model = LinearRegression()
             model.fit(X=x_spy, y=y_ticker)
             alpha = model.intercept_
+            alpha_annual = alpha * 252
             beta = model.coef_[0]
 
             return {
                 "text": {
-                    "Alpha": f"{alpha:.4f}",
+                    "Alpha": f"{alpha:.2%} daily | {alpha_annual:.2%} annualized",
                     "Beta": f"{beta:.4f}",
                 },
                 "plot": {
