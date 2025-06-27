@@ -36,7 +36,7 @@ class RatiosCmd:
         if self.help:
             print_help_table(" pe ", [
                 ("Info:", "Fetches P/E ratio for given ticker"),
-                ("Usage:", "ratio pe -t <TICKER>\n"),
+                ("Usage:", "metric pe -t <TICKER>\n"),
             ])
         else:
             print(value.ratio_pe(ticker=self.ticker))
@@ -45,7 +45,7 @@ class RatiosCmd:
         if self.help:
             print_help_table(" pb ", [
                 ("Info:", "Fetches P/B ratio for given ticker"),
-                ("Usage:", "ratio pb -t <TICKER>\n"),
+                ("Usage:", "metric pb -t <TICKER>\n"),
             ])
         else:
             print(value.ratio_pb(ticker=self.ticker))
@@ -54,11 +54,19 @@ class RatiosCmd:
         if self.help:
             print_help_table(" sharpe ", [
                 ("Info:", "Fetches Sharpe ratio for given ticker"),
-                ("Usage:", "ratio sharpe -t <TICKER> -p <PERIOD>\n"),
+                ("Usage:", "metric sharpe -t <TICKER> -p <PERIOD>\n"),
             ])
         else:
             print(risk.ratio_sharpe(ticker=self.ticker, period=self.period))
-        
+
+    def _maxdd(self):
+        if self.help:
+            print_help_table(" maxdd ", [
+                ("Info:", "Fetches Max Drawdown for given ticker"),
+                ("Usage:", "metric maxdd -t <TICKER> -p <PERIOD>\n"),
+            ])
+        else:
+            print(risk.max_dd(ticker=self.ticker, period=self.period))
 
     def run(self):
         if self.help_requested or self.failed:
@@ -70,6 +78,8 @@ class RatiosCmd:
             self._pb()
         elif self.metric == 'SHARPE':
             self._sharpe()
+        elif self.metric == 'MAXDD':
+            self._maxdd()
         else:
-            print("Ratio: Incorrect metric")
+            print("metric: Incorrect metric")
 
