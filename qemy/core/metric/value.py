@@ -61,15 +61,18 @@ def ratio_pe(ticker):
 
     try: 
         price_df = pd.DataFrame(price_data)
-        price = price_df.iloc[-1]['adjClose']
     except:
-        return "N/A 3"
+        return f"No price data found for: {ticker}"
+
+    price = price_df.iloc[-1]['adjClose']
 
     if price and ttm_eps:
         pe_ratio = round(price / ttm_eps, 2)
+
         if pe_ratio >= 200:
             ttm_eps = eps_1y_df.sum()
             pe_ratio = round(price / ttm_eps, 2)
+
         return (
             f"{ticker}\n"
             f"Price: {price:.2f}\n"
@@ -88,12 +91,13 @@ def ratio_pb(ticker):
 
     try: 
         price_data = StockMarket().get_prices(ticker=ticker)
-        price_df = pd.DataFrame(price_data)
-        price_per_share = price_df.iloc[-1]['adjClose']
     except:
         return f"No price data found for: {ticker}"
 
+    price_df = pd.DataFrame(price_data)
+    price_per_share = price_df.iloc[-1]['adjClose']
     pb_ratio = round(price_per_share / bvps, 2)
+
     return (
         f"{ticker}\n"
         f"Price: {price_per_share}\n"

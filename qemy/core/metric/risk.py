@@ -7,9 +7,6 @@ def ratio_sharpe(ticker, period='1Y'):
 
     try:
         price_df = pd.DataFrame(price_data)
-        pct_df = price_df['adjClose'].pct_change().dropna()
-        year_mean = pct_df.mean() * 252
-        year_std = pct_df.std() * (252 ** 0.5)
     except:
         return f"No price data found for: {ticker}"
 
@@ -19,7 +16,12 @@ def ratio_sharpe(ticker, period='1Y'):
     else:
         return f"No Observations found for T-Bill yield"
 
+    pct_df = price_df['adjClose'].pct_change().dropna()
+    year_mean = pct_df.mean() * 252
+    year_std = pct_df.std() * (252 ** 0.5)
+
     sharpe_ratio = (year_mean - rfr) / year_std
+
     return (
         f"{ticker}\n"
         f"RFR: {rfr:.3f}\n"
@@ -33,12 +35,12 @@ def max_dd(ticker, period='1Y'):
 
     try:
         price_df = pd.DataFrame(price_data)
-        running_max = price_df['adjClose'].cummax()
-        drawdowns = (price_df['adjClose'] - running_max) / running_max
-        max_drawdown = drawdowns.min()
-
     except:
         return f"No price data found for: {ticker}"
+
+    running_max = price_df['adjClose'].cummax()
+    drawdowns = (price_df['adjClose'] - running_max) / running_max
+    max_drawdown = drawdowns.min()
 
     return (
         f"{ticker}\n"
