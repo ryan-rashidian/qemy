@@ -47,8 +47,21 @@ def max_dd(ticker, period='1Y'):
         f"Max Drawdown: {max_drawdown:.2%}"
     )
 
-def volatility(ticker):
-    return
+def volatility(ticker, period='1Y'):
+    price_data = StockMarket().get_prices(ticker=ticker, period=period)
+
+    try:
+        price_df = pd.DataFrame(price_data)
+    except:
+        return f"No price data found for: {ticker}"
+
+    pct_df = price_df['adjClose'].pct_change().dropna()
+    annual_std = pct_df.std() * (252 ** 0.5)
+
+    return (
+        f"{ticker}\n"
+        f"Annualized Volatility: {annual_std:.2%}"
+    )
 
 def beta(ticker):
     return
