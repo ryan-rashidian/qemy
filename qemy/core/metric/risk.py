@@ -22,14 +22,28 @@ def ratio_sharpe(ticker, period='1Y'):
     sharpe_ratio = (year_mean - rfr) / year_std
     return (
         f"{ticker}\n"
-            f"RFR: {rfr:.3f}\n"
-            f"1-Year Mean: {year_mean:.3f}\n"
-            f"1-Year STD: {year_std:.3f}\n"
-            f"Sharpe Ratio: {sharpe_ratio:.2f}"
+        f"RFR: {rfr:.3f}\n"
+        f"1-Year Mean: {year_mean:.3f}\n"
+        f"1-Year STD: {year_std:.3f}\n"
+        f"Sharpe Ratio: {sharpe_ratio:.2f}"
     )
 
-def max_dd(ticker):
-    return
+def max_dd(ticker, period='1Y'):
+    price_data = StockMarket().get_prices(ticker=ticker, period=period)
+
+    try:
+        price_df = pd.DataFrame(price_data)
+        running_max = price_df['adjClose'].cummax()
+        drawdowns = (price_df['adjClose'] - running_max) / running_max
+        max_drawdown = drawdowns.min()
+
+    except:
+        return f"No price data found for: {ticker}"
+
+    return (
+        f"{ticker}\n"
+        f"Max Drawdown: {max_drawdown:.2%}"
+    )
 
 def volatility(ticker):
     return
