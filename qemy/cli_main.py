@@ -78,7 +78,7 @@ class QemyShell(cmd.Cmd):
 #================================== METRIC ===================================#
     
     def do_metric(self, arg):
-        cli_metric.RatiosCmd(arg=arg).run()
+        cli_metric.MetricCmd(arg=arg).run()
 
 #================================== HELPER ===================================#
 

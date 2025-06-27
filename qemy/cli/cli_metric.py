@@ -2,7 +2,7 @@ from qemy.core.metric import value, risk
 from qemy.utils.parse_arg import parse_args_cli, check_help
 from qemy.cli.cli_helper import print_help_table
 
-class RatiosCmd:
+class MetricCmd:
     def __init__(self, arg):
         self.help_requested = False
         self.failed = False
