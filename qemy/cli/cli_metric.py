@@ -70,6 +70,16 @@ class MetricCmd:
         else:
             print(risk.max_dd(ticker=self.ticker, period=self.period))
 
+    def _volatility(self):
+        if self.help:
+            print_help_table(" vol ", [
+                ("Info:", "Fetches Annualized Volatility for given ticker"),
+                ("Usage:", "metric vol -t <TICKER> -p <PERIOD>\n"),
+            ])
+        else:
+            print(risk.volatility(ticker=self.ticker, period=self.period))
+
+
     def _cagr(self):
         if self.help:
             print_help_table(" cagr ", [
@@ -91,6 +101,8 @@ class MetricCmd:
             self._sharpe()
         elif self.metric == 'MAXDD':
             self._maxdd()
+        elif self.metric == 'VOL':
+            self._volatility()
         elif self.metric == 'CAGR':
             self._cagr()
         else:
