@@ -7,7 +7,7 @@ def ratio_sharpe(ticker, period='1Y'):
 
     try:
         price_df = pd.DataFrame(price_data)
-        pct_df = price_df['close'].pct_change().dropna()
+        pct_df = price_df['adjClose'].pct_change().dropna()
         year_mean = pct_df.mean() * 252
         year_std = pct_df.std() * (252 ** 0.5)
     except:

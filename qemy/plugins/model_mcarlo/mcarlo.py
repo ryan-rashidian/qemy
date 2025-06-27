@@ -16,13 +16,13 @@ class MCarloPlugin(BasePlugin):
             ticker_df = pd.DataFrame(ticker_data)
 
             if isinstance(ticker_df, pd.DataFrame):
-                close_prices = np.array(ticker_df['close'])
+                close_prices = np.array(ticker_df['adjClose'])
                 past_returns = (close_prices[1:] / close_prices[:-1]) - 1
                 past_mean = np.mean(past_returns)
                 past_std = np.std(past_returns)
 
                 if num_days is None:
-                    num_days = len(ticker_df['close'])
+                    num_days = len(ticker_df['adjClose'])
                 start_price = close_prices[-1]
                 simulations = np.zeros((self.num, num_days))
 

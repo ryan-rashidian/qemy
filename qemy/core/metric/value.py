@@ -61,7 +61,7 @@ def ratio_pe(ticker):
 
     try: 
         price_df = pd.DataFrame(price_data)
-        price = price_df.iloc[-1]['close']
+        price = price_df.iloc[-1]['adjClose']
     except:
         return "N/A 3"
 
@@ -89,7 +89,7 @@ def ratio_pb(ticker):
     try: 
         price_data = StockMarket().get_prices(ticker=ticker)
         price_df = pd.DataFrame(price_data)
-        price_per_share = price_df.iloc[-1]['close']
+        price_per_share = price_df.iloc[-1]['adjClose']
     except:
         return f"No price data found for: {ticker}"
 

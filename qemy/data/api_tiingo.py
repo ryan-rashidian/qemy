@@ -9,7 +9,7 @@ class StockMarket:
             'Authorization': f"Token {self.API_KEY}"
         }
 
-    def get_prices(self, ticker, period='1W', resample='daily', columns='close'):
+    def get_prices(self, ticker, period='1W', resample='daily', columns='adjClose'):
         start_date, end_date = parse_period(period)
         url = f"{cfg.TIINGO_URL}{ticker}/prices"
         params = {

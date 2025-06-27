@@ -21,8 +21,8 @@ class LinearRPlugin(BasePlugin):
             spy_df.set_index('date', inplace=True)
             spy_df.index = pd.to_datetime(spy_df.index)
             combined_df = pd.DataFrame({
-                self.ticker: ticker_df['close'], 
-                'SPY': spy_df['close']
+                self.ticker: ticker_df['adjClose'], 
+                'SPY': spy_df['adjClose']
             }).dropna()
             returns_df = combined_df.pct_change().dropna()
 
