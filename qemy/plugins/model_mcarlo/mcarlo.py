@@ -12,10 +12,9 @@ class MCarloPlugin(BasePlugin):
     def run(self):
         try:
             num_days = None
-            ticker_data = StockMarket().get_prices(ticker=self.ticker, period=self.period)
-            ticker_df = pd.DataFrame(ticker_data)
+            ticker_df = StockMarket().get_prices(ticker=self.ticker, period=self.period)
 
-            if isinstance(ticker_df, pd.DataFrame):
+            if not ticker_df.empty:
                 close_prices = np.array(ticker_df['adjClose'])
                 past_returns = (close_prices[1:] / close_prices[:-1]) - 1
                 past_mean = np.mean(past_returns)

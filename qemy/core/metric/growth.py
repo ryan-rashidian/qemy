@@ -3,16 +3,10 @@ from qemy.data.api_tiingo import StockMarket
 from qemy.data.api_edgar import SEC_Filings
 
 def cagr(ticker, period='1Y'):
-    price_data = StockMarket().get_prices(ticker=ticker, period=period)
-
-    try:
-        price_df = pd.DataFrame(price_data)
-    except:
-        print(f"No price data found for: {ticker}")
+    price_df = StockMarket().get_prices(ticker=ticker, period=period)
+    if price_df.empty:
         return {}
 
-    price_df['date'] = pd.to_datetime(price_df['date'])
-    price_df.set_index('date', inplace=True)
     n_years = (price_df.index[-1] - price_df.index[0]).days / 365
 
     start_price = price_df['adjClose'].iloc[0]

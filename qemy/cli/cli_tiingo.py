@@ -1,4 +1,3 @@
-import pandas as pd
 from qemy.data.api_tiingo import StockMarket
 from qemy.utils.parse_arg import parse_args_cli, check_help
 from qemy.cli.cli_helper import print_help_table
@@ -64,16 +63,13 @@ def price(arg):
 
     if isinstance(period, str) and isinstance(ticker, str):
         print(f"Fetching price info for: {ticker}...")
-        data = StockMarket().get_prices(ticker=ticker, period=period)
-        if data is None:
-            print('Could not fetch data, please try another ticker or period.')
-            return
-        try:
-            df = pd.DataFrame(data)
-            df['date'] = pd.to_datetime(df['date'])
-            print(df)
-        except Exception as e:
-            print(f"Error:\n{e}")
+
+        price_df = StockMarket().get_prices(ticker=ticker, period=period)
+        formatted_df = price_df.reset_index()
+        formatted_df['date'] = formatted_df['date'].dt.strftime('%Y-%m-%d')
+
+        print(formatted_df)
+        
     else:
         print('For valid syntax, Try: price AAPL -p 3M')
 

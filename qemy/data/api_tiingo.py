@@ -1,15 +1,23 @@
+import pandas as pd
 from qemy import _config as cfg
 from qemy.utils.utils_fetch import parse_period, safe_status_get
 
 class StockMarket:
     def __init__(self):
-        self.API_KEY = cfg.TIINGO_API_KEY
-        self.HEADERS = {
+        self.API_KEY: str = cfg.TIINGO_API_KEY
+        self.HEADERS: dict[str, str] = {
             'Content-Type': 'application/json',
             'Authorization': f"Token {self.API_KEY}"
         }
 
-    def get_prices(self, ticker, period='1W', resample='daily', columns='adjClose'):
+    def get_prices(
+        self, 
+        ticker: str, 
+        period: str = '1W', 
+        resample = 'daily',             
+        columns: str | list[str] = 'adjClose'
+    ) -> pd.DataFrame:
+
         start_date, end_date = parse_period(period)
         url = f"{cfg.TIINGO_URL}{ticker}/prices"
         params = {
@@ -18,9 +26,20 @@ class StockMarket:
             'resampleFreq': resample,
             'columns': columns
         }
-        return safe_status_get(url=url, headers=self.HEADERS, params=params)
 
-    def get_quote(self, tickers):
+        price_data = safe_status_get(url=url, headers=self.HEADERS, params=params)
+
+        if not price_data:
+            return pd.DataFrame()
+
+        price_df = pd.DataFrame(price_data)
+        price_df['date'] = pd.to_datetime(price_df['date'])
+        price_df.set_index('date', inplace=True)
+        price_df.index = pd.DatetimeIndex(price_df.index)
+
+        return price_df if not price_df.empty else pd.DataFrame() 
+
+    def get_quote(self, tickers: str | list[str]) -> dict[str, dict]:
         if isinstance(tickers, str):
             tickers = [tickers]
         url = f"{cfg.TIINGO_IEX_URL}{','.join(tickers)}"

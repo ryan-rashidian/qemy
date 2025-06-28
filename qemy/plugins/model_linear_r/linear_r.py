@@ -12,18 +12,14 @@ class LinearRPlugin(BasePlugin):
 
     def run(self):
         try:
-            ticker_data = StockMarket().get_prices(ticker=self.ticker, period=self.period)
-            spy_data = StockMarket().get_prices(ticker='SPY', period=self.period)
+            ticker_df = StockMarket().get_prices(ticker=self.ticker, period=self.period)
+            spy_df = StockMarket().get_prices(ticker='SPY', period=self.period)
 
-            ticker_df, spy_df = pd.DataFrame(ticker_data), pd.DataFrame(spy_data)
-            ticker_df.set_index('date', inplace=True)
-            ticker_df.index = pd.to_datetime(ticker_df.index)
-            spy_df.set_index('date', inplace=True)
-            spy_df.index = pd.to_datetime(spy_df.index)
             combined_df = pd.DataFrame({
                 self.ticker: ticker_df['adjClose'], 
                 'SPY': spy_df['adjClose']
             }).dropna()
+
             returns_df = combined_df.pct_change().dropna()
 
             x_spy = np.array(returns_df['SPY']).reshape(-1, 1) 
@@ -31,6 +27,7 @@ class LinearRPlugin(BasePlugin):
 
             model = LinearRegression()
             model.fit(X=x_spy, y=y_ticker)
+
             alpha = model.intercept_
             alpha_annual = alpha * 252
             beta = model.coef_[0]

@@ -1,14 +1,9 @@
-import pandas as pd
 from qemy.data.api_tiingo import StockMarket
 from qemy.data.api_fred import FREDData
 
 def ratio_sharpe(ticker, period='1Y'):
-    price_data = StockMarket().get_prices(ticker=ticker, period=period)
-
-    try:
-        price_df = pd.DataFrame(price_data)
-    except:
-        print(f"No price data found for: {ticker}")
+    price_df = StockMarket().get_prices(ticker=ticker, period=period)
+    if price_df.empty:
         return {}
 
     rfr_df = FREDData().get_tbill_yield()
@@ -33,12 +28,8 @@ def ratio_sharpe(ticker, period='1Y'):
     }
 
 def max_dd(ticker, period='1Y'):
-    price_data = StockMarket().get_prices(ticker=ticker, period=period)
-
-    try:
-        price_df = pd.DataFrame(price_data)
-    except:
-        print(f"No price data found for: {ticker}")
+    price_df = StockMarket().get_prices(ticker=ticker, period=period)
+    if price_df.empty:
         return {}
 
     running_max = price_df['adjClose'].cummax()
@@ -51,12 +42,8 @@ def max_dd(ticker, period='1Y'):
     }
 
 def volatility(ticker, period='1Y'):
-    price_data = StockMarket().get_prices(ticker=ticker, period=period)
-
-    try:
-        price_df = pd.DataFrame(price_data)
-    except:
-        print(f"No price data found for: {ticker}")
+    price_df = StockMarket().get_prices(ticker=ticker, period=period)
+    if price_df.empty:
         return {}
 
     pct_df = price_df['adjClose'].pct_change().dropna()

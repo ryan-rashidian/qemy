@@ -59,12 +59,8 @@ def ratio_pe(ticker):
         print("No filing data")
         return {}
 
-    price_data = StockMarket().get_prices(ticker=ticker)
-
-    try: 
-        price_df = pd.DataFrame(price_data)
-    except:
-        print(f"No price data found for {ticker}")
+    price_df = StockMarket().get_prices(ticker=ticker)
+    if price_df.empty:
         return {}
 
     price = price_df.iloc[-1]['adjClose']
@@ -92,13 +88,10 @@ def ratio_pb(ticker):
 
     bvps = round(book_value / shares_outstanding, 2)
 
-    try: 
-        price_data = StockMarket().get_prices(ticker=ticker)
-    except:
-        print(f"No price data found for {ticker}")
+    price_df = StockMarket().get_prices(ticker=ticker)
+    if price_df.empty:
         return {}
 
-    price_df = pd.DataFrame(price_data)
     price_per_share = price_df.iloc[-1]['adjClose']
     pb_ratio = round(price_per_share / bvps, 2)
 
