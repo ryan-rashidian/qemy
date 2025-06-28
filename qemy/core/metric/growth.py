@@ -1,4 +1,3 @@
-import pandas as pd
 from qemy.data.api_tiingo import StockMarket
 from qemy.data.api_edgar import SEC_Filings
 
