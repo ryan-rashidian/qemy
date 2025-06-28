@@ -30,7 +30,7 @@ def get_metric_df(facts, keylist, quarters=40):
                         data.append(entry)
                 df = pd.DataFrame(data)
                 df = df.dropna(subset=['filed'])
-                df = df.sort_values('filed').drop_duplicates('filed', keep='first')
+                df = df.sort_values('filed').drop_duplicates('filed', keep='last')
                 return df.reset_index(drop=True)
         except Exception:
             continue
