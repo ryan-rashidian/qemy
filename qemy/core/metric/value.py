@@ -52,17 +52,20 @@ def ratio_pe(ticker):
             ttm_eps = eps_1y_df.mean()
 
         if ttm_eps is None or ttm_eps == 0:
-            return "N/A 1"
+            print("eps not found")
+            return {}
 
     else:
-        return "N/A 2"
+        print("No filing data")
+        return {}
 
     price_data = StockMarket().get_prices(ticker=ticker)
 
     try: 
         price_df = pd.DataFrame(price_data)
     except:
-        return f"No price data found for: {ticker}"
+        print(f"No price data found for {ticker}")
+        return {}
 
     price = price_df.iloc[-1]['adjClose']
 
@@ -73,12 +76,12 @@ def ratio_pe(ticker):
             ttm_eps = eps_1y_df.sum()
             pe_ratio = round(price / ttm_eps, 2)
 
-        return (
-            f"{ticker}\n"
-            f"Price: {price:.2f}\n"
-            f"TTM EPS: {ttm_eps:.2f}\n"
-            f"P/E Ratio: {pe_ratio}"
-        )
+        return {
+            'ticker': ticker,
+            'price': price,
+            'ttm_eps': ttm_eps,
+            'pe': pe_ratio
+        }
 
 def ratio_pb(ticker):
     equity_df = SEC_Filings(ticker=ticker).get_metric_history(key='equity')
@@ -92,18 +95,19 @@ def ratio_pb(ticker):
     try: 
         price_data = StockMarket().get_prices(ticker=ticker)
     except:
-        return f"No price data found for: {ticker}"
+        print(f"No price data found for {ticker}")
+        return {}
 
     price_df = pd.DataFrame(price_data)
     price_per_share = price_df.iloc[-1]['adjClose']
     pb_ratio = round(price_per_share / bvps, 2)
 
-    return (
-        f"{ticker}\n"
-        f"Price: {price_per_share}\n"
-        f"BVPS: {bvps}\n"
-        f"P/B Ratio: {pb_ratio}"
-    )
+    return {
+        'ticker': ticker,
+        'price': price_per_share,
+        'bvps': bvps,
+        'pb': pb_ratio 
+    }
 
 def ratio_roe():
     return

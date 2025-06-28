@@ -8,7 +8,8 @@ def cagr(ticker, period='1Y'):
     try:
         price_df = pd.DataFrame(price_data)
     except:
-        return f"No price data found for: {ticker}"
+        print(f"No price data found for: {ticker}")
+        return {}
 
     price_df['date'] = pd.to_datetime(price_df['date'])
     price_df.set_index('date', inplace=True)
@@ -19,11 +20,11 @@ def cagr(ticker, period='1Y'):
 
     cagr = (end_price / start_price) ** (1 / n_years) - 1  
 
-    return (
-        f"{ticker}\n"
-        f"Years: {n_years:.2f}\n"
-        f"CAGR: {cagr:.2%}"
-    )
+    return {
+        'ticker': ticker,
+        'years': n_years,
+        'cagr': cagr
+    }
 
 def growth_rate(ticker, metric):
     metric_data = SEC_Filings(ticker=ticker).get_metric_history(key=metric.lower())
@@ -32,10 +33,10 @@ def growth_rate(ticker, metric):
 
     annual_metric_growth = (1 + metric_growth).prod() - 1
     
-    return (
-        f"{ticker}\n"
-        f"1 Year {metric.upper()} Growth: {annual_metric_growth:.2%}"
-    )
+    return {
+        'ticker': ticker,
+        'growth': annual_metric_growth
+    }
 
 def eps_growth(ticker):
     return

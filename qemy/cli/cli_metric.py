@@ -44,8 +44,13 @@ class MetricCmd:
                 ("Info:", "Fetches P/E ratio for given ticker"),
                 ("Usage:", "metric pe -t <TICKER>\n"),
             ])
+
         else:
-            print(value.ratio_pe(ticker=self.ticker))
+            results_dict = value.ratio_pe(ticker=self.ticker)
+            print(f"Ticker: {self.ticker}")
+            print(f"Price: {results_dict['price']:.2f}")
+            print(f"TTM EPS: {results_dict['ttm_eps']:.2f}")
+            print(f"P/E Ratio: {results_dict['pe']}")
     
     def _pb(self):
         if self.help:
@@ -53,8 +58,13 @@ class MetricCmd:
                 ("Info:", "Fetches P/B ratio for given ticker"),
                 ("Usage:", "metric pb -t <TICKER>\n"),
             ])
+
         else:
-            print(value.ratio_pb(ticker=self.ticker))
+            results_dict = value.ratio_pb(ticker=self.ticker)
+            print(f"Ticker: {self.ticker}")
+            print(f"Price: {results_dict['price']}")
+            print(f"BVPS: {results_dict['bvps']}")
+            print(f"P/B Ratio: {results_dict['pb']}")
 
     def _sharpe(self):
         if self.help:
@@ -62,8 +72,14 @@ class MetricCmd:
                 ("Info:", "Fetches Sharpe ratio for given ticker"),
                 ("Usage:", "metric sharpe -t <TICKER> -p <PERIOD>\n"),
             ])
+
         else:
-            print(risk.ratio_sharpe(ticker=self.ticker, period=self.period))
+            results_dict = risk.ratio_sharpe(ticker=self.ticker, period=self.period)
+            print(f"Ticker: {self.ticker}")
+            print(f"RFR: {results_dict['rfr']:.3f}")
+            print(f"1 Year Mean: {results_dict['mean']:.3f}")
+            print(f"1 Year STD: {results_dict['std']:.3f}")
+            print(f"Sharpe Ratio: {results_dict['sharpe']:.2f}")
 
     def _maxdd(self):
         if self.help:
@@ -71,8 +87,11 @@ class MetricCmd:
                 ("Info:", "Fetches Max Drawdown for given ticker"),
                 ("Usage:", "metric maxdd -t <TICKER> -p <PERIOD>\n"),
             ])
+
         else:
-            print(risk.max_dd(ticker=self.ticker, period=self.period))
+            results_dict = risk.max_dd(ticker=self.ticker, period=self.period)
+            print(f"Ticker: {self.ticker}")
+            print(f"Max Drawdown: {results_dict['maxdd']:.2%}")
 
     def _volatility(self):
         if self.help:
@@ -80,8 +99,11 @@ class MetricCmd:
                 ("Info:", "Fetches Annualized Volatility for given ticker"),
                 ("Usage:", "metric vol -t <TICKER> -p <PERIOD>\n"),
             ])
+
         else:
-            print(risk.volatility(ticker=self.ticker, period=self.period))
+            results_dict = risk.volatility(ticker=self.ticker, period=self.period)
+            print(f"Ticker: {self.ticker}")
+            print(f"Volatility: {results_dict['vol']:.2%} Annualized")
 
 
     def _cagr(self):
@@ -90,8 +112,11 @@ class MetricCmd:
                 ("Info:", "Fetches Compounded Annual Growth Rate for given ticker"),
                 ("Usage:", "metric cagr -t <TICKER> -p <PERIOD>\n"),
             ])
+
         else:
-            print(growth.cagr(ticker=self.ticker, period=self.period))
+            results_dict = growth.cagr(ticker=self.ticker, period=self.period)
+            print(f"Ticker: {self.ticker}")
+            print(f"CAGR: {results_dict['cagr']:.2%} Annualized")
 
     def _growth(self):
         if self.help:
@@ -99,8 +124,12 @@ class MetricCmd:
                 ("Info:", f"Fetches 1 Year {self.metric.upper()} growth rate for given ticker"),
                 ("Usage:", f"metric {self.metric.upper()} -t <TICKER>\n"),
             ])
+
         else:
-            print(growth.growth_rate(ticker=self.ticker, metric=self.metric))
+            results_dict = growth.growth_rate(ticker=self.ticker, metric=self.metric)
+
+            print(f"Ticker: {self.ticker}")
+            print(f"{self.metric} Growth: {results_dict['growth']:.2%} Annualized")
 
     def run(self):
         if self.help_requested or self.failed:
@@ -124,6 +153,7 @@ class MetricCmd:
                 'EQUITY', 'OPEX', 'CAPEX', 'OCF', 'FCF', 'EPS',
             ):
             self._growth()
+
         else:
             print("metric: Incorrect metric")
 
