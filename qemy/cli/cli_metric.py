@@ -9,12 +9,16 @@ class MetricCmd:
 
         if check_help(
             arg_str=arg, 
-            help_func=lambda: print_help_table(" metric commands ", [
+            help_func=lambda: print_help_table(" metric Commands ", [
                 ("pe", "P/E Ratio"),
                 ("pb", "P/B Ratio"),
                 ("sharpe", "Sharpe Ratio"),
                 ("maxdd", "Max Drawdown"),
-                ("cagr", "Compounded Annual Growth Rate"),
+                ("vol", "Volatility"),
+                ("cagr", "Compounded Annual Growth Rate\n"),
+                ("PCH Commands:", "shares, cash, debt, netdebt, rev, cogs"),
+                ("", "gprofit, ebit, netinc, assets, liab"),
+                ("", "equity, opex, capex, ocf, fcf, eps\n"),
                 ("For More Info:", "metric <COMMAND> -h\n"),
             ])
         ):
@@ -89,6 +93,15 @@ class MetricCmd:
         else:
             print(growth.cagr(ticker=self.ticker, period=self.period))
 
+    def _growth(self):
+        if self.help:
+            print_help_table(f" {self.metric} ", [
+                ("Info:", f"Fetches 1 Year {self.metric.upper()} growth rate for given ticker"),
+                ("Usage:", f"metric {self.metric.upper()} -t <TICKER>\n"),
+            ])
+        else:
+            print(growth.growth_rate(ticker=self.ticker, metric=self.metric))
+
     def run(self):
         if self.help_requested or self.failed:
             return
@@ -105,6 +118,12 @@ class MetricCmd:
             self._volatility()
         elif self.metric == 'CAGR':
             self._cagr()
+        elif self.metric in (
+                'SHARES', 'CASH', 'DEBT', 'NETDEBT', 'REV', 'COGS', 
+                'GPROFIT', 'EBIT', 'NETINC', 'ASSETS', 'LIAB', 
+                'EQUITY', 'OPEX', 'CAPEX', 'OCF', 'FCF', 'EPS',
+            ):
+            self._growth()
         else:
             print("metric: Incorrect metric")
 
