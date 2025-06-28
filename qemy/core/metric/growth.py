@@ -25,11 +25,17 @@ def cagr(ticker, period='1Y'):
         f"CAGR: {cagr:.2%}"
     )
 
-def fcf_growth(ticker):
-    return
+def growth_rate(ticker, metric):
+    metric_data = SEC_Filings(ticker=ticker).get_metric_history(key=metric.lower())
+    metric_vals = metric_data['val'].iloc[-5:]
+    metric_growth = metric_vals.pct_change().dropna()
 
-def rev_growth(ticker):
-    return
+    annual_metric_growth = (1 + metric_growth).prod() - 1
+    
+    return (
+        f"{ticker}\n"
+        f"1 Year {metric.upper()} Growth: {annual_metric_growth:.2%}"
+    )
 
 def eps_growth(ticker):
     return
