@@ -1,8 +1,8 @@
-from qemy.data.api_tiingo import StockMarket
+from qemy.data.api_tiingo import TiingoClient
 from qemy.data.api_edgar import SEC_Filings
 
 def cagr(ticker, period='1Y'):
-    price_df = StockMarket().get_prices(ticker=ticker, period=period)
+    price_df = TiingoClient().get_prices(ticker=ticker, period=period)
     if price_df.empty:
         return {}
 

@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from qemy.utils.file_tools import save_to_png
-from qemy.data.api_tiingo import StockMarket
+from qemy.data.api_tiingo import TiingoClient
 
 def plot_models(title='title', save=False, plot_func=None):
     plt.figure(figsize=(14, 8))
@@ -18,7 +18,7 @@ def plot_models(title='title', save=False, plot_func=None):
     plt.show()
 
 def plot_price(ticker, period):
-    stock_df = StockMarket().get_prices(ticker=ticker, period=period)
+    stock_df = TiingoClient().get_prices(ticker=ticker, period=period)
 
     plt.figure(figsize=(14, 8))
     plt.plot(stock_df.index, stock_df['adjClose'], label='Price', color='green', linewidth=3, marker= 'o', alpha=0.8)

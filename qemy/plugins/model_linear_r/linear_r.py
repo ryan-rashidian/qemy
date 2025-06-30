@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-from qemy.data.api_tiingo import StockMarket
+from qemy.data.api_tiingo import TiingoClient
 from qemy.core.plugin_base import BasePlugin
 
 class LinearRPlugin(BasePlugin):
@@ -12,8 +12,8 @@ class LinearRPlugin(BasePlugin):
 
     def run(self):
         try:
-            ticker_df = StockMarket().get_prices(ticker=self.ticker, period=self.period)
-            spy_df = StockMarket().get_prices(ticker='SPY', period=self.period)
+            ticker_df = TiingoClient().get_prices(ticker=self.ticker, period=self.period)
+            spy_df = TiingoClient().get_prices(ticker='SPY', period=self.period)
 
             combined_df = pd.DataFrame({
                 self.ticker: ticker_df['adjClose'], 

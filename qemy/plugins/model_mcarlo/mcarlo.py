@@ -1,7 +1,6 @@
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-from qemy.data.api_tiingo import StockMarket
+from qemy.data.api_tiingo import TiingoClient
 from qemy.core.plugin_base import BasePlugin
 
 class MCarloPlugin(BasePlugin):
@@ -12,7 +11,7 @@ class MCarloPlugin(BasePlugin):
     def run(self):
         try:
             num_days = None
-            ticker_df = StockMarket().get_prices(ticker=self.ticker, period=self.period)
+            ticker_df = TiingoClient().get_prices(ticker=self.ticker, period=self.period)
 
             if not ticker_df.empty:
                 close_prices = np.array(ticker_df['adjClose'])

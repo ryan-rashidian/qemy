@@ -1,3 +1,5 @@
+"""Edgar API module."""
+
 import time
 import json
 from math import nan
@@ -9,6 +11,8 @@ from qemy.utils.utils_fetch import safe_status_get
 from qemy.utils.parse_filing import get_metric_df
 
 class SEC_Filings:
+    """Fetch parsed SEC filing data."""
+
     def __init__(self, ticker, use_requests=False):
         self.HEADERS = {'User-Agent': cfg.EDGAR_USER_AGENT} 
         self.ticker = ticker.upper().strip()

@@ -1,5 +1,5 @@
 import pandas as pd
-from qemy.data.api_tiingo import StockMarket
+from qemy.data.api_tiingo import TiingoClient
 from qemy.data.api_edgar import SEC_Filings
 
 def ratio_pe(ticker):
@@ -59,7 +59,7 @@ def ratio_pe(ticker):
         print("No filing data")
         return {}
 
-    price_df = StockMarket().get_prices(ticker=ticker)
+    price_df = TiingoClient().get_prices(ticker=ticker)
     if price_df.empty:
         return {}
 
@@ -88,7 +88,7 @@ def ratio_pb(ticker):
 
     bvps = round(book_value / shares_outstanding, 2)
 
-    price_df = StockMarket().get_prices(ticker=ticker)
+    price_df = TiingoClient().get_prices(ticker=ticker)
     if price_df.empty:
         return {}
 

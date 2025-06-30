@@ -1,5 +1,4 @@
-"""
-Tiingo API wrapper.
+"""Tiingo API client.
 
 This module requests and fetches data from Tiingo API servers.
 """
@@ -8,15 +7,11 @@ import pandas as pd
 from qemy import _config as cfg
 from qemy.utils.utils_fetch import parse_period, safe_status_get
 
-class StockMarket:
-    """
-    Interface for fetching stock market data from Tiingo API.
-    """
+class TiingoClient:
+    """Interface for fetching stock market data from Tiingo API."""
 
     def __init__(self):
-        """
-        Initialize StockMarket with user-agent and request headers.
-        """
+        """Initialize TiingoClient with user-agent and request headers."""
         self.API_KEY: str = cfg.TIINGO_API_KEY
         self.HEADERS: dict[str, str] = {
             'Content-Type': 'application/json',
@@ -30,8 +25,7 @@ class StockMarket:
         resample = 'daily',             
         columns: str | list[str] = 'adjClose'
     ) -> pd.DataFrame:
-        """
-        Fetch historical price data for a given ticker.
+        """Fetch historical price data for a given ticker.
 
         Args:
             ticker (str): Company ticker
@@ -70,8 +64,7 @@ class StockMarket:
         return price_df if not price_df.empty else pd.DataFrame() 
 
     def get_quote(self, tickers: str | list[str]) -> dict[str, dict]:
-        """
-        Fetch latest quote data for one or more tickers.
+        """Fetch latest quote data for one or more tickers.
 
         Args:
             tickers (str | list[str]): A single ticker or list of tickers

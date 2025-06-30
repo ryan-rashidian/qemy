@@ -1,4 +1,4 @@
-from qemy.data.api_tiingo import StockMarket
+from qemy.data.api_tiingo import TiingoClient
 from qemy.utils.parse_arg import parse_args_cli, check_help
 from qemy.cli.cli_helper import print_help_table
 
@@ -28,7 +28,7 @@ def quote(arg):
     ticker, = core_args
 
     if isinstance(ticker, str):
-        data = StockMarket().get_quote(tickers=ticker)
+        data = TiingoClient().get_quote(tickers=ticker)
         if data and ticker in data:
             quote_data = data[ticker]
             quote = quote_data.get('last') or quote_data.get('tngoLast') or quote_data.get('mid')
@@ -64,7 +64,7 @@ def price(arg):
     if isinstance(period, str) and isinstance(ticker, str):
         print(f"Fetching price info for: {ticker}...")
 
-        price_df = StockMarket().get_prices(ticker=ticker, period=period)
+        price_df = TiingoClient().get_prices(ticker=ticker, period=period)
         formatted_df = price_df.reset_index()
         formatted_df['date'] = formatted_df['date'].dt.strftime('%Y-%m-%d')
 
