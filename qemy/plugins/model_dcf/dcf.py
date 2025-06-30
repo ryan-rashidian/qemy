@@ -20,6 +20,8 @@ class DCFPlugin(BasePlugin):
             net_debt = df_net_debt.iloc[-1]['val'] if not df_net_debt.empty else nan
 
             df_fcf = EDGARClient(ticker=self.ticker).get_metric_history(key='fcf', quarters=20)
+            if df_fcf.empty:
+                df_fcf = nan
 
             return df_fcf, shares, net_debt
 

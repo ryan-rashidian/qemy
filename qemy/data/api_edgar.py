@@ -1,19 +1,31 @@
-"""Edgar API module."""
+"""Edgar API module.
+
+This module requests company concepts data from local download or SEC servers.
+Uses CIK##########.json files from companyfacts.
+XBRL taxonomy for concept tags.
+"""
 
 import time
 import json
 from math import nan
 import pandas as pd
-from pathlib import Path
 from . import api_edgar_lists as keylist
 from qemy import _config as cfg
 from qemy.utils.utils_fetch import safe_status_get
 from qemy.utils.parse_filing import get_metric_df
 
 class EDGARClient:
-    """Fetch parsed SEC filing data from SEC EDGAR API."""
+    """Client for fetching filing data from SEC EDGAR API."""
 
-    def __init__(self, ticker, use_requests=False):
+    def __init__(self, ticker: str, use_requests: bool=False):
+        """Initialize EDGAR API. 
+
+        Initialize EDGAR User-Agent and request headers.
+        
+        Args:
+            ticker (str): Company ticker symbol
+            use_requests (bool): Send request to SEC servers. Default=False (no request)
+        """
         self.HEADERS = {'User-Agent': cfg.EDGAR_USER_AGENT} 
         self.ticker = ticker.upper().strip()
         self.cik = None
@@ -23,6 +35,7 @@ class EDGARClient:
             if use_requests:
                 url = cfg.EDGAR_CIK_URL
                 cik_data = safe_status_get(url=url, headers=self.HEADERS)
+
                 if cik_data:
                     for entry in cik_data.values():
                         if entry['ticker'].lower() == ticker.lower():
@@ -41,8 +54,8 @@ class EDGARClient:
                         print("Failed to fetch filing data from SEC.")
 
             else:
-                root_dir = Path(__file__).resolve().parents[2]
-                bulk_cik_path = root_dir / 'bulk_data' / 'company_tickers.json'
+                bulk_cik_path = cfg.BULK_DIR / 'company_tickers.json'
+
                 with open(bulk_cik_path, 'r') as f:
                     cik_data = json.load(f)
                     if cik_data:
@@ -53,23 +66,38 @@ class EDGARClient:
                     print('Failed to request ticker symbol cik.')
 
                 else:
-                    bulk_data_path = root_dir / 'bulk_data' / 'companyfacts' / f"CIK{self.cik}.json"
+                    bulk_data_path = (
+                        cfg.BULK_DIR 
+                            / 'companyfacts' 
+                                / f"CIK{self.cik}.json"
+                    )
+
                     if not bulk_data_path.exists():
                         print(f"Error: {bulk_data_path}\nDoes not exist.")
-                        return None
-                    with open(bulk_data_path, 'r') as f:
-                        self.facts = json.load(f)
-                    if self.facts is None:
-                        print("Failed to fetch filing from bulk SEC data.")
+
+                    else:
+                        with open(bulk_data_path, 'r') as f:
+                            self.facts = json.load(f)
+                        if self.facts is None:
+                            print("Failed to fetch filing from bulk SEC data.")
 
         except Exception as e:
             print(f"No bulk data.\nError code:\n{e}")
     
-    def get_metrics(self) -> pd.DataFrame | None:
+    def get_metrics(self) -> pd.DataFrame:
+        """Fetch summary of metrics from lastest SEC filing for a given self.ticker.
+
+        Returns:
+            pd.DataFrame | None: 
+        """
         try:
             if self.facts is not None:
 
-                df_shares = get_metric_df(facts=self.facts, keylist=keylist.key_list_shares, quarters=10)
+                df_shares = get_metric_df(
+                    facts=self.facts, 
+                    keylist=keylist.key_list_shares, 
+                    quarters=10
+                )
                 if not df_shares.empty:
                     latest = df_shares.iloc[-1]
                     shares_outstanding = latest['val']
@@ -80,16 +108,35 @@ class EDGARClient:
                     form = None
                     filed = None
 
-                df_cash = get_metric_df(self.facts, keylist.key_list_cash, quarters=10)
-                cash = df_cash.iloc[-1]['val'] if not df_cash.empty else nan
+                df_cash = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_cash, 
+                    quarters=10
+                )
+                if not df_cash.empty:
+                    cash = df_cash.iloc[-1]['val']
+                else:
+                    cash = nan
 
-                df_total_debt = get_metric_df(self.facts, keylist.key_list_debt, quarters=10)
+                df_total_debt = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_debt, 
+                    quarters=10
+                )
                 if df_total_debt.empty:
-                    df_debt_long = get_metric_df(self.facts, keylist.key_list_debt_long, quarters=10)
-                    df_debt_short = get_metric_df(self.facts, keylist.key_list_debt_short, quarters=10)
-
+                    df_debt_long = get_metric_df(
+                        self.facts, 
+                        keylist.key_list_debt_long, 
+                        quarters=10
+                    )
+                    df_debt_short = get_metric_df(
+                        self.facts, 
+                        keylist.key_list_debt_short, 
+                        quarters=10
+                    )
                     df_debt_long = df_debt_long.infer_objects()
                     df_debt_short = df_debt_short.infer_objects()
+
                     df_total_debt = pd.merge(
                         df_debt_long, df_debt_short, 
                         on='filed', how='outer', 
@@ -98,12 +145,20 @@ class EDGARClient:
                     df_total_debt = df_total_debt.infer_objects()
                     df_total_debt = df_total_debt.fillna(0)
 
-                    df_total_debt['val'] = df_total_debt['val_long'] + df_total_debt['val_short']
+                    df_total_debt['val'] = (
+                        df_total_debt['val_long'] + df_total_debt['val_short']
+                    )
                     df_total_debt = df_total_debt[['filed', 'val']]
+
                 if df_total_debt.empty:
-                    df_total_debt = get_metric_df(self.facts, keylist.key_list_debt_fallbacks, quarters=10)
+                    df_total_debt = get_metric_df(
+                        self.facts, 
+                        keylist.key_list_debt_fallbacks, 
+                        quarters=10
+                    )
                 if not df_total_debt.empty:
-                    df_total_debt = df_total_debt.sort_values('filed').reset_index(drop=True)
+                    df_total_debt = df_total_debt.sort_values('filed')
+                    df_total_debt = df_total_debt.reset_index(drop=True)
                     debt = df_total_debt.iloc[-1]['val']
                 else:
                     debt = nan
@@ -119,13 +174,31 @@ class EDGARClient:
                 else:
                     net_debt = nan
 
-                df_revenue = get_metric_df(self.facts, keylist.key_list_revenue, quarters=10)
-                revenue = df_revenue.iloc[-1]['val'] if not df_revenue.empty else nan
+                df_revenue = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_revenue, 
+                    quarters=10
+                )
+                if not df_revenue.empty:
+                    revenue = df_revenue.iloc[-1]['val']
+                else:
+                    revenue = nan
 
-                df_cogs = get_metric_df(self.facts, keylist.key_list_cogs, quarters=10)
-                cogs = df_cogs.iloc[-1]['val'] if not df_cogs.empty else nan
+                df_cogs = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_cogs, 
+                    quarters=10
+                )
+                if not df_cogs.empty:
+                    cogs = df_cogs.iloc[-1]['val']
+                else:
+                    cogs = nan
 
-                df_gross_profit = get_metric_df(self.facts, keylist.key_list_gross_profit, quarters=10)
+                df_gross_profit = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_gross_profit, 
+                    quarters=10
+                )
                 if not df_gross_profit.empty:
                     gross_profit = df_gross_profit.iloc[-1]['val']
                 elif not df_gross_profit.empty and not df_cogs.empty:
@@ -135,32 +208,95 @@ class EDGARClient:
                 else:
                     gross_profit = nan
 
-                df_operating_income = get_metric_df(self.facts, keylist.key_list_operating_income, quarters=10)
-                operating_income = df_operating_income.iloc[-1]['val'] if not df_operating_income.empty else nan
+                df_operating_income = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_operating_income, 
+                    quarters=10
+                )
+                if not df_operating_income.empty:
+                    operating_income = df_operating_income.iloc[-1]['val']
+                else:
+                    operating_income = nan
 
-                df_income = get_metric_df(self.facts, keylist.key_list_income, quarters=10)
-                income = df_income.iloc[-1]['val'] if not df_income.empty else nan
+                df_income = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_income, 
+                    quarters=10
+                )
+                if not df_income.empty:
+                    income = df_income.iloc[-1]['val']
+                else:
+                    income = nan
 
-                df_assets = get_metric_df(self.facts, keylist.key_list_assets, quarters=10)
-                assets = df_assets.iloc[-1]['val'] if not df_assets.empty else nan
+                df_assets = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_assets, 
+                    quarters=10
+                )
+                if not df_assets.empty:
+                    assets = df_assets.iloc[-1]['val']
+                else:
+                    assets = nan
 
-                df_liability = get_metric_df(self.facts, keylist.key_list_liability, quarters=10)
-                liability = df_liability.iloc[-1]['val'] if not df_liability.empty else nan
+                df_liability = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_liability, 
+                    quarters=10
+                )
+                if not df_liability.empty:
+                    liability = df_liability.iloc[-1]['val']
+                else:
+                    liability = nan
 
-                df_equity = get_metric_df(self.facts, keylist.key_list_equity, quarters=10)
-                equity = df_equity.iloc[-1]['val'] if not df_equity.empty else assets - liability
+                df_equity = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_equity, 
+                    quarters=10
+                )
+                if not df_equity.empty:
+                    equity = df_equity.iloc[-1]['val']
+                else:
+                    equity = assets - liability
 
-                df_opex = get_metric_df(self.facts, keylist.key_list_opex, quarters=10)
-                opex = df_opex.iloc[-1]['val'] if not df_opex.empty else nan
+                df_opex = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_opex, 
+                    quarters=10
+                )
+                if not df_opex.empty:
+                    opex = df_opex.iloc[-1]['val']
+                else:
+                    opex = nan
 
-                df_capex = get_metric_df(self.facts, keylist.key_list_capex, quarters=10)
-                capex = df_capex.iloc[-1]['val'] if not df_capex.empty else nan
+                df_capex = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_capex, 
+                    quarters=10
+                )
+                if not df_capex.empty:
+                    capex = df_capex.iloc[-1]['val']
+                else:
+                    capex = nan
 
-                df_ocf = get_metric_df(self.facts, keylist.key_list_ocf, quarters=10)
-                ocf = df_ocf.iloc[-1]['val'] if not df_ocf.empty else nan
+                df_ocf = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_ocf, 
+                    quarters=10
+                )
+                if not df_ocf.empty:
+                    ocf = df_ocf.iloc[-1]['val']
+                else:
+                    ocf = nan
 
-                df_eps = get_metric_df(self.facts, keylist.key_list_eps, quarters=10)
-                eps = df_eps.iloc[-1]['val'] if not df_eps.empty else nan
+                df_eps = get_metric_df(
+                    self.facts, 
+                    keylist.key_list_eps, 
+                    quarters=10
+                )
+                if not df_eps.empty:
+                    eps = df_eps.iloc[-1]['val']
+                else:
+                    eps = nan
 
                 df_metrics: pd.DataFrame = pd.DataFrame([
                     ['Form', form],
@@ -190,27 +326,46 @@ class EDGARClient:
 
             else:
                 print("Error: filing data failed to initialize.")
-                return None
+                return pd.DataFrame()
         except Exception as e:
             print(f"Failed to request company facts:\n{e}")
-            return None
+            return pd.DataFrame()
 
-    def get_metric_history(self, key='eps', quarters=20):
+    def get_metric_history(self, key='eps', quarters=20) -> pd.DataFrame:
+        """
+        """
         try:
             if self.facts is not None:
                 key = key.strip().lower()
                 
                 if key == 'gprofit':
-                    df_gprofit_hist = get_metric_df(self.facts, keylist=keylist.key_list_gross_profit, quarters=quarters * 4)
+                    df_gprofit_hist = get_metric_df(
+                        self.facts, 
+                        keylist=keylist.key_list_gross_profit, 
+                        quarters=quarters * 4
+                    )
                     if not df_gprofit_hist.empty:
                         df_gprofit_quarters = df_gprofit_hist.tail(quarters).set_index('filed').copy()
-                        return df_gprofit_quarters
+                        if isinstance(df_gprofit_quarters, pd.DataFrame):
+                            df_gprofit_quarters['val'] = pd.to_numeric(
+                                df_gprofit_quarters['val'],
+                                errors='coerce'
+                            )
+                            return df_gprofit_quarters
 
-                    df_revenue_hist = get_metric_df(self.facts, keylist=keylist.key_list_revenue, quarters=quarters * 4)
-                    df_cogs_hist = get_metric_df(self.facts, keylist=keylist.key_list_cogs, quarters=quarters * 4)
+                    df_revenue_hist = get_metric_df(
+                        self.facts, 
+                        keylist=keylist.key_list_revenue, 
+                        quarters=quarters * 4
+                    )
+                    df_cogs_hist = get_metric_df(
+                        self.facts, 
+                        keylist=keylist.key_list_cogs, 
+                        quarters=quarters * 4
+                    )
                     if df_revenue_hist.empty and df_cogs_hist.empty:
                         print("Fallback failed. Gross Profit metric not found.")
-                        return None
+                        return pd.DataFrame()
 
                     df_combined = pd.merge(
                         df_revenue_hist, df_cogs_hist, 
@@ -221,16 +376,35 @@ class EDGARClient:
                     df_combined = df_combined.dropna(subset=['val_rev'])
                     df_combined['val_cogs'] = df_combined['val_cogs'].fillna(0)
 
-                    df_combined['val'] = df_combined['val_rev'] - df_combined['val_cogs']
+                    df_combined['val'] = (
+                        df_combined['val_rev'] - df_combined['val_cogs']
+                    )
                     df_gprofit_quarters = df_combined[['filed', 'val']].tail(quarters).copy()
                     df_gprofit_quarters.set_index('filed', inplace=True)
-                    return df_gprofit_quarters
+                    if isinstance(df_gprofit_quarters, pd.DataFrame):
+                        df_gprofit_quarters['val'] = pd.to_numeric(
+                            df_gprofit_quarters['val'],
+                            errors='coerce'
+                        )
+                        return df_gprofit_quarters
 
                 if key == 'debt':
-                    df_total_debt_hist = get_metric_df(self.facts, keylist.key_list_debt, quarters=quarters * 4)
+                    df_total_debt_hist = get_metric_df(
+                        self.facts, 
+                        keylist.key_list_debt, 
+                        quarters=quarters * 4
+                    )
                     if df_total_debt_hist.empty:
-                        df_debt_long = get_metric_df(self.facts, keylist.key_list_debt_long, quarters=quarters * 4)
-                        df_debt_short = get_metric_df(self.facts, keylist.key_list_debt_short, quarters=quarters * 4)
+                        df_debt_long = get_metric_df(
+                            self.facts, 
+                            keylist.key_list_debt_long, 
+                            quarters=quarters * 4
+                        )
+                        df_debt_short = get_metric_df(
+                            self.facts, 
+                            keylist.key_list_debt_short, 
+                            quarters=quarters * 4
+                        )
 
                         df_total_debt_hist = pd.merge(
                             df_debt_long, df_debt_short, 
@@ -240,22 +414,43 @@ class EDGARClient:
                         df_total_debt_hist = df_total_debt_hist.infer_objects()
                         df_total_debt_hist = df_total_debt_hist.fillna(0)
 
-                        df_total_debt_hist['val'] = df_total_debt_hist['val_long'] + df_total_debt_hist['val_short']
+                        df_total_debt_hist['val'] = (
+                            df_total_debt_hist['val_long'] + df_total_debt_hist['val_short']
+                        )
                         df_total_debt_hist = df_total_debt_hist[['filed', 'val']]
                     if df_total_debt_hist.empty:
-                        df_total_debt_hist = get_metric_df(self.facts, keylist.key_list_debt_fallbacks, quarters=quarters * 4)
+                        df_total_debt_hist = get_metric_df(
+                            self.facts, 
+                            keylist.key_list_debt_fallbacks, 
+                            quarters=quarters * 4
+                        )
 
-                    df_total_debt_hist = df_total_debt_hist.sort_values('filed').reset_index(drop=True)
+                    df_total_debt_hist = df_total_debt_hist.sort_values('filed')
+                    df_total_debt_hist = df_total_debt_hist.reset_index(drop=True)
                     df_debt_quarters = df_total_debt_hist[['filed', 'val']].tail(quarters).copy()
                     df_debt_quarters.set_index('filed', inplace=True)
-                    return df_debt_quarters
+                    if isinstance(df_debt_quarters, pd.DataFrame):
+                        df_debt_quarters['val'] = pd.to_numeric(
+                            df_debt_quarters['val'],
+                            errors='coerce'
+                        )
+                        return df_debt_quarters
 
                 if key == 'netdebt':
-                    df_debt_hist = get_metric_df(self.facts, keylist=keylist.key_list_debt, quarters=quarters * 4)
-                    df_cash_hist = get_metric_df(self.facts, keylist=keylist.key_list_cash, quarters=quarters * 4)
+                    df_debt_hist = get_metric_df(
+                        self.facts, 
+                        keylist=keylist.key_list_debt, 
+                        quarters=quarters * 4
+                    )
+                    df_cash_hist = get_metric_df(
+                        self.facts, 
+                        keylist=keylist.key_list_cash, 
+                        quarters=quarters * 4
+                    )
+
                     if df_cash_hist.empty and df_debt_hist.empty:
                         print("Net Debt: required metrics not found.")
-                        return None
+                        return pd.DataFrame()
 
                     df_combined = pd.merge(
                         df_debt_hist, df_cash_hist, 
@@ -265,24 +460,49 @@ class EDGARClient:
                     df_combined = df_combined.infer_objects()
                     df_combined = df_combined.fillna(0)
 
-                    df_combined['val'] = df_combined['val_debt'] - df_combined['val_cash']
+                    df_combined['val'] = (
+                        df_combined['val_debt'] - df_combined['val_cash']
+                    )
                     df_netdebt_quarters = df_combined[['filed', 'val']].tail(quarters).copy()
                     df_netdebt_quarters.set_index('filed', inplace=True)
-                    return df_netdebt_quarters
+                    if isinstance(df_netdebt_quarters, pd.DataFrame):
+                        df_netdebt_quarters['val'] = pd.to_numeric(
+                            df_netdebt_quarters['val'],
+                            errors='coerce'
+                        )
+                        return df_netdebt_quarters
 
                 if key == 'equity':
-                    df_equity = get_metric_df(self.facts, keylist.key_list_equity, quarters=quarters * 4)
+                    df_equity = get_metric_df(
+                        self.facts, 
+                        keylist.key_list_equity, 
+                        quarters=quarters * 4
+                    )
                     df_equity_quarters = df_equity.tail(quarters).copy()
                     df_equity_quarters.set_index('filed', inplace=True)
                     if not df_equity_quarters.empty:
-                        return df_equity_quarters
+                        if isinstance(df_equity_quarters, pd.DataFrame):
+                            df_equity_quarters['val'] = pd.to_numeric(
+                                df_equity_quarters['val'],
+                                errors='coerce'
+                            )
+                            return df_equity_quarters
 
                     else:
-                        df_assets_hist = get_metric_df(self.facts, keylist=keylist.key_list_assets, quarters=quarters * 4)
-                        df_liability_hist = get_metric_df(self.facts, keylist=keylist.key_list_liability, quarters=quarters * 4)
+                        df_assets_hist = get_metric_df(
+                            self.facts, 
+                            keylist=keylist.key_list_assets, 
+                            quarters=quarters * 4
+                        )
+                        df_liability_hist = get_metric_df(
+                            self.facts, 
+                            keylist=keylist.key_list_liability, 
+                            quarters=quarters * 4
+                        )
+
                         if df_assets_hist.empty and df_liability_hist.empty:
                             print("Net Debt: required metrics not found.")
-                            return None
+                            return pd.DataFrame()
 
                         df_combined = pd.merge(
                             df_assets_hist, df_liability_hist, 
@@ -292,17 +512,33 @@ class EDGARClient:
                         df_combined = df_combined.infer_objects()
                         df_combined = df_combined.fillna(0)
 
-                        df_combined['val'] = df_combined['val_assets'] - df_combined['val_liability']
+                        df_combined['val'] = (
+                            df_combined['val_assets'] - df_combined['val_liability']
+                        )
                         df_equity_quarters = df_combined[['filed', 'val']].tail(quarters).copy()
                         df_equity_quarters.set_index('filed', inplace=True)
-                        return df_equity_quarters
+                        if isinstance(df_equity_quarters, pd.DataFrame):
+                            df_equity_quarters['val'] = pd.to_numeric(
+                                df_equity_quarters['val'],
+                                errors='coerce'
+                            )
+                            return df_equity_quarters
 
                 if key == 'fcf':
-                    df_ocf_hist = get_metric_df(self.facts, keylist=keylist.key_list_ocf, quarters=quarters * 4)
-                    df_capex_hist = get_metric_df(self.facts, keylist=keylist.key_list_capex, quarters=quarters * 4)
+                    df_ocf_hist = get_metric_df(
+                        self.facts, 
+                        keylist=keylist.key_list_ocf, 
+                        quarters=quarters * 4
+                    )
+                    df_capex_hist = get_metric_df(
+                        self.facts, 
+                        keylist=keylist.key_list_capex, 
+                        quarters=quarters * 4
+                    )
+
                     if df_ocf_hist.empty and df_capex_hist.empty:
                         print("Net Debt: required metrics not found.")
-                        return None
+                        return pd.DataFrame()
 
                     df_combined = pd.merge(
                         df_ocf_hist, df_capex_hist, 
@@ -312,27 +548,49 @@ class EDGARClient:
                     df_combined = df_combined.infer_objects()
                     df_combined = df_combined.fillna(0)
 
-                    df_combined['val'] = df_combined['val_ocf'] - df_combined['val_capex']
+                    df_combined['val'] = (
+                        df_combined['val_ocf'] - df_combined['val_capex']
+                    )
                     df_fcf_quarters = df_combined[['filed', 'val']].tail(quarters).copy()
                     df_fcf_quarters.set_index('filed', inplace=True)
-                    return df_fcf_quarters
+                    if isinstance(df_fcf_quarters, pd.DataFrame):
+                        df_fcf_quarters['val'] = pd.to_numeric(
+                            df_fcf_quarters['val'],
+                            errors='coerce'
+                        )
+                        return df_fcf_quarters
 
                 if key in keylist.key_lists:
                     key = keylist.key_lists.get(key)
                     if key is None:
                         print(f"Unknown metric type: {key}")
-                        return None
+                        return pd.DataFrame()
 
-                    df_metric_hist = get_metric_df(self.facts, keylist=key, quarters=quarters * 4)
+                    df_metric_hist = get_metric_df(
+                        self.facts, 
+                        keylist=key, 
+                        quarters=quarters * 4
+                    )
+
                     df_metric_quarters = df_metric_hist.tail(quarters).copy()
                     df_metric_quarters.set_index('filed', inplace=True)
                     if isinstance(df_metric_quarters, pd.DataFrame):
+                        df_metric_quarters['val'] = pd.to_numeric(
+                            df_metric_quarters['val'],
+                            errors='coerce'
+                        )
                         return df_metric_quarters
+                    else:
+                        return pd.DataFrame()
                 else:
                     print(f"get_metric_history: invalid metric name: {key}")
-                    return None
+                    return pd.DataFrame()
+
+            else:
+                print("Failed to return metric history")
+                return pd.DataFrame()
 
         except Exception as e:
             print(f"Failed to request company facts:\n{e}")
-            return None
+            return pd.DataFrame()
 

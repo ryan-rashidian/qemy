@@ -21,6 +21,9 @@ def cagr(ticker, period='1Y'):
 
 def growth_rate(ticker, metric):
     metric_data = EDGARClient(ticker=ticker).get_metric_history(key=metric.lower())
+    if metric_data.empty:
+        return {}
+
     metric_vals = metric_data['val'].iloc[-5:]
     metric_growth = metric_vals.pct_change().dropna()
 

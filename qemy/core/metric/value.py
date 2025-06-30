@@ -1,11 +1,10 @@
-import pandas as pd
 from qemy.data.api_tiingo import TiingoClient
 from qemy.data.api_edgar import EDGARClient
 
 def ratio_pe(ticker):
     eps_df = EDGARClient(ticker=ticker).get_metric_history(key='eps')
 
-    if isinstance(eps_df, pd.DataFrame):
+    if not eps_df.empty:
         ttm_eps = None
 
         eps_1y_df = eps_df['val'].tail(4).copy()
@@ -81,9 +80,13 @@ def ratio_pe(ticker):
 
 def ratio_pb(ticker):
     equity_df = EDGARClient(ticker=ticker).get_metric_history(key='equity')
+    if equity_df.empty:
+        return {}
     book_value = equity_df.iloc[-1]['val']
 
     shares_df = EDGARClient(ticker=ticker).get_metric_history(key='shares')
+    if shares_df.empty:
+        return {}
     shares_outstanding = shares_df.iloc[-1]['val']
 
     bvps = round(book_value / shares_outstanding, 2)

@@ -40,7 +40,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
 
         try:
             filing_df = EDGARClient(ticker=ticker, use_requests=request).get_metrics() 
-            if isinstance(filing_df, pd.DataFrame): 
+            if not filing_df.empty: 
                 ticker_df[ticker] = filing_df[ticker]
                 print(filing_df.to_string(justify='left', formatters={
                     ticker: lambda x: f"{x:,}" if isinstance(x, Number) else x
@@ -85,7 +85,7 @@ def filing_metric(arg):
             ticker = ticker.strip()
             quarters = int(quarters)
             metric_df = EDGARClient(ticker=ticker).get_metric_history(quarters=quarters, key=metric)
-            if isinstance(metric_df, pd.DataFrame): 
+            if not metric_df.empty: 
                 metric_df['pch'] = metric_df['val'].pct_change().map(lambda x: f"{x:.2%}" if pd.notnull(x) else "0.00%") 
                 total_pch = (metric_df['val'].iloc[-1] - metric_df['val'].iloc[0]) / metric_df['val'].iloc[0]
                 print(metric_df.to_string(justify='left', formatters={
