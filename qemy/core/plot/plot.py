@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
-import pandas as pd
-from qemy.utils.filetools import save_to_png
+from qemy.utils.file_tools import save_to_png
 from qemy.data.api_tiingo import StockMarket
 
 def plot_models(title='title', save=False, plot_func=None):
