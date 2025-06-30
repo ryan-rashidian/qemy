@@ -2,17 +2,16 @@
 
 ## Known Issues:
 
-- [ ] (Non-critical) Total debt metric for filings still incomplete or outdated ~50% of time. Solutions known; Fixes are in progress.
-- [ ] (Non-critical) As a result of some testing, current filings metrics have ~90% success for accuracy (with exception of total debt, referenced in previous issue). Further refinement is needed and planned. Note: most inconsistent results in financial services sector.   
-- [ ] (Non-critical) P/E ratio module does not always properly identify whether the eps reported in a SEC filing is cumulative, or quarterly. More refinement needed. 
+- [ ] (Non-critical) Parsing logic for company concepts data should factor in more variations of XBRL taxonomy.
+- [ ] (Non-critical) Parsing logic for Total Debt metric should combine components of long and short-term debt on certain edge-cases. 
+- [ ] (Non-critical) Need a utility function that distinguishes between cumulative, quarterly and yearly values for metrics in SEC filings.
 
 ## Ideas:
 
 - Stock screening and filtering.
 - Separate filing commands: 'Income Statement', 'Balance Sheet', 'Cash Flow Statement' 
-- IFRS filing support in SEC_Filings parser and currency conversion. 
-- sklearn model that is trained on valuation data as features -> makes predictions and evaluates feature importance -> feature importance can be used to weigh different filtering/screening conditions. (Batch learning, train on demand, simple machine learning pipeline.)
-- For last idea to work, metrics will need to be properly pre-processed: scaled and normalized (z-score/min-max).      
+- IFRS filing support and currency conversion. 
+- Data preprocessing and normalizing. 
 
 ## Log
 
