@@ -1,4 +1,4 @@
-"""Tiingo API client.
+"""Tiingo API module.
 
 This module requests and fetches data from Tiingo API servers.
 """
@@ -8,10 +8,10 @@ from qemy import _config as cfg
 from qemy.utils.utils_fetch import parse_period, safe_status_get
 
 class TiingoClient:
-    """Interface for fetching stock market data from Tiingo API."""
+    """Client for fetching stock market data from Tiingo API."""
 
     def __init__(self):
-        """Initialize TiingoClient with user-agent and request headers."""
+        """Initialize TiingoClient with API key and request headers."""
         self.API_KEY: str = cfg.TIINGO_API_KEY
         self.HEADERS: dict[str, str] = {
             'Content-Type': 'application/json',
