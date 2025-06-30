@@ -10,8 +10,8 @@ from qemy import _config as cfg
 from qemy.utils.utils_fetch import safe_status_get
 from qemy.utils.parse_filing import get_metric_df
 
-class SEC_Filings:
-    """Fetch parsed SEC filing data."""
+class EDGARClient:
+    """Fetch parsed SEC filing data from SEC EDGAR API."""
 
     def __init__(self, ticker, use_requests=False):
         self.HEADERS = {'User-Agent': cfg.EDGAR_USER_AGENT} 

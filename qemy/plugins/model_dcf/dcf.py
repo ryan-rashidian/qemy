@@ -2,7 +2,7 @@ from math import nan
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
-from qemy.data.api_edgar import SEC_Filings
+from qemy.data.api_edgar import EDGARClient
 from qemy.core.plugin_base import BasePlugin
 
 class DCFPlugin(BasePlugin):
@@ -13,18 +13,18 @@ class DCFPlugin(BasePlugin):
     def _get_dcf_metrics(self):
         try:
 
-            df_shares = SEC_Filings(ticker=self.ticker).get_metric_history(key='shares', quarters=40)
+            df_shares = EDGARClient(ticker=self.ticker).get_metric_history(key='shares', quarters=40)
             shares = df_shares.iloc[-1]['val'] if not df_shares.empty else nan
 
-            df_net_debt = SEC_Filings(ticker=self.ticker).get_metric_history(key='netdebt', quarters=20)
+            df_net_debt = EDGARClient(ticker=self.ticker).get_metric_history(key='netdebt', quarters=20)
             net_debt = df_net_debt.iloc[-1]['val'] if not df_net_debt.empty else nan
 
-            df_fcf = SEC_Filings(ticker=self.ticker).get_metric_history(key='fcf', quarters=20)
+            df_fcf = EDGARClient(ticker=self.ticker).get_metric_history(key='fcf', quarters=20)
 
             return df_fcf, shares, net_debt
 
         except Exception as e:
-            print(f"Failed to request SEC_Filings:\n{e}")
+            print(f"Failed to request EDGARClient:\n{e}")
             return None, None, None
 
     def run(self):

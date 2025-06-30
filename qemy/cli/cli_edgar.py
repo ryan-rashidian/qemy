@@ -1,7 +1,7 @@
 import pandas as pd
 from numbers import Number
 from qemy.utils.parse_arg import parse_args_cli, check_help
-from qemy.data.api_edgar import SEC_Filings
+from qemy.data.api_edgar import EDGARClient
 from qemy.cli.cli_helper import print_help_table
 
 pd.set_option('display.max_columns', None)
@@ -39,7 +39,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
         print(f"Fetching latest 10K/10Q/20F filing metrics for {ticker}")
 
         try:
-            filing_df = SEC_Filings(ticker=ticker, use_requests=request).get_metrics() 
+            filing_df = EDGARClient(ticker=ticker, use_requests=request).get_metrics() 
             if isinstance(filing_df, pd.DataFrame): 
                 ticker_df[ticker] = filing_df[ticker]
                 print(filing_df.to_string(justify='left', formatters={
@@ -84,7 +84,7 @@ def filing_metric(arg):
             metric.strip().lower()
             ticker = ticker.strip()
             quarters = int(quarters)
-            metric_df = SEC_Filings(ticker=ticker).get_metric_history(quarters=quarters, key=metric)
+            metric_df = EDGARClient(ticker=ticker).get_metric_history(quarters=quarters, key=metric)
             if isinstance(metric_df, pd.DataFrame): 
                 metric_df['pch'] = metric_df['val'].pct_change().map(lambda x: f"{x:.2%}" if pd.notnull(x) else "0.00%") 
                 total_pch = (metric_df['val'].iloc[-1] - metric_df['val'].iloc[0]) / metric_df['val'].iloc[0]

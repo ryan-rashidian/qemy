@@ -1,9 +1,9 @@
 import pandas as pd
 from qemy.data.api_tiingo import TiingoClient
-from qemy.data.api_edgar import SEC_Filings
+from qemy.data.api_edgar import EDGARClient
 
 def ratio_pe(ticker):
-    eps_df = SEC_Filings(ticker=ticker).get_metric_history(key='eps')
+    eps_df = EDGARClient(ticker=ticker).get_metric_history(key='eps')
 
     if isinstance(eps_df, pd.DataFrame):
         ttm_eps = None
@@ -80,10 +80,10 @@ def ratio_pe(ticker):
         }
 
 def ratio_pb(ticker):
-    equity_df = SEC_Filings(ticker=ticker).get_metric_history(key='equity')
+    equity_df = EDGARClient(ticker=ticker).get_metric_history(key='equity')
     book_value = equity_df.iloc[-1]['val']
 
-    shares_df = SEC_Filings(ticker=ticker).get_metric_history(key='shares')
+    shares_df = EDGARClient(ticker=ticker).get_metric_history(key='shares')
     shares_outstanding = shares_df.iloc[-1]['val']
 
     bvps = round(book_value / shares_outstanding, 2)
