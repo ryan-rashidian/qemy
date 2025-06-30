@@ -1,24 +1,18 @@
-import os
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
-
-load_dotenv(dotenv_path=Path(__file__).resolve().parents[1] / '.env')
+from qemy.utils.env_tools import get_env_str
 
 # === KEY ===
-def get_env_str(key: str) -> str:
-    val = os.getenv(key)
-    if val is None:
-        print(f"Missing API key: {key}")
-        print(f"Exiting Qemy, Please setup API keys correctly.")
-        sys.exit(1)
-    return val
+
+load_dotenv(dotenv_path=Path(__file__).resolve().parents[1] / '.env')
 
 FRED_API_KEY: str = get_env_str('FRED_API_KEY')
 TIINGO_API_KEY: str = get_env_str('TIINGO_API_KEY')
 EDGAR_USER_AGENT: str = get_env_str('EDGAR_USER_AGENT')
 
 # === URL ===
+
 FRED_URL = "https://api.stlouisfed.org/fred/series/observations"
 
 TIINGO_URL = "https://api.tiingo.com/tiingo/daily/"
@@ -29,6 +23,8 @@ EDGAR_FACTS_URL = "https://data.sec.gov/api/xbrl/companyfacts/CIK"
 EDGAR_ZIP_URL = "https://www.sec.gov/Archives/edgar/daily-index/xbrl/companyfacts.zip"
 
 # === PATH ===
+
+# Check if executable before determining root path
 if getattr(sys, 'frozen', False):
     PROJECT_ROOT = Path(sys.executable).resolve().parent
 else:
