@@ -2,7 +2,7 @@ import pandas as pd
 from qemy import _config as cfg
 from qemy.utils.utils_fetch import parse_period, safe_status_get
 
-class FREDData:
+class FREDClient:
     def __init__(self):
         self.API_KEY = cfg.FRED_API_KEY
         self.url = cfg.FRED_URL

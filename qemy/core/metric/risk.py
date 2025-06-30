@@ -1,12 +1,12 @@
 from qemy.data.api_tiingo import TiingoClient
-from qemy.data.api_fred import FREDData
+from qemy.data.api_fred import FREDClient
 
 def ratio_sharpe(ticker, period='1Y'):
     price_df = TiingoClient().get_prices(ticker=ticker, period=period)
     if price_df.empty:
         return {}
 
-    rfr_df = FREDData().get_tbill_yield()
+    rfr_df = FREDClient().get_tbill_yield()
     if rfr_df is not None and not rfr_df.empty:
         rfr = rfr_df['value'].iloc[0] / 100
     else:

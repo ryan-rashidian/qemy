@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from qemy import _config as cfg
 from qemy.utils.file_tools import save_to_png
-from qemy.data.api_fred import FREDData
+from qemy.data.api_fred import FREDClient
 
 class PlotFRED:
     def __init__(self):
@@ -27,7 +27,7 @@ class PlotFRED:
 
     def plot_cpi(self, period, save=False, units='pc1'):
         self._plot(
-            fred_func=FREDData().get_cpi,
+            fred_func=FREDClient().get_cpi,
             period=period, units=units,
             label="CPI Inflation",
             title=f"CPI Inflation: {units}",
@@ -38,7 +38,7 @@ class PlotFRED:
 
     def plot_gdp(self, period, save=False, units='pc1'):
         self._plot(
-            fred_func=FREDData().get_gdp,
+            fred_func=FREDClient().get_gdp,
             period=period, units=units,
             label="Gross Domestic Product",
             title=f"Gross Domestic Product: {units}",
@@ -49,7 +49,7 @@ class PlotFRED:
 
     def plot_sentiment(self, period, save=False, units='pch'):
         self._plot(
-            fred_func=FREDData().get_sentiment,
+            fred_func=FREDClient().get_sentiment,
             period=period, units=units,
             label="Consumer Sentiment Index",
             title=f"Consumer Sentiment Index: {units}",
@@ -60,7 +60,7 @@ class PlotFRED:
 
     def plot_nfp(self, period, save=False, units='pc1'):
         self._plot(
-            fred_func=FREDData().get_nf_payrolls,
+            fred_func=FREDClient().get_nf_payrolls,
             period=period, units=units,
             label="Nonfarm Payrolls",
             title=f"Nonfarm Payrolls: {units}",
@@ -71,7 +71,7 @@ class PlotFRED:
 
     def plot_interest(self, period, save=False, units='pc1'):
         self._plot(
-            fred_func=FREDData().get_interest_rate,
+            fred_func=FREDClient().get_interest_rate,
             period=period, units=units,
             label="Fed Interest Rate",
             title=f"Fed Interest Rate: {units}",
@@ -82,7 +82,7 @@ class PlotFRED:
 
     def plot_jobc(self, period, save=False, units='pc1'):
         self._plot(
-            fred_func=FREDData().get_jobless_claims,
+            fred_func=FREDClient().get_jobless_claims,
             period=period, units=units,
             label="Jobless Claims",
             title=f"Jobless Claims: {units}",
@@ -93,7 +93,7 @@ class PlotFRED:
 
     def plot_unem(self, period, save=False, units='pc1'):
         self._plot(
-            fred_func=FREDData().get_unemployment,
+            fred_func=FREDClient().get_unemployment,
             period=period, units=units,
             label="Unemployment Rate",
             title=f"Unemployment Rate: {units}",
@@ -104,7 +104,7 @@ class PlotFRED:
 
     def plot_indp(self, period, save=False, units='pc1'):
         self._plot(
-            fred_func=FREDData().get_industrial_production,
+            fred_func=FREDClient().get_industrial_production,
             period=period, units=units,
             label="Industrial Production",
             title=f"Industrial Production: {units}",
@@ -115,7 +115,7 @@ class PlotFRED:
 
     def plot_netex(self, period, save=False, units='lin'):
         self._plot(
-            fred_func=FREDData().get_net_exports,
+            fred_func=FREDClient().get_net_exports,
             period=period, units=units,
             label="Net Exports",
             title=f"Net Exports: {units}",

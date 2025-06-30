@@ -1,4 +1,4 @@
-from qemy.data.api_fred import FREDData
+from qemy.data.api_fred import FREDClient
 from qemy.utils.parse_arg import parse_args_cli, check_help
 from qemy.cli.cli_helper import print_help_table
 
@@ -49,7 +49,7 @@ class FREDCmd:
 
         else:
             try:
-                print(FREDData().get_tbill_yield())
+                print(FREDClient().get_tbill_yield())
             except Exception as e:
                 print(f"Could not fetch data ERROR:\n{e}")
 
@@ -64,7 +64,7 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDData().get_cpi(period=self.period, units=units))
+                    print(FREDClient().get_cpi(period=self.period, units=units))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -81,7 +81,7 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDData().get_gdp(period=self.period, units=units))
+                    print(FREDClient().get_gdp(period=self.period, units=units))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -98,7 +98,7 @@ class FREDCmd:
             units = 'pch' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDData().get_sentiment(period=self.period, units=units))
+                    print(FREDClient().get_sentiment(period=self.period, units=units))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -115,7 +115,7 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDData().get_nf_payrolls(period=self.period, units=units))
+                    print(FREDClient().get_nf_payrolls(period=self.period, units=units))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -132,7 +132,7 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDData().get_interest_rate(period=self.period, units=units))
+                    print(FREDClient().get_interest_rate(period=self.period, units=units))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -149,7 +149,7 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDData().get_jobless_claims(period=self.period, units=units))
+                    print(FREDClient().get_jobless_claims(period=self.period, units=units))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -166,7 +166,7 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDData().get_unemployment(period=self.period, units=units))
+                    print(FREDClient().get_unemployment(period=self.period, units=units))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -183,7 +183,7 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDData().get_industrial_production(period=self.period, units=units))
+                    print(FREDClient().get_industrial_production(period=self.period, units=units))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -200,7 +200,7 @@ class FREDCmd:
             units = 'lin' if self.units is None else self.units 
             if isinstance(self.period, str):
                 try:
-                    print(FREDData().get_net_exports(period=self.period, units=units.lower()))
+                    print(FREDClient().get_net_exports(period=self.period, units=units.lower()))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
