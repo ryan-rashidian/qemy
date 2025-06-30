@@ -1,23 +1,46 @@
+"""
+Environment Setup Wizard for Qemy CLI.
+"""
+
 import sys
 from dotenv import load_dotenv
 from qemy import _config as cfg
 
-def _setup_input(prompt):
+def _setup_input(prompt: str) -> str:
+    """
+    Prompt the user for input. Exits if input is 'exit' or 'q'.
+
+    Args:
+        prompt (str): The message displayed to users
+
+    Returns:
+        str: The stripped user input
+    """
     user_input = input(prompt).strip()
+
     if user_input.lower() in ('exit', 'q'):
         sys.exit()
     else:
         return user_input
 
 def setup_wizard():
+    """
+    Setup Wizard to initialize environment variables.
+
+    Prompts the user for API credentials and stores them in a .env file as environment variables.
+    If .env already exists, it will just load the environment variables.
+    """
     project_root = cfg.PROJECT_ROOT
+
     env_path = project_root / '.env'
     temp_env_path = project_root / '.env.tmp'
+
     if env_path.exists():
         load_dotenv(dotenv_path=env_path)
         return
 
-    print("\n No .env file found!\n Please setup your FRED API key, Tiingo API key, and EDGAR API 'User Agent'")
+    print("\n No .env file found!")
+    print(" Please setup your FRED API key, Tiingo API key, and EDGAR API 'User Agent'")
     print(" Type: 'exit' or 'q' to exit this setup at any time.")
 
     try:
@@ -26,11 +49,14 @@ def setup_wizard():
         print(" Enter a 'User Agent' to identify yourself to EDGAR API")
         print(" - e.g. john johndoe@example.com")
         edgar_agent = _setup_input("Enter a 'User Agent': ")
+
         with temp_env_path.open('w') as f:
             f.write(f"FRED_API_KEY={fred_key}\n")
             f.write(f"TIINGO_API_KEY={tiingo_key}\n")
             f.write(f"EDGAR_USER_AGENT={edgar_agent}\n")
+
         temp_env_path.rename(env_path)
+
         print(
             " .env file created successfully!\n",
             "\n Tip: use the bulk_refresh command to download SEC filings locally on your machine.\n",
@@ -38,10 +64,13 @@ def setup_wizard():
             "    - Otherwise, use '-r' or '--request' flags to fetch indicidual filings live.\n"
             "      Be mindful of your usage - the SEC discourages frequent scraping.\n"
         )
+
         load_dotenv(dotenv_path=env_path)
+
     except SystemExit:
         if temp_env_path.exists():
             temp_env_path.unlink()
+
         print("Setup aborted. No setup information saved.\n")
         sys.exit()
 
