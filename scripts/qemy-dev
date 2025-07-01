@@ -3,6 +3,6 @@
 orig_dir=$(pwd)
 source ~/path/to/your/venvs/qemyenv/bin/activate # change to your path
 cd ~/path/to/projectroot # change to your path
-python -m qemy.cli_main
+python -m qemy.cli.main
 deactivate 
 cd "$orig_dir"
