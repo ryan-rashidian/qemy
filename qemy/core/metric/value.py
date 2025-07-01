@@ -78,6 +78,10 @@ def ratio_pe(ticker):
             'pe': pe_ratio
         }
 
+    else:
+        print("No price data")
+        return {}
+
 def ratio_pb(ticker):
     equity_df = EDGARClient(ticker=ticker).get_metric_history(key='equity')
     if equity_df.empty:
