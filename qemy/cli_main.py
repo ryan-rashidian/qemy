@@ -1,8 +1,9 @@
-from qemy.utils.env_setup import setup_wizard
 import cmd
 import os
 import platform
 import pandas as pd
+
+from qemy.utils.env_setup import setup_wizard
 from qemy.cli import (
     cli_helper, cli_fred, cli_edgar, cli_tiingo, 
     cli_plot, cli_aux, cli_core, cli_plugins, 
@@ -14,18 +15,20 @@ setup_wizard()
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
+metric_index = pd.Index([
+    'Form', 'Filed', 'Shares Outstanding', 'Cash & Equivalents', 'Total Debt',
+    'Net Debt', 'Revenue', 'COGS', 'Gross Profit', 'EBIT', 'Net Income', 'Assets', 
+    'Liabilities', 'Equity', 'OpEx', 'CapEx', 'OCF', 'FCF', 'EPS', 
+])
 #=============================================================================#
 
 class QemyShell(cmd.Cmd):
     intro = "Qemy v0.1.0\nType \"help\" or \"?\" for more information.\n"
     prompt = "qemy> "
+
     def __init__(self):
-        metric_index = pd.Index([
-            'Form', 'Filed', 'Shares Outstanding', 'Cash & Equivalents', 'Total Debt',
-            'Net Debt', 'Revenue', 'COGS', 'Gross Profit', 'EBIT', 'Net Income', 'Assets', 
-            'Liabilities', 'Equity', 'OpEx', 'CapEx', 'OCF', 'FCF', 'EPS', 
-        ])
         super().__init__()
+        self.debug_mode = False
         self.ticker_list = []
         self.ticker_df = pd.DataFrame(index=metric_index) 
         self.ticker_df.index.name = 'Metrics:'
@@ -127,6 +130,11 @@ class QemyShell(cmd.Cmd):
 
     def do_calc(self, arg):
         cli_aux.calc(arg=arg)
+
+    def do_debug(self, arg):
+        toggle = cli_aux.debug(arg=arg, debug_mode=self.debug_mode)
+        if toggle is not None:
+            self.debug_mode = toggle
 
     def do_env_reset(self, arg):
         cli_aux.env_reset(arg=arg)

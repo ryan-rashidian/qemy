@@ -1,8 +1,12 @@
 import sys
 from pathlib import Path
+import logging
+
 from qemy.data import api_edgar_bulk as bulk
 from qemy.utils.parse_arg import check_help
 from qemy.cli.cli_helper import print_help_table
+
+logging.disable(logging.CRITICAL) 
 
 def bulk_refresh(arg):
     if check_help(
@@ -36,6 +40,27 @@ def calc(arg):
         print(result)
     except:
         print("Invalid expression")
+
+def debug(arg: str, debug_mode: bool) -> bool | None:
+    if check_help(
+        arg_str=arg,
+        help_func=lambda: print_help_table(" debug ", [
+            ("Info:", "Toggles log messages in CLI\n"),
+        ])
+    ):
+        return
+    
+    if debug_mode:
+        logging.disable(logging.CRITICAL)
+        print("Logging is now OFF")
+        debug_mode = False
+        return debug_mode 
+
+    else:
+        logging.disable(logging.NOTSET)
+        print("Logging is now ON")
+        debug_mode = True
+        return debug_mode
 
 def env_reset(arg):
     if check_help(
