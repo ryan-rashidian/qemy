@@ -1,6 +1,7 @@
 import pandas as pd
 from qemy import _config as cfg
-from qemy.utils.utils_fetch import parse_period, safe_status_get
+from qemy.utils.safe_request import safe_status_get
+from qemy.utils.parse_arg import parse_period
 
 class FREDClient:
     def __init__(self):

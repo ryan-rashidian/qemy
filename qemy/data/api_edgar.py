@@ -11,7 +11,7 @@ from math import nan
 import pandas as pd
 from . import api_edgar_lists as keylist
 from qemy import _config as cfg
-from qemy.utils.utils_fetch import safe_status_get
+from qemy.utils.safe_request import safe_status_get
 from qemy.utils.parse_filing import get_metric_df
 
 class EDGARClient:
