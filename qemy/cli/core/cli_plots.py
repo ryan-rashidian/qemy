@@ -1,9 +1,11 @@
+from .helper import print_help_table
+from .._parse_args import check_help, parse_args_cli
+
 from qemy.core.plot import plot
 from qemy.core.plot.plot_fred import PlotFRED
-from qemy.utils.parse_arg import check_help, parse_args_cli
-from qemy.cli.cli_helper import print_help_table
 
-#================================== PLOT =====================================#
+# === PLOT ===
+
 class PlotCmd:
     def __init__(self, arg):
         self.help_requested = False

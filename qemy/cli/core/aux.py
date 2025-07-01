@@ -2,9 +2,9 @@ import sys
 from pathlib import Path
 import logging
 
-from qemy.data import api_edgar_bulk as bulk
-from qemy.utils.parse_arg import check_help
-from qemy.cli.cli_helper import print_help_table
+from qemy.data import bulk_refresh as bulk_r
+from .._parse_args import check_help
+from ..core.helper import print_help_table
 
 logging.disable(logging.CRITICAL) 
 
@@ -21,7 +21,7 @@ def bulk_refresh(arg):
     confirm = input("All previous bulk data will be overwritten.\nAre you sure? (yes/no): ")
     if confirm.strip().lower() == 'yes':
         try:
-            bulk.bulk_refresh()
+            bulk_r()
         except Exception as e:
             print(f"cli_edgar\nBulk refresh failed. Error:\n{e}")
 

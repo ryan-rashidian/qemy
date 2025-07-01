@@ -1,8 +1,10 @@
 import pandas as pd
 from numbers import Number
-from qemy.utils.parse_arg import parse_args_cli, check_help
+
+from ..core.helper import print_help_table
+from .._parse_args import check_help, parse_args_cli
+
 from qemy.data.api_edgar import EDGARClient
-from qemy.cli.cli_helper import print_help_table
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)

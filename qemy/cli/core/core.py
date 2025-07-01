@@ -1,10 +1,12 @@
 from numbers import Number
-from qemy.utils.file_tools import save_to_csv
-from qemy.utils.parse_arg import check_help, parse_args_cli
-from qemy.core.watch_list import WatchListManager
-from qemy.cli.cli_helper import print_help_table
 
-#================================== CORE =====================================#
+from ..core.helper import print_help_table
+from .._parse_args import check_help, parse_args_cli
+
+from qemy.utils.file_tools import save_to_csv
+from qemy.core.watch_list import WatchListManager
+
+# === CORE ===
 
 def watch_list(arg, ticker_list):
     if check_help(

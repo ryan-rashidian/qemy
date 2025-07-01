@@ -1,8 +1,9 @@
-from qemy.data.api_tiingo import TiingoClient
-from qemy.utils.parse_arg import parse_args_cli, check_help
-from qemy.cli.cli_helper import print_help_table
+from ..core.helper import print_help_table
+from .._parse_args import check_help, parse_args_cli
 
-#================================== TIINGO ===================================#
+from qemy.data import TiingoClient
+
+# === TIINGO ===
 
 def quote(arg):
     if check_help(

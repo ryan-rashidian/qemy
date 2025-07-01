@@ -1,7 +1,8 @@
+from .helper import print_help_table
+from .._parse_args import check_help, parse_args_cli
+
 from qemy.core.plugin_loader import load_plugins
 from qemy.core.plot.plot import plot_models
-from qemy.utils.parse_arg import parse_args_cli, check_help
-from qemy.cli.cli_helper import print_help_table
 
 def run_models(arg):
     if check_help(

@@ -1,6 +1,3 @@
-
-#================================== HELPER ===================================#
-
 def print_help_table(title, commands):
     print(f"\n{title}")
     print("-" * len(title))
