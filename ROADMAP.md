@@ -7,31 +7,25 @@ The primary goal of v0.1.0 will be to create a developer facing MVP foundation f
 - [x] Basic CLI
 - [x] API financial data cleaning and visualization
 - [x] SEC filing parser MVP
-- [x] Basic metrics:
-    - Ratios (P/E, PEG, Sharpe, etc.)
-    - Price and performance metrics
-    - Fundamental metrics (from financial statements) 
-    - Macro metrics (CPI, GDP, Treasury Yields, etc.)
+- [x] Basic metrics
 - [x] Plugin architecture for models and tools 
-- [x] Built-in plugins for:
-    - Discounted Cash Flow (DCF)
-    - Monte Carlo simulation
-    - Linear regression
+- [x] Built-in plugins
 - [x] SDK (Software Development Kit) MVP
 - [x] Refactor and clean codebase 
 
 ## Qemy v0.2.0
 
 - [ ] Refined SEC parsing
-- [ ] Refined SDK
-- [ ] More Metrics
-- [ ] Finish CONTRIBUTING.md guide
 - [ ] Separate financial statements for SEC filings
-- [ ] Support for IFRS filing format
+- [ ] More metrics
+- [ ] Refined SDK
+- [ ] Basic CONTRIBUTING.md guide
 - [ ] Refactor and clean codebase 
 
-## Planned Updates
+## Additional Planned Updates
 
 - [ ] Stock screening and filtering
 - [ ] Scale and normalize data preprocessing 
+- [ ] Support for IFRS filing format
+- [ ] FRED observation release calendar
 

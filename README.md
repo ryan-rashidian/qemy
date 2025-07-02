@@ -1,4 +1,4 @@
-# Qemy (prototype): A developer-first CLI toolkit for financial data and modeling
+# Qemy: A developer-first CLI toolkit for financial data, modeling, and analytics
 
 ![Header Screenshot](assets/qemy_welcome.png)
 
