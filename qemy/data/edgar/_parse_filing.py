@@ -14,7 +14,7 @@ key_list_units = [
 def get_concept(
     facts: dict, 
     xbrl_tags: tuple, 
-    quarters: int=20, 
+    quarters: int=10, 
     latest: bool=False
 ) -> pd.DataFrame | float | None:
     """Concept search and retrieval.
@@ -46,10 +46,12 @@ def get_concept(
                     unit = 'USD'
 
                 raw = facts['facts']['us-gaap'][tag]['units']
-                raw = raw.get(unit, [])[-quarters:]
+                # Slice quarters * 2 to account for duplicates
+                raw = raw.get(unit, [])[(-quarters * 2):]
                 data = []
                 for d in raw: # Sometimes, you just have to.
                     if 'val' in d and d['val'] is not None:
+                        # 'filed' and 'form' meta data for each 'val'
                         filed = pd.to_datetime(d['filed'], errors='coerce')
                         entry = {
                             'val': d['val'],
@@ -63,6 +65,7 @@ def get_concept(
                 df = df.sort_values('filed')
                 df = df.drop_duplicates('filed', keep='last')
                 df = df.reset_index(drop=True)
+                df = df.tail(quarters)
 
                 if latest:
                     if not df.empty:
