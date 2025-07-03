@@ -12,7 +12,16 @@ pd.set_option('display.max_rows', None)
 # === EDGAR ===
 
 def filing(arg, ticker_df) -> pd.DataFrame | None:
-    """
+    """Print filing data to CLI.
+
+    Args:
+        arg (str): CLI input string
+        ticker_df (pd.Dataframe): Holds current CLI session filing history
+            - Accessed via 'table' command in CLI
+
+    Returns:
+        pd.DataFrame: ticker_df and new filing concatenated together
+        None: If --help called or EDGARClient returns None 
     """
     if check_help(
         arg_str=arg,
@@ -108,6 +117,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
             return None
 
         ticker_df = pd.concat([ticker_df, filing_df], axis=1)
+
         print(filing_df.to_string(justify='left', formatters={
             ticker: lambda x: f"{x:,}" if isinstance(x, Number) else x
         }))

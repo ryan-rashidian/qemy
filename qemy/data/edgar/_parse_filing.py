@@ -25,10 +25,10 @@ def get_concept(
         facts (dict): JSON file from companyfacts
         xbrl_tags (tuple): Ordered strings of XBRL taxonomy tags
         quarters (int): Number of quarters to fetch
-        latest (bool): True returns only latest value (default = False)
+        latest (bool): True returns only latest value as float
 
     Returns:
-        pd.DataFrame: Quarterly rows for given concept
+        pd.DataFrame: comlumns=['val', 'filed', 'form'], quarterly rows
         float: Latest concept value (returned with 'latest = True' arg) 
         None: If incorrect inputs or parsing logic fails 
     """

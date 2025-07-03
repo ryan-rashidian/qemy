@@ -61,7 +61,11 @@ class EDGARClient:
             raise ValueError(f"Unknown CLI argument: {cli_arg}")
 
     def get_filing(self) -> pd.DataFrame | None:
-        """
+        """Fetch all available concepts for given ticker.
+
+        Returns:
+            pd.DataFrame: with concepts split into rows
+            None: If class fails to initialize filing data
         """
         if self.facts is None:
             return None
