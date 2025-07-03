@@ -52,7 +52,6 @@ def market():
     print("\n qemy - Market Command Reference Table")
     print_help_table(" Market: ", [
         ("f", "Fetches latest SEC filing (10K/10Q/20F)"),
-        ("fmetric", "Fetches filing history for given metric"),
         ("price", "Fetches stock price data"),
         ("quote", "Fetches latest price quote"),
         ("metric", "Fetches given metric for given ticker"),
@@ -76,6 +75,12 @@ def plugins():
 def flags():
     print("\n qemy - Flags")
     print(" Basic Syntax: <FLAG> <ARGUMENT>")
+    print_help_table(" -f --file", [
+        ("balance", "Balance Sheet"),
+        ("cashflow", "Cash Flow Statement"),
+        ("income", "Income Statement"),
+        ("concept", "Given metric from form"),
+    ])
     print_help_table(" -h --help ", [
         ("Info:", "Display the help info for a command."),
         ("Usage:", "<COMMAND> -h"),
@@ -152,23 +157,31 @@ def units():
 def metrics():
     print("\n qemy - Metrics")
     print_help_table(" Arguments ", [
-        ("assets", "Total Assets"),
-        ("capex", "Capital Expenditure"),
-        ("cash", "Total Cash"),
-        ("cogs", "Cost of Goods and Service"),
-        ("debt", "Total Debt"),
-        ("ebit", "Earnings Before Interest and Taxes"),
-        ("eps", "Diluted Earnings Per-Share"),
-        ("equity", "Total Equity"),
-        ("fcf", "Free Cash Flow"),
-        ("gprofit", "Gross Profit"),
-        ("liab", "Total Liability"),
-        ("netdebt", "Net Debt"),
-        ("netinc", "Net Income"),
-        ("ocf", "Operating Cash Flow"),
-        ("opex", "Operating Expenditure"),
-        ("rev", "Revenue"),
         ("shares", "Shares Outstanding"),
+        ("assets", "Assets"),
+        ("cash", "Cash & Equivalents"),
+        ("ppe", "PP&E"),
+        ("inven", "Inventory"),
+        ("goodw", "Goodwill"),
+        ("debt", "Debt"),
+        ("sdebt", "Shortterm Debt"),
+        ("ldebt", "Longterm Debt"),
+        ("liab", "Total Liabilities"),
+        ("equity", "Stockholders Equity"),
+        ("ocf", "Operating Cash Flow"),
+        ("netcashf", "Net Cash: Financing"),
+        ("netcashi", "Net Cash: Investing"),
+        ("capex", "CAPEX"),
+        ("revenue", "Revenue"),
+        ("cogs", "COGS"),
+        ("gprofit", "Gross Profit"),
+        ("randd", "R&D"),
+        ("ganda", "G&A"),
+        ("opinc", "Operating Income"),
+        ("netinc", "Net Income"),
+        ("opex", "OPEX"),
+        ("epsb", "EPS Basic"),
+        ("epsd", "EPS Diluted"),
     ])
     print("\n")
 
