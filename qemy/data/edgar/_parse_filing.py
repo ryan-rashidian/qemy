@@ -46,15 +46,6 @@ def get_concept(
                     unit = 'USD'
 
                 raw = facts['facts']['us-gaap'][tag]['units']
-                #if unit not in raw:
-                #    print(f"{unit} not found in {tag}")
-                #    continue
-                #raw = raw[unit]
-                #if not isinstance(raw, list):
-                #    print(f"{tag} unit {unit} got type{raw}")
-                #    continue
-                #print("test1.7")
-                #raw = raw[-quarters:]
                 raw = raw.get(unit, [])[-quarters:]
                 data = []
                 for d in raw: # Sometimes, you just have to.
