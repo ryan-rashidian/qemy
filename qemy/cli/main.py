@@ -130,6 +130,3 @@ class QemyShell(cmd.Cmd):
 def main():
     QemyShell().cmdloop()
 
-if __name__ == '__main__':
-    main()
-
