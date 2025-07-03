@@ -1,0 +1,284 @@
+"""Edgar API module.
+
+This module requests company concepts data from local download or SEC servers.
+Uses CIK##########.json files from companyfacts.
+XBRL taxonomy for concept tags.
+"""
+
+import pandas as pd
+
+from . import _tag_containers as tags
+from ._parse_filing import get_concept
+from ._get_facts import get_facts_bulk, get_facts_request
+
+class EDGARClient:
+    """Client for fetching filing data from SEC EDGAR API."""
+
+    def __init__(self, ticker: str, use_requests: bool=False):
+        """Initialize EDGAR API. 
+
+        Initialize EDGAR User-Agent and request headers.
+        
+        Args:
+            ticker (str): Company ticker symbol
+            use_requests (bool): Requests from SEC servers. False = no request.
+        """
+        self.ticker = ticker.upper().strip()
+        self.facts = None
+
+        try:
+            if use_requests:
+                self.facts = get_facts_request(self.ticker)
+            else:
+                self.facts = get_facts_bulk(self.ticker)
+
+            if self.facts is None:
+                print(f"[EDGARClient] Failed to initialize: {self.ticker}")
+
+        except Exception as e:
+            print(f"[EDGARClinet] INIT ERROR:\n{e}")
+
+    def __repr__(self):
+        status = "Initialized" if self.facts else "Failed"
+        return f"<EDGARClient ticker={self.ticker} [{status}]>"
+
+    def __bool__(self):
+        return self.facts is not None
+
+    def _map_arg(self, cli_arg: str) -> tuple[str]:
+        """Map CLI arguments to matching container.
+
+        Args:
+            cli_arg (str): User argument parsed from the CLI
+
+        Returns:
+            tuple[str]: Matching concept tag container 
+        """
+        try:
+            section, label = tags.map_arg[cli_arg.lower()]
+            return tags.filing_tags[section][label]
+        except KeyError:
+            raise ValueError(f"Unknown CLI argument: {cli_arg}")
+
+    def get_filing(self) -> pd.DataFrame | None:
+        """
+        """
+        if self.facts is None:
+            return None
+
+        # Use Shares Outstanding tags to get filing date and type
+        shares_df = get_concept(
+            facts=self.facts,
+            xbrl_tags=tags.tag_shares_outstanding,
+            quarters=10
+        )
+        if isinstance(shares_df, pd.DataFrame):
+            filed = shares_df['form'].iloc[-1]
+            form = shares_df['filed'].iloc[-1]
+        else:
+            form = None
+            filed = None
+
+        # Filing fields
+        filing = [
+            ('Form', form),
+            ('Filed', filed),
+        ]
+
+        for _, metrics in tags.filing_tags.items():
+            for key, tag_tuple in metrics.items():
+                value = get_concept(
+                    facts=self.facts,
+                    xbrl_tags=tag_tuple,
+                    latest=True
+                )
+                filing.append((key, value))
+
+        filing_df = pd.DataFrame(
+            filing, 
+            columns=['Metric:', self.ticker]
+        )
+        filing_df.set_index('Metric:', inplace=True)
+
+        return filing_df
+        
+    def get_balance_sheet(self) -> pd.DataFrame | None:
+        """Fetches Balance Sheet concepts for given ticker.
+
+        Returns:
+            pd.DataFrame: with concepts split into rows
+            None: If class fails to initialize filing data
+        """
+        if self.facts is None:
+            return None
+
+        # Shares Outstanding and filing info
+        shares_df = get_concept(
+            facts=self.facts,
+            xbrl_tags=tags.tag_shares_outstanding,
+            quarters=10
+        )
+        if isinstance(shares_df, pd.DataFrame):
+            shares_outstanding = shares_df['val'].iloc[-1]
+            filed = shares_df['form'].iloc[-1]
+            form = shares_df['filed'].iloc[-1]
+        else:
+            shares_outstanding = None
+            form = None
+            filed = None
+
+        # Balance Sheet fields
+        balance_sheet = [
+            ('Form', form),
+            ('Filed', filed),
+            ('Shares Outstanding', shares_outstanding)
+        ]
+
+        for key, tag_tuple in tags.balance_sheet.items():
+            value = get_concept(
+                facts=self.facts,
+                xbrl_tags=tag_tuple,
+                latest=True
+            )
+            balance_sheet.append((key, value))
+
+        balance_df = pd.DataFrame(
+            balance_sheet, 
+            columns=['Metric:', self.ticker]
+        )
+        balance_df.set_index('Metric:', inplace=True)
+
+        return balance_df
+
+    def get_cashflow_statement(self) -> pd.DataFrame | None:
+        """Fetches Cash Flow Statement concepts for given ticker.
+
+        Returns:
+            pd.DataFrame: with concepts split into rows
+            None: If class fails to initialize filing data
+        """
+        if self.facts is None:
+            return None
+
+        # Shares Outstanding and filing info
+        shares_df = get_concept(
+            facts=self.facts,
+            xbrl_tags=tags.tag_shares_outstanding,
+            quarters=10
+        )
+        if isinstance(shares_df, pd.DataFrame):
+            shares_outstanding = shares_df['val'].iloc[-1]
+            filed = shares_df['form'].iloc[-1]
+            form = shares_df['filed'].iloc[-1]
+        else:
+            shares_outstanding = None
+            form = None
+            filed = None
+
+        # Cash Flow Statement fields
+        cashflow_statement = [
+            ('Form', form),
+            ('Filed', filed),
+            ('Shares Outstanding', shares_outstanding)
+        ]
+
+        for key, tag_tuple in tags.cash_flow_statement.items():
+            value = get_concept(
+                facts=self.facts,
+                xbrl_tags=tag_tuple,
+                latest=True
+            )
+            cashflow_statement.append((key, value))
+
+        cashflow_statement_df = pd.DataFrame(
+            cashflow_statement, 
+            columns=['Metric:', self.ticker]
+        )
+        cashflow_statement_df.set_index('Metric:', inplace=True)
+
+        return cashflow_statement_df
+
+    def get_income_statement(self) -> pd.DataFrame | None:
+        """Fetches Income Statement concepts for given ticker.
+
+        Returns:
+            pd.DataFrame: with concepts split into rows
+            None: If class fails to initialize filing data
+        """
+        if self.facts is None:
+            return None
+
+        # Shares Outstanding and filing info
+        shares_df = get_concept(
+            facts=self.facts,
+            xbrl_tags=tags.tag_shares_outstanding,
+            quarters=10
+        )
+        if isinstance(shares_df, pd.DataFrame):
+            shares_outstanding = shares_df['val'].iloc[-1]
+            filed = shares_df['form'].iloc[-1]
+            form = shares_df['filed'].iloc[-1]
+        else:
+            shares_outstanding = None
+            form = None
+            filed = None
+
+        # Income Statement fields
+        income_statement = [
+            ('Form', form),
+            ('Filed', filed),
+            ('Shares Outstanding', shares_outstanding)
+        ]
+
+        for key, tag_tuple in tags.income_statement.items():
+            value = get_concept(
+                facts=self.facts,
+                xbrl_tags=tag_tuple,
+                latest=True
+            )
+            income_statement.append((key, value))
+
+        income_statement_df = pd.DataFrame(
+            income_statement, 
+            columns=['Metric:', self.ticker]
+        )
+        income_statement_df.set_index('Metric:', inplace=True)
+
+        return income_statement_df
+
+    def get_concept(
+            self, 
+            cli_arg: str, 
+            quarters: int=10
+    ) -> pd.DataFrame | None:
+        """Fetches given concept for given ticker.
+
+        Args:
+            cli_arg (str): User argument parsed from the CLI
+            quarters (int): Number of quarters to fetch
+
+        Returns:
+            pd.DataFrame: Quarterly rows with 'val' column for concept
+            None: If class fails to initialize filing data
+        """
+        if self.facts is None:
+            return None
+
+        xbrl_tags = self._map_arg(cli_arg=cli_arg)
+        
+        concept_df = get_concept(
+            facts=self.facts,
+            xbrl_tags=xbrl_tags,
+            quarters=quarters
+        )        
+
+        if isinstance(concept_df, pd.DataFrame):
+            concept_df.rename(
+                columns={'val': 'Value', 'filed': 'Date', 'form': 'Form'},
+                inplace=True
+            )
+            concept_df.set_index('Date', inplace=True)
+            return concept_df
+        else:
+            return None
+
