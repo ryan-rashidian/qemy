@@ -5,7 +5,7 @@ from qemy.utils.parse_arg import parse_period
 
 class FREDClient:
     def __init__(self):
-        self.API_KEY = cfg.FRED_API_KEY
+        self.API_KEY = cfg.fred_api_key()
         self.url = cfg.FRED_URL
 
     def _fetch_series(

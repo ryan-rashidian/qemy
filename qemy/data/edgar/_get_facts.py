@@ -17,7 +17,7 @@ def _find_cik(ticker: str, cik_data: dict) -> str | None:
 
 def get_facts_request(ticker: str) -> dict | None:
     ticker = ticker.lower().strip()
-    headers = {'User-Agent': cfg.EDGAR_USER_AGENT} 
+    headers = {'User-Agent': cfg.edgar_user_agent()} 
 
     cik_data = safe_status_get(cfg.EDGAR_CIK_URL, headers=headers)
     if not cik_data:

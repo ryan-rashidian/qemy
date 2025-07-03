@@ -19,7 +19,7 @@ def bulk_refresh():
     cik_tickers_url = cfg.EDGAR_CIK_URL
     companyfacts_zip = bulk_dir / "companyfacts.zip"
     cik_tickers_json = bulk_dir / "company_tickers.json"
-    headers = {"User-Agent": cfg.EDGAR_USER_AGENT} 
+    headers = {"User-Agent": cfg.edgar_user_agent()} 
 
     print("Downloading bulk filing data...")
     success = safe_status_download(url=companyfacts_url, headers=headers, dest_path=companyfacts_zip)

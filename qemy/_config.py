@@ -5,11 +5,19 @@ from qemy.utils.env_tools import get_env_str
 
 # === KEY ===
 
-load_dotenv(dotenv_path=Path(__file__).resolve().parents[1] / '.env')
+dotenv_path = Path(__file__).resolve().parents[1] / '.env'
+if dotenv_path.exists():
+    load_dotenv(dotenv_path=dotenv_path)
+ 
+# Lazy accessors for API keys
+def fred_api_key() -> str:
+    return get_env_str('FRED_API_KEY')
 
-FRED_API_KEY: str = get_env_str('FRED_API_KEY')
-TIINGO_API_KEY: str = get_env_str('TIINGO_API_KEY')
-EDGAR_USER_AGENT: str = get_env_str('EDGAR_USER_AGENT')
+def tiingo_api_key() -> str:
+    return get_env_str('TIINGO_API_KEY')
+
+def edgar_user_agent() -> str:
+    return get_env_str('EDGAR_USER_AGENT')
 
 # === URL ===
 

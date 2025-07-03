@@ -26,7 +26,7 @@ class EDGARClient:
             ticker (str): Company ticker symbol
             use_requests (bool): Send request to SEC servers. Default=False (no request)
         """
-        self.HEADERS = {'User-Agent': cfg.EDGAR_USER_AGENT} 
+        self.HEADERS = {'User-Agent': cfg.edgar_user_agent()} 
         self.ticker = ticker.upper().strip()
         self.cik = None
         self.facts = None

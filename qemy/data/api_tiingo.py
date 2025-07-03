@@ -14,7 +14,7 @@ class TiingoClient:
 
     def __init__(self):
         """Initialize TiingoClient with API key and request headers."""
-        self.API_KEY: str = cfg.TIINGO_API_KEY
+        self.API_KEY: str = cfg.tiingo_api_key()
         self.HEADERS: dict[str, str] = {
             'Content-Type': 'application/json',
             'Authorization': f"Token {self.API_KEY}"
