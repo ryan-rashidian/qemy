@@ -1,6 +1,7 @@
 import cmd
 import os
 import platform
+import logging
 import pandas as pd
 
 from .core import aux, core, helper, cli_plugins, cli_metrics, cli_plots 
@@ -126,7 +127,4 @@ class QemyShell(cmd.Cmd):
         aux.env_reset(arg=arg)
 
 #=============================================================================#
-
-def main():
-    QemyShell().cmdloop()
 

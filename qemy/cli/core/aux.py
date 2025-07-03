@@ -6,8 +6,6 @@ from qemy.data import bulk_refresh as bulk_r
 from .._parse_args import check_help
 from ..core.helper import print_help_table
 
-logging.disable(logging.CRITICAL) 
-
 def bulk_refresh(arg):
     if check_help(
         arg_str=arg,
@@ -51,7 +49,7 @@ def debug(arg: str, debug_mode: bool) -> bool | None:
         return
     
     if debug_mode:
-        logging.disable(logging.CRITICAL)
+        logging.disable(logging.CRITICAL + 1)
         print("Logging is now OFF")
         debug_mode = False
         return debug_mode 
