@@ -73,6 +73,8 @@ def get_concept(
                 concept_df = concept_df.drop_duplicates('filed', keep='last')
                 concept_df = concept_df.reset_index(drop=True)
                 concept_df = concept_df.tail(quarters)
+                # Make sure 'val' column is float
+                concept_df['val'] = concept_df['val'].astype(float)
 
                 if latest:
                     if not concept_df.empty:
