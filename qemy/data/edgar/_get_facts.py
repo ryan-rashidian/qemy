@@ -29,7 +29,7 @@ def get_facts_request(ticker: str) -> dict | None:
         logger.warning(f"CIK not found for ticker: {ticker.upper()}")
         return None
 
-    logger.info(f"Fetching facts from SEC for CIK {cik}")
+    logger.info(f"Fetching facts from SEC for: {ticker.upper()}")
     time.sleep(1) # Be polite to SEC server
 
     facts_url = f"{cfg.EDGAR_FACTS_URL}{cik}.json"
@@ -38,6 +38,7 @@ def get_facts_request(ticker: str) -> dict | None:
     if not facts:
         logger.warning(f"Failed to fetch facts from SEC servers for {cik}")
 
+    logger.info(f"EDGAR data found for {ticker.upper()}")
     return facts
 
 def get_facts_bulk(ticker: str) -> dict | None:
@@ -71,5 +72,6 @@ def get_facts_bulk(ticker: str) -> dict | None:
         logger.exception(f"Failed to load facts JSON for {cik}\n{e}")
         return None
 
+    logger.info(f"EDGAR data found for {ticker.upper()}")
     return facts
 

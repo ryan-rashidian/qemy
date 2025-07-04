@@ -3,7 +3,10 @@
 This module is used internally for /edgar/ parsing.
 """
 
+import logging
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 key_list_units = [
     'USD',
@@ -22,7 +25,7 @@ def get_concept(
     Iterates through given xbrl_tags and searches for matching us-gaap key.
 
     Args:
-        facts (dict): JSON file from companyfacts
+        facts (dict): companyfacts from SEC EDGAR API
         xbrl_tags (tuple): Ordered strings of XBRL taxonomy tags
         quarters (int): Number of quarters to fetch
         latest (bool): True returns only latest value as float
@@ -36,16 +39,20 @@ def get_concept(
         try:
 
             if tag in facts['facts']['us-gaap']:
+                logger.info(f"'{tag}' found in facts")
                 unit = None
                 unit_keys = facts['facts']['us-gaap'][tag]['units']
                 for try_key in key_list_units:
                     if try_key in unit_keys:
+                        logger.info(f"'{try_key}' found in facts...['units']")
                         unit = try_key
                         break
                 if unit is None:
+                    logger.warning(f"facts...['units'] no match found")
                     unit = 'USD'
 
                 raw = facts['facts']['us-gaap'][tag]['units']
+                logger.info(f"{len(raw.get(unit, []))} filings found")
                 # Slice quarters * 2 to account for duplicates
                 raw = raw.get(unit, [])[(-quarters * 2):]
                 data = []
@@ -75,8 +82,14 @@ def get_concept(
 
                 return df
 
-        except Exception:
+            else:
+                logger.warning(f"'{tag}' not found in facts")
+                continue
+
+        except Exception as e:
+            logger.exception(f"Exception:\n{e}")
             continue
 
+    logger.warning(f"No matches found in facts\n{xbrl_tags}")
     return None
 

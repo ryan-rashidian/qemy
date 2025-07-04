@@ -5,11 +5,14 @@ Uses CIK##########.json files from companyfacts.
 XBRL taxonomy for concept tags.
 """
 
+import logging
 import pandas as pd
 
 from . import _tag_containers as tags
 from ._parse_filing import get_concept
 from ._get_facts import get_facts_bulk, get_facts_request
+
+logger = logging.getLogger(__name__)
 
 class EDGARClient:
     """Client for fetching filing data from SEC EDGAR API."""
@@ -33,10 +36,10 @@ class EDGARClient:
                 self.facts = get_facts_bulk(self.ticker)
 
             if self.facts is None:
-                print(f"[EDGARClient] Failed to initialize: {self.ticker}")
+                logger.error(f"Facts not found: {self.ticker}")
 
         except Exception as e:
-            print(f"[EDGARClinet] INIT ERROR:\n{e}")
+            logger.exception(f"Exception:\n{e}")
 
     def __repr__(self):
         status = "Initialized" if self.facts else "Failed"
@@ -68,6 +71,7 @@ class EDGARClient:
             None: If class fails to initialize filing data
         """
         if self.facts is None:
+            logger.warning(f"EDGARClient({self.ticker}) - failed to init")
             return None
 
         # Use Shares Outstanding tags to get filing date and type
@@ -80,6 +84,7 @@ class EDGARClient:
             filed = shares_df['form'].iloc[-1]
             form = shares_df['filed'].iloc[-1]
         else:
+            logger.warning("get_concept() filing info not found")
             form = None
             filed = None
 
@@ -96,7 +101,11 @@ class EDGARClient:
                     xbrl_tags=tag_tuple,
                     latest=True
                 )
-                filing.append((key, value))
+                if isinstance(value, float):
+                    filing.append((key, value))
+                else:
+                    filing.append((key, value))
+                    logger.warning(f"get_concept() failed for: {key}")
 
         filing_df = pd.DataFrame(
             filing, 
@@ -114,6 +123,7 @@ class EDGARClient:
             None: If class fails to initialize filing data
         """
         if self.facts is None:
+            logger.warning(f"EDGARClient({self.ticker}) - failed to init")
             return None
 
         # Shares Outstanding and filing info
@@ -127,6 +137,7 @@ class EDGARClient:
             filed = shares_df['form'].iloc[-1]
             form = shares_df['filed'].iloc[-1]
         else:
+            logger.warning("get_concept() filing info not found")
             shares_outstanding = None
             form = None
             filed = None
@@ -144,7 +155,11 @@ class EDGARClient:
                 xbrl_tags=tag_tuple,
                 latest=True
             )
-            balance_sheet.append((key, value))
+            if isinstance(value, float):
+                balance_sheet.append((key, value))
+            else:
+                balance_sheet.append((key, value))
+                logger.warning(f"get_concept() failed for: {key}")
 
         balance_df = pd.DataFrame(
             balance_sheet, 
@@ -162,6 +177,7 @@ class EDGARClient:
             None: If class fails to initialize filing data
         """
         if self.facts is None:
+            logger.warning(f"EDGARClient({self.ticker}) - failed to init")
             return None
 
         # Shares Outstanding and filing info
@@ -175,6 +191,7 @@ class EDGARClient:
             filed = shares_df['form'].iloc[-1]
             form = shares_df['filed'].iloc[-1]
         else:
+            logger.warning("get_concept() filing info not found")
             shares_outstanding = None
             form = None
             filed = None
@@ -192,7 +209,11 @@ class EDGARClient:
                 xbrl_tags=tag_tuple,
                 latest=True
             )
-            cashflow_statement.append((key, value))
+            if isinstance(value, float):
+                cashflow_statement.append((key, value))
+            else:
+                cashflow_statement.append((key, value))
+                logger.warning(f"get_concept() failed for: {key}")
 
         cashflow_statement_df = pd.DataFrame(
             cashflow_statement, 
@@ -210,6 +231,7 @@ class EDGARClient:
             None: If class fails to initialize filing data
         """
         if self.facts is None:
+            logger.warning(f"EDGARClient({self.ticker}) - failed to init")
             return None
 
         # Shares Outstanding and filing info
@@ -223,6 +245,7 @@ class EDGARClient:
             filed = shares_df['form'].iloc[-1]
             form = shares_df['filed'].iloc[-1]
         else:
+            logger.warning("get_concept() filing info not found")
             shares_outstanding = None
             form = None
             filed = None
@@ -240,7 +263,11 @@ class EDGARClient:
                 xbrl_tags=tag_tuple,
                 latest=True
             )
-            income_statement.append((key, value))
+            if isinstance(value, float):
+                income_statement.append((key, value))
+            else:
+                income_statement.append((key, value))
+                logger.warning(f"get_concept() failed for: {key}")
 
         income_statement_df = pd.DataFrame(
             income_statement, 
@@ -266,6 +293,7 @@ class EDGARClient:
             None: If class fails to initialize filing data
         """
         if self.facts is None:
+            logger.warning(f"EDGARClient({self.ticker}) - failed to init")
             return None
 
         xbrl_tags = self._map_arg(cli_arg=cli_arg)
@@ -284,5 +312,6 @@ class EDGARClient:
             concept_df.set_index('Date', inplace=True)
             return concept_df
         else:
+            logger.error(f"Error: get_concept({cli_arg}) failed\n{xbrl_tags}")
             return None
 
