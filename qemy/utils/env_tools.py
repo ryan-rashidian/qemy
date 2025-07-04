@@ -1,13 +1,10 @@
-"""
-Functions relating to os.getenv environment variables.
-"""
+"""Functions relating to os.getenv environment variables."""
 
 import os
 import sys
 
 def get_env_str(key: str) -> str:
-    """
-    Ensure string is returned from os.getenv
+    """Ensure string is returned from os.getenv
     
     Args:
         key (str): Name of environment variable (e.g., "EDGAR_USER_AGENT")
