@@ -96,14 +96,19 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
         return
 
     elif file == 'METRIC':
-        file_df = EDGARClient(
+        concept_df = EDGARClient(
             ticker=ticker, 
             use_requests=request
         ).get_concept(cli_arg=metric, quarters=int(quarters))
-        if file_df is None or file_df.empty:
+        if concept_df is None or concept_df.empty:
             return None
 
-        print(file_df.to_string(justify='left', formatters={
+        concept_df.rename(
+            columns={'val': 'Value', 'filed': 'Date', 'form': 'Form'},
+            inplace=True
+        )
+        concept_df.set_index('Date', inplace=True)
+        print(concept_df.to_string(justify='left', formatters={
             'Value': lambda x: f"{x:,}" if isinstance(x, Number) else x
         }))
         return

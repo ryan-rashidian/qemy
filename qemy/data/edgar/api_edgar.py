@@ -305,11 +305,6 @@ class EDGARClient:
         )        
 
         if isinstance(concept_df, pd.DataFrame):
-            concept_df.rename(
-                columns={'val': 'Value', 'filed': 'Date', 'form': 'Form'},
-                inplace=True
-            )
-            concept_df.set_index('Date', inplace=True)
             return concept_df
         else:
             logger.error(f"Error: get_concept({cli_arg}) failed\n{xbrl_tags}")
