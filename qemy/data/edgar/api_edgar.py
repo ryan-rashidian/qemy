@@ -296,7 +296,11 @@ class EDGARClient:
             logger.warning(f"EDGARClient({self.ticker}) - failed to init")
             return None
 
-        xbrl_tags = self._map_concept(concept=concept)
+        try:
+            xbrl_tags = self._map_concept(concept=concept)
+        except ValueError:
+            logger.error(f"'{concept}' is not a valid argument")
+            return None
         
         concept_df = get_concept(
             facts=self.facts,
