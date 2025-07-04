@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
+
 from qemy.utils.file_tools import save_to_png
-from qemy.data.api_tiingo import TiingoClient
+from qemy.data import TiingoClient
 
 def plot_models(title='title', save=False, plot_func=None):
     plt.figure(figsize=(14, 8))

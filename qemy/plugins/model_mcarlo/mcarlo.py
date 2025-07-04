@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from qemy.data.api_tiingo import TiingoClient
+
+from qemy.data import TiingoClient
 from qemy.core.plugin_base import BasePlugin
 
 class MCarloPlugin(BasePlugin):

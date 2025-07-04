@@ -2,7 +2,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-from qemy.data.api_tiingo import TiingoClient
+
+from qemy.data import TiingoClient
 from qemy.core.plugin_base import BasePlugin
 
 class LinearRPlugin(BasePlugin):

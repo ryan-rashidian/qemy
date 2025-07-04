@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+
 from qemy import _config as cfg
 from qemy.utils.file_tools import save_to_png
-from qemy.data.api_fred import FREDClient
+from qemy.data import FREDClient
 
 class PlotFRED:
     def __init__(self):
