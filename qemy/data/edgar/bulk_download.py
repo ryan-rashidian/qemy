@@ -31,7 +31,11 @@ def bulk_refresh():
     headers = {"User-Agent": cfg.edgar_user_agent()} 
 
     print("Downloading bulk filing data...")
-    success = safe_status_download(url=companyfacts_url, headers=headers, dest_path=companyfacts_zip)
+    success = safe_status_download(
+        url=companyfacts_url, 
+        headers=headers, 
+        dest_path=companyfacts_zip
+    )
     if not success:
         print("Download failed for companyfacts.zip")
 
