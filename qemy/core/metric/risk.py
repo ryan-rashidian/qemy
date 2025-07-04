@@ -8,7 +8,7 @@ def ratio_sharpe(ticker, period='1Y'):
 
     rfr_df = FREDClient().get_tbill_yield()
     if rfr_df is not None and not rfr_df.empty:
-        rfr = rfr_df['value'].iloc[0] / 100
+        rfr = rfr_df['val'].iloc[0] / 100
     else:
         print(f"No Observations found for T-Bill yield")
         return {}

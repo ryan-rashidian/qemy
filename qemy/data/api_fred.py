@@ -76,6 +76,8 @@ class FREDClient:
                     obs_df['value'], 
                     errors='coerce'
                 )
+                # Rename column to 'val' for consistency
+                obs_df.rename(columns={'value': 'val'}, inplace=True)
                 # Drop un-needed columns
                 return obs_df.drop(
                     columns=['realtime_start', 'realtime_end'], 

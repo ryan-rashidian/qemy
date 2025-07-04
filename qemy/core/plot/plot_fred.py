@@ -14,7 +14,15 @@ class PlotFRED:
         fred_df = pd.DataFrame(fred_data)
 
         plt.figure(figsize=(14, 8))
-        plt.plot(fred_df.index, fred_df['value'], label=label, color='green', linewidth=3, marker= 'o', alpha=0.8)
+        plt.plot(
+            fred_df.index, 
+            fred_df['val'], 
+            label=label, 
+            color='green', 
+            linewidth=3, 
+            marker= 'o', 
+            alpha=0.8
+        )
         plt.xlabel('Date')
         plt.ylabel(y_label)
         plt.title(title)
