@@ -1,5 +1,5 @@
-from qemy.data.api_tiingo import TiingoClient
-from qemy.data.api_edgar import EDGARClient
+from qemy.data import TiingoClient
+from qemy.data import EDGARClient
 
 def cagr(ticker, period='1Y'):
     price_df = TiingoClient().get_prices(ticker=ticker, period=period)
@@ -20,19 +20,27 @@ def cagr(ticker, period='1Y'):
     }
 
 def growth_rate(ticker, metric):
-    metric_data = EDGARClient(ticker=ticker).get_metric_history(key=metric.lower())
-    if metric_data.empty:
+    metric_data = EDGARClient(ticker=ticker).get_concept(concept=metric)
+    if metric_data is None:
         return {}
 
     metric_vals = metric_data['val'].iloc[-5:]
     metric_growth = metric_vals.pct_change().dropna()
+    if metric_growth.empty:
+        return {}
 
-    annual_metric_growth = (1 + metric_growth).prod() - 1
-    
-    return {
-        'ticker': ticker,
-        'growth': annual_metric_growth
-    }
+    growth_factors = 1 + metric_growth
+    product = growth_factors.prod()
+
+    if isinstance(product, float): 
+        annual_metric_growth = product - 1
+
+        return {
+            'ticker': ticker,
+            'growth': annual_metric_growth
+        }
+    else:
+        return {}
 
 def eps_growth(ticker):
     return

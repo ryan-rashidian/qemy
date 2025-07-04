@@ -1,5 +1,5 @@
-from qemy.data.api_tiingo import TiingoClient
-from qemy.data.api_fred import FREDClient
+from qemy.data import TiingoClient
+from qemy.data import FREDClient
 
 def ratio_sharpe(ticker, period='1Y'):
     price_df = TiingoClient().get_prices(ticker=ticker, period=period)
