@@ -1,13 +1,16 @@
 """Tiingo API module.
 
-This module requests and fetches data from Tiingo API servers.
+This module requests and fetches data from Tiingo API.
 """
 
+import logging
 import pandas as pd
 
 from ._api_tools import safe_status_get, parse_period
 
 from qemy import _config as cfg
+
+logger = logging.getLogger(__name__)
 
 class TiingoClient:
     """Client for fetching stock market data from Tiingo API."""
@@ -55,7 +58,9 @@ class TiingoClient:
         )
 
         if not price_data:
+            logger.error("Tiingo API request Failed")
             return pd.DataFrame()
+        logger.info("Tiingo API request Successful")
 
         # DataFrame formatting step
         price_df = pd.DataFrame(price_data)
@@ -79,9 +84,12 @@ class TiingoClient:
             tickers = [tickers]
 
         url = f"{cfg.TIINGO_IEX_URL}{','.join(tickers)}"
+
         response = safe_status_get(url=url, headers=self.HEADERS)
         if not isinstance(response, list):
+            logger.error("Tiingo API request Failed")
             return {}
+        logger.info("Tiingo API request Successful")
 
         return {entry["ticker"]: entry for entry in response if "ticker" in entry}
 
