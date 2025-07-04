@@ -1,8 +1,9 @@
 from math import nan
 import pandas as pd
 import numpy as np
+
 from sklearn.linear_model import LinearRegression
-from qemy.data.api_edgar import EDGARClient
+from qemy.data import EDGARClient
 from qemy.core.plugin_base import BasePlugin
 
 class DCFPlugin(BasePlugin):
@@ -11,17 +12,60 @@ class DCFPlugin(BasePlugin):
     version = "0.1.0"
 
     def _get_dcf_metrics(self):
+
         try:
+            df_shares = EDGARClient(ticker=self.ticker).get_concept(concept='shares', quarters=10)
+            if df_shares is None:
+                shares = nan
+            else:
+                shares = df_shares['val'].iloc[-1]
 
-            df_shares = EDGARClient(ticker=self.ticker).get_metric_history(key='shares', quarters=40)
-            shares = df_shares.iloc[-1]['val'] if not df_shares.empty else nan
+            df_debt = EDGARClient(ticker=self.ticker).get_concept(concept='debt', quarters=10)
+            df_debt_short = EDGARClient(ticker=self.ticker).get_concept(concept='sdebt', quarters=10)
+            df_debt_long = EDGARClient(ticker=self.ticker).get_concept(concept='ldebt', quarters=10)
+            df_cash = EDGARClient(ticker=self.ticker).get_concept(concept='cash', quarters=10)
+            if df_debt is None:
+                debt = 0
+            else:
+                debt = df_debt['val'].iloc[-1]
+            if df_debt_short is None:
+                debt_short = 0
+            else:
+                debt_short = df_debt_short['val'].iloc[-1]
+            if df_debt_long is None:
+                debt_long = 0
+            else:
+                debt_long = df_debt_long['val'].iloc[-1]
+            if df_cash is None:
+                cash = 0
+            else:
+                cash = df_cash['val'].iloc[-1]
+            net_debt = (debt + debt_short + debt_long) - cash
 
-            df_net_debt = EDGARClient(ticker=self.ticker).get_metric_history(key='netdebt', quarters=20)
-            net_debt = df_net_debt.iloc[-1]['val'] if not df_net_debt.empty else nan
-
-            df_fcf = EDGARClient(ticker=self.ticker).get_metric_history(key='fcf', quarters=20)
-            if df_fcf.empty:
+            df_ocf = EDGARClient(ticker=self.ticker).get_concept(concept='ocf', quarters=20)
+            df_capex = EDGARClient(ticker=self.ticker).get_concept(concept='capex', quarters=20)
+            if df_ocf is None or df_capex is None:
                 df_fcf = nan
+            else:
+                df_cash_combined = pd.merge(
+                    df_ocf, 
+                    df_capex, 
+                    on='filed', 
+                    how='outer', 
+                    suffixes=('_ocf', '_capex')
+                ).copy()
+                df_combined = df_cash_combined.infer_objects()
+                df_combined = df_combined.fillna(0)
+                df_combined['val'] = (
+                    df_combined['val_ocf'] - df_combined['val_capex']
+                )
+                df_fcf = df_combined[['filed', 'val']].tail(20).copy()
+                df_fcf.set_index('filed', inplace=True)
+                if isinstance(df_fcf, pd.DataFrame):
+                    df_fcf['val'] = pd.to_numeric(
+                        df_fcf['val'],
+                        errors='coerce'
+                    )
 
             return df_fcf, shares, net_debt
 
