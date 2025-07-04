@@ -11,7 +11,7 @@ ARGUMENTS = {
     'ticker_flag':   lambda p: p.add_argument('-t', '--ticker'),
     'num':           lambda p: p.add_argument('-n', '--num', default=1000),
     'quarter':       lambda p: p.add_argument('-q', '--quarter', default='20'),
-    'metric':        lambda p: p.add_argument('-m', '--metric', default='eps'),
+    'metric':        lambda p: p.add_argument('-m', '--metric', default='epsd'),
     'metric_p':      lambda p: p.add_argument('metric_p'),
     'model':         lambda p: p.add_argument('model'),
     'plot':          lambda p: p.add_argument('-plt', '--plot', action='store_true'),
