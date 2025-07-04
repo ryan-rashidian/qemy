@@ -91,5 +91,10 @@ class TiingoClient:
             return {}
         logger.info("Tiingo API request Successful")
 
-        return {entry["ticker"]: entry for entry in response if "ticker" in entry}
+        result = {}
+        for entry in response:
+            if 'ticker' in entry:
+                ticker: str = entry['ticker']
+                result[ticker] = dict(entry)
+        return result
 
