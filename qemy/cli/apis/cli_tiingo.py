@@ -16,11 +16,14 @@ def quote(arg):
     ):
         return
 
-    core_args, plugin_kwargs, other_args = parse_args_cli(
-        arg_str=arg, 
-        expected_args=['ticker'], 
-        prog_name='quote', 
-    )
+    try:
+        core_args, plugin_kwargs, other_args = parse_args_cli(
+            arg_str=arg, 
+            expected_args=['ticker'], 
+            prog_name='quote', 
+        )
+    except:
+        return
 
     if plugin_kwargs or other_args:
         print(f"Unexpected command: {other_args} {plugin_kwargs}")
@@ -50,11 +53,15 @@ def price(arg):
         ])
     ):
         return
-    core_args, plugin_kwargs, other_args = parse_args_cli(
-        arg_str=arg, 
-        expected_args=['period', 'ticker'], 
-        prog_name='price', 
-    )
+
+    try:
+        core_args, plugin_kwargs, other_args = parse_args_cli(
+            arg_str=arg, 
+            expected_args=['period', 'ticker'], 
+            prog_name='price', 
+        )
+    except:
+        return
 
     if plugin_kwargs or other_args:
         print(f"Unexpected command: {other_args} {plugin_kwargs}")
