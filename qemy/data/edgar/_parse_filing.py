@@ -36,8 +36,8 @@ def get_concept(
         None: If incorrect inputs or parsing logic fails 
     """
     for tag in xbrl_tags:
-        try:
 
+        try:
             if tag in facts['facts']['us-gaap']:
                 logger.info(f"'{tag}' found in facts")
                 unit = None
@@ -51,36 +51,36 @@ def get_concept(
                     logger.warning(f"facts...['units'] no match found")
                     unit = 'USD'
 
-                raw = facts['facts']['us-gaap'][tag]['units']
-                logger.info(f"{len(raw.get(unit, []))} filings found")
+                raw_facts = facts['facts']['us-gaap'][tag]['units']
+                logger.info(f"{len(raw_facts.get(unit, []))} filings found")
                 # Slice quarters * 2 to account for duplicates
-                raw = raw.get(unit, [])[(-quarters * 2):]
-                data = []
-                for d in raw: # Sometimes, you just have to.
-                    if 'val' in d and d['val'] is not None:
+                raw_facts = raw_facts.get(unit, [])[(-quarters * 2):]
+                concept_data = []
+                for rf in raw_facts:
+                    if 'val' in rf and rf['val'] is not None:
                         # 'filed' and 'form' meta data for each 'val'
-                        filed = pd.to_datetime(d['filed'], errors='coerce')
+                        filed = pd.to_datetime(rf['filed'], errors='coerce')
                         entry = {
-                            'val': d['val'],
+                            'val': rf['val'],
                             'filed': filed,
-                            'form': d.get('form')
+                            'form': rf.get('form')
                         }
-                        data.append(entry)
+                        concept_data.append(entry)
 
-                df = pd.DataFrame(data)
-                df = df.dropna(subset=['filed'])
-                df = df.sort_values('filed')
-                df = df.drop_duplicates('filed', keep='last')
-                df = df.reset_index(drop=True)
-                df = df.tail(quarters)
+                concept_df = pd.DataFrame(concept_data)
+                concept_df = concept_df.dropna(subset=['filed'])
+                concept_df = concept_df.sort_values('filed')
+                concept_df = concept_df.drop_duplicates('filed', keep='last')
+                concept_df = concept_df.reset_index(drop=True)
+                concept_df = concept_df.tail(quarters)
 
                 if latest:
-                    if not df.empty:
-                        return float(df['val'].iloc[-1])
+                    if not concept_df.empty:
+                        return float(concept_df['val'].iloc[-1])
                     else:
                         return None
 
-                return df
+                return concept_df
 
             else:
                 logger.warning(f"'{tag}' not found in facts")
