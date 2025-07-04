@@ -5,9 +5,9 @@ This module requests and fetches data from Tiingo API servers.
 
 import pandas as pd
 
+from ._api_tools import safe_status_get, parse_period
+
 from qemy import _config as cfg
-from qemy.utils.safe_request import safe_status_get
-from qemy.utils.parse_arg import parse_period
 
 class TiingoClient:
     """Client for fetching stock market data from Tiingo API."""

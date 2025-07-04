@@ -8,7 +8,7 @@ import time
 import json
 
 from qemy import _config as cfg
-from qemy.utils.safe_request import safe_status_get
+from qemy.data._api_tools import safe_status_get
 
 logger = logging.getLogger(__name__)
 

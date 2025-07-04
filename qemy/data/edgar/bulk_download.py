@@ -6,7 +6,7 @@ import zipfile
 import json
 
 from qemy import _config as cfg
-from qemy.utils.safe_request import safe_status_get, safe_status_download
+from qemy.data._api_tools import safe_status_get, safe_status_download
 
 def bulk_refresh():
     """SEC companyfacts.zip bulk downloader function.

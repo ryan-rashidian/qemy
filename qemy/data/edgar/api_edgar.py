@@ -9,7 +9,7 @@ import logging
 import pandas as pd
 
 from . import _tag_containers as tags
-from ._parse_filing import get_concept
+from ._parse_filing import get_concept as _get_concept
 from ._get_facts import get_facts_bulk, get_facts_request
 
 logger = logging.getLogger(__name__)
@@ -75,7 +75,7 @@ class EDGARClient:
             return None
 
         # Use Shares Outstanding tags to get filing date and type
-        shares_df = get_concept(
+        shares_df = _get_concept(
             facts=self.facts,
             xbrl_tags=tags.tag_shares_outstanding,
             quarters=10
@@ -96,7 +96,7 @@ class EDGARClient:
 
         for _, metrics in tags.filing_tags.items():
             for key, tag_tuple in metrics.items():
-                value = get_concept(
+                value = _get_concept(
                     facts=self.facts,
                     xbrl_tags=tag_tuple,
                     latest=True
@@ -127,7 +127,7 @@ class EDGARClient:
             return None
 
         # Shares Outstanding and filing info
-        shares_df = get_concept(
+        shares_df = _get_concept(
             facts=self.facts,
             xbrl_tags=tags.tag_shares_outstanding,
             quarters=10
@@ -150,7 +150,7 @@ class EDGARClient:
         ]
 
         for key, tag_tuple in tags.balance_sheet.items():
-            value = get_concept(
+            value = _get_concept(
                 facts=self.facts,
                 xbrl_tags=tag_tuple,
                 latest=True
@@ -181,7 +181,7 @@ class EDGARClient:
             return None
 
         # Shares Outstanding and filing info
-        shares_df = get_concept(
+        shares_df = _get_concept(
             facts=self.facts,
             xbrl_tags=tags.tag_shares_outstanding,
             quarters=10
@@ -204,7 +204,7 @@ class EDGARClient:
         ]
 
         for key, tag_tuple in tags.cash_flow_statement.items():
-            value = get_concept(
+            value = _get_concept(
                 facts=self.facts,
                 xbrl_tags=tag_tuple,
                 latest=True
@@ -235,7 +235,7 @@ class EDGARClient:
             return None
 
         # Shares Outstanding and filing info
-        shares_df = get_concept(
+        shares_df = _get_concept(
             facts=self.facts,
             xbrl_tags=tags.tag_shares_outstanding,
             quarters=10
@@ -258,7 +258,7 @@ class EDGARClient:
         ]
 
         for key, tag_tuple in tags.income_statement.items():
-            value = get_concept(
+            value = _get_concept(
                 facts=self.facts,
                 xbrl_tags=tag_tuple,
                 latest=True
@@ -302,7 +302,7 @@ class EDGARClient:
             logger.error(f"'{concept}' is not a valid argument")
             return None
         
-        concept_df = get_concept(
+        concept_df = _get_concept(
             facts=self.facts,
             xbrl_tags=xbrl_tags,
             quarters=quarters
