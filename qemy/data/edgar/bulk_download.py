@@ -1,3 +1,5 @@
+"""SEC bulk downloader."""
+
 import time
 import shutil
 import zipfile
@@ -7,6 +9,13 @@ from qemy import _config as cfg
 from qemy.utils.safe_request import safe_status_get, safe_status_download
 
 def bulk_refresh():
+    """SEC companyfacts.zip bulk downloader function.
+
+    Downloads all available CIK##########.json files from SEC servers.
+    It will also replace any previously downloaded data.
+
+    The SEC updates their bulk data nightly.
+    """
     bulk_dir = cfg.BULK_DIR
 
     unzipped_dir = bulk_dir / "companyfacts"

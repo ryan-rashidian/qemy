@@ -1,3 +1,8 @@
+"""Get companyfacts from SEC servers and bulk download.
+
+This module contains get_ functions that return facts through different means.
+"""
+
 import logging
 import time
 import json
@@ -8,6 +13,16 @@ from qemy.utils.safe_request import safe_status_get
 logger = logging.getLogger(__name__)
 
 def _find_cik(ticker: str, cik_data: dict) -> str | None:
+    """CIK # search and rerieval for given ticker.
+
+    Args:
+        ticker (str): Company ticker symbol
+        cik_data (dict): All SEC CIK data
+
+    Returns:
+        str: string of company CIK #
+        None: failed to find ticker in cik_data
+    """
     cik = None
     for entry in cik_data.values():
         if entry.get('ticker', '').lower() == ticker:
@@ -16,6 +31,15 @@ def _find_cik(ticker: str, cik_data: dict) -> str | None:
     return cik
 
 def get_facts_request(ticker: str) -> dict | None:
+    """Fetch facts from SEC servers.
+
+    Args:
+        ticker (str): Company ticker symbol
+
+    Returns:
+        dict: facts for given ticker
+        None: failed to find facts for given ticker
+    """
     ticker = ticker.lower().strip()
     headers = {'User-Agent': cfg.edgar_user_agent()} 
 
@@ -42,6 +66,15 @@ def get_facts_request(ticker: str) -> dict | None:
     return facts
 
 def get_facts_bulk(ticker: str) -> dict | None:
+    """Fetch facts from bulk download.
+
+    Args:
+        ticker (str): Company ticker symbol
+
+    Returns:
+        dict: facts for given ticker
+        None: failed to find facts for given ticker
+    """
     ticker = ticker.lower().strip()
     bulk_dir = cfg.BULK_DIR
 
