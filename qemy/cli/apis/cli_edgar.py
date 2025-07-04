@@ -99,7 +99,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
         concept_df = EDGARClient(
             ticker=ticker, 
             use_requests=request
-        ).get_concept(cli_arg=metric, quarters=int(quarters))
+        ).get_concept(concept=metric, quarters=int(quarters))
         if concept_df is None or concept_df.empty:
             return None
 

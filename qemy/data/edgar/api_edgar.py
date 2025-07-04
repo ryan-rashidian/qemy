@@ -48,20 +48,20 @@ class EDGARClient:
     def __bool__(self):
         return self.facts is not None
 
-    def _map_arg(self, cli_arg: str) -> tuple[str]:
-        """Map CLI arguments to matching container.
+    def _map_concept(self, concept: str) -> tuple[str]:
+        """Map concept argument to matching container.
 
         Args:
-            cli_arg (str): User argument parsed from the CLI
+            concept (str): User argument parsed from the CLI
 
         Returns:
             tuple[str]: Matching concept tag container 
         """
         try:
-            section, label = tags.map_arg[cli_arg.lower()]
+            section, label = tags.map_arg[concept.lower()]
             return tags.filing_tags[section][label]
         except KeyError:
-            raise ValueError(f"Unknown CLI argument: {cli_arg}")
+            raise ValueError(f"Unknown concept argument: {concept}")
 
     def get_filing(self) -> pd.DataFrame | None:
         """Fetch all available concepts for given ticker.
@@ -279,7 +279,7 @@ class EDGARClient:
 
     def get_concept(
             self, 
-            cli_arg: str, 
+            concept: str, 
             quarters: int=10
     ) -> pd.DataFrame | None:
         """Fetches given concept for given ticker.
@@ -296,7 +296,7 @@ class EDGARClient:
             logger.warning(f"EDGARClient({self.ticker}) - failed to init")
             return None
 
-        xbrl_tags = self._map_arg(cli_arg=cli_arg)
+        xbrl_tags = self._map_concept(concept=concept)
         
         concept_df = get_concept(
             facts=self.facts,
@@ -307,6 +307,6 @@ class EDGARClient:
         if isinstance(concept_df, pd.DataFrame):
             return concept_df
         else:
-            logger.error(f"Error: get_concept({cli_arg}) failed\n{xbrl_tags}")
+            logger.error(f"Error: get_concept({concept}) failed\n{xbrl_tags}")
             return None
 
