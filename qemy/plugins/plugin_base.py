@@ -26,7 +26,7 @@ class BasePlugin:
         self.num = num
         self.args = kwargs
 
-    def run(self):
+    def run(self) -> dict:
         """
         
         This method is called by the CLI in order to print plugin output
