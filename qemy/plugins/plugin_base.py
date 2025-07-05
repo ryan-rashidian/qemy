@@ -16,10 +16,10 @@ class BasePlugin:
         """Initialize CLI commands as inherited variables.
 
         Args:
-            ticker (str):
-            period (str):
-            num (int):
-            **kwargs (str):
+            ticker (str): -t --ticker in CLI
+            period (str): -p --period in CLI
+            num (int): -n --num in CLI
+            **kwargs (str): Custom CLI args for plugins
         """
         self.ticker = ticker
         self.period = period
@@ -27,6 +27,13 @@ class BasePlugin:
         self.args = kwargs
 
     def run(self):
+        """
+        
+        This method is called by the CLI in order to print plugin output
+
+        Returns:
+            dict: Expected return type in the CLI
+        """
         raise NotImplementedError("Plugin must use run() method")
 
     def help(self):
