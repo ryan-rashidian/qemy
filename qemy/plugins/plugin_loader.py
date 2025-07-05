@@ -1,14 +1,20 @@
+""""""
+
 import importlib.util
 from pathlib import Path
 
 class PluginRegistry:
+    """"""
     def __init__(self):
+        """"""
         self.models = {}
 
     def register_model(self, name, func):
+        """"""
         self.models[name] = func
 
 def load_plugins(plugin_dir="plugins"):
+    """"""
     registry = PluginRegistry()
     base_path = Path(__file__).parent.parent / plugin_dir
 

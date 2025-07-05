@@ -1,7 +1,7 @@
 from .helper import print_help_table
 from .._parse_args import check_help, parse_args_cli
 
-from qemy.core.plugin_loader import load_plugins
+from qemy.plugins import load_plugins
 from qemy.core.plot.plot import plot_models
 
 def run_models(arg):
