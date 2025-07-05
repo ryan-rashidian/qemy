@@ -10,7 +10,7 @@ from qemy.plugins import BasePlugin
 class DCFPlugin(BasePlugin):
     name = "dcf"
     description = "Discounted Cash Flow Valuation Model"
-    version = "0.1.0"
+    version = "0.1.1"
 
     def _get_dcf_metrics(self):
 

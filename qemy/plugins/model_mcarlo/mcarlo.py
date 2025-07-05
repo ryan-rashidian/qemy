@@ -7,7 +7,7 @@ from qemy.plugins import BasePlugin
 class MCarloPlugin(BasePlugin):
     name = "mcarlo"
     description = "Monte Carlo Simulation"
-    version = "0.1.0"
+    version = "0.1.1"
 
     def run(self):
         try:

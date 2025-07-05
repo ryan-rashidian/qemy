@@ -4,7 +4,7 @@ class BasePlugin:
     """Base class for Qemy plugins."""
     name = "BasePlugin"
     description = "Base class for Qemy plugins"
-    version = "0.1.0"
+    version = "0.1.1"
 
     def __init__(
         self, 
