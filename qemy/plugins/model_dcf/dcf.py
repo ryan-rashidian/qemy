@@ -3,8 +3,9 @@ import pandas as pd
 import numpy as np
 
 from sklearn.linear_model import LinearRegression
+
 from qemy.data import EDGARClient
-from qemy.core.plugin_base import BasePlugin
+from qemy.plugins import BasePlugin
 
 class DCFPlugin(BasePlugin):
     name = "dcf"

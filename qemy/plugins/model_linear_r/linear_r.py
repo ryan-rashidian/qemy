@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
 from qemy.data import TiingoClient
-from qemy.core.plugin_base import BasePlugin
+from qemy.plugins import BasePlugin
 
 class LinearRPlugin(BasePlugin):
     name = "linear_r"

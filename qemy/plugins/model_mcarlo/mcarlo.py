@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from qemy.data import TiingoClient
-from qemy.core.plugin_base import BasePlugin
+from qemy.plugins import BasePlugin
 
 class MCarloPlugin(BasePlugin):
     name = "mcarlo"
