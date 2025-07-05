@@ -17,7 +17,7 @@ pd.set_option('display.max_rows', None)
 #=============================================================================#
 
 class QemyShell(cmd.Cmd):
-    intro = "Qemy v0.1.1\nType \"help\" or \"?\" for more information.\n"
+    intro = "Qemy CLI 0.1.1\nType \"help\" or \"?\" for more information.\n"
     prompt = "qemy> "
 
     def __init__(self):
