@@ -1,6 +1,10 @@
+""""""
+
 import os
 
 class WatchListManager:
+    """"""
+
     def __init__(self, ticker_list):
         self.tickers = ticker_list
 

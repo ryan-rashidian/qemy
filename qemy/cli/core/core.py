@@ -2,9 +2,9 @@ from numbers import Number
 
 from ..core.helper import print_help_table
 from .._parse_args import check_help, parse_args_cli
+from ._watchlist import WatchListManager
 
 from qemy.utils.file_tools import save_to_csv
-from qemy.core.watch_list import WatchListManager
 
 # === CORE ===
 
