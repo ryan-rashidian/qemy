@@ -20,3 +20,8 @@ qemy = "qemy.cli:main"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["qemy"]
+
+[tool.ruff]
+line-length = 79
+target-version = "py313"
+select = ["E", "F", "W", "I", "B"]
