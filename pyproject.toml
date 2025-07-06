@@ -24,4 +24,4 @@ include = ["qemy"]
 [tool.ruff]
 line-length = 79
 target-version = "py313"
-select = ["E", "F", "W", "I", "B"]
+lint.select = ["E", "F", "W", "I", "B"]
