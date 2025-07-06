@@ -40,7 +40,7 @@ class BasePlugin:
         """CLI -h --help info for plugins."""
         return f"{self.name} - {self.description}\nNo help found"
 
-    def log(self, message):
+    def log(self, message: str):
         """Print logging for plugins.
 
         Args:

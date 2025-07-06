@@ -74,7 +74,7 @@ class DCFPlugin(BasePlugin):
             print(f"Failed to request EDGARClient:\n{e}")
             return None, None, None
 
-    def run(self):
+    def run(self) -> dict:
         filing_df, shares_outstanding, net_debt = self._get_dcf_metrics()
 
         if isinstance(filing_df, pd.DataFrame) and shares_outstanding is not None:
@@ -83,7 +83,7 @@ class DCFPlugin(BasePlugin):
 
                 if len(fcf_df) < 4:
                     self.log("Not enough FCF data to apply rolling average.")
-                    return
+                    return {}
 
                 x_time = np.arange(len(fcf_df)).reshape(-1, 1)
                 y_fcf = fcf_df
@@ -132,10 +132,10 @@ class DCFPlugin(BasePlugin):
 
             except Exception as e:
                 self.log(f"dcf.py Exception ERROR:\n{e}")
-                return None
+                return {}
         else:
             self.log(f"dcf.py ERROR:\n{filing_df}\nShares outstanding: {shares_outstanding}")
-            return None
+            return {}
 
     def help(self):
         return (

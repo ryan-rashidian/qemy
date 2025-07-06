@@ -49,7 +49,7 @@ def run_models(arg):
                 return
 
             results = plugin_instance.run()
-            if not isinstance(results, dict):
+            if not results:
                 print("\nPlugin failed to return results")
                 return
 

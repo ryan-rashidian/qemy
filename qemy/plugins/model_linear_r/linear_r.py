@@ -11,7 +11,7 @@ class LinearRPlugin(BasePlugin):
     description = "Linear Regression Model"
     version = "0.1.1"
 
-    def run(self):
+    def run(self) -> dict:
         try:
             ticker_df = TiingoClient(ticker=self.ticker).get_prices(period=self.period)
             spy_df = TiingoClient(ticker='SPY').get_prices(period=self.period)
@@ -49,7 +49,7 @@ class LinearRPlugin(BasePlugin):
 
         except Exception as e:
             self.log(f"core/models/linear_r.py Exception ERROR:\n{e}")
-            return None 
+            return {}
 
     def help(self):
         return (

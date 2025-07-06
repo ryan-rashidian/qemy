@@ -9,7 +9,7 @@ class MCarloPlugin(BasePlugin):
     description = "Monte Carlo Simulation"
     version = "0.1.1"
 
-    def run(self):
+    def run(self) -> dict:
         try:
             num_days = None
             ticker_df = TiingoClient(ticker=self.ticker).get_prices(period=self.period)
@@ -54,11 +54,11 @@ class MCarloPlugin(BasePlugin):
 
             else:
                 self.log(f"Failed to retrieve price data for {self.ticker}")
-                return None
+                return {}
 
         except Exception as e:
             self.log(f"core/models/monte_carlo.py Exception ERROR:\n{e}")
-            return None
+            return {}
 
     def help(self):
         return (
