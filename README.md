@@ -3,6 +3,10 @@
 ![Header Screenshot](assets/qemy_welcome.png)
 
 ![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python)
+![Release](https://img.shields.io/github/v/release/ryan-rashidian/qemy)
+![Last Commit](https://img.shields.io/github/last-commit/ryan-rashidian/qemy)
+![License](https://img.shields.io/badge/license-Apache%202.0-blue)
+
 ![License](https://img.shields.io/github/license/ryan-rashidian/qemy)
 ![Release](https://img.shields.io/github/v/release/ryan-rashidian/qemy)
 ![Last Commit](https://img.shields.io/github/last-commit/ryan-rashidian/qemy)
