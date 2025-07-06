@@ -2,7 +2,10 @@
 
 ![Header Screenshot](assets/qemy_welcome.png)
 
-![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
+![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python)
+![License](https://img.shields.io/github/license/ryan-rashidian/qemy)
+![Release](https://img.shields.io/github/v/release/ryan-rashidian/qemy)
+![Last Commit](https://img.shields.io/github/last-commit/ryan-rashidian/qemy)
 
 Qemy is a modular, open-source financial research toolkit built in Python. It features clean access to financial and economic data, a flexible plugin system for running your own models and analysis, and a built in command-line interface - all in one place.
 
