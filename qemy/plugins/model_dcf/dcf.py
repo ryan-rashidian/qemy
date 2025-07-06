@@ -79,7 +79,10 @@ class DCFPlugin(BasePlugin):
 
         if isinstance(filing_df, pd.DataFrame) and shares_outstanding is not None:
             try:
-                fcf_df = filing_df['val'].rolling(window=4).mean().dropna().values
+                rolling_window = filing_df['val'].rolling(window=4)
+                rolling_mean = pd.Series(rolling_window.mean())
+                rolling_mean_clean = rolling_mean.dropna()
+                fcf_df = rolling_mean_clean.values
 
                 if len(fcf_df) < 4:
                     self.log("Not enough FCF data to apply rolling average.")

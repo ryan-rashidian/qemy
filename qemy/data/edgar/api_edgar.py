@@ -107,10 +107,8 @@ class EDGARClient:
                     filing.append((key, value))
                     logger.warning(f"get_concept() failed for: {key}")
 
-        filing_df = pd.DataFrame(
-            filing, 
-            columns=['Metric:', self.ticker]
-        )
+        filing_df = pd.DataFrame(filing)
+        filing_df.columns = ['Metric:', self.ticker]
         filing_df.set_index('Metric:', inplace=True)
 
         return filing_df
@@ -161,10 +159,8 @@ class EDGARClient:
                 balance_sheet.append((key, value))
                 logger.warning(f"get_concept() failed for: {key}")
 
-        balance_df = pd.DataFrame(
-            balance_sheet, 
-            columns=['Metric:', self.ticker]
-        )
+        balance_df = pd.DataFrame(balance_sheet)
+        balance_df.columns = ['Metric:', self.ticker]
         balance_df.set_index('Metric:', inplace=True)
 
         return balance_df
@@ -215,10 +211,8 @@ class EDGARClient:
                 cashflow_statement.append((key, value))
                 logger.warning(f"get_concept() failed for: {key}")
 
-        cashflow_statement_df = pd.DataFrame(
-            cashflow_statement, 
-            columns=['Metric:', self.ticker]
-        )
+        cashflow_statement_df = pd.DataFrame(cashflow_statement)
+        cashflow_statement_df.columns = ['Metric:', self.ticker]
         cashflow_statement_df.set_index('Metric:', inplace=True)
 
         return cashflow_statement_df
@@ -269,10 +263,8 @@ class EDGARClient:
                 income_statement.append((key, value))
                 logger.warning(f"get_concept() failed for: {key}")
 
-        income_statement_df = pd.DataFrame(
-            income_statement, 
-            columns=['Metric:', self.ticker]
-        )
+        income_statement_df = pd.DataFrame(income_statement)
+        income_statement_df.columns = ['Metric:', self.ticker]
         income_statement_df.set_index('Metric:', inplace=True)
 
         return income_statement_df
