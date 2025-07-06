@@ -6,11 +6,12 @@ XBRL taxonomy for concept tags.
 """
 
 import logging
+
 import pandas as pd
 
 from . import _tag_containers as tags
-from ._parse_filing import get_concept as _get_concept
 from ._get_facts import get_facts_bulk, get_facts_request
+from ._parse_filing import get_concept as _get_concept
 
 logger = logging.getLogger(__name__)
 
@@ -18,10 +19,10 @@ class EDGARClient:
     """Client for fetching filing data from SEC EDGAR API."""
 
     def __init__(self, ticker: str, use_requests: bool=False):
-        """Initialize EDGAR API. 
+        """Initialize EDGAR API.
 
         Initialize EDGAR User-Agent and request headers.
-        
+
         Args:
             ticker (str): Company ticker symbol
             use_requests (bool): Requests from SEC servers. False = no request.
@@ -55,13 +56,13 @@ class EDGARClient:
             concept (str): User argument parsed from the CLI
 
         Returns:
-            tuple[str]: Matching concept tag container 
+            tuple[str]: Matching concept tag container
         """
         try:
             section, label = tags.map_arg[concept.lower()]
             return tags.filing_tags[section][label]
-        except KeyError:
-            raise ValueError(f"Unknown concept argument: {concept}")
+        except KeyError as err:
+            raise KeyError(f"Unknown concept argument: {concept}") from err
 
     def get_filing(self) -> pd.DataFrame | None:
         """Fetch all available concepts for given ticker.
@@ -112,7 +113,7 @@ class EDGARClient:
         filing_df.set_index('Metric:', inplace=True)
 
         return filing_df
-        
+
     def get_balance_sheet(self) -> pd.DataFrame | None:
         """Fetches Balance Sheet concepts for given ticker.
 
@@ -270,8 +271,8 @@ class EDGARClient:
         return income_statement_df
 
     def get_concept(
-            self, 
-            concept: str, 
+            self,
+            concept: str,
             quarters: int=10
     ) -> pd.DataFrame | None:
         """Fetches given concept for given ticker.
@@ -293,12 +294,12 @@ class EDGARClient:
         except ValueError:
             logger.error(f"'{concept}' is not a valid argument")
             return None
-        
+
         concept_df = _get_concept(
             facts=self.facts,
             xbrl_tags=xbrl_tags,
             quarters=quarters
-        )        
+        )
 
         if isinstance(concept_df, pd.DataFrame):
             return concept_df

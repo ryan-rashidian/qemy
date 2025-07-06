@@ -4,11 +4,12 @@ This module requests and fetches data from Tiingo API.
 """
 
 import logging
+
 import pandas as pd
 
-from ._api_tools import safe_status_get, parse_period
-
 from qemy import _config as cfg
+
+from ._api_tools import parse_period, safe_status_get
 
 logger = logging.getLogger(__name__)
 
@@ -17,8 +18,8 @@ class TiingoClient:
 
     def __init__(self, ticker: str):
         """Initialize TiingoClient with API key and request headers.
-        
-        Args: 
+
+        Args:
             tickers (str): Company ticker symbol
         """
         self.ticker = ticker
@@ -29,9 +30,9 @@ class TiingoClient:
         }
 
     def get_prices(
-        self, 
-        period: str = '1W', 
-        resample = 'daily',             
+        self,
+        period: str = '1W',
+        resample = 'daily',
         columns: str | list[str] = 'adjClose'
     ) -> pd.DataFrame:
         """Fetch historical price data for a given ticker.
@@ -42,7 +43,7 @@ class TiingoClient:
             columns (str | list[str]): Data columns (e.g. "close", "adjClose")
 
         Returns:
-            pd.DataFrame: DataFrame with pd.DatetimeIndex and column for values  
+            pd.DataFrame: DataFrame with pd.DatetimeIndex and column for values
         """
         start_date, end_date = parse_period(period)
 
@@ -60,8 +61,8 @@ class TiingoClient:
         }
 
         price_data = safe_status_get(
-            url=url, 
-            headers=self.HEADERS, 
+            url=url,
+            headers=self.HEADERS,
             params=params
         )
 
@@ -76,9 +77,9 @@ class TiingoClient:
         price_df.set_index('date', inplace=True)
         price_df.index = pd.DatetimeIndex(price_df.index)
 
-        return price_df if not price_df.empty else pd.DataFrame() 
+        return price_df if not price_df.empty else pd.DataFrame()
 
-    def get_quote(self, ticker_lst: list[str]=[]) -> dict[str, dict]:
+    def get_quote(self, ticker_lst: list[str]) -> dict[str, dict]:
         """Fetch latest quote data for one or more tickers.
 
         Args:

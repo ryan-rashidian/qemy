@@ -1,12 +1,13 @@
 """SEC bulk downloader."""
 
-import time
-import shutil
-import zipfile
 import json
+import shutil
+import time
+import zipfile
 
 from qemy import _config as cfg
-from qemy.data._api_tools import safe_status_get, safe_status_download
+from qemy.data._api_tools import safe_status_download, safe_status_get
+
 
 def bulk_refresh():
     """SEC companyfacts.zip bulk downloader function.
@@ -28,12 +29,12 @@ def bulk_refresh():
     cik_tickers_url = cfg.EDGAR_CIK_URL
     companyfacts_zip = bulk_dir / "companyfacts.zip"
     cik_tickers_json = bulk_dir / "company_tickers.json"
-    headers = {"User-Agent": cfg.edgar_user_agent()} 
+    headers = {"User-Agent": cfg.edgar_user_agent()}
 
     print("Downloading bulk filing data...")
     success = safe_status_download(
-        url=companyfacts_url, 
-        headers=headers, 
+        url=companyfacts_url,
+        headers=headers,
         dest_path=companyfacts_zip
     )
     if not success:

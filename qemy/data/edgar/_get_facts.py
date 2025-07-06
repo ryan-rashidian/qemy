@@ -3,9 +3,9 @@
 This module contains get_ functions that return facts through different means.
 """
 
+import json
 import logging
 import time
-import json
 
 from qemy import _config as cfg
 from qemy.data._api_tools import safe_status_get
@@ -41,7 +41,7 @@ def get_facts_request(ticker: str) -> dict | None:
         None: failed to find facts for given ticker
     """
     ticker = ticker.lower().strip()
-    headers = {'User-Agent': cfg.edgar_user_agent()} 
+    headers = {'User-Agent': cfg.edgar_user_agent()}
 
     cik_data = safe_status_get(cfg.EDGAR_CIK_URL, headers=headers)
     if not cik_data:

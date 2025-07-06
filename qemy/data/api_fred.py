@@ -4,11 +4,12 @@ This module requests and fetches data from FRED API.
 """
 
 import logging
+
 import pandas as pd
 
-from ._api_tools import safe_status_get, parse_period
-
 from qemy import _config as cfg
+
+from ._api_tools import parse_period, safe_status_get
 
 logger = logging.getLogger(__name__)
 
@@ -21,12 +22,12 @@ class FREDClient:
         self.url: str = cfg.FRED_URL
 
     def _fetch_series(
-        self, 
-        series_id: str, 
-        period: str='1Y', 
-        frequency: str='m', 
-        units: str='pc1', 
-        aggregation: str='avg', 
+        self,
+        series_id: str,
+        period: str='1Y',
+        frequency: str='m',
+        units: str='pc1',
+        aggregation: str='avg',
         limit: int=100_000
     ) -> pd.DataFrame | None:
         """Internal method for sending requests.
@@ -35,18 +36,18 @@ class FREDClient:
             series_id (str): Series ID for observation
             period (str): Period for requested data
                 - (e.g., "1Y", "3M")
-            frequency (str): Frequency for observations 
+            frequency (str): Frequency for observations
                 - (e.g., "m", "q", "d")
             units (str): Units of measurement for observations
                 - (e.g., "pc1", "pch", "lin")
-            aggregation (str): Frequency aggregation 
+            aggregation (str): Frequency aggregation
                 - "avg" Average
                 - "sum" Sum
                 - "eop" End of Period
             limit (int): Integer to slice tail of observations
 
         Returns:
-            pd.DataFrame: DataFrame indexed by 'date' with 'val' column 
+            pd.DataFrame: DataFrame indexed by 'date' with 'val' column
             None: Failed to fetch data from FRED API
         """
         start_date, end_date = parse_period(period)
@@ -73,14 +74,14 @@ class FREDClient:
                 obs_df['date'] = pd.to_datetime(obs_df['date'])
                 obs_df.set_index('date', inplace=True)
                 obs_df['value'] = pd.to_numeric(
-                    obs_df['value'], 
+                    obs_df['value'],
                     errors='coerce'
                 )
                 # Rename column to 'val' for consistency
                 obs_df.rename(columns={'value': 'val'}, inplace=True)
                 # Drop un-needed columns
                 return obs_df.drop(
-                    columns=['realtime_start', 'realtime_end'], 
+                    columns=['realtime_start', 'realtime_end'],
                     errors='ignore'
                 )
 
@@ -91,10 +92,10 @@ class FREDClient:
     def get_tbill_yield(self):
         """Fetch latest observation for: 1 Year T-Bill Yield."""
         return self._fetch_series(
-            series_id='GS1', 
-            period='1M', 
-            frequency='m', 
-            units='lin', 
+            series_id='GS1',
+            period='1M',
+            frequency='m',
+            units='lin',
             limit=1
         )
 
@@ -108,9 +109,9 @@ class FREDClient:
                 - (e.g., "pc1", "pch", "lin")
         """
         return self._fetch_series(
-            series_id='CPIAUCSL', 
-            period=period, 
-            frequency='m', 
+            series_id='CPIAUCSL',
+            period=period,
+            frequency='m',
             units=units
         )
 
@@ -124,9 +125,9 @@ class FREDClient:
                 - (e.g., "pc1", "pch", "lin")
         """
         return self._fetch_series(
-            series_id='GDP', 
-            period=period, 
-            frequency='q', 
+            series_id='GDP',
+            period=period,
+            frequency='q',
             units=units
         )
 
@@ -140,9 +141,9 @@ class FREDClient:
                 - (e.g., "pc1", "pch", "lin")
         """
         return self._fetch_series(
-            series_id='UMCSENT', 
-            period=period, 
-            frequency='m', 
+            series_id='UMCSENT',
+            period=period,
+            frequency='m',
             units=units
         )
 
@@ -156,9 +157,9 @@ class FREDClient:
                 - (e.g., "pc1", "pch", "lin")
         """
         return self._fetch_series(
-            series_id='PAYEMS', 
-            period=period, 
-            frequency='m', 
+            series_id='PAYEMS',
+            period=period,
+            frequency='m',
             units=units
         )
 
@@ -172,9 +173,9 @@ class FREDClient:
                 - (e.g., "pc1", "pch", "lin")
         """
         return self._fetch_series(
-            series_id='DFF', 
-            period=period, 
-            frequency='d', 
+            series_id='DFF',
+            period=period,
+            frequency='d',
             units=units
         )
 
@@ -188,9 +189,9 @@ class FREDClient:
                 - (e.g., "pc1", "pch", "lin")
         """
         return self._fetch_series(
-            series_id='ICSA', 
-            period=period, 
-            frequency='w', 
+            series_id='ICSA',
+            period=period,
+            frequency='w',
             units=units
         )
 
@@ -204,9 +205,9 @@ class FREDClient:
                 - (e.g., "pc1", "pch", "lin")
         """
         return self._fetch_series(
-            series_id='UNRATE', 
-            period=period, 
-            frequency='m', 
+            series_id='UNRATE',
+            period=period,
+            frequency='m',
             units=units
         )
 
@@ -220,9 +221,9 @@ class FREDClient:
                 - (e.g., "pc1", "pch", "lin")
         """
         return self._fetch_series(
-            series_id='INDPRO', 
-            period=period, 
-            frequency='m', 
+            series_id='INDPRO',
+            period=period,
+            frequency='m',
             units=units
         )
 
@@ -236,9 +237,9 @@ class FREDClient:
                 - (e.g., "pc1", "pch", "lin")
         """
         return self._fetch_series(
-            series_id='NETEXC', 
-            period=period, 
-            frequency='q', 
+            series_id='NETEXC',
+            period=period,
+            frequency='q',
             units=units
-        )        
+        )
 

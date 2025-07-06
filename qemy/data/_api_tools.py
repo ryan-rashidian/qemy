@@ -1,9 +1,9 @@
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-
 import logging
+from datetime import datetime
 from pathlib import Path
+
 import requests
+from dateutil.relativedelta import relativedelta
 
 logger = logging.getLogger(__name__)
 
@@ -27,15 +27,15 @@ def parse_period(period_str):
 
         return start_date.strftime('%Y-%m-%d'), now.strftime('%Y-%m-%d')
 
-    except ValueError:
-        raise ValueError("Invalid period format.\nUse: D, W, M, or Y")
+    except ValueError as err:
+        raise ValueError("Invalid period format.\nUse: D, W, M, or Y") from err
 
 def safe_status_get(url, headers=None, params=None):
     response = None
     try:
         response = requests.get(url=url, headers=headers, params=params)
         response.raise_for_status()
-        return response.json() 
+        return response.json()
     except requests.exceptions.HTTPError as e:
         logger.error(f"HTTPError: {e}")
     except requests.exceptions.RequestException as e:

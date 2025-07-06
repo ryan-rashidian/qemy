@@ -145,7 +145,7 @@ cash_flow_statement = {
     'CAPEX': tag_capex
 }
 
-## === Income Statement === 
+## === Income Statement ===
 
 ### Revenue
 tag_revenue = (
@@ -250,7 +250,7 @@ income_statement = {
     'EPS Diluted': tag_eps_diluted
 }
 
-# === Meta Containers === 
+# === Meta Containers ===
 
 ## Nested dictionary of all tags
 filing_tags = {

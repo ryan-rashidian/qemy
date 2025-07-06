@@ -4,6 +4,7 @@ This module is used internally for /edgar/ parsing.
 """
 
 import logging
+
 import pandas as pd
 
 logger = logging.getLogger(__name__)
@@ -15,9 +16,9 @@ key_list_units = [
 ]
 
 def get_concept(
-    facts: dict, 
-    xbrl_tags: tuple, 
-    quarters: int=10, 
+    facts: dict,
+    xbrl_tags: tuple,
+    quarters: int=10,
     latest: bool=False
 ) -> pd.DataFrame | float | None:
     """Concept search and retrieval.
@@ -32,8 +33,8 @@ def get_concept(
 
     Returns:
         pd.DataFrame: comlumns=['val', 'filed', 'form'], quarterly rows
-        float: Latest concept value (returned with 'latest = True' arg) 
-        None: If incorrect inputs or parsing logic fails 
+        float: Latest concept value (returned with 'latest = True' arg)
+        None: If incorrect inputs or parsing logic fails
     """
     for tag in xbrl_tags:
 
@@ -48,7 +49,7 @@ def get_concept(
                         unit = try_key
                         break
                 if unit is None:
-                    logger.warning(f"facts...['units'] no match found")
+                    logger.warning("facts...['units'] no match found")
                     unit = 'USD'
 
                 raw_facts = facts['facts']['us-gaap'][tag]['units']
