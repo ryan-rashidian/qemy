@@ -13,8 +13,8 @@ class LinearRPlugin(BasePlugin):
 
     def run(self):
         try:
-            ticker_df = TiingoClient().get_prices(ticker=self.ticker, period=self.period)
-            spy_df = TiingoClient().get_prices(ticker='SPY', period=self.period)
+            ticker_df = TiingoClient(ticker=self.ticker).get_prices(period=self.period)
+            spy_df = TiingoClient(ticker='SPY').get_prices(period=self.period)
 
             combined_df = pd.DataFrame({
                 self.ticker: ticker_df['adjClose'], 

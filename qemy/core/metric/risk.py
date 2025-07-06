@@ -2,7 +2,7 @@ from qemy.data import TiingoClient
 from qemy.data import FREDClient
 
 def ratio_sharpe(ticker, period='1Y'):
-    price_df = TiingoClient().get_prices(ticker=ticker, period=period)
+    price_df = TiingoClient(ticker=ticker).get_prices(period=period)
     if price_df.empty:
         return {}
 
@@ -28,7 +28,7 @@ def ratio_sharpe(ticker, period='1Y'):
     }
 
 def max_dd(ticker, period='1Y'):
-    price_df = TiingoClient().get_prices(ticker=ticker, period=period)
+    price_df = TiingoClient(ticker=ticker).get_prices(period=period)
     if price_df.empty:
         return {}
 
@@ -42,7 +42,7 @@ def max_dd(ticker, period='1Y'):
     }
 
 def volatility(ticker, period='1Y'):
-    price_df = TiingoClient().get_prices(ticker=ticker, period=period)
+    price_df = TiingoClient(ticker=ticker).get_prices(period=period)
     if price_df.empty:
         return {}
 

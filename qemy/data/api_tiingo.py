@@ -15,8 +15,13 @@ logger = logging.getLogger(__name__)
 class TiingoClient:
     """Client for fetching stock market data from Tiingo API."""
 
-    def __init__(self):
-        """Initialize TiingoClient with API key and request headers."""
+    def __init__(self, ticker: str):
+        """Initialize TiingoClient with API key and request headers.
+        
+        Args: 
+            tickers (str): Company ticker symbol
+        """
+        self.ticker = ticker
         self.API_KEY: str = cfg.tiingo_api_key()
         self.HEADERS: dict[str, str] = {
             'Content-Type': 'application/json',
@@ -25,7 +30,6 @@ class TiingoClient:
 
     def get_prices(
         self, 
-        ticker: str, 
         period: str = '1W', 
         resample = 'daily',             
         columns: str | list[str] = 'adjClose'
@@ -33,7 +37,6 @@ class TiingoClient:
         """Fetch historical price data for a given ticker.
 
         Args:
-            ticker (str): Company ticker
             period (str): Period (e.g., "1Y", "3M", "50D")
             resample (str): Resample frequency (e.g., "daily", "weekly")
             columns (str | list[str]): Data columns (e.g. "close", "adjClose")
@@ -43,7 +46,12 @@ class TiingoClient:
         """
         start_date, end_date = parse_period(period)
 
-        url = f"{cfg.TIINGO_URL}{ticker}/prices"
+        if isinstance(self.ticker, list):
+            logger.error("")
+            return pd.DataFrame()
+
+
+        url = f"{cfg.TIINGO_URL}{self.ticker}/prices"
         params = {
             'startDate': start_date,
             'endDate': end_date,
@@ -70,18 +78,20 @@ class TiingoClient:
 
         return price_df if not price_df.empty else pd.DataFrame() 
 
-    def get_quote(self, tickers: str | list[str]) -> dict[str, dict]:
+    def get_quote(self, ticker_lst: list[str]=[]) -> dict[str, dict]:
         """Fetch latest quote data for one or more tickers.
 
         Args:
-            tickers (str | list[str]): A single ticker or list of tickers
+            ticker_lst (list[str]):
 
         Returns:
             dict[str, dict]: With tickers mapped to their quote data
         """
-        # Normalize tickers arg to list
-        if isinstance(tickers, str):
-            tickers = [tickers]
+        tickers = ticker_lst
+
+        if isinstance(self.ticker, str):
+            # Normalize self.ticker arg to list
+            tickers = [self.ticker]
 
         url = f"{cfg.TIINGO_IEX_URL}{','.join(tickers)}"
 

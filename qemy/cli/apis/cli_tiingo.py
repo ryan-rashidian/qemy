@@ -32,7 +32,7 @@ def quote(arg):
     ticker, = core_args
 
     if isinstance(ticker, str):
-        data = TiingoClient().get_quote(tickers=ticker)
+        data = TiingoClient(ticker=ticker).get_quote()
         if data and ticker in data:
             quote_data = data[ticker]
             quote = quote_data.get('last') or quote_data.get('tngoLast') or quote_data.get('mid')
@@ -72,7 +72,7 @@ def price(arg):
     if isinstance(period, str) and isinstance(ticker, str):
         print(f"Fetching price info for: {ticker}...")
 
-        price_df = TiingoClient().get_prices(ticker=ticker, period=period)
+        price_df = TiingoClient(ticker=ticker).get_prices(period=period)
         formatted_df = price_df.reset_index()
         formatted_df['date'] = formatted_df['date'].dt.strftime('%Y-%m-%d')
 

@@ -19,7 +19,7 @@ def plot_models(title='title', save=False, plot_func=None):
     plt.show()
 
 def plot_price(ticker, period):
-    stock_df = TiingoClient().get_prices(ticker=ticker, period=period)
+    stock_df = TiingoClient(ticker=ticker).get_prices(period=period)
 
     plt.figure(figsize=(14, 8))
     plt.plot(stock_df.index, stock_df['adjClose'], label='Price', color='green', linewidth=3, marker= 'o', alpha=0.8)
