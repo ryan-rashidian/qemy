@@ -7,6 +7,10 @@ from dateutil.relativedelta import relativedelta
 
 logger = logging.getLogger(__name__)
 
+class ClientError(Exception):
+    """Custom exception for Qemy Client classes"""
+    pass
+
 def parse_period(period_str):
     now = datetime.now()
 
