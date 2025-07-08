@@ -2,7 +2,7 @@
 
 This module is used to search for concepts keys.
 Tuple order reflects relevance/priority from most -> least.
-Tag strings with low priority may include fall-back, or component metrics. 
+Tag strings with low priority may include fall-back, or component metrics.
 """
 
 # === Concepts ===
