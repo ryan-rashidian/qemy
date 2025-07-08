@@ -18,21 +18,26 @@ def parse_period(period_str):
         unit = period_str[-1].upper()
         value = int(period_str[:-1])
 
-        if unit == 'D':
-            start_date = now - relativedelta(days=value)
-        elif unit == 'W':
-            start_date = now - relativedelta(weeks=value)
-        elif unit == "M":
-            start_date = now - relativedelta(months=value)
-        elif unit == "Y":
-            start_date = now - relativedelta(years=value)
-        else:
-            raise ValueError("Invalid period format.\nUse: D, W, M, or Y")
+        match unit:
+            case 'D':
+                start_date = now - relativedelta(days=value)
+            case 'W':
+                start_date = now - relativedelta(weeks=value)
+            case 'M':
+                start_date = now - relativedelta(months=value)
+            case 'Y':
+                start_date = now - relativedelta(years=value)
+            case _:
+                raise ValueError("Invalid unit")
 
         return start_date.strftime('%Y-%m-%d'), now.strftime('%Y-%m-%d')
 
     except ValueError as err:
-        raise ValueError("Invalid period format.\nUse: D, W, M, or Y") from err
+        raise ClientError(
+            "Invalid period format.\nUse: D, W, M, or Y\n"
+            "Usage: <INTEGER><UNITS>\n"
+            "Example: '6M', '2Y', '5D'"
+        ) from err
 
 def safe_status_get(url, headers=None, params=None):
     response = None
