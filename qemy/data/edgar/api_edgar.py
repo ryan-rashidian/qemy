@@ -42,11 +42,15 @@ class EDGARClient:
         except Exception as e:
             logger.exception(f"Exception:\n{e}")
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         status = "Initialized" if self.facts else "Failed"
-        return f"<EDGARClient ticker={self.ticker} [{status}]>"
+        return f"EDGARClient(ticker={self.ticker}) <[{status}]>"
 
-    def __bool__(self):
+    def __str__(self) -> str:
+        status = "Initialized" if self.facts else "Failed"
+        return f"[EDGARClient] ticker={self.ticker} <[{status}]>"
+
+    def __bool__(self) -> bool:
         return self.facts is not None
 
     def _map_concept(self, concept: str) -> tuple[str]:
