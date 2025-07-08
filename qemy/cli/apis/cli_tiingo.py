@@ -32,14 +32,21 @@ def quote(arg):
     ticker, = core_args
 
     if isinstance(ticker, str):
-        data = TiingoClient(ticker=ticker).get_quote()
-        if data and ticker in data:
-            quote_data = data[ticker]
-            quote = quote_data.get('last') or quote_data.get('tngoLast') or quote_data.get('mid')
-            if quote is not None:
-                print(f"{ticker}: {quote}")
-        else:
-            print(f"Could note fetch data for {ticker}, please try another ticker.")
+        try:
+            data = TiingoClient(ticker=ticker).get_quote()
+            if data and ticker in data:
+                quote_data = data[ticker]
+                quote = (
+                    quote_data.get('last') 
+                    or quote_data.get('tngoLast') 
+                    or quote_data.get('mid'))
+                if quote is not None:
+                    print(f"{ticker}: {quote}")
+            else:
+                print(f"Could note fetch data for {ticker}.")
+
+        except Exception as e:
+            print(e)
     else:
         print("For valid syntax Try: quote <TICKER>")
 
@@ -72,12 +79,15 @@ def price(arg):
     if isinstance(period, str) and isinstance(ticker, str):
         print(f"Fetching price info for: {ticker}...")
 
-        price_df = TiingoClient(ticker=ticker).get_prices(period=period)
-        formatted_df = price_df.reset_index()
-        formatted_df['date'] = formatted_df['date'].dt.strftime('%Y-%m-%d')
+        try:
+            price_df = TiingoClient(ticker=ticker).get_prices(period=period)
+            formatted_df = price_df.reset_index()
+            formatted_df['date'] = formatted_df['date'].dt.strftime('%Y-%m-%d')
+            print(formatted_df)
 
-        print(formatted_df)
-        
+        except Exception as e:
+            print(e)
+
     else:
         print('For valid syntax, Try: price AAPL -p 3M')
 
