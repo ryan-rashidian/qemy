@@ -22,9 +22,6 @@ class TiingoClient:
 
         Args:
             ticker (str | list[str]): Company ticker symbol(s)
-
-        Raises:
-            ClientError: If self.tickers cannot be defined
         """
         self.tickers = self._normalize_tickers(ticker)
         self.ticker = self.tickers[0]
@@ -134,8 +131,31 @@ class TiingoClient:
             columns (str | list[str]): Data columns (e.g. "close", "adjClose")
 
         Returns:
-            pd.DataFrame: DataFrame with pd.DatetimeIndex and column for values
+            pd.DataFrame: DataFrame with date index
+
+        Raises:
+            ClientError: If method arguments cannot be defined
         """
+        resample_check = {'daily', 'weekly', 'monthly', 'annually'}
+        if resample not in resample_check:
+            raise ClientError(
+                "Incorrect resample argument\n"
+                f"Given: {resample}"
+                f"Accepted: {resample_check}"
+            )
+
+        columns_check = {
+            'close', 'high', 'low', 'open', 'volume',
+            'adjClose', 'adjHigh', 'adjLow', 'adjOpen', 'adjVolume',
+            'divCash', 'splitFactor'
+        }
+        if columns not in columns_check:
+            raise ClientError(
+                "Incorrect columns argument\n"
+                f"Given: {columns}\n"
+                f"Accepted: {columns_check}"
+            )
+
         start_date, end_date = parse_period(period)
 
         url = f"{cfg.TIINGO_URL}{self.ticker}/prices"
@@ -153,7 +173,7 @@ class TiingoClient:
         )
 
         if not price_data:
-            logger.error("Tiingo API request Failed")
+            logger.error("No price data")
             return pd.DataFrame()
         logger.info("Tiingo API request Successful")
 
