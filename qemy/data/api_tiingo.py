@@ -2,6 +2,8 @@
 
 This module requests and fetches data from Tiingo API.
 """
+from __future__ import annotations
+
 import logging
 
 import pandas as pd
@@ -77,6 +79,44 @@ class TiingoClient:
             raise ClientError(
                 f"Args (ticker): incorrect type: {type(ticker)}"
             )
+
+    def __repr__(self) -> str:
+        return f"TiingoClient(ticker={self.tickers})"
+
+    def __str__(self) -> str:
+        return f"[TiingoClient]\nticker={self.tickers}"
+
+    def __bool__(self) -> bool:
+        return bool(self.tickers)
+
+    def __len__(self) -> int:
+        return len(self.tickers)
+
+    def __getitem__(self, position) -> str:
+        return self.tickers[position]
+
+    def __add__(self, other) -> TiingoClient:
+        new_tickers = self.tickers.copy()
+        for t in self._normalize_tickers(other):
+            if t not in new_tickers:
+                new_tickers.append(t)
+        return TiingoClient(new_tickers)
+
+    def __sub__(self, other) -> TiingoClient:
+        remove = set(self._normalize_tickers(other))
+        new_tickers = [t for t in self.tickers if t not in remove]
+        return TiingoClient(new_tickers)
+
+    def __iadd__(self, other) -> TiingoClient:
+        for t in self._normalize_tickers(other):
+            if t not in self.tickers:
+                self.tickers.append(t)
+        return self
+
+    def __isub__(self, other) -> TiingoClient:
+        remove = set(self._normalize_tickers(other))
+        self.tickers = [t for t in self.tickers if t not in remove]
+        return self
 
     def get_prices(
         self,
