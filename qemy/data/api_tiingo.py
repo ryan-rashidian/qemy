@@ -48,7 +48,7 @@ class TiingoClient:
             ClientError: If ticker argument is invalid type
         """
         if isinstance(ticker, str):
-            if not ticker:
+            if not ticker.strip():
                 raise ClientError("Args (ticker): empty string")
             return [ticker.strip().upper()]
 
