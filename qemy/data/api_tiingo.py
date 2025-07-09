@@ -140,7 +140,7 @@ class TiingoClient:
         if resample not in resample_check:
             raise ClientError(
                 "Incorrect resample argument\n"
-                f"Given: {resample}"
+                f"Given: {resample}\n"
                 f"Accepted: {resample_check}"
             )
 
@@ -194,7 +194,7 @@ class TiingoClient:
 
         response = safe_status_get(url=url, headers=self.HEADERS)
         if not isinstance(response, list):
-            logger.error("Tiingo API request Failed")
+            logger.error("No quote data")
             return {}
         logger.info("Tiingo API request Successful")
 
