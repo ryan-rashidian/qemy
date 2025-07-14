@@ -8,7 +8,7 @@ import pandas as pd
 
 from qemy import _config as cfg
 
-from ._api_tools import parse_period, safe_status_get
+from ._api_tools import ClientError, parse_period, safe_status_get
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ class FREDClient:
         units: str='pc1',
         aggregation: str='avg',
         limit: int=100_000
-    ) -> pd.DataFrame | None:
+    ) -> pd.DataFrame:
         """Internal method for sending requests.
 
         Args:
@@ -54,6 +54,9 @@ class FREDClient:
         Returns:
             pd.DataFrame: DataFrame indexed by 'date' with 'val' column
             None: Failed to fetch data from FRED API
+
+        Raises:
+            ClientError: If failure to fetch observations
         """
         start_date, end_date = parse_period(period)
 
@@ -70,31 +73,30 @@ class FREDClient:
             'limit': limit
         }
 
-        try:
-            fred_data = safe_status_get(url=self.url, params=params)
-            if fred_data and fred_data.get('observations'):
-                logger.info("FRED API request Successful")
+        fred_data = safe_status_get(url=self.url, params=params)
+        if fred_data and fred_data.get('observations'):
+            logger.info("FRED API request Successful")
 
-                obs_df = pd.DataFrame(fred_data['observations'])
-                obs_df['date'] = pd.to_datetime(obs_df['date'])
-                obs_df.set_index('date', inplace=True)
-                obs_df['value'] = pd.to_numeric(
-                    obs_df['value'],
-                    errors='coerce'
-                )
-                # Rename column to 'val' for consistency
-                obs_df.rename(columns={'value': 'val'}, inplace=True)
-                # Drop un-needed columns
-                return obs_df.drop(
-                    columns=['realtime_start', 'realtime_end'],
-                    errors='ignore'
-                )
+            obs_df = pd.DataFrame(fred_data['observations'])
+            obs_df['date'] = pd.to_datetime(obs_df['date'])
+            obs_df.set_index('date', inplace=True)
+            obs_df['value'] = pd.to_numeric(
+                obs_df['value'],
+                errors='coerce'
+            )
+            # Rename column to 'val' for consistency
+            obs_df.rename(columns={'value': 'val'}, inplace=True)
+            # Drop un-needed columns
+            return obs_df.drop(
+                columns=['realtime_start', 'realtime_end'],
+                errors='ignore'
+            )
 
-        except Exception as e:
-            logger.exception(f"FRED API request Failed\n{e}")
-        return None
+        else:
+            logger.error("[FREDClient] Failed to fetch observations")
+            raise ClientError("[FREDClient] Failed to fetch observations")
 
-    def get_tbill_yield(self) -> pd.DataFrame | None:
+    def get_tbill_yield(self) -> pd.DataFrame:
         """Fetch latest observation for: 1 Year T-Bill Yield."""
         return self._fetch_series(
             series_id='GS1',
@@ -108,7 +110,7 @@ class FREDClient:
         self,
         period: str='1Y',
         units: str='pc1'
-    ) -> pd.DataFrame | None:
+    ) -> pd.DataFrame:
         """Fetch observations for: Consumer Price Index.
 
         Args:
@@ -128,7 +130,7 @@ class FREDClient:
         self,
         period: str='1Y',
         units: str='pc1'
-    ) -> pd.DataFrame | None:
+    ) -> pd.DataFrame:
         """Fetch observations for: Gross Domestic Product.
 
         Args:
@@ -148,7 +150,7 @@ class FREDClient:
         self,
         period: str='1Y',
         units: str='pch'
-    ) -> pd.DataFrame | None:
+    ) -> pd.DataFrame:
         """Fetch observations for: Consumer Sentiment Index.
 
         Args:
@@ -168,7 +170,7 @@ class FREDClient:
         self,
         period: str='1Y',
         units: str='pc1'
-    ) -> pd.DataFrame | None:
+    ) -> pd.DataFrame:
         """Fetch observations for: Nonfarm Payrolls.
 
         Args:
@@ -188,7 +190,7 @@ class FREDClient:
         self,
         period: str='1Y',
         units: str='pc1'
-    ) -> pd.DataFrame | None:
+    ) -> pd.DataFrame:
         """Fetch observations for: Federal Interest Rate.
 
         Args:
@@ -208,7 +210,7 @@ class FREDClient:
         self,
         period: str='1Y',
         units: str='pc1'
-    ) -> pd.DataFrame | None:
+    ) -> pd.DataFrame:
         """Fetch observations for: Jobless Claims.
 
         Args:
@@ -228,7 +230,7 @@ class FREDClient:
         self,
         period: str='1Y',
         units: str='pc1'
-    ) -> pd.DataFrame | None:
+    ) -> pd.DataFrame:
         """Fetch observations for: Unemployment Rate.
 
         Args:
@@ -248,7 +250,7 @@ class FREDClient:
         self,
         period: str='1Y',
         units: str='pc1'
-    ) -> pd.DataFrame | None:
+    ) -> pd.DataFrame:
         """Fetch observations for: Industrial Production Index.
 
         Args:
@@ -268,7 +270,7 @@ class FREDClient:
         self,
         period: str='1Y',
         units: str='lin'
-    ) -> pd.DataFrame | None:
+    ) -> pd.DataFrame:
         """Fetch observations for: Net Exports.
 
         Args:
