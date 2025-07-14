@@ -1,14 +1,14 @@
-"""
-Environment Setup Wizard for Qemy CLI.
-"""
+"""Environment Setup Wizard for Qemy CLI."""
 
 import sys
+
 from dotenv import load_dotenv
+
 from qemy import _config as cfg
 
+
 def _setup_input(prompt: str) -> str:
-    """
-    Prompt the user for input. Exits if input is 'exit' or 'q'.
+    """Prompt the user for input. Exits if input is 'exit' or 'q'.
 
     Args:
         prompt (str): The message displayed to users
@@ -24,10 +24,9 @@ def _setup_input(prompt: str) -> str:
         return user_input
 
 def setup_wizard():
-    """
-    Setup Wizard to initialize environment variables.
+    """Setup Wizard to initialize environment variables.
 
-    Prompts the user for API credentials and stores them in a .env file as environment variables.
+    Prompts the user for API credentials and stores them in .env file.
     If .env already exists, it will just load the environment variables.
     """
     project_root = cfg.PROJECT_ROOT
@@ -40,7 +39,7 @@ def setup_wizard():
         return
 
     print("\n No .env file found!")
-    print(" Please setup your FRED API key, Tiingo API key, and EDGAR API 'User Agent'")
+    print(" Please setup your API credentials.")
     print(" Type: 'exit' or 'q' to exit this setup at any time.")
 
     try:
@@ -59,10 +58,10 @@ def setup_wizard():
 
         print(
             " .env file created successfully!\n",
-            "\n Tip: use the bulk_refresh command to download SEC filings locally on your machine.\n",
+            "\n Tip: use the bulk_refresh command to download SEC filings.\n",
             "    - This is faster and helps avoid hitting SEC rate limits.\n",
-            "    - Otherwise, use '-r' or '--request' flags to fetch indicidual filings live.\n"
-            "      Be mindful of your usage - the SEC discourages frequent scraping.\n"
+            "    - Otherwise, use '-r' or '--request' flag.\n"
+            "      Be mindful of your request usage.\n"
         )
 
         load_dotenv(dotenv_path=env_path)
