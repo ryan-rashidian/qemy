@@ -20,6 +20,12 @@ class FREDClient:
         self.API_KEY: str = cfg.fred_api_key()
         self.url: str = cfg.FRED_URL
 
+    def __repr__(self) -> str:
+        return "FREDClient()"
+
+    def __str__(self) -> str:
+        return "[FREDClient]"
+
     def _fetch_series(
         self,
         series_id: str,
