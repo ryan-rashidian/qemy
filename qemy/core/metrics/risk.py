@@ -1,5 +1,5 @@
-from qemy.data import TiingoClient
-from qemy.data import FREDClient
+from qemy.data import FREDClient, TiingoClient
+
 
 def ratio_sharpe(ticker, period='1Y'):
     price_df = TiingoClient(ticker=ticker).get_prices(period=period)
@@ -10,7 +10,7 @@ def ratio_sharpe(ticker, period='1Y'):
     if rfr_df is not None and not rfr_df.empty:
         rfr = rfr_df['val'].iloc[0] / 100
     else:
-        print(f"No Observations found for T-Bill yield")
+        print("No Observations found for T-Bill yield")
         return {}
 
     pct_df = price_df['adjClose'].pct_change().dropna()

@@ -1,5 +1,5 @@
-from qemy.data import TiingoClient
-from qemy.data import EDGARClient
+from qemy.data import EDGARClient, TiingoClient
+
 
 def cagr(ticker, period='1Y'):
     price_df = TiingoClient(ticker=ticker).get_prices(period=period)
@@ -11,7 +11,7 @@ def cagr(ticker, period='1Y'):
     start_price = price_df['adjClose'].iloc[0]
     end_price = price_df['adjClose'].iloc[-1]
 
-    cagr = (end_price / start_price) ** (1 / n_years) - 1  
+    cagr = (end_price / start_price) ** (1 / n_years) - 1
 
     return {
         'ticker': ticker,
@@ -32,7 +32,7 @@ def growth_rate(ticker, metric):
     growth_factors = 1 + metric_growth
     product = growth_factors.prod()
 
-    if isinstance(product, float): 
+    if isinstance(product, float):
         annual_metric_growth = product - 1
 
         return {

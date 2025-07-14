@@ -2,25 +2,36 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from qemy import _config as cfg
-from qemy.utils.file_tools import save_to_png
 from qemy.data import FREDClient
+from qemy.utils.file_tools import save_to_png
+
 
 class PlotFRED:
     def __init__(self):
         self.export_dir = cfg.EXPORT_CHART_DIR
 
-    def _plot(self, fred_func, period, units, label, title, y_label, filename, save):
+    def _plot(
+        self,
+        fred_func,
+        period,
+        units,
+        label,
+        title,
+        y_label,
+        filename,
+        save
+    ):
         fred_data = fred_func(period=period, units=units)
         fred_df = pd.DataFrame(fred_data)
 
         plt.figure(figsize=(14, 8))
         plt.plot(
-            fred_df.index, 
-            fred_df['val'], 
-            label=label, 
-            color='green', 
-            linewidth=3, 
-            marker= 'o', 
+            fred_df.index,
+            fred_df['val'],
+            label=label,
+            color='green',
+            linewidth=3,
+            marker= 'o',
             alpha=0.8
         )
         plt.xlabel('Date')
@@ -30,7 +41,7 @@ class PlotFRED:
         plt.grid(True)
         plt.tight_layout()
 
-        if save == True:
+        if save:
             save_to_png(filename=filename)
         plt.show()
 

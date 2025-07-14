@@ -1,10 +1,13 @@
-from qemy.data import TiingoClient
-from qemy.data import EDGARClient
+from qemy.data import EDGARClient, TiingoClient
+
 
 def ratio_pe(ticker):
-    eps_df = EDGARClient(ticker=ticker).get_concept(concept='epsd', quarters=20)
+    eps_df = EDGARClient(ticker).get_concept(concept='epsd', quarters=20)
 
-    if not eps_df is None:
+    if eps_df is not None:
+        def _get_val(pos: int) -> float:
+            return eps_df.iloc[pos]['val'] if 0 <= pos < len(eps_df) else 0
+
         ttm_eps = None
 
         eps_1y_df = eps_df['val'].tail(4).copy()
@@ -19,35 +22,44 @@ def ratio_pe(ticker):
             n_quarters = len(after_cumulative_df)
 
             if n_quarters == 0:
-                #print("0")
                 ttm_eps = max_eps
 
             elif n_quarters == 1:
-                #print("1")
                 q1 = after_cumulative_df.iloc[0]['val']
-                q1_last_year = eps_df.iloc[cumulative_pos - 3]['val'] if cumulative_pos - 3 >= 0 else 0
+                q1_last_year = _get_val(cumulative_pos - 3)
+
                 ttm_eps = max_eps + q1 - q1_last_year
 
             elif n_quarters == 2:
-                #print("2")
                 q1 = after_cumulative_df.iloc[0]['val']
                 q2 = after_cumulative_df.iloc[1]['val']
-                q1_last_year = eps_df.iloc[cumulative_pos - 3]['val'] if cumulative_pos - 3 >= 0 else 0
-                q2_last_year = eps_df.iloc[cumulative_pos - 2]['val'] if cumulative_pos - 2 >= 0 else 0
-                ttm_eps = max_eps + q1 + q2 - q1_last_year - q2_last_year
+                q1_last_year = _get_val(cumulative_pos - 3)
+                q2_last_year = _get_val(cumulative_pos - 2)
+
+                ttm_eps = (
+                    max_eps
+                    + q1 + q2
+                    - q1_last_year
+                    - q2_last_year
+                )
 
             elif n_quarters == 3:
-                #print("3")
                 q1 = after_cumulative_df.iloc[0]['val']
                 q2 = after_cumulative_df.iloc[1]['val']
                 q3 = after_cumulative_df.iloc[2]['val']
-                q1_last_year = eps_df.iloc[cumulative_pos - 3]['val'] if cumulative_pos - 3 >= 0 else 0
-                q2_last_year = eps_df.iloc[cumulative_pos - 2]['val'] if cumulative_pos - 2 >= 0 else 0
-                q3_last_year = eps_df.iloc[cumulative_pos - 1]['val'] if cumulative_pos - 1 >= 0 else 0
-                ttm_eps = max_eps + q1 + q2 + q3 - q1_last_year - q2_last_year - q3_last_year
+                q1_last_year = _get_val(cumulative_pos - 3)
+                q2_last_year = _get_val(cumulative_pos - 2)
+                q3_last_year = _get_val(cumulative_pos - 1)
+
+                ttm_eps = (
+                    max_eps
+                    + q1 + q2 + q3
+                    - q1_last_year
+                    - q2_last_year
+                    - q3_last_year
+                )
 
         else:
-            #print("else")
             ttm_eps = eps_1y_df.mean()
 
         if ttm_eps is None or ttm_eps == 0:
@@ -64,7 +76,7 @@ def ratio_pe(ticker):
 
     price = price_df.iloc[-1]['adjClose']
 
-    if price and ttm_eps:
+    if price:
         pe_ratio = round(price / ttm_eps, 2)
 
         if pe_ratio >= 200:
@@ -83,19 +95,19 @@ def ratio_pe(ticker):
         return {}
 
 def ratio_pb(ticker):
-    equity_df = EDGARClient(ticker=ticker).get_concept(concept='equity', quarters=4)
+    equity_df = EDGARClient(ticker).get_concept(concept='equity', quarters=4)
     if equity_df is None:
         return {}
     book_value = equity_df.iloc[-1]['val']
 
-    shares_df = EDGARClient(ticker=ticker).get_concept(concept='shares', quarters=4)
+    shares_df = EDGARClient(ticker).get_concept(concept='shares', quarters=4)
     if shares_df is None:
         return {}
     shares_outstanding = shares_df.iloc[-1]['val']
 
     bvps = round(book_value / shares_outstanding, 2)
 
-    price_df = TiingoClient(ticker=ticker).get_prices(period='2W')
+    price_df = TiingoClient(ticker).get_prices(period='2W')
     if price_df.empty:
         return {}
 
@@ -106,7 +118,7 @@ def ratio_pb(ticker):
         'ticker': ticker,
         'price': price_per_share,
         'bvps': bvps,
-        'pb': pb_ratio 
+        'pb': pb_ratio
     }
 
 def ratio_roe():
