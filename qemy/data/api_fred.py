@@ -2,7 +2,6 @@
 
 This module requests and fetches data from FRED API.
 """
-
 import logging
 
 import pandas as pd
@@ -89,7 +88,7 @@ class FREDClient:
             logger.exception(f"FRED API request Failed\n{e}")
         return None
 
-    def get_tbill_yield(self):
+    def get_tbill_yield(self) -> pd.DataFrame | None:
         """Fetch latest observation for: 1 Year T-Bill Yield."""
         return self._fetch_series(
             series_id='GS1',
@@ -99,7 +98,11 @@ class FREDClient:
             limit=1
         )
 
-    def get_cpi(self, period: str='1Y', units: str='pc1'):
+    def get_cpi(
+        self,
+        period: str='1Y',
+        units: str='pc1'
+    ) -> pd.DataFrame | None:
         """Fetch observations for: Consumer Price Index.
 
         Args:
@@ -115,7 +118,11 @@ class FREDClient:
             units=units
         )
 
-    def get_gdp(self, period: str='1Y', units: str='pc1'):
+    def get_gdp(
+        self,
+        period: str='1Y',
+        units: str='pc1'
+    ) -> pd.DataFrame | None:
         """Fetch observations for: Gross Domestic Product.
 
         Args:
@@ -131,7 +138,11 @@ class FREDClient:
             units=units
         )
 
-    def get_sentiment(self, period: str='1Y', units: str='pch'):
+    def get_sentiment(
+        self,
+        period: str='1Y',
+        units: str='pch'
+    ) -> pd.DataFrame | None:
         """Fetch observations for: Consumer Sentiment Index.
 
         Args:
@@ -147,7 +158,11 @@ class FREDClient:
             units=units
         )
 
-    def get_nf_payrolls(self, period: str='1Y', units: str='pc1'):
+    def get_nf_payrolls(
+        self,
+        period: str='1Y',
+        units: str='pc1'
+    ) -> pd.DataFrame | None:
         """Fetch observations for: Nonfarm Payrolls.
 
         Args:
@@ -163,7 +178,11 @@ class FREDClient:
             units=units
         )
 
-    def get_interest_rate(self, period: str='1Y', units: str='pc1'):
+    def get_interest_rate(
+        self,
+        period: str='1Y',
+        units: str='pc1'
+    ) -> pd.DataFrame | None:
         """Fetch observations for: Federal Interest Rate.
 
         Args:
@@ -179,7 +198,11 @@ class FREDClient:
             units=units
         )
 
-    def get_jobless_claims(self, period: str='1Y', units: str='pc1'):
+    def get_jobless_claims(
+        self,
+        period: str='1Y',
+        units: str='pc1'
+    ) -> pd.DataFrame | None:
         """Fetch observations for: Jobless Claims.
 
         Args:
@@ -195,7 +218,11 @@ class FREDClient:
             units=units
         )
 
-    def get_unemployment(self, period: str='1Y', units: str='pc1'):
+    def get_unemployment(
+        self,
+        period: str='1Y',
+        units: str='pc1'
+    ) -> pd.DataFrame | None:
         """Fetch observations for: Unemployment Rate.
 
         Args:
@@ -211,7 +238,11 @@ class FREDClient:
             units=units
         )
 
-    def get_industrial_production(self, period: str='1Y', units: str='pc1'):
+    def get_industrial_production(
+        self,
+        period: str='1Y',
+        units: str='pc1'
+    ) -> pd.DataFrame | None:
         """Fetch observations for: Industrial Production Index.
 
         Args:
@@ -227,7 +258,11 @@ class FREDClient:
             units=units
         )
 
-    def get_net_exports(self, period: str='1Y', units: str='lin'):
+    def get_net_exports(
+        self,
+        period: str='1Y',
+        units: str='lin'
+    ) -> pd.DataFrame | None:
         """Fetch observations for: Net Exports.
 
         Args:
