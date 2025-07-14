@@ -54,7 +54,7 @@ def get_concept(
 
                 raw_facts = facts['facts']['us-gaap'][tag]['units']
                 logger.info(f"{len(raw_facts.get(unit, []))} filings found")
-                # Slice quarters * 3 to account for duplicates
+                # Slice quarters * 3 to buffer for duplicates
                 raw_facts = raw_facts.get(unit, [])[(-quarters * 3):]
                 concept_data = []
                 for rf in raw_facts:

@@ -1,6 +1,6 @@
 """Get companyfacts from SEC servers and bulk download.
 
-This module contains get_ functions that return facts through different means.
+This module contains get_ functions that return company facts.
 """
 
 import json
@@ -37,8 +37,8 @@ def get_facts_request(ticker: str) -> dict | None:
         ticker (str): Company ticker symbol
 
     Returns:
-        dict: facts for given ticker
-        None: failed to find facts for given ticker
+        dict: Facts for given ticker
+        None: If nothing found
     """
     ticker = ticker.lower().strip()
     headers = {'User-Agent': cfg.edgar_user_agent()}
@@ -72,8 +72,8 @@ def get_facts_bulk(ticker: str) -> dict | None:
         ticker (str): Company ticker symbol
 
     Returns:
-        dict: facts for given ticker
-        None: failed to find facts for given ticker
+        dict: Facts for given ticker
+        None: If nothing found
     """
     ticker = ticker.lower().strip()
     bulk_dir = cfg.BULK_DIR
