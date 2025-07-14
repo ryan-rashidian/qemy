@@ -8,7 +8,11 @@ import pandas as pd
 from qemy import _config as cfg
 
 
-def _get_next_path(base_dir: Path, name="file", ext="png") -> Path:
+def _get_next_path(
+    base_dir: Path,
+    name: str="file",
+    ext: str="png"
+) -> Path:
     """Default file name sequencing."""
     i = 1
     while True:
@@ -17,7 +21,7 @@ def _get_next_path(base_dir: Path, name="file", ext="png") -> Path:
             return check
         i += 1
 
-def save_to_png(filename):
+def save_to_png(filename: str):
     """Save plot to PNG file."""
     output_path =  _get_next_path(
         cfg.EXPORT_CHART_DIR,
