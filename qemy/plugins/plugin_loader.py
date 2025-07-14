@@ -1,9 +1,9 @@
 """Plugin loader for Qemy CLI."""
 
 import importlib.util
+import logging
 from collections.abc import Callable
 from pathlib import Path
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -21,10 +21,10 @@ class PluginRegistry:
 def load_plugins() -> PluginRegistry:
     """Dynamically discovers and loads all plugin modules.
 
-    Searches subfolders in /plugins/
-    Loads plugin modules into 'registry' PluginRegistry object
+    Searches subfolders in /plugins/,
+    Loads plugin modules into 'registry' PluginRegistry object.
 
-    Returns: 
+    Returns:
         registry (PluginRegistry): Contains all discovered plugins
     """
     registry = PluginRegistry()

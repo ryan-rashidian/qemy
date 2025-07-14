@@ -7,10 +7,10 @@ class BasePlugin:
     version = "0.1.1"
 
     def __init__(
-        self, 
-        ticker: str, 
-        period: str, 
-        num: int, 
+        self,
+        ticker: str,
+        period: str,
+        num: int,
         **kwargs: str
     ):
         """Initialize CLI commands as inherited variables.
@@ -27,9 +27,7 @@ class BasePlugin:
         self.args = kwargs
 
     def run(self) -> dict:
-        """
-        
-        This method is called by the CLI in order to print plugin output
+        """Called by the CLI in order to print plugin output.
 
         Returns:
             dict: Expected return type in the CLI
@@ -47,4 +45,4 @@ class BasePlugin:
             message (str): log string
         """
         print(f"[{self.name}] {message}")
-        
+

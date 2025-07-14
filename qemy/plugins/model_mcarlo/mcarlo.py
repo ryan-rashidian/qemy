@@ -1,8 +1,9 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 from qemy.data import TiingoClient
 from qemy.plugins import BasePlugin
+
 
 class MCarloPlugin(BasePlugin):
     name = "mcarlo"
@@ -12,7 +13,9 @@ class MCarloPlugin(BasePlugin):
     def run(self) -> dict:
         try:
             num_days = None
-            ticker_df = TiingoClient(ticker=self.ticker).get_prices(period=self.period)
+            ticker_df = TiingoClient(self.ticker).get_prices(
+                period=self.period
+            )
 
             if not ticker_df.empty:
                 close_prices = np.array(ticker_df['adjClose'])
@@ -26,7 +29,11 @@ class MCarloPlugin(BasePlugin):
                 simulations = np.zeros((self.num, num_days))
 
                 for i in range(self.num):
-                    future_returns = np.random.normal(loc=past_mean, scale=past_std, size=num_days)
+                    future_returns = np.random.normal(
+                        loc=past_mean,
+                        scale=past_std,
+                        size=num_days
+                    )
                     price_path = [start_price]
 
                     for ret in future_returns:
@@ -38,14 +45,15 @@ class MCarloPlugin(BasePlugin):
 
                 return {
                     "text": {
-                        "Assumptions": f"Daily % Return mean: {past_mean:.6f}, STD: {past_std:.6f}",
+                        "Daily % Return:": f"{past_mean:.6f}",
+                        "STD:": f"{past_std:.6f}",
                         "Start Price": f"{start_price:.2f}",
                         "# of Simulations": self.num,
                         "End Mean": f"{end_mean:.2f}",
                         "End STD": f"{end_std:.2f}",
                     },
                     "plot": {
-                        "title": f"{self.num} Monte Carlo Simulation for {self.ticker}",
+                        "title": f"{self.num} Simulation for {self.ticker}",
                         "plot_func": lambda: (
                             plt.plot(simulations.T, alpha=0.05, color='blue'),
                         )
@@ -67,4 +75,4 @@ class MCarloPlugin(BasePlugin):
             f"Version: {self.version}\n\n"
             f"Usage: qemy> m mcarlo -t <TICKER> -p <PERIOD> -n <#SIMS>\n"
         )
-    
+

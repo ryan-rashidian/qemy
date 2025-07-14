@@ -1,10 +1,11 @@
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 from sklearn.linear_model import LinearRegression
 
 from qemy.data import TiingoClient
 from qemy.plugins import BasePlugin
+
 
 class LinearRPlugin(BasePlugin):
     name = "linear_r"
@@ -13,17 +14,21 @@ class LinearRPlugin(BasePlugin):
 
     def run(self) -> dict:
         try:
-            ticker_df = TiingoClient(ticker=self.ticker).get_prices(period=self.period)
-            spy_df = TiingoClient(ticker='SPY').get_prices(period=self.period)
+            ticker_df = TiingoClient(self.ticker).get_prices(
+                period=self.period
+            )
+            spy_df = TiingoClient('SPY').get_prices(
+                period=self.period
+            )
 
             combined_df = pd.DataFrame({
-                self.ticker: ticker_df['adjClose'], 
+                self.ticker: ticker_df['adjClose'],
                 'SPY': spy_df['adjClose']
             }).dropna()
 
             returns_df = combined_df.pct_change().dropna()
 
-            x_spy = np.array(returns_df['SPY']).reshape(-1, 1) 
+            x_spy = np.array(returns_df['SPY']).reshape(-1, 1)
             y_ticker = np.array(returns_df[self.ticker])
 
             model = LinearRegression()
@@ -35,11 +40,11 @@ class LinearRPlugin(BasePlugin):
 
             return {
                 "text": {
-                    "Alpha": f"{alpha:.2%} daily | {alpha_annual:.2%} annualized",
+                    "Alpha": f"{alpha:.2%} daily | {alpha_annual:.2%} annual",
                     "Beta": f"{beta:.4f}",
                 },
                 "plot": {
-                    "title": f"Linear Regression fit for {self.ticker} and SPY returns",
+                    "title": f"Linear Regression: {self.ticker} and SPY",
                     "plot_func": lambda: (
                         plt.scatter(x_spy, y_ticker, alpha=0.3),
                         plt.plot(x_spy, model.predict(x_spy), color='red')
@@ -58,4 +63,4 @@ class LinearRPlugin(BasePlugin):
             f"Version: {self.version}\n\n"
             f"Usage: qemy> m linear_r -t <TICKER> -p <PERIOD>\n"
         )
-    
+

@@ -1,11 +1,12 @@
 from math import nan
-import pandas as pd
-import numpy as np
 
+import numpy as np
+import pandas as pd
 from sklearn.linear_model import LinearRegression
 
 from qemy.data import EDGARClient
 from qemy.plugins import BasePlugin
+
 
 class DCFPlugin(BasePlugin):
     name = "dcf"
@@ -15,16 +16,32 @@ class DCFPlugin(BasePlugin):
     def _get_dcf_metrics(self):
 
         try:
-            df_shares = EDGARClient(ticker=self.ticker).get_concept(concept='shares', quarters=10)
+            df_shares = EDGARClient(self.ticker).get_concept(
+                concept='shares',
+                quarters=10
+            )
             if df_shares is None:
                 shares = nan
             else:
                 shares = df_shares['val'].iloc[-1]
 
-            df_debt = EDGARClient(ticker=self.ticker).get_concept(concept='debt', quarters=10)
-            df_debt_short = EDGARClient(ticker=self.ticker).get_concept(concept='sdebt', quarters=10)
-            df_debt_long = EDGARClient(ticker=self.ticker).get_concept(concept='ldebt', quarters=10)
-            df_cash = EDGARClient(ticker=self.ticker).get_concept(concept='cash', quarters=10)
+            df_debt = EDGARClient(self.ticker).get_concept(
+                concept='debt',
+                quarters=10
+            )
+            df_debt_short = EDGARClient(self.ticker).get_concept(
+                concept='sdebt',
+                quarters=10
+            )
+            df_debt_long = EDGARClient(self.ticker).get_concept(
+                concept='ldebt',
+                quarters=10
+            )
+            df_cash = EDGARClient(self.ticker).get_concept(
+                concept='cash',
+                quarters=10
+            )
+
             if df_debt is None:
                 debt = 0
             else:
@@ -43,16 +60,22 @@ class DCFPlugin(BasePlugin):
                 cash = df_cash['val'].iloc[-1]
             net_debt = (debt + debt_short + debt_long) - cash
 
-            df_ocf = EDGARClient(ticker=self.ticker).get_concept(concept='ocf', quarters=20)
-            df_capex = EDGARClient(ticker=self.ticker).get_concept(concept='capex', quarters=20)
+            df_ocf = EDGARClient(self.ticker).get_concept(
+                concept='ocf',
+                quarters=20
+            )
+            df_capex = EDGARClient(self.ticker).get_concept(
+                concept='capex',
+                quarters=20
+            )
             if df_ocf is None or df_capex is None:
                 df_fcf = nan
             else:
                 df_cash_combined = pd.merge(
-                    df_ocf, 
-                    df_capex, 
-                    on='filed', 
-                    how='outer', 
+                    df_ocf,
+                    df_capex,
+                    on='filed',
+                    how='outer',
                     suffixes=('_ocf', '_capex')
                 ).copy()
                 df_combined = df_cash_combined.infer_objects()
@@ -75,9 +98,9 @@ class DCFPlugin(BasePlugin):
             return None, None, None
 
     def run(self) -> dict:
-        filing_df, shares_outstanding, net_debt = self._get_dcf_metrics()
+        filing_df, shares, net_debt = self._get_dcf_metrics()
 
-        if isinstance(filing_df, pd.DataFrame) and shares_outstanding is not None:
+        if isinstance(filing_df, pd.DataFrame) and shares is not None:
             try:
                 rolling_window = filing_df['val'].rolling(window=4)
                 rolling_mean = pd.Series(rolling_window.mean())
@@ -92,7 +115,10 @@ class DCFPlugin(BasePlugin):
                 y_fcf = fcf_df
                 model = LinearRegression().fit(X=x_time, y=y_fcf)
 
-                future_x = np.arange(len(fcf_df), len(fcf_df) + 20).reshape(-1, 1)
+                future_x = np.arange(
+                    len(fcf_df),
+                    len(fcf_df) + 20
+                ).reshape(-1, 1)
                 fcf_forecast = model.predict(future_x)
                 fcf_forecast = np.clip(fcf_forecast, 0, None)
 
@@ -114,22 +140,24 @@ class DCFPlugin(BasePlugin):
 
                 if net_debt:
                     equity_value = enterprise_value - net_debt
-                    intrinsic_value_per_share = max(0, equity_value / shares_outstanding)
+                    # Intrinsic Value Per-Share
+                    ivps = max(0, equity_value / shares)
                     return {
                         "text": {
                             "Model Fit Confidence": f"{r_squared:.2%}",
                             "Enterprise Value": f"{enterprise_value:.0f}",
                             "Equity Value": f"{equity_value:.0f}",
-                            "Intrinsic Value Per Share": f"{intrinsic_value_per_share:.2f}",
+                            "Intrinsic Value Per Share": f"{ivps:.2f}",
                         }
                     }
                 else:
-                    enterprise_value_per_share = max(0, enterprise_value / shares_outstanding)
+                    # Enterprise Value Per-Share
+                    evps = max(0, enterprise_value / shares)
                     return {
                         "text": {
                             "Model Fit Confidence": r_squared,
                             "Enterprise Value": enterprise_value,
-                            "Enterprise Value Per Share": enterprise_value_per_share,
+                            "Enterprise Value Per Share": evps,
                         }
                     }
 
@@ -137,7 +165,9 @@ class DCFPlugin(BasePlugin):
                 self.log(f"dcf.py Exception ERROR:\n{e}")
                 return {}
         else:
-            self.log(f"dcf.py ERROR:\n{filing_df}\nShares outstanding: {shares_outstanding}")
+            self.log("dcf.py ERROR:")
+            self.log(f"{filing_df}")
+            self.log(f"Shares outstanding: {shares}")
             return {}
 
     def help(self):
@@ -147,4 +177,4 @@ class DCFPlugin(BasePlugin):
             f"Version: {self.version}\n\n"
             f"Usage: qemy> m dcf -t <TICKER>\n"
         )
-    
+
