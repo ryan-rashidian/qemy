@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
+
 from dotenv import load_dotenv
+
 from qemy.utils.env_tools import get_env_str
 
 # === KEY ===
@@ -8,7 +10,7 @@ from qemy.utils.env_tools import get_env_str
 dotenv_path = Path(__file__).resolve().parents[1] / '.env'
 if dotenv_path.exists():
     load_dotenv(dotenv_path=dotenv_path)
- 
+
 # Lazy accessors for API keys
 def fred_api_key() -> str:
     return get_env_str('FRED_API_KEY')
