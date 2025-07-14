@@ -91,12 +91,16 @@ def flags():
         ("W", "Week"),
         ("M", "Month"),
         ("Y", "Year"),
-        ("Info:", "Specifies a start and end date based on the given period. Start = <Current-Date>, End = <Start - Period>"),
+        ("Info:", (
+            "Specifies a start and end date based on the given period. "
+            "Start = <Current-Date>, End = <Start - Period>"
+        )),
         ("Usage:", "-p <PERIOD>"),
         ("Example:", "-p 3M"),
     ])
     print_help_table(" -plt --plot ", [
-        ("Info:", "True/False flag to enable plotting feature. Takes no arguments."),
+        ("Info:", "True/False flag to enable plotting feature."),
+        ("", "No argument taken."),
         ("Usage:", "-plt"),
         ("Example:", "m mcarlo -t aapl -p 2y -plt"),
     ])
@@ -116,13 +120,17 @@ def flags():
         ("Example:", "-t aapl"),
     ])
     print_help_table(" -s --save ", [
-        ("Info:", "True/False flag to enable save feature. Takes no arguments."),
+        ("Info:", "True/False flag to enable save feature."),
+        ("", "No argument taken."),
         ("Usage:", "-s"),
         ("Example:", "m mcarlo -t aapl -p 2y -plt -s"),
     ])
     print_help_table(" -u --units ", [
         ("Unit arguments:", "lin, chg, ch1, pch, log, etc..."),
-        ("Info:", "Transforms data values to given unit type. Enter 'units' for a list and explanation of each argument."),
+        ("Info:", (
+            "Transforms data values to given unit type. "
+            "Enter 'units' for a list and explanation of each argument."
+        )),
         ("Usage:", "-u <UNIT>"),
         ("Example:", "-u log"),
     ])

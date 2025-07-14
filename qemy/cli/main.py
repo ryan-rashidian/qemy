@@ -1,13 +1,13 @@
 import cmd
 import os
 import platform
-import logging
+
 import pandas as pd
 
-from .core import aux, core, helper, cli_plugins, cli_metrics, cli_plots 
-from .apis import cli_edgar, cli_fred, cli_tiingo
-
 from qemy.utils.env_setup import setup_wizard
+
+from .apis import cli_edgar, cli_fred, cli_tiingo
+from .core import aux, cli_metrics, cli_plots, cli_plugins, core, helper
 
 setup_wizard()
 
@@ -36,7 +36,7 @@ class QemyShell(cmd.Cmd):
 
     def do_wl(self, arg):
         ticker_list = core.watch_list(
-            arg=arg, 
+            arg=arg,
             ticker_list=self.ticker_list.copy()
         )
         if ticker_list:
@@ -47,7 +47,7 @@ class QemyShell(cmd.Cmd):
 # === EDGAR ===
     def do_f(self, arg):
         df_return = cli_edgar.filing(
-            arg=arg, 
+            arg=arg,
             ticker_df=self.ticker_df.copy()
         )
         if isinstance(df_return, pd.DataFrame):

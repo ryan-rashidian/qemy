@@ -1,22 +1,27 @@
+import logging
 import sys
 from pathlib import Path
-import logging
 
 from qemy.data import bulk_refresh as bulk_r
+
 from .._parse_args import check_help
 from ..core.helper import print_help_table
+
 
 def bulk_refresh(arg):
     if check_help(
         arg_str=arg,
         help_func=lambda: print_help_table(" bulk_refresh ", [
-                ("Info:", "Download, or refresh current download of SEC filing data"),
+                ("Info:", "Download, or refresh existing SEC filing data"),
                 ("Size:", "~18GB\n"),
         ])
     ):
         return
 
-    confirm = input("All previous bulk data will be overwritten.\nAre you sure? (yes/no): ")
+    confirm = input(
+        "All previous bulk data will be overwritten.\n"
+        "Are you sure? (yes/no): "
+    )
     if confirm.strip().lower() == 'yes':
         try:
             bulk_r()
@@ -36,8 +41,8 @@ def calc(arg):
     try:
         result = eval(arg, {"__builtins__": {}}, {})
         print(result)
-    except:
-        print("Invalid expression")
+    except Exception as e:
+        print(f"Invalid expression\n{e}")
 
 def debug(arg: str, debug_mode: bool) -> bool | None:
     if check_help(
@@ -47,12 +52,12 @@ def debug(arg: str, debug_mode: bool) -> bool | None:
         ])
     ):
         return
-    
+
     if debug_mode:
         logging.disable(logging.CRITICAL + 1)
         print("Logging is now OFF")
         debug_mode = False
-        return debug_mode 
+        return debug_mode
 
     else:
         logging.disable(logging.NOTSET)
@@ -64,8 +69,9 @@ def env_reset(arg):
     if check_help(
         arg_str=arg,
         help_func=lambda: print_help_table(" env_reset ", [
-            ("Info:", "Delete current API key setup (will remove the .env file in project root)"),
-            ("", "Will restart current Qemy CLI session, and users will be prompted by the setup wizard on next start\n"),
+            ("Info:", "Delete current API key setup"),
+            ("", "(Removed .env file from Qemy)"),
+            ("", "Restarts current Qemy CLI session\n"),
         ])
     ):
         return
@@ -77,7 +83,10 @@ def env_reset(arg):
 
     env_path = project_root / '.env'
 
-    confirm = input("Are you sure you want to delete the .env file? This action will also exit qemy. (yes/no): ").strip().lower()
+    confirm = input(
+        "Are you sure you want to delete the .env file?\n"
+        "This action will also exit qemy. (yes/no): "
+    ).strip().lower()
     if confirm != 'yes':
         print("Aborted. .env file was not deleted.\n")
         return

@@ -1,7 +1,7 @@
-from ..core.helper import print_help_table
-from .._parse_args import check_help, parse_args_cli
-
 from qemy.data import TiingoClient
+
+from .._parse_args import check_help, parse_args_cli
+from ..core.helper import print_help_table
 
 # === TIINGO ===
 
@@ -18,11 +18,12 @@ def quote(arg):
 
     try:
         core_args, plugin_kwargs, other_args = parse_args_cli(
-            arg_str=arg, 
-            expected_args=['ticker'], 
-            prog_name='quote', 
+            arg_str=arg,
+            expected_args=['ticker'],
+            prog_name='quote',
         )
-    except:
+    except Exception as e:
+        print(e)
         return
 
     if plugin_kwargs or other_args:
@@ -37,8 +38,8 @@ def quote(arg):
             if data and ticker in data:
                 quote_data = data[ticker]
                 quote = (
-                    quote_data.get('last') 
-                    or quote_data.get('tngoLast') 
+                    quote_data.get('last')
+                    or quote_data.get('tngoLast')
                     or quote_data.get('mid'))
                 if quote is not None:
                     print(f"{ticker}: {quote}")
@@ -63,11 +64,12 @@ def price(arg):
 
     try:
         core_args, plugin_kwargs, other_args = parse_args_cli(
-            arg_str=arg, 
-            expected_args=['period', 'ticker'], 
-            prog_name='price', 
+            arg_str=arg,
+            expected_args=['period', 'ticker'],
+            prog_name='price',
         )
-    except:
+    except Exception as e:
+        print(e)
         return
 
     if plugin_kwargs or other_args:

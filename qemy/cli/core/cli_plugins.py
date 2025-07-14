@@ -1,8 +1,9 @@
-from .helper import print_help_table
-from .._parse_args import check_help, parse_args_cli
-
-from qemy.plugins import load_plugins
 from qemy.core.plot.plot import plot_models
+from qemy.plugins import load_plugins
+
+from .._parse_args import check_help, parse_args_cli
+from .helper import print_help_table
+
 
 def run_models(arg):
     if check_help(
@@ -15,11 +16,11 @@ def run_models(arg):
         return
 
     core_args, plugin_kwargs, other_args = parse_args_cli(
-        arg_str=arg, 
+        arg_str=arg,
         expected_args=[
             'period', 'ticker_flag', 'model',
             'num', 'plot', 'save', 'help'
-        ], 
+        ],
         prog_name='run_model'
     )
 

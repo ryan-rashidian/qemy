@@ -1,7 +1,8 @@
-from .helper import print_help_table
-from .._parse_args import check_help, parse_args_cli
+from qemy.core.metrics import growth, risk, value
 
-from qemy.core.metrics import value, risk, growth
+from .._parse_args import check_help, parse_args_cli
+from .helper import print_help_table
+
 
 class MetricCmd:
     def __init__(self, arg):
@@ -9,7 +10,7 @@ class MetricCmd:
         self.failed = False
 
         if check_help(
-            arg_str=arg, 
+            arg_str=arg,
             help_func=lambda: print_help_table(" metric Commands ", [
                 ("pe", "P/E Ratio"),
                 ("pb", "P/B Ratio"),
@@ -27,9 +28,9 @@ class MetricCmd:
             return
 
         core_args, plugin_kwargs, other_args = parse_args_cli(
-            arg_str=arg, 
-            expected_args=['metric_p', 'ticker_flag', 'period', 'help'], 
-            prog_name='ratios', 
+            arg_str=arg,
+            expected_args=['metric_p', 'ticker_flag', 'period', 'help'],
+            prog_name='ratios',
         )
 
         if plugin_kwargs or other_args:
@@ -52,7 +53,7 @@ class MetricCmd:
             print(f"Price: {results_dict['price']:.2f}")
             print(f"TTM EPS: {results_dict['ttm_eps']:.2f}")
             print(f"P/E Ratio: {results_dict['pe']}")
-    
+
     def _pb(self):
         if self.help:
             print_help_table(" pb ", [
@@ -75,7 +76,10 @@ class MetricCmd:
             ])
 
         else:
-            results_dict = risk.ratio_sharpe(ticker=self.ticker, period=self.period)
+            results_dict = risk.ratio_sharpe(
+                ticker=self.ticker,
+                period=self.period
+            )
             print(f"Ticker: {self.ticker}")
             print(f"RFR: {results_dict['rfr']:.3f}")
             print(f"1 Year Mean: {results_dict['mean']:.3f}")
@@ -85,24 +89,30 @@ class MetricCmd:
     def _maxdd(self):
         if self.help:
             print_help_table(" maxdd ", [
-                ("Info:", "Fetches Max Drawdown for given ticker"),
+                ("Info:", "Fetches Max Drawdown"),
                 ("Usage:", "metric maxdd -t <TICKER> -p <PERIOD>\n"),
             ])
 
         else:
-            results_dict = risk.max_dd(ticker=self.ticker, period=self.period)
+            results_dict = risk.max_dd(
+                ticker=self.ticker,
+                period=self.period
+            )
             print(f"Ticker: {self.ticker}")
             print(f"Max Drawdown: {results_dict['maxdd']:.2%}")
 
     def _volatility(self):
         if self.help:
             print_help_table(" vol ", [
-                ("Info:", "Fetches Annualized Volatility for given ticker"),
+                ("Info:", "Fetches Annualized Volatility"),
                 ("Usage:", "metric vol -t <TICKER> -p <PERIOD>\n"),
             ])
 
         else:
-            results_dict = risk.volatility(ticker=self.ticker, period=self.period)
+            results_dict = risk.volatility(
+                ticker=self.ticker,
+                period=self.period
+            )
             print(f"Ticker: {self.ticker}")
             print(f"Volatility: {results_dict['vol']:.2%} Annualized")
 
@@ -110,27 +120,36 @@ class MetricCmd:
     def _cagr(self):
         if self.help:
             print_help_table(" cagr ", [
-                ("Info:", "Fetches Compounded Annual Growth Rate for given ticker"),
+                ("Info:", "Fetches Compounded Annual Growth Rate"),
                 ("Usage:", "metric cagr -t <TICKER> -p <PERIOD>\n"),
             ])
 
         else:
-            results_dict = growth.cagr(ticker=self.ticker, period=self.period)
+            results_dict = growth.cagr(
+                ticker=self.ticker,
+                period=self.period
+            )
             print(f"Ticker: {self.ticker}")
             print(f"CAGR: {results_dict['cagr']:.2%} Annualized")
 
     def _growth(self):
         if self.help:
             print_help_table(f" {self.metric} ", [
-                ("Info:", f"Fetches 1 Year {self.metric.upper()} growth rate for given ticker"),
+                ("Info:", f"Fetches yearly {self.metric.upper()} growth rate"),
                 ("Usage:", f"metric {self.metric.upper()} -t <TICKER>\n"),
             ])
 
         else:
-            results_dict = growth.growth_rate(ticker=self.ticker, metric=self.metric)
+            results_dict = growth.growth_rate(
+                ticker=self.ticker,
+                metric=self.metric
+            )
 
             print(f"Ticker: {self.ticker}")
-            print(f"{self.metric} Growth: {results_dict['growth']:.2%} Annualized")
+            print(
+                f"{self.metric} Growth: "
+                f"{results_dict['growth']:.2%} Annualized"
+            )
 
     def run(self):
         if self.help_requested or self.failed:
@@ -149,8 +168,8 @@ class MetricCmd:
         elif self.metric == 'CAGR':
             self._cagr()
         elif self.metric in (
-                'SHARES', 'CASH', 'DEBT', 'NETDEBT', 'REV', 'COGS', 
-                'GPROFIT', 'EBIT', 'NETINC', 'ASSETS', 'LIAB', 
+                'SHARES', 'CASH', 'DEBT', 'NETDEBT', 'REV', 'COGS',
+                'GPROFIT', 'EBIT', 'NETINC', 'ASSETS', 'LIAB',
                 'EQUITY', 'OPEX', 'CAPEX', 'OCF', 'FCF', 'EPS',
             ):
             self._growth()

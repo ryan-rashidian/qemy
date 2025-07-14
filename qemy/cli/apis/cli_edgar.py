@@ -1,10 +1,11 @@
-import pandas as pd
 from numbers import Number
 
-from ..core.helper import print_help_table
-from .._parse_args import check_help, parse_args_cli
+import pandas as pd
 
 from qemy.data import EDGARClient
+
+from .._parse_args import check_help, parse_args_cli
+from ..core.helper import print_help_table
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -21,7 +22,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
 
     Returns:
         pd.DataFrame: ticker_df and new filing concatenated together
-        None: If --help called or EDGARClient returns None 
+        None: If --help called or EDGARClient returns None
     """
     if check_help(
         arg_str=arg,
@@ -40,11 +41,12 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
 
     try:
         core_args, plugin_kwargs, other_args = parse_args_cli(
-            arg_str=arg, 
-            expected_args=['ticker', 'request', 'file', 'metric', 'quarter'], 
-            prog_name='filing', 
+            arg_str=arg,
+            expected_args=['ticker', 'request', 'file', 'metric', 'quarter'],
+            prog_name='filing',
         )
-    except:
+    except Exception as e:
+        print(e)
         return
 
     if plugin_kwargs or other_args:
@@ -55,10 +57,10 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
 
     if not request:
         request = False
-    
+
     if file == 'BALANCE':
         balance_df = EDGARClient(
-            ticker=ticker, 
+            ticker=ticker,
             use_requests=request
         ).get_balance_sheet()
         if balance_df is None or balance_df.empty:
@@ -71,7 +73,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
 
     elif file == 'CASHFLOW':
         cashflow_df = EDGARClient(
-            ticker=ticker, 
+            ticker=ticker,
             use_requests=request
         ).get_cashflow_statement()
         if cashflow_df is None or cashflow_df.empty:
@@ -84,7 +86,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
 
     elif file == 'INCOME':
         income_df = EDGARClient(
-            ticker=ticker, 
+            ticker=ticker,
             use_requests=request
         ).get_income_statement()
         if income_df is None or income_df.empty:
@@ -97,7 +99,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
 
     elif file == 'METRIC':
         concept_df = EDGARClient(
-            ticker=ticker, 
+            ticker=ticker,
             use_requests=request
         ).get_concept(concept=metric, quarters=int(quarters))
         if concept_df is None or concept_df.empty:
@@ -115,7 +117,7 @@ def filing(arg, ticker_df) -> pd.DataFrame | None:
 
     else:
         filing_df = EDGARClient(
-            ticker=ticker, 
+            ticker=ticker,
             use_requests=request
         ).get_filing()
         if filing_df is None or filing_df.empty:

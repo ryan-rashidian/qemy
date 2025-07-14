@@ -1,7 +1,7 @@
-from ..core.helper import print_help_table
-from .._parse_args import check_help, parse_args_cli
-
 from qemy.data import FREDClient
+
+from .._parse_args import check_help, parse_args_cli
+from ..core.helper import print_help_table
 
 # === FRED ===
 
@@ -12,7 +12,7 @@ class FREDCmd:
         self.metric = None
 
         if check_help(
-            arg_str=arg, 
+            arg_str=arg,
             help_func=lambda: print_help_table(" fred commands ", [
                 ("cpi", ""),
                 ("gdp", ""),
@@ -32,8 +32,8 @@ class FREDCmd:
 
         try:
             core_args, plugin_kwargs, other_args = parse_args_cli(
-                arg_str=arg, 
-                expected_args=['metric_p', 'period', 'units', 'help'], 
+                arg_str=arg,
+                expected_args=['metric_p', 'period', 'units', 'help'],
                 prog_name='fred'
             )
             if plugin_kwargs or other_args:
@@ -43,7 +43,8 @@ class FREDCmd:
 
             self.metric, self.period, self.units, self.help = core_args
 
-        except:
+        except Exception as e:
+            print(e)
             return
 
     def rfr(self):
@@ -70,7 +71,10 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDClient().get_cpi(period=self.period, units=units))
+                    print(FREDClient().get_cpi(
+                        period=self.period,
+                        units=units
+                    ))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -87,7 +91,10 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDClient().get_gdp(period=self.period, units=units))
+                    print(FREDClient().get_gdp(
+                        period=self.period,
+                        units=units
+                    ))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -104,7 +111,10 @@ class FREDCmd:
             units = 'pch' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDClient().get_sentiment(period=self.period, units=units))
+                    print(FREDClient().get_sentiment(
+                        period=self.period,
+                        units=units
+                    ))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -121,7 +131,10 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDClient().get_nf_payrolls(period=self.period, units=units))
+                    print(FREDClient().get_nf_payrolls(
+                        period=self.period,
+                        units=units
+                    ))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -138,7 +151,10 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDClient().get_interest_rate(period=self.period, units=units))
+                    print(FREDClient().get_interest_rate(
+                        period=self.period,
+                        units=units
+                    ))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -155,7 +171,10 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDClient().get_jobless_claims(period=self.period, units=units))
+                    print(FREDClient().get_jobless_claims(
+                        period=self.period,
+                        units=units
+                    ))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -172,7 +191,10 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDClient().get_unemployment(period=self.period, units=units))
+                    print(FREDClient().get_unemployment(
+                        period=self.period,
+                        units=units
+                    ))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -189,7 +211,10 @@ class FREDCmd:
             units = 'pc1' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDClient().get_industrial_production(period=self.period, units=units))
+                    print(FREDClient().get_industrial_production(
+                        period=self.period,
+                        units=units
+                    ))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
@@ -203,10 +228,13 @@ class FREDCmd:
             ])
 
         else:
-            units = 'lin' if self.units is None else self.units 
+            units = 'lin' if self.units is None else self.units
             if isinstance(self.period, str):
                 try:
-                    print(FREDClient().get_net_exports(period=self.period, units=units.lower()))
+                    print(FREDClient().get_net_exports(
+                        period=self.period,
+                        units=units.lower()
+                    ))
                 except Exception as e:
                     print(f"Could not fetch data ERROR:\n{e}")
             else:
