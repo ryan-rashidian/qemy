@@ -21,6 +21,9 @@ def parse_period(period_str) -> tuple[str, str]:
 
     Returns:
         tuple[str, str]: Tuple of start and end date strings
+
+    Raises:
+        ClientError: If invalid units
     """
     now = datetime.now()
 
