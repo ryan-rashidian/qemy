@@ -121,9 +121,12 @@ def ratio_pb(ticker):
         'pb': pb_ratio
     }
 
-def ratio_roe():
+def ratio_ps():
     return
 
-def ratio_ev_ebitda():
+def ratio_enterprise_multiple():
+    return
+
+def market_cap():
     return
 
