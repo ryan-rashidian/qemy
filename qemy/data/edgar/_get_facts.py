@@ -8,11 +8,11 @@ import logging
 import time
 
 from qemy import _config as cfg
-from qemy.data._api_tools import safe_status_get
+from qemy.data._api_tools import ClientError, safe_status_get
 
 logger = logging.getLogger(__name__)
 
-def _find_cik(ticker: str, cik_data: dict) -> str | None:
+def _find_cik(ticker: str, cik_data: dict) -> str:
     """CIK # search and rerieval for given ticker.
 
     Args:
@@ -21,16 +21,21 @@ def _find_cik(ticker: str, cik_data: dict) -> str | None:
 
     Returns:
         str: string of company CIK #
-        None: failed to find ticker in cik_data
+
+    Raises:
+        ClientError: If cik not found
     """
     cik = None
     for entry in cik_data.values():
         if entry.get('ticker', '').lower() == ticker:
             cik = str(entry.get('cik_str')).zfill(10)
             break
-    return cik
+    if cik is not None:
+        return cik
+    else:
+        raise ClientError(f"CIK not found for {ticker.upper()}")
 
-def get_facts_request(ticker: str) -> dict | None:
+def get_facts_request(ticker: str) -> dict:
     """Fetch facts from SEC servers.
 
     Args:
@@ -38,34 +43,21 @@ def get_facts_request(ticker: str) -> dict | None:
 
     Returns:
         dict: Facts for given ticker
-        None: If nothing found
     """
     ticker = ticker.lower().strip()
     headers = {'User-Agent': cfg.edgar_user_agent()}
 
+    logger.debug(f"Fetching cik data for: {ticker.upper()}")
     cik_data = safe_status_get(cfg.EDGAR_CIK_URL, headers=headers)
-    if not cik_data:
-        logger.warning("Failed to fetch CIK data from SEC servers.")
-        return None
-
     cik = _find_cik(ticker, cik_data)
-    if cik is None:
-        logger.warning(f"CIK not found for ticker: {ticker.upper()}")
-        return None
+    facts_url = f"{cfg.EDGAR_FACTS_URL}{cik}.json"
 
-    logger.info(f"Fetching facts from SEC for: {ticker.upper()}")
+    logger.debug(f"Fetching facts from SEC for: {ticker.upper()}")
     time.sleep(1) # Be polite to SEC server
 
-    facts_url = f"{cfg.EDGAR_FACTS_URL}{cik}.json"
-    facts = safe_status_get(facts_url, headers=headers)
+    return safe_status_get(facts_url, headers=headers)
 
-    if not facts:
-        logger.warning(f"Failed to fetch facts from SEC servers for {cik}")
-
-    logger.info(f"EDGAR data found for {ticker.upper()}")
-    return facts
-
-def get_facts_bulk(ticker: str) -> dict | None:
+def get_facts_bulk(ticker: str) -> dict:
     """Fetch facts from bulk download.
 
     Args:
@@ -73,7 +65,9 @@ def get_facts_bulk(ticker: str) -> dict | None:
 
     Returns:
         dict: Facts for given ticker
-        None: If nothing found
+
+    Raise:
+        ClientError: If nothing found
     """
     ticker = ticker.lower().strip()
     bulk_dir = cfg.BULK_DIR
@@ -81,30 +75,28 @@ def get_facts_bulk(ticker: str) -> dict | None:
     try:
         with open(bulk_dir / 'company_tickers.json', 'r') as f:
             cik_data = json.load(f)
-    except FileNotFoundError:
-        logger.warning(f"CIK not found in {bulk_dir}")
-        return None
+
+    except FileNotFoundError as err:
+        logger.error(f"CIK not found in {bulk_dir}")
+        raise ClientError("CIK not found") from err
 
     cik = _find_cik(ticker, cik_data)
-    if cik is None:
-        logger.warning(f"CIK not found for ticker: {ticker.upper()}")
-        return None
-
     facts_path = bulk_dir / 'companyfacts' / f"CIK{cik}.json"
     if not facts_path.exists():
         logger.warning(f"Facts file missing: {facts_path}")
-        return None
+        raise ClientError("Facts file not found")
 
     try:
         with open(facts_path, 'r') as f:
             facts = json.load(f)
-    except json.JSONDecodeError as e:
-        logger.error(f"Corrupted JSON file for {cik}\n{e}")
-        return None
-    except Exception as e:
-        logger.exception(f"Failed to load facts JSON for {cik}\n{e}")
-        return None
 
-    logger.info(f"EDGAR data found for {ticker.upper()}")
+    except json.JSONDecodeError as err:
+        logger.error(f"Corrupted JSON file for {cik}\n{err}")
+        raise ClientError("Corrupted JSON file") from err
+    except Exception as err:
+        logger.exception(f"Failed to load facts for {cik}\n{err}")
+        raise ClientError("Failed to load facts") from err
+
+    logger.debug(f"EDGAR data found for {ticker.upper()}")
     return facts
 
