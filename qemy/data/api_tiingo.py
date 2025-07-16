@@ -2,6 +2,7 @@
 
 This module requests and fetches data from Tiingo API.
 """
+
 from __future__ import annotations
 
 import logging
@@ -9,8 +10,9 @@ import logging
 import pandas as pd
 
 from qemy import _config as cfg
+from qemy.exceptions import InvalidArgumentError
 
-from ._api_tools import ClientError, parse_period, safe_status_get
+from ._api_tools import parse_period, safe_status_get
 
 logger = logging.getLogger(__name__)
 
@@ -45,35 +47,37 @@ class TiingoClient:
             list[str]: Normalized ticker list for self.tickers
 
         Raises:
-            ClientError: If ticker argument is invalid type
+            InvalidArgumentError: If ticker argument is invalid type
         """
         if isinstance(ticker, str):
             if not ticker.strip():
-                raise ClientError("Args (ticker): empty string")
+                raise InvalidArgumentError("Args (ticker): empty string")
             return [ticker.strip().upper()]
 
         elif isinstance(ticker, list):
             if not ticker:
-                raise ClientError("Args (ticker): empty list")
+                raise InvalidArgumentError("Args (ticker): empty list")
 
             normalized_tickers = []
 
             for i, t in enumerate(ticker):
                 if not isinstance(t, str):
-                    raise ClientError(
+                    raise InvalidArgumentError(
                         f"Args (ticker[{i}]): incorrect type: {type(t)}"
                     )
 
                 clean_ticker = t.strip().upper()
                 if not clean_ticker:
-                    raise ClientError(f"Args (ticker[{i}]): empty string")
+                    raise InvalidArgumentError(
+                        f"Args (ticker[{i}]): empty string"
+                    )
                 normalized_tickers.append(clean_ticker)
 
             return normalized_tickers
 
         else:
             logger.error(f"Failed to initialize agument: {ticker}")
-            raise ClientError(
+            raise InvalidArgumentError(
                 f"Args (ticker): incorrect type: {type(ticker)}"
             )
 
@@ -134,11 +138,11 @@ class TiingoClient:
             pd.DataFrame: DataFrame with date index
 
         Raises:
-            ClientError: If method arguments cannot be defined
+            InvalidArgumentError: If method arguments cannot be defined
         """
         resample_check = {'daily', 'weekly', 'monthly', 'annually'}
         if resample not in resample_check:
-            raise ClientError(
+            raise InvalidArgumentError(
                 "Incorrect resample argument\n"
                 f"Given: {resample}\n"
                 f"Accepted: {resample_check}"
@@ -150,7 +154,7 @@ class TiingoClient:
             'divCash', 'splitFactor'
         }
         if columns not in columns_check:
-            raise ClientError(
+            raise InvalidArgumentError(
                 "Incorrect columns argument\n"
                 f"Given: {columns}\n"
                 f"Accepted: {columns_check}"

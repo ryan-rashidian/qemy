@@ -7,8 +7,9 @@ import logging
 import pandas as pd
 
 from qemy import _config as cfg
+from qemy.exceptions import APIClientError
 
-from ._api_tools import ClientError, parse_period, safe_status_get
+from ._api_tools import parse_period, safe_status_get
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +95,7 @@ class FREDClient:
 
         else:
             logger.error("[FREDClient] Failed to fetch observations")
-            raise ClientError("[FREDClient] Failed to fetch observations")
+            raise APIClientError("[FREDClient] Failed to fetch observations")
 
     def get_tbill_yield(self) -> pd.DataFrame:
         """Fetch latest observation for: 1 Year T-Bill Yield."""

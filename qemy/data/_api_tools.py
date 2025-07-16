@@ -7,11 +7,9 @@ from pathlib import Path
 import requests
 from dateutil.relativedelta import relativedelta
 
-logger = logging.getLogger(__name__)
+from qemy.exceptions import APIClientError
 
-class ClientError(Exception):
-    """Custom exception for Qemy Client classes."""
-    pass
+logger = logging.getLogger(__name__)
 
 def parse_period(period_str) -> tuple[str, str]:
     """Convert shorthand period into formatted date-time strings.
@@ -41,12 +39,12 @@ def parse_period(period_str) -> tuple[str, str]:
             case 'Y':
                 start_date = now - relativedelta(years=value)
             case _:
-                raise ClientError("Invalid unit")
+                raise APIClientError("Invalid unit")
 
         return start_date.strftime('%Y-%m-%d'), now.strftime('%Y-%m-%d')
 
     except ValueError as e:
-        raise ClientError(
+        raise APIClientError(
             "Invalid period format.\n"
             "Use: D, W, M, or Y\n"
             "Usage: <INTEGER><UNITS>\n"
@@ -79,15 +77,15 @@ def safe_status_get(
 
     except requests.exceptions.HTTPError as e:
         logger.error(f"HTTP Error:\n{e}")
-        raise ClientError("HTTP Error") from e
+        raise APIClientError("HTTP Error") from e
 
     except requests.exceptions.RequestException as e:
         logger.error(f"Request failed:\n{e}")
-        raise ClientError("Request failed") from e
+        raise APIClientError("Request failed") from e
 
     except Exception as e:
         logger.exception(f"Error:\n{e}")
-        raise ClientError("Unexpected Error") from e
+        raise APIClientError("Unexpected Error") from e
 
 def safe_status_download(
     url: str,
@@ -106,7 +104,7 @@ def safe_status_download(
     """
     if not isinstance(dest_path, Path):
         logger.error("Incorrect type for: dest_path")
-        raise ClientError("Incorrect type for: dest_path")
+        raise APIClientError("Incorrect type for: dest_path")
 
     try:
         with requests.get(url=url, headers=headers, stream=True) as r:
@@ -118,13 +116,13 @@ def safe_status_download(
 
     except requests.exceptions.HTTPError as e:
         logger.error(f"HTTP Error during download:\n{e}")
-        raise ClientError("HTTP Error") from e
+        raise APIClientError("HTTP Error") from e
 
     except requests.exceptions.RequestException as e:
         logger.error(f"Request failed:\n{e}")
-        raise ClientError("Request failed") from e
+        raise APIClientError("Request failed") from e
 
     except Exception as e:
         logger.exception(f"Error:\n{e}")
-        raise ClientError("Unexpected Error") from e
+        raise APIClientError("Unexpected Error") from e
 

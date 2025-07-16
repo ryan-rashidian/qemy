@@ -8,7 +8,8 @@ import logging
 import time
 
 from qemy import _config as cfg
-from qemy.data._api_tools import ClientError, safe_status_get
+from qemy.data._api_tools import safe_status_get
+from qemy.exceptions import DataError, InvalidArgumentError
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +34,7 @@ def _find_cik(ticker: str, cik_data: dict) -> str:
     if cik is not None:
         return cik
     else:
-        raise ClientError(f"CIK not found for {ticker.upper()}")
+        raise InvalidArgumentError(f"CIK not found for {ticker.upper()}")
 
 def get_facts_request(ticker: str) -> dict:
     """Fetch facts from SEC servers.
@@ -78,13 +79,13 @@ def get_facts_bulk(ticker: str) -> dict:
 
     except FileNotFoundError as err:
         logger.error(f"CIK not found in {bulk_dir}")
-        raise ClientError("CIK not found") from err
+        raise DataError("CIK not found") from err
 
     cik = _find_cik(ticker, cik_data)
     facts_path = bulk_dir / 'companyfacts' / f"CIK{cik}.json"
     if not facts_path.exists():
         logger.warning(f"Facts file missing: {facts_path}")
-        raise ClientError("Facts file not found")
+        raise DataError("Facts file not found")
 
     try:
         with open(facts_path, 'r') as f:
@@ -92,10 +93,10 @@ def get_facts_bulk(ticker: str) -> dict:
 
     except json.JSONDecodeError as err:
         logger.error(f"Corrupted JSON file for {cik}\n{err}")
-        raise ClientError("Corrupted JSON file") from err
+        raise DataError("Corrupted JSON file") from err
     except Exception as err:
         logger.exception(f"Failed to load facts for {cik}\n{err}")
-        raise ClientError("Failed to load facts") from err
+        raise DataError("Failed to load facts") from err
 
     logger.debug(f"EDGAR data found for {ticker.upper()}")
     return facts
