@@ -1,9 +1,5 @@
 """Tools for Qemy plugins."""
 
-class PluginError(Exception):
-    """Custom exception for Qemy plugins."""
-    pass
-
 class BasePlugin:
     """Base class for Qemy plugins."""
     name = "BasePlugin"
