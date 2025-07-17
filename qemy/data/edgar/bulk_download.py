@@ -43,8 +43,6 @@ def bulk_refresh():
     time.sleep(1) # be polite to SEC server
 
     cik_data = safe_status_get(url=cik_tickers_url, headers=headers)
-    if cik_data is None:
-        logger.error("Download failed for company_tickers.json")
     with open(cik_tickers_json, 'w') as f:
         json.dump(cik_data, f)
     logger.info("Download Complete.\n")
