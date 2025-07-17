@@ -1,5 +1,8 @@
 """Tools for Qemy plugins."""
 
+import logging
+
+
 class BasePlugin:
     """Base class for Qemy plugins."""
     name = "BasePlugin"
@@ -25,6 +28,7 @@ class BasePlugin:
         self.period = period
         self.num = num
         self.args = kwargs
+        self.logger = logging.getLogger(self.name)
 
     def run(self) -> dict:
         """Called by the CLI in order to print plugin output.
@@ -38,11 +42,11 @@ class BasePlugin:
         """CLI -h --help info for plugins."""
         return f"{self.name} - {self.description}\nNo help found"
 
-    def log(self, message: str):
+    def log(self, message: str, level: int=logging.INFO):
         """Print logging for plugins.
 
         Args:
             message (str): log string
         """
-        print(f"[{self.name}] {message}")
+        self.logger.log(level, message)
 
