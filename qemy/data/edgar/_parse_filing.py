@@ -7,6 +7,8 @@ import logging
 
 import pandas as pd
 
+from qemy.exceptions import ParseError
+
 logger = logging.getLogger(__name__)
 
 key_list_units = [
@@ -20,7 +22,7 @@ def get_concept(
     xbrl_tags: tuple,
     quarters: int=10,
     latest: bool=False
-) -> pd.DataFrame | float | None:
+) -> pd.DataFrame:
     """Concept search and retrieval.
 
     Iterates through given xbrl_tags and searches for matching us-gaap key.
@@ -33,19 +35,20 @@ def get_concept(
 
     Returns:
         pd.DataFrame: comlumns=['val', 'filed', 'form'], quarterly rows
-        float: Latest concept value (returned with 'latest = True' arg)
-        None: If incorrect inputs or parsing logic fails
+
+    Raises:
+        ParseError: if parsing logic fails
     """
     for tag in xbrl_tags:
 
         try:
             if tag in facts['facts']['us-gaap']:
-                logger.info(f"'{tag}' found in facts")
+                logger.debug(f"'{tag}' found in facts")
                 unit = None
                 unit_keys = facts['facts']['us-gaap'][tag]['units']
                 for try_key in key_list_units:
                     if try_key in unit_keys:
-                        logger.info(f"'{try_key}' found in facts...['units']")
+                        logger.debug(f"'{try_key}' found in facts...['units']")
                         unit = try_key
                         break
                 if unit is None:
@@ -53,7 +56,7 @@ def get_concept(
                     unit = 'USD'
 
                 raw_facts = facts['facts']['us-gaap'][tag]['units']
-                logger.info(f"{len(raw_facts.get(unit, []))} filings found")
+                logger.debug(f"{len(raw_facts.get(unit, []))} filings found")
                 # Slice quarters * 3 to buffer for duplicates
                 raw_facts = raw_facts.get(unit, [])[(-quarters * 3):]
                 concept_data = []
@@ -74,14 +77,14 @@ def get_concept(
                 concept_df = concept_df.drop_duplicates('filed', keep='last')
                 concept_df = concept_df.reset_index(drop=True)
                 concept_df = concept_df.tail(quarters)
-                # Make sure 'val' column is float
                 concept_df['val'] = concept_df['val'].astype(float)
 
                 if latest:
                     if not concept_df.empty:
-                        return float(concept_df['val'].iloc[-1])
+                        return concept_df.iloc[-1]
                     else:
-                        return None
+                        logger.error(f"Concept not found\n{xbrl_tags}")
+                        raise ParseError("Concept not found")
 
                 return concept_df
 
@@ -93,6 +96,6 @@ def get_concept(
             logger.exception(f"Exception:\n{e}")
             continue
 
-    logger.warning(f"No matches found in facts\n{xbrl_tags}")
-    return None
+    logger.error(f"Concept not found\n{xbrl_tags}")
+    raise ParseError("No matches found in facts")
 

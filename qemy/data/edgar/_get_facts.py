@@ -24,7 +24,7 @@ def _find_cik(ticker: str, cik_data: dict) -> str:
         str: string of company CIK #
 
     Raises:
-        ClientError: If cik not found
+        InvalidArgumentError: If CIK not found
     """
     cik = None
     for entry in cik_data.values():
@@ -68,7 +68,7 @@ def get_facts_bulk(ticker: str) -> dict:
         dict: Facts for given ticker
 
     Raise:
-        ClientError: If nothing found
+        DataError: If nothing found
     """
     ticker = ticker.lower().strip()
     bulk_dir = cfg.BULK_DIR

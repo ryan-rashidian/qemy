@@ -9,6 +9,8 @@ import logging
 
 import pandas as pd
 
+from qemy.exceptions import InvalidArgumentError, ParseError
+
 from . import _tag_containers as tags
 from ._get_facts import get_facts_bulk, get_facts_request
 from ._parse_filing import get_concept as _get_concept
@@ -25,22 +27,14 @@ class EDGARClient:
 
         Args:
             ticker (str): Company ticker symbol
-            use_requests (bool): Requests from SEC servers. False = no request.
+            use_requests (bool): Requests from SEC servers. False = no request
         """
         self.ticker = ticker.upper().strip()
-        self.facts = None
 
-        try:
-            if use_requests:
-                self.facts = get_facts_request(self.ticker)
-            else:
-                self.facts = get_facts_bulk(self.ticker)
-
-            if self.facts is None:
-                logger.error(f"Facts not found: {self.ticker}")
-
-        except Exception as e:
-            logger.exception(f"Exception:\n{e}")
+        if use_requests:
+            self.facts = get_facts_request(self.ticker)
+        else:
+            self.facts = get_facts_bulk(self.ticker)
 
     def __repr__(self) -> str:
         status = "Initialized" if self.facts else "Failed"
@@ -61,37 +55,37 @@ class EDGARClient:
 
         Returns:
             tuple[str]: Matching concept tag container
+
+        Raises:
+            InvalidArgumentError: If unknown concept argument
         """
         try:
             section, label = tags.map_arg[concept.lower()]
             return tags.filing_tags[section][label]
         except KeyError as err:
-            raise KeyError(f"Unknown concept argument: {concept}") from err
+            raise InvalidArgumentError(
+                f"Unknown concept argument: {concept}"
+            ) from err
 
-    def get_filing(self) -> pd.DataFrame | None:
+    def get_filing(self) -> pd.DataFrame:
         """Fetch all available concepts for given ticker.
 
         Returns:
             pd.DataFrame: with concepts split into rows
-            None: If class fails to initialize filing data
         """
-        if self.facts is None:
-            logger.warning(f"EDGARClient({self.ticker}) - failed to init")
-            return None
-
         # Use Shares Outstanding tags to get filing date and type
-        shares_df = _get_concept(
-            facts=self.facts,
-            xbrl_tags=tags.tag_shares_outstanding,
-            quarters=10
-        )
-        if isinstance(shares_df, pd.DataFrame):
+        form = None
+        filed = None
+        try:
+            shares_df = _get_concept(
+                facts=self.facts,
+                xbrl_tags=tags.tag_shares_outstanding,
+                quarters=10
+            )
             filed = shares_df['form'].iloc[-1]
             form = shares_df['filed'].iloc[-1]
-        else:
-            logger.warning("get_concept() filing info not found")
-            form = None
-            filed = None
+        except ParseError as e:
+            logger.warning(e)
 
         # Filing fields
         filing = [
@@ -100,17 +94,21 @@ class EDGARClient:
         ]
 
         for _, metrics in tags.filing_tags.items():
+
             for key, tag_tuple in metrics.items():
-                value = _get_concept(
-                    facts=self.facts,
-                    xbrl_tags=tag_tuple,
-                    latest=True
-                )
-                if isinstance(value, float):
-                    filing.append((key, value))
-                else:
-                    filing.append((key, value))
-                    logger.warning(f"get_concept() failed for: {key}")
+                value = None
+                try:
+                    value_df = _get_concept(
+                        facts=self.facts,
+                        xbrl_tags=tag_tuple,
+                        latest=True
+                    )
+                    value = value_df['val']
+
+                except ParseError as e:
+                    logger.warning(e)
+
+                filing.append((key, value))
 
         filing_df = pd.DataFrame(filing)
         filing_df.columns = ['Metric:', self.ticker]
@@ -118,32 +116,28 @@ class EDGARClient:
 
         return filing_df
 
-    def get_balance_sheet(self) -> pd.DataFrame | None:
+    def get_balance_sheet(self) -> pd.DataFrame:
         """Fetches Balance Sheet concepts for given ticker.
 
         Returns:
             pd.DataFrame: with concepts split into rows
-            None: If class fails to initialize filing data
         """
-        if self.facts is None:
-            logger.warning(f"EDGARClient({self.ticker}) - failed to init")
-            return None
-
         # Shares Outstanding and filing info
-        shares_df = _get_concept(
-            facts=self.facts,
-            xbrl_tags=tags.tag_shares_outstanding,
-            quarters=10
-        )
-        if isinstance(shares_df, pd.DataFrame):
+        shares_outstanding = None
+        form = None
+        filed = None
+        try:
+            shares_df = _get_concept(
+                facts=self.facts,
+                xbrl_tags=tags.tag_shares_outstanding,
+                quarters=10
+            )
             shares_outstanding = shares_df['val'].iloc[-1]
             filed = shares_df['form'].iloc[-1]
             form = shares_df['filed'].iloc[-1]
-        else:
-            logger.warning("get_concept() filing info not found")
-            shares_outstanding = None
-            form = None
-            filed = None
+
+        except ParseError as e:
+            logger.warning(e)
 
         # Balance Sheet fields
         balance_sheet = [
@@ -153,16 +147,19 @@ class EDGARClient:
         ]
 
         for key, tag_tuple in tags.balance_sheet.items():
-            value = _get_concept(
-                facts=self.facts,
-                xbrl_tags=tag_tuple,
-                latest=True
-            )
-            if isinstance(value, float):
-                balance_sheet.append((key, value))
-            else:
-                balance_sheet.append((key, value))
-                logger.warning(f"get_concept() failed for: {key}")
+            value = None
+            try:
+                value_df = _get_concept(
+                    facts=self.facts,
+                    xbrl_tags=tag_tuple,
+                    latest=True
+                )
+                value = value_df['val']
+
+            except ParseError as e:
+                logger.warning(e)
+
+            balance_sheet.append((key, value))
 
         balance_df = pd.DataFrame(balance_sheet)
         balance_df.columns = ['Metric:', self.ticker]
@@ -170,32 +167,28 @@ class EDGARClient:
 
         return balance_df
 
-    def get_cashflow_statement(self) -> pd.DataFrame | None:
+    def get_cashflow_statement(self) -> pd.DataFrame:
         """Fetches Cash Flow Statement concepts for given ticker.
 
         Returns:
             pd.DataFrame: with concepts split into rows
-            None: If class fails to initialize filing data
         """
-        if self.facts is None:
-            logger.warning(f"EDGARClient({self.ticker}) - failed to init")
-            return None
-
         # Shares Outstanding and filing info
-        shares_df = _get_concept(
-            facts=self.facts,
-            xbrl_tags=tags.tag_shares_outstanding,
-            quarters=10
-        )
-        if isinstance(shares_df, pd.DataFrame):
+        shares_outstanding = None
+        form = None
+        filed = None
+        try:
+            shares_df = _get_concept(
+                facts=self.facts,
+                xbrl_tags=tags.tag_shares_outstanding,
+                quarters=10
+            )
             shares_outstanding = shares_df['val'].iloc[-1]
             filed = shares_df['form'].iloc[-1]
             form = shares_df['filed'].iloc[-1]
-        else:
-            logger.warning("get_concept() filing info not found")
-            shares_outstanding = None
-            form = None
-            filed = None
+
+        except ParseError as e:
+            logger.warning(e)
 
         # Cash Flow Statement fields
         cashflow_statement = [
@@ -205,16 +198,18 @@ class EDGARClient:
         ]
 
         for key, tag_tuple in tags.cash_flow_statement.items():
-            value = _get_concept(
-                facts=self.facts,
-                xbrl_tags=tag_tuple,
-                latest=True
-            )
-            if isinstance(value, float):
-                cashflow_statement.append((key, value))
-            else:
-                cashflow_statement.append((key, value))
-                logger.warning(f"get_concept() failed for: {key}")
+            value = None
+            try:
+                value_df = _get_concept(
+                    facts=self.facts,
+                    xbrl_tags=tag_tuple,
+                    latest=True
+                )
+                value = value_df['val']
+            except ParseError as e:
+                    logger.warning(e)
+
+            cashflow_statement.append((key, value))
 
         cashflow_statement_df = pd.DataFrame(cashflow_statement)
         cashflow_statement_df.columns = ['Metric:', self.ticker]
@@ -222,32 +217,28 @@ class EDGARClient:
 
         return cashflow_statement_df
 
-    def get_income_statement(self) -> pd.DataFrame | None:
+    def get_income_statement(self) -> pd.DataFrame:
         """Fetches Income Statement concepts for given ticker.
 
         Returns:
             pd.DataFrame: with concepts split into rows
-            None: If class fails to initialize filing data
         """
-        if self.facts is None:
-            logger.warning(f"EDGARClient({self.ticker}) - failed to init")
-            return None
-
         # Shares Outstanding and filing info
-        shares_df = _get_concept(
-            facts=self.facts,
-            xbrl_tags=tags.tag_shares_outstanding,
-            quarters=10
-        )
-        if isinstance(shares_df, pd.DataFrame):
+        shares_outstanding = None
+        form = None
+        filed = None
+        try:
+            shares_df = _get_concept(
+                facts=self.facts,
+                xbrl_tags=tags.tag_shares_outstanding,
+                quarters=10
+            )
             shares_outstanding = shares_df['val'].iloc[-1]
             filed = shares_df['form'].iloc[-1]
             form = shares_df['filed'].iloc[-1]
-        else:
-            logger.warning("get_concept() filing info not found")
-            shares_outstanding = None
-            form = None
-            filed = None
+
+        except ParseError as e:
+            logger.warning(e)
 
         # Income Statement fields
         income_statement = [
@@ -257,16 +248,18 @@ class EDGARClient:
         ]
 
         for key, tag_tuple in tags.income_statement.items():
-            value = _get_concept(
-                facts=self.facts,
-                xbrl_tags=tag_tuple,
-                latest=True
-            )
-            if isinstance(value, float):
-                income_statement.append((key, value))
-            else:
-                income_statement.append((key, value))
-                logger.warning(f"get_concept() failed for: {key}")
+            value = None
+            try:
+                value_df = _get_concept(
+                    facts=self.facts,
+                    xbrl_tags=tag_tuple,
+                    latest=True
+                )
+                value = value_df['val']
+            except ParseError as e:
+                logger.warning(e)
+
+            income_statement.append((key, value))
 
         income_statement_df = pd.DataFrame(income_statement)
         income_statement_df.columns = ['Metric:', self.ticker]
@@ -278,7 +271,7 @@ class EDGARClient:
             self,
             concept: str,
             quarters: int=10
-    ) -> pd.DataFrame | None:
+    ) -> pd.DataFrame:
         """Fetches given concept for given ticker.
 
         Args:
@@ -287,17 +280,9 @@ class EDGARClient:
 
         Returns:
             pd.DataFrame: Quarterly rows with 'val' column for concept
-            None: If class fails to initialize filing data
         """
-        if self.facts is None:
-            logger.warning(f"EDGARClient({self.ticker}) - failed to init")
-            return None
 
-        try:
-            xbrl_tags = self._map_concept(concept=concept)
-        except ValueError:
-            logger.error(f"'{concept}' is not a valid argument")
-            return None
+        xbrl_tags = self._map_concept(concept=concept)
 
         concept_df = _get_concept(
             facts=self.facts,
@@ -305,9 +290,5 @@ class EDGARClient:
             quarters=quarters
         )
 
-        if isinstance(concept_df, pd.DataFrame):
-            return concept_df
-        else:
-            logger.error(f"Error: get_concept({concept}) failed\n{xbrl_tags}")
-            return None
+        return concept_df
 
