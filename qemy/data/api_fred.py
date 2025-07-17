@@ -2,12 +2,13 @@
 
 This module requests and fetches data from FRED API.
 """
+
 import logging
 
 import pandas as pd
 
 from qemy import _config as cfg
-from qemy.exceptions import APIClientError
+from qemy.exceptions import DataError
 
 from ._api_tools import parse_period, safe_status_get
 
@@ -54,10 +55,9 @@ class FREDClient:
 
         Returns:
             pd.DataFrame: DataFrame indexed by 'date' with 'val' column
-            None: Failed to fetch data from FRED API
 
         Raises:
-            ClientError: If failure to fetch observations
+            APIClientError: If failure to fetch observations
         """
         start_date, end_date = parse_period(period)
 
@@ -75,9 +75,7 @@ class FREDClient:
         }
 
         fred_data = safe_status_get(url=self.url, params=params)
-        if fred_data and fred_data.get('observations'):
-            logger.info("FRED API request Successful")
-
+        try:
             obs_df = pd.DataFrame(fred_data['observations'])
             obs_df['date'] = pd.to_datetime(obs_df['date'])
             obs_df.set_index('date', inplace=True)
@@ -93,9 +91,9 @@ class FREDClient:
                 errors='ignore'
             )
 
-        else:
-            logger.error("[FREDClient] Failed to fetch observations")
-            raise APIClientError("[FREDClient] Failed to fetch observations")
+        except Exception as e:
+            logger.error(e)
+            raise DataError("[FREDClient] No observations found") from e
 
     def get_tbill_yield(self) -> pd.DataFrame:
         """Fetch latest observation for: 1 Year T-Bill Yield."""

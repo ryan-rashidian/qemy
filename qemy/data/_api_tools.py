@@ -7,7 +7,7 @@ from pathlib import Path
 import requests
 from dateutil.relativedelta import relativedelta
 
-from qemy.exceptions import APIClientError
+from qemy.exceptions import APIClientError, InvalidArgumentError
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ def parse_period(period_str) -> tuple[str, str]:
         tuple[str, str]: Tuple of start and end date strings
 
     Raises:
-        ClientError: If invalid units
+        InvalidArgumentError: If invalid units
     """
     now = datetime.now()
 
@@ -39,12 +39,12 @@ def parse_period(period_str) -> tuple[str, str]:
             case 'Y':
                 start_date = now - relativedelta(years=value)
             case _:
-                raise APIClientError("Invalid unit")
+                raise InvalidArgumentError("Invalid unit")
 
         return start_date.strftime('%Y-%m-%d'), now.strftime('%Y-%m-%d')
 
     except ValueError as e:
-        raise APIClientError(
+        raise InvalidArgumentError(
             "Invalid period format.\n"
             "Use: D, W, M, or Y\n"
             "Usage: <INTEGER><UNITS>\n"
