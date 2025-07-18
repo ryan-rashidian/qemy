@@ -1,3 +1,4 @@
+from .cashflow import get_fcf, get_netdebt
 from .growth import cagr, growth_rate
 from .risk import max_dd, ratio_sharpe, volatility
 from .value import ratio_pb, ratio_pe
@@ -9,5 +10,7 @@ __all__ = [
     'max_dd',
     'volatility',
     'ratio_pe',
-    'ratio_pb'
+    'ratio_pb',
+    'get_fcf',
+    'get_netdebt'
 ]
