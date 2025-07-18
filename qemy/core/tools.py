@@ -1,4 +1,4 @@
-"""Tools and utility functions for /metrics/ package."""
+"""Tools and utility functions for Qemy development.."""
 
 import pandas as pd
 
