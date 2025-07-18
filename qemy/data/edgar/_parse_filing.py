@@ -89,7 +89,7 @@ def get_concept(
                 return concept_df
 
             else:
-                logger.warning(f"'{tag}' not found in facts")
+                logger.debug(f"'{tag}' not found in facts")
                 continue
 
         except Exception as e:
