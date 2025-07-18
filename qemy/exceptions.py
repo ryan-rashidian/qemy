@@ -16,6 +16,14 @@ class ParseError(QemyError):
     """Raised for parsing errors."""
     pass
 
+class MetricError(QemyError):
+    """Raised for metric related errors."""
+    pass
+
+class ModelError(QemyError):
+    """Raised for model related errors."""
+    pass
+
 class InvalidArgumentError(QemyError):
     """Raised when invalid argument is given."""
     pass
