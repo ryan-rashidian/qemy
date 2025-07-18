@@ -9,11 +9,17 @@ from qemy.data import EDGARClient
 from qemy.exceptions import ModelError
 
 
-def calc_dcf(ticker: str) -> dict:
+def calc_dcf(
+    ticker: str,
+    discount_rate: float = 0.09,
+    growth_rate: float = 0.02
+) -> dict:
     """Calculate 'Discounted Cash Flow' metrics.
 
     Args:
         ticker (str): Company ticker symbol
+        discount_rate (float): Discount rate
+        growth_rate (float): Perpetuity growth rate
 
     Returns:
         dict: Contains DCF metric data for given ticker
@@ -48,9 +54,9 @@ def calc_dcf(ticker: str) -> dict:
     fcf_forecast = np.clip(fcf_forecast, 0, None)
 
     # Calculate 'Discounted Free Cash Flow'
-    discount_rate = 0.09 / 4
+    q_discount_rate = discount_rate / 4
     quarters = np.arange(1, 21)
-    discount_factors = 1 / (1 + discount_rate) ** quarters
+    discount_factors = 1 / (1 + q_discount_rate) ** quarters
     discounted_fcf = fcf_forecast * discount_factors
 
     # Calculate 'Terminal Value' using Gordon Growth Model
@@ -59,16 +65,16 @@ def calc_dcf(ticker: str) -> dict:
     #   fcf_last = last forecasted FCF
     #   g = Perpetuity Growth Rate
     #   r = Discount Rate (typically WACC)
-    g = 0.02
-    r = 0.09
+    g = growth_rate
+    r = discount_rate
     fcf_last = fcf_forecast[-1]
     terminal_value = (fcf_last * (1 + g)) / (r - g)
 
     # Discount 'Terminal Value' back to present value
     n = len(fcf_forecast)
-    discounted_tv = terminal_value / ((1 + discount_rate) ** n)
+    discounted_tv = terminal_value / ((1 + q_discount_rate) ** n)
 
-    # Calculate 'Intrinsic Value Per Share'
+    # Calculate IVPS - 'Intrinsic Value Per Share'
     enterprise_value = np.sum(discounted_fcf) + discounted_tv
     equity_value = enterprise_value - netdebt
     ivps = max(0, equity_value / shares)
