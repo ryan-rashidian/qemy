@@ -6,7 +6,15 @@ from qemy.data import EDGARClient
 
 
 def get_fcf(ticker: str, quarters: int=20) -> pd.DataFrame:
-    """Derive Free Cash Flow from filing metrics."""
+    """Derive Free Cash Flow from filing metrics.
+
+    Args:
+        ticker (str): Company ticker symbol
+        quarters (int): # of quarters to fetch
+
+    Returns:
+        pd.DataFrame: With historic FCF data
+    """
     client = EDGARClient(ticker)
     df_ocf = client.get_concept(
         concept='ocf',
@@ -33,7 +41,15 @@ def get_fcf(ticker: str, quarters: int=20) -> pd.DataFrame:
     return df_fcf.sort_values('filed').tail(quarters)
 
 def get_netdebt(ticker: str, quarters: int=20) -> pd.DataFrame:
-    """Derive Net Debt from filing metrics."""
+    """Derive Net Debt from filing metrics.
+
+    Args:
+        ticker (str): Company ticker symbol
+        quarters (int): # of quarters to fetch
+
+    Returns:
+        pd.DataFrame: With historic Net Debt data
+    """
     client = EDGARClient(ticker)
 
     def _get_latest_val(concept: str) -> pd.DataFrame:
