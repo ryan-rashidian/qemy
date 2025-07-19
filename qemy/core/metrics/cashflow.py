@@ -32,21 +32,71 @@ def get_fcf(ticker: str, quarters: int=20) -> pd.DataFrame:
 
     return df_fcf.sort_values('filed').tail(quarters)
 
-def get_netdebt(ticker: str) -> float:
+def get_netdebt(ticker: str, quarters: int=20) -> pd.DataFrame:
     """Derive Net Debt from filing metrics."""
     client = EDGARClient(ticker)
 
-    def _get_latest_val(concept: str) -> float:
+    def _get_latest_val(concept: str) -> pd.DataFrame:
         try:
-            df = client.get_concept(concept=concept)
-            return df['val'].iloc[-1]
+            return client.get_concept(concept=concept, quarters=quarters)
         except Exception:
-            return 0.0
+            return pd.DataFrame({
+                'val': [0.0] * quarters,
+                'filed': [pd.NaT] * quarters,
+                'form': ['N/A'] * quarters
+            })
 
-    debt = _get_latest_val('debt')
-    debt_short = _get_latest_val('sdebt')
-    debt_long = _get_latest_val('ldebt')
-    cash = _get_latest_val('cash')
+    df_debt = _get_latest_val('debt').rename(
+        columns={'val': 'val_debt'}
+    )
+    df_debt_short = _get_latest_val('sdebt').rename(
+        columns={'val': 'val_sdebt'}
+    )
+    df_debt_long = _get_latest_val('ldebt').rename(
+        columns={'val': 'val_ldebt'}
+    )
+    df_cash = _get_latest_val('cash').rename(
+        columns={'val': 'val_cash'}
+    )
 
-    return (debt + debt_short + debt_long) - cash
+    df_combined: pd.DataFrame = pd.merge(
+        df_debt,
+        df_debt_short,
+        on=['filed', 'form'],
+        how='outer',
+    ).copy()
+    df_combined = pd.merge(
+        df_debt_long,
+        df_combined,
+        on=['filed', 'form'],
+        how='outer',
+    ).copy()
+    df_combined = pd.merge(
+        df_cash,
+        df_combined,
+        on=['filed', 'form'],
+        how='outer',
+    ).copy()
+
+    # Placeholder 0 for missing values
+    # Allows for missing components in quarterly calculations
+    df_combined[[
+        'val_debt', 'val_sdebt', 'val_ldebt', 'val_cash'
+    ]] = df_combined[[
+        'val_debt', 'val_sdebt', 'val_ldebt', 'val_cash'
+    ]].fillna(0)
+
+    df_combined = df_combined.dropna(subset=['filed'])
+
+    df_combined['val'] = ((df_combined['val_debt']
+                    + df_combined['val_sdebt']
+                    + df_combined['val_ldebt'])
+                    - df_combined['val_cash'])
+
+    df_netdebt = df_combined.drop(
+        ['val_debt', 'val_sdebt', 'val_ldebt', 'val_cash'],
+        axis=1
+    )
+
+    return df_netdebt.tail(quarters).reset_index(drop=True)
 
