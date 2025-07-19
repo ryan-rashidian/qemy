@@ -31,7 +31,8 @@ def calc_dcf(
         shares_df = EDGARClient(ticker).get_concept(concept='shares')
         shares = shares_df['val'].iloc[-1]
         fcf_df = get_fcf(ticker, quarters=20)
-        netdebt = get_netdebt(ticker)
+        netdebt_df = get_netdebt(ticker)
+        netdebt = netdebt_df['val'].iloc[-1]
     except Exception as e:
         raise ModelError(f"DCF for {ticker} Error: missing data") from e
 
