@@ -21,6 +21,7 @@ tag_shares_outstanding = (
 ### Total Assets
 tag_total_assets = (
     'Assets',
+    'LiabilitiesAndStockholdersEquity',
 )
 
 ### Cash and Cash Equivalents
@@ -29,6 +30,39 @@ tag_cash_equiv = (
     'CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents',
     'Cash',
     'CashCashEquivalentsAndShortTermInvestments',
+)
+
+### Accounts Payable
+tag_acc_payable = (
+    'AccountsPayableCurrent',
+    'AccountsPayableAndAccruedLiabilitiesCurrent',
+    'AccountsPayable',
+    'TradeAccountsPayable',
+    'PayablesAndAccrualsCurrent',
+    'AccruedLiabilitiesCurrent',
+    'OtherLiabilitiesCurrent',
+)
+
+### Accounts Receivable
+tag_acc_receivable = (
+    'AccountsReceivableNetCurrent',
+    'AccountsReceivable',
+    'TradeAccountsReceivable',
+    'AccountsReceivableNet',
+    'AccountsAndOtherReceivablesNetCurrent',
+    'TradeAndOtherReceivablesNetCurrent',
+    'ReceivablesNetCurrent',
+)
+
+### Marketable Securities
+tag_market_securities = (
+    'MarketableSecuritiesCurrent',
+    'MarketableSecurities',
+    'ShortTermInvestments',
+    'AvailableForSaleSecuritiesCurrent',
+    'TradingSecuritiesCurrent',
+    'InvestmentsCurrent',
+    'OtherCurrentInvestments'
 )
 
 ### Property Plant and Equipment (PP&E)
@@ -101,6 +135,9 @@ tag_stockholders_equity = (
 balance_sheet = {
     'Assets': tag_total_assets,
     'Cash & Equivalents': tag_cash_equiv,
+    'Accounts Payable': tag_acc_payable,
+    'Accounts Receivable': tag_acc_receivable,
+    'Marketable Securities': tag_market_securities,
     'PP&E': tag_ppande,
     'Inventory': tag_inventory,
     'Goodwill': tag_goodwill,
@@ -270,6 +307,9 @@ map_arg = {
     'shares':   ('Company', 'Shares Outstanding'),
     'assets':   ('Balance Sheet', 'Assets'),
     'cash':     ('Balance Sheet', 'Cash & Equivalents'),
+    'apay':     ('Balance Sheet', 'Accounts Payable'),
+    'arec':     ('Balance Sheet', 'Accounts Receivable'),
+    'marsec':   ('Balance Sheet', 'Marketable Securities'),
     'ppe':      ('Balance Sheet', 'PP&E'),
     'inven':    ('Balance Sheet', 'Inventory'),
     'goodw':    ('Balance Sheet', 'Goodwill'),
