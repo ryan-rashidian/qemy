@@ -81,9 +81,59 @@ def ratio_quick(ticker: str) -> dict:
         'quick_ratio': quick_ratio
     }
 
-def working_capital():
-    return
+def calc_working_capital(ticker: str) -> dict:
+    """Calculate Woking Capital of given ticker.
 
-def net_margin():
-    return
+    Args:
+        ticker (str): Company ticker symbol
+
+    Returns:
+        dict: With ticker 'working_capital' key and corresponding value
+    """
+    client = EDGARClient(ticker)
+    try:
+        assets_df = client.get_concept(concept='assets')
+        assets = assets_df['val'].iloc[-1]
+    except Exception:
+        assets = 0.0
+    try:
+        liabilities_df = client.get_concept(concept='liab')
+        liabilities = liabilities_df['val'].iloc[-1]
+    except Exception:
+        liabilities = 0.0
+
+    working_cap = assets - liabilities
+
+    return {
+        'ticker': ticker,
+        'working_capital': working_cap
+    }
+
+def calc_net_margin(ticker: str) -> dict:
+    """Calculate Net Margin of given ticker.
+
+    Args:
+        ticker (str): Company ticker symbol
+
+    Returns:
+        dict: With ticker 'net_margin' key and corresponding value
+    """
+    client = EDGARClient(ticker)
+    try:
+        net_income_df = client.get_concept(concept='netinc')
+        net_income = net_income_df['val'].iloc[-1]
+    except Exception:
+        net_income = 0.0
+    try:
+        revenue_df = client.get_concept(concept='revenue')
+        revenue = revenue_df['val'].iloc[-1]
+    except Exception:
+        revenue = 0.0
+
+    net_margin = (net_income - revenue) / 100
+
+    return {
+        'ticker': ticker,
+        'net_margin': net_margin
+    }
 
