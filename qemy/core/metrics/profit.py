@@ -1,5 +1,8 @@
 """Profitability Metrics."""
 
+import pandas as pd
+
+from qemy.core.tools import get_concept_shaped
 from qemy.data import EDGARClient
 
 
@@ -40,42 +43,58 @@ def ratio_roe(ticker: str) -> dict:
         'roe': roe
     }
 
-def ratio_roa(ticker: str) -> dict:
+def ratio_roa(ticker: str, quarters: int=10) -> pd.DataFrame:
     """Calculate Return on Assets ratio for given ticker.
 
     Args:
         ticker (str): Company ticker symbol
 
     Returns:
-        dict: With ticker 'roa' key and corresponding value
     """
-    client = EDGARClient(ticker)
-    try:
-        net_income_df = client.get_concept(concept='netinc')
-        net_income = net_income_df['val'].iloc[-1]
-    except Exception:
-        net_income = 0.0
-    try:
-        assets_df = client.get_concept(concept='assets')
-        ### Calculate assets 1-year average
-        start = assets_df['val'].iloc[-4]
-        end = assets_df['val'].iloc[-1]
-        avg_assets = (start + end) / 2
-    except Exception:
-        avg_assets = 0.0
+    net_income_df = get_concept_shaped(
+        ticker = ticker,
+        concept = 'netinc',
+        quarters = quarters
+    ).rename(columns={'val': 'val_netinc'})
 
-    if avg_assets <= 0.0:
-        return {
-            'ticker': ticker,
-            'roa': 999999.0
-        }
+    assets_df = get_concept_shaped(
+        ticker = ticker,
+        concept = 'assets',
+        # Add 4 quarters as rolling avgerage buffer
+        quarters = quarters + 4
+    ).rename(columns={'val': 'val_assets'})
+    # Calculate 1-year rolling average
+    assets_df['avg_assets'] = assets_df['val_assets'].rolling(window=4).mean()
+    assets_df.dropna(inplace=True)
+    assets_df = assets_df.tail(quarters).copy()
 
-    roa = net_income / avg_assets
+    df_combined: pd.DataFrame = pd.merge(
+        net_income_df,
+        assets_df,
+        on=['filed', 'form'],
+        how='outer',
+    ).copy()
+    df_combined[[
+        'val_netinc', 'avg_assets', 'val_assets'
+    ]] = df_combined[[
+        'val_netinc', 'avg_assets', 'val_assets'
+    ]].fillna(0.0).copy()
 
-    return {
-        'ticker': ticker,
-        'roe': roa
-    }
+    # Avoid dividing by 0
+    df_condition = df_combined['avg_assets'] <= 0.0
+    # 1e12 denominator gives placeholder '~inf' small val
+    df_combined.loc[df_condition, 'avg_assets'] = 1e12
+
+    df_combined['val'] = (
+        df_combined['val_netinc'] / df_combined['avg_assets']
+    )
+
+    df_roa = df_combined.drop(
+        ['val_netinc', 'avg_assets', 'val_assets'],
+        axis=1
+    )
+
+    return df_roa.tail(quarters).reset_index(drop=True)
 
 def ratio_roic(ticker: str) -> dict:
     """Calculate Return on Invested Capital ratio for given ticker.
