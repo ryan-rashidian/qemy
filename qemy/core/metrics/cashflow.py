@@ -2,6 +2,7 @@
 
 import pandas as pd
 
+from qemy.core.tools import get_concept_shaped
 from qemy.data import EDGARClient
 
 
@@ -50,28 +51,16 @@ def get_netdebt(ticker: str, quarters: int=20) -> pd.DataFrame:
     Returns:
         pd.DataFrame: With historic Net Debt data
     """
-    client = EDGARClient(ticker)
-
-    def _get_latest_val(concept: str) -> pd.DataFrame:
-        try:
-            return client.get_concept(concept=concept, quarters=quarters)
-        except Exception:
-            return pd.DataFrame({
-                'val': [0.0] * quarters,
-                'filed': [pd.NaT] * quarters,
-                'form': ['N/A'] * quarters
-            })
-
-    df_debt = _get_latest_val('debt').rename(
+    df_debt = get_concept_shaped(ticker, 'debt', quarters).rename(
         columns={'val': 'val_debt'}
     )
-    df_debt_short = _get_latest_val('sdebt').rename(
+    df_debt_short = get_concept_shaped(ticker, 'sdebt', quarters).rename(
         columns={'val': 'val_sdebt'}
     )
-    df_debt_long = _get_latest_val('ldebt').rename(
+    df_debt_long = get_concept_shaped(ticker, 'ldebt', quarters).rename(
         columns={'val': 'val_ldebt'}
     )
-    df_cash = _get_latest_val('cash').rename(
+    df_cash = get_concept_shaped(ticker, 'cash', quarters).rename(
         columns={'val': 'val_cash'}
     )
 
