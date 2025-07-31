@@ -42,7 +42,7 @@ def piotroski_f(ticker: str) -> dict:
     previous_roa = roa_df['val'].iloc[-5]
     fscore_roa = 1.0 if current_roa > previous_roa else 0.0
 
-    # Section: Leverage, Liquidity
+    # Section: Leverage, Liquidity, and Source of Funds
     try:
         ldebt_df = client.get_concept(concept='ldebt')
         current_ldebt = ldebt_df['val'].iloc[-1]
@@ -51,7 +51,6 @@ def piotroski_f(ticker: str) -> dict:
     except Exception:
         fscore_ldebt = 1.0
 
-    ##### placeholder for current ratio after enhancements
     current_ratio_df = ratio_current(ticker)
     current_cr = current_ratio_df['val'].iloc[-1]
     previous_cr = current_ratio_df['val'].iloc[-5]
@@ -65,6 +64,7 @@ def piotroski_f(ticker: str) -> dict:
     except Exception:
         fscore_shares = 0.0
 
+    # Section: Operating Efficiency
     gross_margin_df = get_gross_margin(ticker)
     current_gmargin = gross_margin_df['val'].iloc[-1]
     previous_gmargin = gross_margin_df['val'].iloc[-5]
