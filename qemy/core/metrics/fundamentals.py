@@ -1,9 +1,13 @@
 """Fundamental Metrics."""
 
+import numpy as np
+import pandas as pd
+
+from qemy.core.tools import get_concept_shaped
 from qemy.data import EDGARClient
 
 
-def ratio_current(ticker: str) -> dict:
+def ratio_current(ticker: str, quarters: int=10) -> pd.DataFrame:
     """Calculate Current Ratio of given ticker.
 
     Args:
@@ -12,30 +16,41 @@ def ratio_current(ticker: str) -> dict:
     Returns:
         dict: With ticker 'current_ratio' key and corresponding value
     """
-    client = EDGARClient(ticker)
-    try:
-        assets_df = client.get_concept(concept='assets')
-        assets = assets_df['val'].iloc[-1]
-    except Exception:
-        assets = 0.0
-    try:
-        liabilities_df = client.get_concept(concept='liab')
-        liabilities = liabilities_df['val'].iloc[-1]
-    except Exception:
-        liabilities = 0.0
+    assets_df = get_concept_shaped(
+        ticker = ticker,
+        concept = 'assets',
+        quarters = quarters
+    ).rename(columns={'val': 'val_assets'})
 
-    if liabilities <= 0.0:
-        return {
-            'ticker': ticker,
-            'current_ratio': 999999.0
-        }
+    liabilities_df = get_concept_shaped(
+        ticker = ticker,
+        concept = 'liab',
+        quarters = quarters
+    ).rename(columns={'val': 'val_liab'})
 
-    current_ratio = assets / liabilities
+    df_combined = pd.merge(
+        assets_df,
+        liabilities_df,
+        on=['filed', 'form'],
+        how='outer'
+    ).copy()
+    df_combined[[
+        'val_assets', 'val_liab'
+    ]] = df_combined[[
+        'val_assets', 'val_liab'
+    ]].fillna(1.0).copy()
+    df_combined = df_combined.dropna(subset=['filed'])
 
-    return {
-        'ticker': ticker,
-        'current_ratio': current_ratio
-    }
+    df_combined['val'] = df_combined['val_assets'] / df_combined['val_liab']
+    df_combined['val'] = df_combined['val'].replace([np.inf, -np.inf], 0)
+    df_combined['val'] = df_combined['val'].fillna(0)
+
+    df_combined = df_combined.drop(
+        ['val_assets', 'val_liab'],
+        axis=1
+    )
+
+    return df_combined.tail(quarters).reset_index(drop=True)
 
 def ratio_quick(ticker: str) -> dict:
     """Calculate Quick Ratio of given ticker.
