@@ -1,4 +1,5 @@
 from .cashflow import get_fcf, get_netdebt
+from .fundamentals import ratio_current
 from .growth import cagr, growth_rate
 from .profit import (
     get_gross_margin,
@@ -14,6 +15,7 @@ __all__ = [
     'cagr',
     'growth_rate',
     'ratio_sharpe',
+    'ratio_current',
     'max_dd',
     'volatility',
     'ratio_pe',
@@ -24,5 +26,5 @@ __all__ = [
     'ratio_roa',
     'ratio_roic',
     'ratio_net_profit_margin',
-    'get_gross_margin'
+    'get_gross_margin',
 ]
