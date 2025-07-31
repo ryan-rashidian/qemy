@@ -1,10 +1,42 @@
 """Profitability Metrics."""
 
+import numpy as np
 import pandas as pd
 
 from qemy.core.tools import get_concept_shaped
 from qemy.data import EDGARClient
 
+
+def get_gross_margin(ticker: str, quarters: int=20) -> pd.DataFrame:
+    """Derive Gross Margin from filing metrics"""
+    df_gross_profit = get_concept_shaped(ticker, 'gprofit', quarters).rename(
+        columns={'val': 'val_gprofit'}
+    )
+    df_revenue = get_concept_shaped(ticker, 'revenue', quarters).rename(
+        columns={'val': 'val_rev'}
+    )
+
+    df_combined = pd.merge(
+        df_gross_profit,
+        df_revenue,
+        on=['filed', 'form'],
+        how='outer'
+    ).copy()
+    df_combined[['val_gprofit', 'val_rev']] = (
+        df_combined[['val_gprofit', 'val_rev']].fillna(0)
+    )
+    df_combined = df_combined.dropna(subset=['filed'])
+
+    df_combined['val'] = df_combined['val_gprofit'] / df_combined['val_rev']
+    df_combined['val'] = df_combined['val'].replace([np.inf, -np.inf], 0)
+    df_combined['val'] = df_combined['val'].fillna(0)
+
+    df_combined = df_combined.drop(
+        ['val_gprofit', 'val_rev'],
+        axis=1
+    )
+
+    return df_combined.tail(quarters).reset_index(drop=True)
 
 def ratio_roe(ticker: str) -> dict:
     """Calculate Return on Equity ratio for given ticker.
