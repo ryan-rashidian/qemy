@@ -9,6 +9,7 @@ from .profit import (
     ratio_roic,
 )
 from .risk import max_dd, ratio_sharpe, volatility
+from .scores import piotroski_f
 from .value import ratio_pb, ratio_pe
 
 __all__ = [
@@ -27,4 +28,5 @@ __all__ = [
     'ratio_roic',
     'ratio_net_profit_margin',
     'get_gross_margin',
+    'piotroski_f',
 ]
