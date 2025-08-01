@@ -1,8 +1,9 @@
 test.py
-/exports/
-/bulk_data/
-/dist/
-/build/
+.venv/
+exports/
+bulk_data/
+dist/
+build/
 *.dist/
 *.build/
 cli.dist/
