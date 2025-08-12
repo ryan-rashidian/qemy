@@ -1,4 +1,5 @@
 test.py
+test/
 .venv/
 exports/
 bulk_data/
