@@ -2,11 +2,7 @@
 
 ## Known Issues:
 
-- [ ] (Critical) CLI does not handle all errors gracefully yet - In progress.
-- [ ] (Non-Critical) Help information is out-dated and incomplete - Fix awaiting further refactors.
-- [ ] (Non-Critical) CLI commands should be more intuitive and consistent. - Fix awaiting further refactors.
-- [x] (Non-critical) Deprecated version of EDGARClient still in temporary use - awaiting deletion after full refactor of /core/ and /plugins/ packages.
-- [ ] (Non-critical) Need a utility function for /metric/ that distinguishes between cumulative, quarterly and yearly values for metrics in SEC filings.
+- [ ] (Non-Critical) 'Docs are still running on Vista' - Update documentation.
 
 ## Log
 
@@ -14,6 +10,6 @@
 
 - This is my first serious project on GitHub. Earlier commits show my learning curve with git, and workflow habits. Since then, I've been refining my process. - Thanks for understanding.
 
-### Note (2025-07-08) - [@ryan-rashidian](https://github.com/ryan-rashidian):
+### Note (2025-08-17) - [@ryan-rashidian](https://github.com/ryan-rashidian):
 
-- The project is currently undergoing a refactor focused on consolidating packages, and systematically cleaning the code in each module. Modules and callable objects are also being documented. Development of new and improved features will resume shortly. - (~1 week estimate)
+- Though progress has slowed in recent weeks, my intention is to continue development on Qemy into the foreseeable future. This project will continue to be shaped, refined, and refactored as I become a better developer. In the mean time, I'm keeping things simple, focusing on fundamentals, and not digging any deep holes early. I don't want to fall into any perfectionist trap, or constantly change the scope of project goals. - But it may still take a few more months of 'sandbox' testing before anything resembling a user-ended application comes out. 
