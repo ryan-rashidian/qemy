@@ -75,8 +75,8 @@ class EDGARClient:
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=4
             ).data
-            filed = shares_df['form'].iloc[-1]
-            form = shares_df['filed'].iloc[-1]
+            filed = shares_df['filed'].iloc[-1]
+            form = shares_df['form'].iloc[-1]
         except ParseError:
             filed = None
             form = None
@@ -100,9 +100,7 @@ class EDGARClient:
                 filing.append((key, value))
 
         filing_df = pd.DataFrame(filing)
-        filing_df.columns = ['Metric:', self.ticker]
-        filing_df.set_index('Metric:', inplace=True)
-
+        filing_df.columns = ['Metric', 'Value']
         return filing_df
 
     def get_balance_sheet(self) -> pd.DataFrame:
@@ -119,8 +117,8 @@ class EDGARClient:
                 quarters=10
             ).data
             shares_outstanding = shares_df['val'].iloc[-1]
-            filed = shares_df['form'].iloc[-1]
-            form = shares_df['filed'].iloc[-1]
+            filed = shares_df['filed'].iloc[-1]
+            form = shares_df['form'].iloc[-1]
         except ParseError:
             shares_outstanding = None
             filed = None
@@ -144,9 +142,7 @@ class EDGARClient:
             balance_sheet.append((key, value))
 
         balance_df = pd.DataFrame(balance_sheet)
-        balance_df.columns = ['Metric:', self.ticker]
-        balance_df.set_index('Metric:', inplace=True)
-
+        balance_df.columns = ['Metric', 'Value']
         return balance_df
 
     def get_cashflow_statement(self) -> pd.DataFrame:
@@ -163,8 +159,8 @@ class EDGARClient:
                 quarters=10
             ).data
             shares_outstanding = shares_df['val'].iloc[-1]
-            filed = shares_df['form'].iloc[-1]
-            form = shares_df['filed'].iloc[-1]
+            filed = shares_df['filed'].iloc[-1]
+            form = shares_df['form'].iloc[-1]
         except ParseError:
             shares_outstanding = None
             filed = None
@@ -188,9 +184,7 @@ class EDGARClient:
             cashflow_statement.append((key, value))
 
         cashflow_statement_df = pd.DataFrame(cashflow_statement)
-        cashflow_statement_df.columns = ['Metric:', self.ticker]
-        cashflow_statement_df.set_index('Metric:', inplace=True)
-
+        cashflow_statement_df.columns = ['Metric', 'Value']
         return cashflow_statement_df
 
     def get_income_statement(self) -> pd.DataFrame:
@@ -207,8 +201,8 @@ class EDGARClient:
                 quarters=10
             ).data
             shares_outstanding = shares_df['val'].iloc[-1]
-            filed = shares_df['form'].iloc[-1]
-            form = shares_df['filed'].iloc[-1]
+            filed = shares_df['filed'].iloc[-1]
+            form = shares_df['form'].iloc[-1]
         except ParseError:
             shares_outstanding = None
             filed = None
@@ -232,9 +226,7 @@ class EDGARClient:
             income_statement.append((key, value))
 
         income_statement_df = pd.DataFrame(income_statement)
-        income_statement_df.columns = ['Metric:', self.ticker]
-        income_statement_df.set_index('Metric:', inplace=True)
-
+        income_statement_df.columns = ['Metric', 'Value']
         return income_statement_df
 
     def get_concept(
