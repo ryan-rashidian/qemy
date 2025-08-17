@@ -47,7 +47,7 @@ def get_concept(
             continue
 
         logger.debug(f"'{tag}' found in facts (us-gaap)")
-        concept = facts['facts']['us-gaap'][tag]
+        concept: dict = facts['facts']['us-gaap'][tag]
         description = concept.get('description', '')
         label = concept.get('label', '')
 
@@ -57,7 +57,7 @@ def get_concept(
             continue
 
         unit = next(iter(units_dict))
-        concept_files_all = units_dict[unit]
+        concept_files_all: list = units_dict[unit]
         logger.debug(f"{len(concept_files_all)} filings found")
 
         try:
