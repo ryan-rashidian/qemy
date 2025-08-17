@@ -4,7 +4,7 @@ import logging
 
 import pandas as pd
 
-from qemy.exceptions import InvalidArgumentError
+from qemy.exceptions import InvalidArgumentError, ParseError
 
 from . import _tag_containers as tags
 from ._get_facts import get_facts_bulk, get_facts_request
@@ -69,27 +69,34 @@ class EDGARClient:
             pd.DataFrame: with concepts split into rows
         """
         # Use Shares Outstanding tags to get filing date and type
-        shares_df = _get_concept(
-            facts=self.facts,
-            xbrl_tags=tags.tag_shares_outstanding,
-            quarters=4
-        ).data
-        filed = shares_df['form'].iloc[-1]
-        form = shares_df['filed'].iloc[-1]
+        try:
+            shares_df = _get_concept(
+                facts=self.facts,
+                xbrl_tags=tags.tag_shares_outstanding,
+                quarters=4
+            ).data
+            filed = shares_df['form'].iloc[-1]
+            form = shares_df['filed'].iloc[-1]
+        except ParseError:
+            filed = None
+            form = None
+
         filing = [
             ('Form', form),
             ('Filed', filed),
         ]
-
         # Filing fields
         for _, metrics in tags.filing_tags.items():
             for key, tag_tuple in metrics.items():
-                value_df = _get_concept(
-                    facts=self.facts,
-                    xbrl_tags=tag_tuple,
-                    quarters=4
-                ).data
-                value = value_df['val'].iloc[-1]
+                try:
+                    value_df = _get_concept(
+                        facts=self.facts,
+                        xbrl_tags=tag_tuple,
+                        quarters=4
+                    ).data
+                    value = value_df['val'].iloc[-1]
+                except ParseError:
+                    value = None
                 filing.append((key, value))
 
         filing_df = pd.DataFrame(filing)
@@ -105,27 +112,35 @@ class EDGARClient:
             pd.DataFrame: with concepts split into rows
         """
         # Shares Outstanding and filing info
-        shares_df = _get_concept(
-            facts=self.facts,
-            xbrl_tags=tags.tag_shares_outstanding,
-            quarters=10
-        ).data
-        shares_outstanding = shares_df['val'].iloc[-1]
-        filed = shares_df['form'].iloc[-1]
-        form = shares_df['filed'].iloc[-1]
+        try:
+            shares_df = _get_concept(
+                facts=self.facts,
+                xbrl_tags=tags.tag_shares_outstanding,
+                quarters=10
+            ).data
+            shares_outstanding = shares_df['val'].iloc[-1]
+            filed = shares_df['form'].iloc[-1]
+            form = shares_df['filed'].iloc[-1]
+        except ParseError:
+            shares_outstanding = None
+            filed = None
+            form = None
+
         balance_sheet = [
             ('Form', form),
             ('Filed', filed),
             ('Shares Outstanding', shares_outstanding)
         ]
-
         # Balance Sheet fields
         for key, tag_tuple in tags.balance_sheet.items():
-            value_df = _get_concept(
-                facts=self.facts,
-                xbrl_tags=tag_tuple,
-            ).data
-            value = value_df['val'].iloc[-1]
+            try:
+                value_df = _get_concept(
+                    facts=self.facts,
+                    xbrl_tags=tag_tuple,
+                ).data
+                value = value_df['val'].iloc[-1]
+            except ParseError:
+                value = None
             balance_sheet.append((key, value))
 
         balance_df = pd.DataFrame(balance_sheet)
@@ -141,27 +156,35 @@ class EDGARClient:
             pd.DataFrame: with concepts split into rows
         """
         # Shares Outstanding and filing info
-        shares_df = _get_concept(
-            facts=self.facts,
-            xbrl_tags=tags.tag_shares_outstanding,
-            quarters=10
-        ).data
-        shares_outstanding = shares_df['val'].iloc[-1]
-        filed = shares_df['form'].iloc[-1]
-        form = shares_df['filed'].iloc[-1]
+        try:
+            shares_df = _get_concept(
+                facts=self.facts,
+                xbrl_tags=tags.tag_shares_outstanding,
+                quarters=10
+            ).data
+            shares_outstanding = shares_df['val'].iloc[-1]
+            filed = shares_df['form'].iloc[-1]
+            form = shares_df['filed'].iloc[-1]
+        except ParseError:
+            shares_outstanding = None
+            filed = None
+            form = None
+
         cashflow_statement = [
             ('Form', form),
             ('Filed', filed),
             ('Shares Outstanding', shares_outstanding)
         ]
-
         # Cash Flow Statement fields
         for key, tag_tuple in tags.cash_flow_statement.items():
-            value_df = _get_concept(
-                facts=self.facts,
-                xbrl_tags=tag_tuple,
-            ).data
-            value = value_df['val'].iloc[-1]
+            try:
+                value_df = _get_concept(
+                    facts=self.facts,
+                    xbrl_tags=tag_tuple,
+                ).data
+                value = value_df['val'].iloc[-1]
+            except ParseError:
+                value = None
             cashflow_statement.append((key, value))
 
         cashflow_statement_df = pd.DataFrame(cashflow_statement)
@@ -177,27 +200,35 @@ class EDGARClient:
             pd.DataFrame: with concepts split into rows
         """
         # Shares Outstanding and filing info
-        shares_df = _get_concept(
-            facts=self.facts,
-            xbrl_tags=tags.tag_shares_outstanding,
-            quarters=10
-        ).data
-        shares_outstanding = shares_df['val'].iloc[-1]
-        filed = shares_df['form'].iloc[-1]
-        form = shares_df['filed'].iloc[-1]
+        try:
+            shares_df = _get_concept(
+                facts=self.facts,
+                xbrl_tags=tags.tag_shares_outstanding,
+                quarters=10
+            ).data
+            shares_outstanding = shares_df['val'].iloc[-1]
+            filed = shares_df['form'].iloc[-1]
+            form = shares_df['filed'].iloc[-1]
+        except ParseError:
+            shares_outstanding = None
+            filed = None
+            form = None
+
         income_statement = [
             ('Form', form),
             ('Filed', filed),
             ('Shares Outstanding', shares_outstanding)
         ]
-
         # Income Statement fields
         for key, tag_tuple in tags.income_statement.items():
-            value_df = _get_concept(
-                facts=self.facts,
-                xbrl_tags=tag_tuple,
-            ).data
-            value = value_df['val'].iloc[-1]
+            try:
+                value_df = _get_concept(
+                    facts=self.facts,
+                    xbrl_tags=tag_tuple,
+                ).data
+                value = value_df['val'].iloc[-1]
+            except ParseError:
+                value = None
             income_statement.append((key, value))
 
         income_statement_df = pd.DataFrame(income_statement)
