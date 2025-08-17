@@ -23,6 +23,9 @@ This product includes third-party software licensed under the following licenses
 - requests: Licensed under the Apache License 2.0.
   https://github.com/psf/requests/blob/main/LICENSE
 
+- rich: Licensed under the MIT License.
+  https://github.com/Textualize/rich/blob/master/LICENSE
+
 - scikit-learn: Licensed under the BSD 3-Clause License.
   https://github.com/scikit-learn/scikit-learn/blob/main/COPYING
 
