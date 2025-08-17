@@ -11,7 +11,7 @@ from qemy.exceptions import ParseError
 logger = logging.getLogger(__name__)
 
 @dataclass
-class ConceptFiles:
+class SECFiles:
     company: str
     label: str
     units: str
@@ -22,7 +22,7 @@ def get_concept(
     facts: dict,
     xbrl_tags: tuple,
     quarters: int = 10
-) -> ConceptFiles:
+) -> SECFiles:
     """Concept search and retrieval.
 
     Parses companyfacts JSON given a tuple of possible xbrl concept names.
@@ -86,7 +86,7 @@ def get_concept(
         concept_df = concept_df.tail(quarters)
         concept_df['val'] = concept_df['val'].astype(float)
 
-        return ConceptFiles(
+        return SECFiles(
             company=company_name,
             label=label,
             units=unit,
