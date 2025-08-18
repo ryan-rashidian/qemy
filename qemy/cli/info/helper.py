@@ -1,5 +1,5 @@
 from pathlib import Path
-from qemy.cli_ref.format import print_markdown
+from qemy.cli.format import print_markdown
 
 def print_help():
     current_dir = Path(__file__).parent

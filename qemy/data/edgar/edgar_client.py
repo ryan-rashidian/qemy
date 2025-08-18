@@ -8,7 +8,7 @@ from qemy.exceptions import InvalidArgumentError, ParseError
 
 from . import _tag_containers as tags
 from ._get_facts import get_facts_bulk, get_facts_request
-from ._parser import get_concept as _get_concept, SECFiles
+from .parser import get_concept as _get_concept
 
 logger = logging.getLogger(__name__)
 
@@ -233,7 +233,7 @@ class EDGARClient:
             self,
             concept: str,
             quarters: int=10
-    ) -> SECFiles:
+    ) -> pd.DataFrame:
         """Fetches given concept for given ticker.
 
         Args:
@@ -241,12 +241,12 @@ class EDGARClient:
             quarters (int): Number of quarters to fetch
 
         Returns:
-            pd.DataFrame: Quarterly rows with 'val' column for concept
+            DataFrame: with concept data
         """
         xbrl_tags = self._map_concept(concept=concept)
         return _get_concept(
             facts=self.facts,
             xbrl_tags=xbrl_tags,
             quarters=quarters
-        )
+        ).data
 

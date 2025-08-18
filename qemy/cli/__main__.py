@@ -1,7 +1,6 @@
 import logging
 
-from .main import QemyShell
-
+from .main import QemyCLI
 
 def main():
     logging.basicConfig(
@@ -11,8 +10,7 @@ def main():
     # Start CLI with logging off
     logging.disable(logging.CRITICAL + 1)
 
-    QemyShell().cmdloop()
+    QemyCLI().run()
 
 if __name__ == '__main__':
     main()
-

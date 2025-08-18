@@ -1,5 +1,5 @@
 from qemy.core.metrics.scores import piotroski_f
-from qemy.cli_ref.format import print_theme
+from qemy.cli.format import print_theme
 
 def cmd_score(ticker: str):
     d = piotroski_f(ticker)

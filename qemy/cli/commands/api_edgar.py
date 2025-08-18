@@ -1,7 +1,7 @@
 """API EDGAR module for Qemy CLI."""
 
-from qemy.data.edgar_ref.edgar_main import EDGARClient
-from qemy.cli_ref.format import print_df
+from qemy.data import EDGARClient
+from qemy.cli.format import print_df
 
 def cmd_filing(ticker: str):
     ticker = ticker.upper().strip()
