@@ -3,19 +3,23 @@
 import readline
 
 from qemy.cli.cmd_register import cmd_reg
-from qemy.cli.format import print_panel, print_prompt, print_theme
+from qemy.cli.format import console
+from qemy.cli.panels import welcome_panel
 
-readline.set_history_length(100)
+def pre_input_hook():
+    console.print('>>> ', style='info', end='')
+    return
 
 class QemyCLI():
     def __init__(self):
+        readline.set_pre_input_hook(pre_input_hook)
+        readline.set_history_length(100)
         self.commands = cmd_reg
 
     def run(self):
         """Main REPL loop."""
-        print_panel()
+        welcome_panel()
         while True:
-            print_prompt()
             raw = input().strip().lower()
             if not raw:
                 continue 
@@ -23,7 +27,7 @@ class QemyCLI():
             parts = raw.split()
             cmd, *args = parts
             if cmd in ('exit', 'quit', 'q'):
-                print_theme('Exiting.', theme='warning')
+                console.print('Exiting.', style='warning')
                 break
             func = self.commands.get(cmd)
             if func:

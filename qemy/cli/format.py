@@ -6,54 +6,40 @@ Using Rich Python library:
 
 import pandas as pd
 
+from typing import Literal
+
 from rich.console import Console
 from rich.text import Text
 from rich.table import Table
-from rich.markdown import Markdown
-from rich.panel import Panel
 from rich.theme import Theme
 from rich import box
 
+from qemy.cli import colors
+
 custom_themes = Theme({
-    'info': 'magenta',
-    'data': 'green',
-    'warning': 'bold red underline',
+    'info': colors.info,
+    'data': colors.data,
+    'warning': colors.warning,
 })
 
 console = Console(theme=custom_themes)
 
-def print_theme(message: str, theme: str):
-    txt = Text(message, style=theme)
+Justify = Literal['default', 'center', 'full', 'left', 'right']
+
+def print_theme(message: str, theme: str, pos: Justify = 'default'):
+    txt = Text(message, style=theme, justify=pos)
     console.print(txt)
 
-def print_markdown(md_text: str, theme: str):
-    console.print(Markdown(md_text), style=theme)
-
-def style_text(message: str, color: str):
-    text = Text(message, justify='center')
-    text.stylize(color)
-    return text
-
-def print_prompt():
-    console.print('>>> ', style='info', end='')
-    
 def print_menu():
     return None
 
-def print_panel():
-    panel = Panel(
-        style_text("Qemy CLI 0.1.1", color='bold magenta'),
-        title="Welcome.",
-        subtitle=f"Type 'help' or '?' for info",
-        border_style="magenta"
-    )
-    console.print(panel)
-
 def print_df(df: pd.DataFrame, title: str):
+    title_fmt = Text(title, justify='center')
+    title_fmt.stylize(colors.df_title)
     table = Table(
-        title=style_text(title, color='bold magenta underline'),
-        border_style='magenta',
-        row_styles=['dim', ''],
+        title=title_fmt,
+        border_style=colors.df_border,
+        row_styles=colors.row_style,
         box=box.ROUNDED
     )
     
@@ -61,20 +47,20 @@ def print_df(df: pd.DataFrame, title: str):
         if col == 'Metric':
             table.add_column(
                 col,
-                style='plum1',
-                header_style='bold plum1'
+                style=colors.metric_col,
+                header_style=colors.metric_col_header
             )
         elif col == 'Value':
             table.add_column(
                 col,
-                style='green',
-                header_style='bold green'
+                style=colors.value_col,
+                header_style=colors.value_col_header
             )
         else:
             table.add_column(
                 col,
-                style='magenta',
-                header_style='bold magenta'
+                style=colors.default_col,
+                header_style=colors.default_col_header
             )
     for _, row in df.iterrows():
         table.add_row(*[str(x) for x in row.values])
