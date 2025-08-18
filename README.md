@@ -49,7 +49,7 @@ Suggestions are welcome!
 
 See full [Roadmap](ROADMAP.md)
 
-Note: Filing data is currently limited to US Generally Accepted Accounting Principles (US-GAAP) format and all metrics are in USD for now. Support for International Financial Reporting Standard (IFRS) and currency conversion is planned. 
+Note: Filing data is currently limited to US Generally Accepted Accounting Principles (US-GAAP) format for now. Support for International Financial Reporting Standard (IFRS) and currency conversion is planned. 
 
 ---
 
@@ -109,7 +109,7 @@ from any terminal or shell.
 qemy> bulk_refresh
 ```
 
-This will download and unzip ~18GB of SEC filing data onto your machine, rather than sending multiple small requests to the SEC servers (which can be done with the -r --request flag in the CLI). This is recommended, since qemy has only basic safe-guards to stop users from potentially being blocked by EDGAR API for abusing requests (it is also much faster for loading times). 
+This will download and unzip ~18GB of SEC filing data into the project root.
 
 - Bulk data is updated by the SEC on a daily basis. bulk_refresh command can be used to re-download, and replace all previous data from within the CLI. 
 

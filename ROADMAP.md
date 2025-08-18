@@ -19,21 +19,7 @@ The primary goal of v0.1.0 will be to create a developer facing MVP foundation f
     - [x] Enhanced parsing
     - [x] Separate financial statements
     - [x] More concepts
-- [ ] Add Metrics:
-    - [ ] Valuation
-    - [ ] Growth
-    - [ ] Risk
-- [ ] SDK:
-    - [ ] User-friendly naming, format, and docstrings
-    - [x] Python REPL interface
-- [ ] Basic CONTRIBUTING.md guide
-- [ ] Refactor and clean codebase 
-
-## Qemy 0.3.0
-
-- [ ] CLI:
-    - [ ] Rich Python library
-    - [ ] Clean CLI command mapping
+- [ ] CLI formatting with Rich
 - [ ] Refactor and clean codebase 
 
 ## Additional Planned Updates

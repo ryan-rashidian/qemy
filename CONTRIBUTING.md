@@ -8,7 +8,6 @@ Qemy uses a modular plugin system to extend its functionality. Each plugin shoul
 
 Prerequisites:
 - Qemy installed in [development mode](docs/dev_setup.md).
-- Familiarity with OOP (object-oriented programming)
 
 Tip: Reference existing plugins to supplement this guide
 
