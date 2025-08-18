@@ -1,28 +1,30 @@
 """Qemy CLI."""
 
-from qemy.cli_ref.commands.api_edgar import cmd_filing
+import readline
+
+from qemy.cli_ref.cmd_register import cmd_reg
+from qemy.cli_ref.format import print_panel, print_prompt, print_theme
+
+readline.set_history_length(100)
 
 class QemyCLI():
     def __init__(self):
-        self.commands = {
-            'quit': self.cmd_quit,
-            'f': cmd_filing
-        }
-        self.running = True
-
-    def cmd_quit(self):
-        print('Quiting.')
-        self.running = False
+        self.commands = cmd_reg
 
     def run(self):
         """Main REPL loop."""
-        print('Welcome.')
-        while self.running:
-            raw = input('qemy> ').strip()
+        print_panel()
+        while True:
+            print_prompt()
+            raw = input().strip().lower()
             if not raw:
                 continue 
+
             parts = raw.split()
             cmd, *args = parts
+            if cmd in ('exit', 'quit', 'q'):
+                print_theme('Exiting.', theme='warning')
+                break
             func = self.commands.get(cmd)
             if func:
                 try:
