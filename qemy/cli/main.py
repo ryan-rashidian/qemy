@@ -2,6 +2,7 @@
 
 import readline
 
+from qemy.utils.env_setup import setup_wizard
 from qemy.cli.cmd_register import cmd_reg
 from qemy.cli.format import console
 from qemy.cli.panels import welcome_panel
@@ -14,6 +15,7 @@ class QemyCLI():
     def __init__(self):
         readline.set_pre_input_hook(pre_input_hook)
         readline.set_history_length(100)
+        setup_wizard()
         self.commands = cmd_reg
 
     def run(self):
