@@ -4,15 +4,14 @@ Using Rich Python library:
 - https://github.com/Textualize/rich
 """
 
-import pandas as pd
-
 from typing import Literal
 
-from rich.console import Console
-from rich.text import Text
-from rich.table import Table
-from rich.theme import Theme
+import pandas as pd
 from rich import box
+from rich.console import Console
+from rich.table import Table
+from rich.text import Text
+from rich.theme import Theme
 
 from qemy.cli import colors
 
@@ -42,7 +41,7 @@ def print_df(df: pd.DataFrame, title: str):
         row_styles=colors.row_style,
         box=box.ROUNDED
     )
-    
+
     for col in df:
         if col == 'Metric':
             table.add_column(
@@ -66,4 +65,4 @@ def print_df(df: pd.DataFrame, title: str):
         table.add_row(*[str(x) for x in row.values])
 
     console.print(table)
-    
+

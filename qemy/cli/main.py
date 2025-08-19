@@ -2,10 +2,11 @@
 
 import readline
 
-from qemy.utils.env_setup import setup_wizard
 from qemy.cli.cmd_register import cmd_reg
 from qemy.cli.format import console
 from qemy.cli.panels import welcome_panel
+from qemy.utils.env_setup import setup_wizard
+
 
 def pre_input_hook():
     console.print('>>> ', style='info', end='')
@@ -24,7 +25,7 @@ class QemyCLI():
         while True:
             raw = input().strip().lower()
             if not raw:
-                continue 
+                continue
 
             parts = raw.split()
             cmd, *args = parts

@@ -2,10 +2,10 @@
 
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
+from qemy.cli import colors
+from qemy.cli.format import print_df
 from qemy.data import EDGARClient
 from qemy.data import bulk_refresh as _bulk_refresh
-from qemy.cli.format import print_df
-from qemy.cli import colors
 
 
 def cmd_filing(ticker: str):
@@ -28,4 +28,4 @@ def cmd_bulk_refresh() -> None:
             task,
             description=f'[{colors.load_spinner}]Download complete.'
         )
-     
+

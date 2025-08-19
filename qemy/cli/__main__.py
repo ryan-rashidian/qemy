@@ -2,6 +2,7 @@ import logging
 
 from .main import QemyCLI
 
+
 def main():
     logging.basicConfig(
         level=logging.DEBUG,

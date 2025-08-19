@@ -5,9 +5,10 @@ Format and print markdown text with Rich library.
 
 from pathlib import Path
 
+from rich.markdown import Markdown
+
 from qemy.cli.format import console
 
-from rich.markdown import Markdown
 
 def print_help():
     current_dir = Path(__file__).parent

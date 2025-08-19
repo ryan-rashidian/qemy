@@ -1,8 +1,8 @@
 """Command registry for Qemy CLI."""
 
-from qemy.cli.commands.api_edgar import cmd_filing, cmd_bulk_refresh
-from qemy.cli.commands.core import cmd_score
+from qemy.cli.commands.api_edgar import cmd_bulk_refresh, cmd_filing
 from qemy.cli.commands.aux import cmd_clear, cmd_rmenv
+from qemy.cli.commands.core import cmd_score
 from qemy.cli.info.helper import print_help
 
 cmd_reg = {
