@@ -1,5 +1,42 @@
 """Auxiliary commands for Qemy CLI."""
 
+import sys
+
+from qemy import _config as cfg
 from qemy.cli.format import console
 
-cmd_clear = console.clear
+
+def cmd_clear() -> None:
+    """CLI clear screen command."""
+    console.clear()
+
+def cmd_rmenv() -> None:
+    """CLI command for deleting .env file."""
+    env_path = cfg.PROJECT_ROOT / '.env'
+
+    console.print(
+        'Delete your current API credentials and exit Qemy.',
+        style='warning'
+    )
+    console.print('Are you sure? (y/n) ', style='warning', end='')
+    confirm = input().strip().lower()
+    if confirm != 'y':
+        console.print(
+            'Aborted. API credentials not deleted.',
+            style='info'
+        )
+        return
+    if env_path.exists():
+        env_path.unlink()
+        console.print(
+            'API credentials deleted. Exiting Qemy...',
+            style='info'
+        )
+        sys.exit()
+    else:
+        console.print(
+            'No credentials found. Nothing to delete.',
+            style='info'
+        )
+        return
+
