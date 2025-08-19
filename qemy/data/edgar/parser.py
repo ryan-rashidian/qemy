@@ -1,10 +1,9 @@
 """SEC filing concept parser."""
 
 import logging
+from dataclasses import dataclass
 
 import pandas as pd
-
-from dataclasses import dataclass
 
 from qemy.exceptions import ParseError
 

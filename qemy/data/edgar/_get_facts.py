@@ -7,7 +7,6 @@ This module contains get_ functions that return companyfacts.
 import json
 import logging
 import time
-
 from pathlib import Path
 
 from qemy import _config as cfg
