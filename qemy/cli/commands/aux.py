@@ -40,3 +40,12 @@ def cmd_rmenv() -> None:
         )
         return
 
+def cmd_calc(*expr_args: str) -> None:
+    """CLI calculator using Python builtins."""
+    expr = ''.join(expr_args)
+    try:
+        result = eval(expr, {"__builtins__": {}}, {})
+        console.print(result, style='data')
+    except Exception as e:
+        console.print(f'Invalid expression: {expr}\n{e}', style='warning')
+
