@@ -9,7 +9,7 @@ info = 'magenta'
 data = 'green'
 warning = 'bold red'
 
-# Dataframe
+# DataFrame
 df_title = 'bold magenta underline'
 df_border = 'magenta'
 row_style = ['dim', '']
@@ -23,4 +23,7 @@ default_col_header = 'bold magenta'
 # Panels
 panel_text = 'bold magenta'
 panel_border = 'magenta'
+
+# Misc.
+load_spinner = 'magenta'
 
