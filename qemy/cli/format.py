@@ -45,15 +45,17 @@ def print_df(df: pd.DataFrame, title: str):
     for col in df:
         if col == 'Metric':
             table.add_column(
-                col,
+                Text(col, justify='center'),
                 style=colors.metric_col,
-                header_style=colors.metric_col_header
+                header_style=colors.metric_col_header,
+                justify='left'
             )
         elif col == 'Value':
             table.add_column(
-                col,
+                Text(col, justify='center'),
                 style=colors.value_col,
-                header_style=colors.value_col_header
+                header_style=colors.value_col_header,
+                justify='right'
             )
         else:
             table.add_column(
