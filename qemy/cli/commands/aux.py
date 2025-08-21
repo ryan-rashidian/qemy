@@ -4,6 +4,7 @@ import sys
 
 from qemy import _config as cfg
 from qemy.cli.format import console
+from qemy.cli.menus import confirm_menu
 
 
 def cmd_clear() -> None:
@@ -14,18 +15,9 @@ def cmd_rmenv() -> None:
     """CLI command for deleting .env file."""
     env_path = cfg.PROJECT_ROOT / '.env'
 
-    console.print(
-        'Delete your current API credentials and exit Qemy.',
-        style='warning'
-    )
-    console.print('Are you sure? (y/n) ', style='warning', end='')
-    confirm = input().strip().lower()
-    if confirm != 'y':
-        console.print(
-            'Aborted. API credentials not deleted.',
-            style='info'
-        )
+    if not confirm_menu():
         return
+
     if env_path.exists():
         env_path.unlink()
         console.print(
