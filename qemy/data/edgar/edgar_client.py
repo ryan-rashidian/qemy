@@ -68,20 +68,24 @@ class EDGARClient:
         Returns:
             pd.DataFrame: with concepts split into rows
         """
-        # Use Shares Outstanding tags to get filing date and type
+        # Use Shares Outstanding tags to get reliable meta-data
         try:
-            shares_df = _get_concept(
+            shares_raw = _get_concept(
                 facts=self.facts,
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=4
-            ).data
+            )
+            company_name = shares_raw.company
+            shares_df = shares_raw.data
             filed = shares_df['filed'].iloc[-1]
             form = shares_df['form'].iloc[-1]
         except ParseError:
+            company_name = None
             filed = None
             form = None
 
         filing = [
+            ('Company', company_name),
             ('Form', form),
             ('Filed', filed),
         ]
@@ -111,20 +115,24 @@ class EDGARClient:
         """
         # Shares Outstanding and filing info
         try:
-            shares_df = _get_concept(
+            shares_raw = _get_concept(
                 facts=self.facts,
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=10
-            ).data
-            shares_outstanding = shares_df['val'].iloc[-1]
+            )
+            company_name = shares_raw.company
+            shares_df = shares_raw.data
             filed = shares_df['filed'].iloc[-1]
             form = shares_df['form'].iloc[-1]
+            shares_outstanding = shares_df['val'].iloc[-1]
         except ParseError:
-            shares_outstanding = None
+            company_name = None
             filed = None
             form = None
+            shares_outstanding = None
 
         balance_sheet = [
+            ('Company', company_name),
             ('Form', form),
             ('Filed', filed),
             ('Shares Outstanding', shares_outstanding)
@@ -153,20 +161,24 @@ class EDGARClient:
         """
         # Shares Outstanding and filing info
         try:
-            shares_df = _get_concept(
+            shares_raw = _get_concept(
                 facts=self.facts,
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=10
-            ).data
-            shares_outstanding = shares_df['val'].iloc[-1]
+            )
+            company_name = shares_raw.company
+            shares_df = shares_raw.data
             filed = shares_df['filed'].iloc[-1]
             form = shares_df['form'].iloc[-1]
+            shares_outstanding = shares_df['val'].iloc[-1]
         except ParseError:
-            shares_outstanding = None
+            company_name = None
             filed = None
             form = None
+            shares_outstanding = None
 
         cashflow_statement = [
+            ('Company', company_name),
             ('Form', form),
             ('Filed', filed),
             ('Shares Outstanding', shares_outstanding)
@@ -195,20 +207,24 @@ class EDGARClient:
         """
         # Shares Outstanding and filing info
         try:
-            shares_df = _get_concept(
+            shares_raw = _get_concept(
                 facts=self.facts,
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=10
-            ).data
+            )
+            company_name = shares_raw.company
+            shares_df = shares_raw.data
             shares_outstanding = shares_df['val'].iloc[-1]
             filed = shares_df['filed'].iloc[-1]
             form = shares_df['form'].iloc[-1]
         except ParseError:
-            shares_outstanding = None
+            company_name = None
             filed = None
             form = None
+            shares_outstanding = None
 
         income_statement = [
+            ('Company', company_name),
             ('Form', form),
             ('Filed', filed),
             ('Shares Outstanding', shares_outstanding)
