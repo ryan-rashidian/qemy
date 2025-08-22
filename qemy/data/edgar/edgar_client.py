@@ -31,6 +31,8 @@ class EDGARClient:
         else:
             self.facts = get_facts_bulk(self.ticker)
 
+        self.company = self.facts.get('entityName', '')
+
     def __repr__(self) -> str:
         status = "Initialized" if self.facts else "Failed"
         return f"EDGARClient(ticker={self.ticker}) <[{status}]>"
@@ -70,22 +72,19 @@ class EDGARClient:
         """
         # Use Shares Outstanding tags to get reliable meta-data
         try:
-            shares_raw = _get_concept(
+            shares_df = _get_concept(
                 facts=self.facts,
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=4
-            )
-            company_name = shares_raw.company
-            shares_df = shares_raw.data
+            ).data
             filed = shares_df['filed'].iloc[-1]
             form = shares_df['form'].iloc[-1]
         except ParseError:
-            company_name = None
             filed = None
             form = None
 
         filing = [
-            ('Company', company_name),
+            ('Company', self.company),
             ('Form', form),
             ('Filed', filed),
         ]
@@ -115,24 +114,21 @@ class EDGARClient:
         """
         # Shares Outstanding and filing info
         try:
-            shares_raw = _get_concept(
+            shares_df = _get_concept(
                 facts=self.facts,
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=10
-            )
-            company_name = shares_raw.company
-            shares_df = shares_raw.data
+            ).data
             filed = shares_df['filed'].iloc[-1]
             form = shares_df['form'].iloc[-1]
             shares_outstanding = shares_df['val'].iloc[-1]
         except ParseError:
-            company_name = None
             filed = None
             form = None
             shares_outstanding = None
 
         balance_sheet = [
-            ('Company', company_name),
+            ('Company', self.company),
             ('Form', form),
             ('Filed', filed),
             ('Shares Outstanding', shares_outstanding)
@@ -161,24 +157,21 @@ class EDGARClient:
         """
         # Shares Outstanding and filing info
         try:
-            shares_raw = _get_concept(
+            shares_df = _get_concept(
                 facts=self.facts,
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=10
-            )
-            company_name = shares_raw.company
-            shares_df = shares_raw.data
+            ).data
             filed = shares_df['filed'].iloc[-1]
             form = shares_df['form'].iloc[-1]
             shares_outstanding = shares_df['val'].iloc[-1]
         except ParseError:
-            company_name = None
             filed = None
             form = None
             shares_outstanding = None
 
         cashflow_statement = [
-            ('Company', company_name),
+            ('Company', self.company),
             ('Form', form),
             ('Filed', filed),
             ('Shares Outstanding', shares_outstanding)
@@ -207,24 +200,21 @@ class EDGARClient:
         """
         # Shares Outstanding and filing info
         try:
-            shares_raw = _get_concept(
+            shares_df = _get_concept(
                 facts=self.facts,
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=10
-            )
-            company_name = shares_raw.company
-            shares_df = shares_raw.data
-            shares_outstanding = shares_df['val'].iloc[-1]
+            ).data
             filed = shares_df['filed'].iloc[-1]
             form = shares_df['form'].iloc[-1]
+            shares_outstanding = shares_df['val'].iloc[-1]
         except ParseError:
-            company_name = None
             filed = None
             form = None
             shares_outstanding = None
 
         income_statement = [
-            ('Company', company_name),
+            ('Company', self.company),
             ('Form', form),
             ('Filed', filed),
             ('Shares Outstanding', shares_outstanding)
