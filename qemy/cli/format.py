@@ -25,14 +25,15 @@ console = Console(theme=custom_themes)
 
 Justify = Literal['default', 'center', 'full', 'left', 'right']
 
-def print_theme(message: str, theme: str, pos: Justify = 'default'):
+def format_text(
+    message: str,
+    theme: str,
+    pos: Justify = 'default'
+) -> Text:
     txt = Text(message, style=theme, justify=pos)
-    console.print(txt)
+    return txt
 
-def print_menu():
-    return None
-
-def print_df(df: pd.DataFrame, title: str):
+def format_df(df: pd.DataFrame, title: str) -> Table:
     title_fmt = Text(title, justify='center')
     title_fmt.stylize(colors.df_title)
     table = Table(
@@ -66,5 +67,5 @@ def print_df(df: pd.DataFrame, title: str):
     for _, row in df.iterrows():
         table.add_row(*[str(x) for x in row.values])
 
-    console.print(table)
+    return table
 
