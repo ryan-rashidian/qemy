@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from qemy.core.tools import get_concept_shaped
-from qemy.data import EDGARClient
+from qemy.data import EDGARClient, SECFiles
 
 
 def ratio_current(ticker: str, quarters: int=10) -> pd.DataFrame:
@@ -63,22 +63,26 @@ def ratio_quick(ticker: str) -> dict:
     """
     client = EDGARClient(ticker)
     try:
-        cash_df = client.get_concept(concept='cash')
+        cash_concept: SECFiles = client.get_concept(concept='cash')
+        cash_df: pd.DataFrame = cash_concept.data
         cash = cash_df['val'].iloc[-1]
     except Exception:
         cash = 0.0
     try:
-        arec_df = client.get_concept(concept='arec')
+        arec_concept: SECFiles = client.get_concept(concept='arec')
+        arec_df: pd.DataFrame = arec_concept.data
         arec = arec_df['val'].iloc[-1]
     except Exception:
         arec = 0.0
     try:
-        msec_df = client.get_concept(concept='msec')
+        msec_concept: SECFiles = client.get_concept(concept='msec')
+        msec_df: pd.DataFrame = msec_concept.data
         msec = msec_df['val'].iloc[-1]
     except Exception:
         msec = 0.0
     try:
-        liabilities_df = client.get_concept(concept='liab')
+        liabilities_concept: SECFiles = client.get_concept(concept='liab')
+        liabilities_df: pd.DataFrame = liabilities_concept.data
         liabilities = liabilities_df['val'].iloc[-1]
     except Exception:
         liabilities = 0.0
@@ -107,12 +111,14 @@ def calc_working_capital(ticker: str) -> dict:
     """
     client = EDGARClient(ticker)
     try:
-        assets_df = client.get_concept(concept='assets')
+        assets_concept: SECFiles = client.get_concept(concept='assets')
+        assets_df: pd.DataFrame = assets_concept.data
         assets = assets_df['val'].iloc[-1]
     except Exception:
         assets = 0.0
     try:
-        liabilities_df = client.get_concept(concept='liab')
+        liabilities_concept: SECFiles = client.get_concept(concept='liab')
+        liabilities_df = liabilities_concept.data
         liabilities = liabilities_df['val'].iloc[-1]
     except Exception:
         liabilities = 0.0
@@ -135,12 +141,14 @@ def calc_net_margin(ticker: str) -> dict:
     """
     client = EDGARClient(ticker)
     try:
-        net_income_df = client.get_concept(concept='netinc')
+        net_income_concept: SECFiles = client.get_concept(concept='netinc')
+        net_income_df: pd.DataFrame = net_income_concept.data
         net_income = net_income_df['val'].iloc[-1]
     except Exception:
         net_income = 0.0
     try:
-        revenue_df = client.get_concept(concept='revenue')
+        revenue_concept: SECFiles = client.get_concept(concept='revenue')
+        revenue_df: pd.DataFrame = revenue_concept.data
         revenue = revenue_df['val'].iloc[-1]
     except Exception:
         revenue = 0.0

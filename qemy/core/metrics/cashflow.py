@@ -3,7 +3,7 @@
 import pandas as pd
 
 from qemy.core.tools import get_concept_shaped
-from qemy.data import EDGARClient
+from qemy.data import EDGARClient, SECFiles
 
 
 def get_fcf(ticker: str, quarters: int=20) -> pd.DataFrame:
@@ -17,18 +17,20 @@ def get_fcf(ticker: str, quarters: int=20) -> pd.DataFrame:
         pd.DataFrame: With historic FCF data
     """
     client = EDGARClient(ticker)
-    df_ocf = client.get_concept(
+    ocf_concept: SECFiles = client.get_concept(
         concept='ocf',
         quarters=quarters
     )
-    df_capex = client.get_concept(
+    ocf_df: pd.DataFrame = ocf_concept.data
+    capex_concept: SECFiles = client.get_concept(
         concept='capex',
         quarters=quarters
     )
+    capex_df: pd.DataFrame = capex_concept.data
 
     df_cash_combined: pd.DataFrame = pd.merge(
-        df_ocf,
-        df_capex,
+        ocf_df,
+        capex_df,
         on=['filed', 'form'],
         how='outer',
         suffixes=('_ocf', '_capex')

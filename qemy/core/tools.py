@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from qemy.data import EDGARClient
+from qemy.data import EDGARClient, SECFiles
 from qemy.exceptions import DataError
 
 
@@ -26,10 +26,13 @@ def get_concept_shaped(
     """
     client = EDGARClient(ticker)
     try:
-        return client.get_concept(
-            concept=concept,
-            quarters=quarters
+        given_concept: SECFiles = client.get_concept(
+            concept = concept,
+            quarters = quarters
         )
+        concept_df: pd.DataFrame = given_concept.data
+        return concept_df
+
     except Exception:
         return pd.DataFrame({
             'val': [0.0] * quarters,

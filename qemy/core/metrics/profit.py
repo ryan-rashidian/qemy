@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from qemy.core.tools import get_concept_shaped
-from qemy.data import EDGARClient
+from qemy.data import EDGARClient, SECFiles
 
 
 def get_gross_margin(ticker: str, quarters: int=20) -> pd.DataFrame:
@@ -49,12 +49,18 @@ def ratio_roe(ticker: str) -> dict:
     """
     client = EDGARClient(ticker)
     try:
-        net_income_df = client.get_concept(concept='netinc')
+        net_income_concept: SECFiles = client.get_concept(
+            concept='netinc'
+        )
+        net_income_df: pd.DataFrame = net_income_concept.data
         net_income = net_income_df['val'].iloc[-1]
     except Exception:
         net_income = 0.0
     try:
-        shareholder_equity_df = client.get_concept(concept='equity')
+        shareholder_equity_concept: SECFiles = client.get_concept(
+            concept='equity'
+        )
+        shareholder_equity_df: pd.DataFrame = shareholder_equity_concept.data
         ### Calculate shareholder equity 1-year average
         start = shareholder_equity_df['val'].iloc[-4]
         end = shareholder_equity_df['val'].iloc[-1]
@@ -140,14 +146,20 @@ def ratio_roic(ticker: str) -> dict:
     TAX_RATE = 0.21 # estimate for US corporate tax rate
     client = EDGARClient(ticker)
     try:
-        operating_income_df = client.get_concept(concept='opinc')
+        operating_income_concept: SECFiles = client.get_concept(
+            concept='opinc'
+        )
+        operating_income_df: pd.DataFrame = operating_income_concept.data
         operating_income = operating_income_df['val'].iloc[-1]
         # Calculate NOPAT "Net Operating Income After Tax"
         nopat = operating_income * (1.0 - TAX_RATE)
     except Exception:
         nopat = 0.0
     try:
-        invested_capital_df = client.get_concept(concept='netcashi')
+        invested_capital_concept: SECFiles = client.get_concept(
+            concept='netcashi'
+        )
+        invested_capital_df: pd.DataFrame = invested_capital_concept.data
         ### Calculate Invested Capital 1-year average
         start = invested_capital_df['val'].iloc[-4]
         end = invested_capital_df['val'].iloc[-1]

@@ -1,8 +1,14 @@
-from qemy.data import EDGARClient, TiingoClient
+import pandas as pd
+
+from qemy.data import EDGARClient, SECFiles, TiingoClient
 
 
 def ratio_pe(ticker):
-    eps_df = EDGARClient(ticker).get_concept(concept='epsd', quarters=20)
+    eps_concept: SECFiles = EDGARClient(ticker).get_concept(
+        concept='epsd',
+        quarters=20
+    )
+    eps_df: pd.DataFrame = eps_concept.data
 
     if eps_df is not None:
         def _get_val(pos: int) -> float:
@@ -66,10 +72,6 @@ def ratio_pe(ticker):
             print("eps not found")
             return {}
 
-    else:
-        print("No filing data")
-        return {}
-
     price_df = TiingoClient(ticker=ticker).get_prices(period='2W')
     if price_df.empty:
         return {}
@@ -95,14 +97,20 @@ def ratio_pe(ticker):
         return {}
 
 def ratio_pb(ticker):
-    equity_df = EDGARClient(ticker).get_concept(concept='equity', quarters=4)
-    if equity_df is None:
-        return {}
+    equity_concept: SECFiles = EDGARClient(ticker).get_concept(
+        concept='equity',
+        quarters=4
+    )
+    equity_df: pd.DataFrame = equity_concept.data
+
     book_value = equity_df.iloc[-1]['val']
 
-    shares_df = EDGARClient(ticker).get_concept(concept='shares', quarters=4)
-    if shares_df is None:
-        return {}
+    shares_concept: SECFiles = EDGARClient(ticker).get_concept(
+        concept='shares',
+        quarters=4
+    )
+    shares_df: pd.DataFrame = shares_concept.data
+
     shares_outstanding = shares_df.iloc[-1]['val']
 
     bvps = round(book_value / shares_outstanding, 2)

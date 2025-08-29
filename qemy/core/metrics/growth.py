@@ -1,4 +1,6 @@
-from qemy.data import EDGARClient, TiingoClient
+import pandas as pd
+
+from qemy.data import EDGARClient, SECFiles, TiingoClient
 
 
 def cagr(ticker, period='1Y'):
@@ -20,11 +22,12 @@ def cagr(ticker, period='1Y'):
     }
 
 def growth_rate(ticker, metric):
-    metric_data = EDGARClient(ticker=ticker).get_concept(concept=metric)
-    if metric_data is None:
-        return {}
+    metric_concept: SECFiles = EDGARClient(ticker=ticker).get_concept(
+        concept=metric
+    )
+    metric_df: pd.DataFrame = metric_concept.data
 
-    metric_vals = metric_data['val'].iloc[-5:]
+    metric_vals = metric_df['val'].iloc[-5:]
     metric_growth = metric_vals.pct_change().dropna()
     if metric_growth.empty:
         return {}

@@ -1,7 +1,9 @@
 """Score-based Metrics."""
 
+import pandas as pd
+
 from qemy.core.metrics import get_gross_margin, ratio_current, ratio_roa
-from qemy.data import EDGARClient
+from qemy.data import EDGARClient, SECFiles
 
 
 def altman_z():
@@ -23,14 +25,16 @@ def piotroski_f(ticker: str) -> dict:
 
     # Section: Profitability
     try:
-        net_inc_df = client.get_concept(concept='netinc')
+        net_inc_concept: SECFiles = client.get_concept(concept='netinc')
+        net_inc_df: pd.DataFrame = net_inc_concept.data
         net_inc = net_inc_df['val'].iloc[-1]
     except Exception:
         net_inc = 0.0
     fscore_net_inc = 1.0 if net_inc > 0.0 else 0.0
 
     try:
-        ocf_df = client.get_concept(concept='ocf')
+        ocf_concept: SECFiles = client.get_concept(concept='ocf')
+        ocf_df: pd.DataFrame = ocf_concept.data
         ocf = ocf_df['val'].iloc[-1]
     except Exception:
         ocf = 0.0
@@ -44,7 +48,8 @@ def piotroski_f(ticker: str) -> dict:
 
     # Section: Leverage, Liquidity, and Source of Funds
     try:
-        ldebt_df = client.get_concept(concept='ldebt')
+        ldebt_concept: SECFiles = client.get_concept(concept='ldebt')
+        ldebt_df: pd.DataFrame = ldebt_concept.data
         current_ldebt = ldebt_df['val'].iloc[-1]
         previous_ldebt = ldebt_df['val'].iloc[-5]
         fscore_ldebt = 1.0 if current_ldebt < previous_ldebt else 0.0
@@ -57,7 +62,8 @@ def piotroski_f(ticker: str) -> dict:
     fscore_cratio = 1.0 if current_cr > previous_cr else 0.0
 
     try:
-        shares_df = client.get_concept(concept='shares')
+        shares_concept: SECFiles = client.get_concept(concept='shares')
+        shares_df: pd.DataFrame = shares_concept.data
         current_shares = shares_df['val'].iloc[-1]
         previous_shares = shares_df['val'].iloc[-5]
         fscore_shares = 1.0 if current_shares <= previous_shares else 0.0
@@ -71,11 +77,13 @@ def piotroski_f(ticker: str) -> dict:
     fscore_gmargin = 1.0 if current_gmargin > previous_gmargin else 0.0
 
     try:
-        rev_df = client.get_concept('revenue')
+        rev_concept: SECFiles = client.get_concept('revenue')
+        rev_df: pd.DataFrame = rev_concept.data
         revenue = rev_df['val'].iloc[-1]
         revenue_prev = rev_df['val'].iloc[-5]
 
-        assets_df = client.get_concept('assets')
+        assets_concept: SECFiles = client.get_concept('assets')
+        assets_df: pd.DataFrame = assets_concept.data
         assets_current = assets_df['val'].iloc[-1]
         assets_previous = assets_df['val'].iloc[-5]
         assets_pprev = assets_df['val'].iloc[-9]

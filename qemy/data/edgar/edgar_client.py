@@ -8,6 +8,7 @@ from qemy.exceptions import InvalidArgumentError, ParseError
 
 from . import _tag_containers as tags
 from ._get_facts import get_facts_bulk, get_facts_request
+from .parser import SECFiles
 from .parser import get_concept as _get_concept
 
 logger = logging.getLogger(__name__)
@@ -229,17 +230,17 @@ class EDGARClient:
                 value = value_df['val'].iloc[-1]
             except ParseError:
                 value = None
-            income_statement.append((key, value))
+                income_statement.append((key, value))
 
         income_statement_df = pd.DataFrame(income_statement)
         income_statement_df.columns = ['Metric', 'Value']
         return income_statement_df
 
     def get_concept(
-            self,
-            concept: str,
-            quarters: int=10
-    ) -> pd.DataFrame:
+        self,
+        concept: str,
+        quarters: int=10
+    ) -> SECFiles:
         """Fetches given concept for given ticker.
 
         Args:
@@ -254,5 +255,5 @@ class EDGARClient:
             facts=self.facts,
             xbrl_tags=xbrl_tags,
             quarters=quarters
-        ).data
+        )
 
