@@ -1,11 +1,11 @@
 """API EDGAR module for Qemy CLI."""
 
 import pandas as pd
-
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from qemy.cli import colors
-from qemy.cli.format import console, format_df
+from qemy.cli.format import console, format_df, format_text
+from qemy.cli.layout import concept_layout
 from qemy.cli.menus import confirm_menu
 from qemy.data import EDGARClient, SECFiles
 from qemy.data import bulk_refresh as _bulk_refresh
@@ -23,6 +23,19 @@ def cmd_concept(ticker: str, concept: str = 'assets', quarters: int=4):
         concept = concept,
         quarters = quarters
     )
+    company = format_text(files.company, theme='info')
+    concept_df_fmt = format_df(df=files.data, title=f'{company} SEC Filing')
+    description = format_text(files.description, theme='info')
+    label = files.label
+    unit = files.units
+    label_full = format_text(f'{label} ({unit})', theme='info')
+    layout = concept_layout(
+        company = company,
+        data = concept_df_fmt,
+        label = label_full,
+        description = description
+    )
+    console.print(layout)
 
 def cmd_bulk_refresh() -> None:
     """Download SEC bulk data from within Qemy CLI."""
