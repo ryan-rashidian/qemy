@@ -1,6 +1,6 @@
 """Menu module for Qemy CLI."""
 
-from qemy.cli.format import console
+from qemy.cli.fmt.format import console
 
 
 def confirm_menu() -> bool:

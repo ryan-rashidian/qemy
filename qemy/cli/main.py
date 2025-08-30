@@ -3,8 +3,8 @@
 import readline
 
 from qemy.cli.cmd_register import cmd_reg
-from qemy.cli.format import console
-from qemy.cli.panels import welcome_panel
+from qemy.cli.fmt.format import console
+from qemy.cli.fmt.panels import welcome_panel
 from qemy.utils.env_setup import setup_wizard
 
 

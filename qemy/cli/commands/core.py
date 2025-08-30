@@ -1,4 +1,6 @@
-from qemy.cli.format import console, format_text
+"""Core commands for Qemy CLI."""
+
+from qemy.cli.fmt.format import console, format_text
 from qemy.core.metrics.scores import piotroski_f
 
 

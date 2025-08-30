@@ -6,8 +6,8 @@ Using Rich library.
 from rich.panel import Panel
 from rich.text import Text
 
-from qemy.cli import colors
-from qemy.cli.format import console
+from qemy.cli.fmt import colors
+from qemy.cli.fmt.format import console
 
 
 def style_panel_text(message: str):

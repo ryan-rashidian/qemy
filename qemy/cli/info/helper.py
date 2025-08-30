@@ -7,7 +7,7 @@ from pathlib import Path
 
 from rich.markdown import Markdown
 
-from qemy.cli.format import console
+from qemy.cli.fmt.format import console
 
 
 def print_help():

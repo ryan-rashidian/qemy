@@ -13,7 +13,7 @@ from rich.table import Table
 from rich.text import Text
 from rich.theme import Theme
 
-from qemy.cli import colors
+from qemy.cli.fmt import colors
 
 custom_themes = Theme({
     'info': colors.info,

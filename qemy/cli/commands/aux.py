@@ -3,8 +3,8 @@
 import sys
 
 from qemy import _config as cfg
-from qemy.cli.format import console
-from qemy.cli.menus import confirm_menu
+from qemy.cli.fmt.format import console
+from qemy.cli.fmt.menus import confirm_menu
 
 
 def cmd_clear() -> None:
