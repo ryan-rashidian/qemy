@@ -63,7 +63,7 @@ def format_df(df: pd.DataFrame, title: str) -> Table:
             )
         else:
             table.add_column(
-                col,
+                Text(col, justify='center'),
                 style=colors.default_col,
                 header_style=colors.default_col_header
             )
