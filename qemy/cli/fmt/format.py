@@ -38,6 +38,8 @@ def format_text(
 def format_df(df: pd.DataFrame, title: str) -> Table:
     title_fmt = Text(title, justify='center')
     title_fmt.stylize(colors.df_title)
+    df = df.map(lambda x: f'{x:,.2f}' if isinstance(x, float) else x)
+
     table = Table(
         title = title_fmt,
         border_style = colors.df_border,
