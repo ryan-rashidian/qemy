@@ -11,26 +11,35 @@ from qemy.data import EDGARClient, SECFiles
 from qemy.data import bulk_refresh as _bulk_refresh
 
 
-def cmd_filing(ticker: str):
+def cmd_filing(ticker: str) -> None:
+    """"""
     ticker = ticker.upper().strip()
     filing: pd.DataFrame = EDGARClient(ticker).get_filing()
     filing_fmt = format_df(df=filing, title=f'Latest SEC Filing for: {ticker}')
 
     console.print(filing_fmt)
 
-def cmd_concept(ticker: str, concept: str = 'assets', quarters: int=16):
+def cmd_concept(
+    ticker: str,
+    concept: str = 'assets',
+    quarters: str | int = 8
+) -> None:
+    """"""
     ticker = ticker.upper().strip()
+    concept = concept.lower().strip()
+    quarters = int(quarters)
+
     files: SECFiles = EDGARClient(ticker).get_concept(
         concept = concept,
         quarters = quarters
     )
     files.data['filed'] = files.data['filed'].dt.date
     files.data['end'] = files.data['end'].dt.date
+    label = files.label
+    unit = files.units
 
     company = format_text(files.company, theme='title', pos='center')
     concept_df_fmt = format_df(df=files.data, title=f'{company} Filings')
-    label = files.label
-    unit = files.units
     description_pnl = description_panel(
         description=files.description,
         label=f'{label}, ({unit})'
