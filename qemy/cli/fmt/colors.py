@@ -8,6 +8,7 @@ https://rich.readthedocs.io/en/stable/appendix/colors.html
 info = 'magenta'
 data = 'green'
 warning = 'bold red'
+title = 'bold magenta underline'
 
 # DataFrame
 df_title = 'bold magenta underline'
