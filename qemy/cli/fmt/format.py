@@ -19,6 +19,7 @@ custom_themes = Theme({
     'info': colors.info,
     'data': colors.data,
     'warning': colors.warning,
+    'title': colors.title,
 })
 
 console = Console(theme=custom_themes)
@@ -30,17 +31,19 @@ def format_text(
     theme: str,
     pos: Justify = 'default'
 ) -> Text:
-    txt = Text(message, style=theme, justify=pos)
+    txt = Text(message, justify=pos)
+    txt.stylize(theme)
     return txt
 
 def format_df(df: pd.DataFrame, title: str) -> Table:
     title_fmt = Text(title, justify='center')
     title_fmt.stylize(colors.df_title)
     table = Table(
-        title=title_fmt,
-        border_style=colors.df_border,
-        row_styles=colors.row_style,
-        box=box.ROUNDED
+        title = title_fmt,
+        border_style = colors.df_border,
+        row_styles = colors.row_style,
+        box = box.ROUNDED,
+        expand = True
     )
 
     for col in df:
@@ -51,7 +54,7 @@ def format_df(df: pd.DataFrame, title: str) -> Table:
                 header_style=colors.metric_col_header,
                 justify='left'
             )
-        elif col == 'Value':
+        elif col in ('Value', 'val'):
             table.add_column(
                 Text(col, justify='center'),
                 style=colors.value_col,
@@ -64,6 +67,7 @@ def format_df(df: pd.DataFrame, title: str) -> Table:
                 style=colors.default_col,
                 header_style=colors.default_col_header
             )
+
     for _, row in df.iterrows():
         table.add_row(*[str(x) for x in row.values])
 
