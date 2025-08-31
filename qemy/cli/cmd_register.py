@@ -7,7 +7,7 @@ from qemy.cli.commands.api_edgar import (
 )
 from qemy.cli.commands.aux import cmd_calc, cmd_clear, cmd_rmenv
 from qemy.cli.commands.core import cmd_score
-from qemy.cli.info.helper import print_help
+from qemy.cli.commands.helper import print_help, print_info
 
 cmd_reg = {
     'f': cmd_filing,
@@ -19,5 +19,6 @@ cmd_reg = {
     'clear': cmd_clear,
     'cls': cmd_clear,
     'help': print_help,
-    '?': print_help
+    '?': print_help,
+    'info': print_info
 }
