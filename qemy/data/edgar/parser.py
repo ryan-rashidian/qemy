@@ -64,12 +64,12 @@ def get_concept(
             concept_sliced = concept_files_all[(-quarters * 3):]
             concept_parsed = [
                 {
-                    'val': f.get('val'),
                     'filed': pd.to_datetime(f.get('filed'), errors='coerce'),
                     'form': f.get('form'),
                     'fy': f.get('fy'),
                     'fp': f.get('fp'),
-                    'end': f.get('end')
+                    'end': pd.to_datetime(f.get('end'), errors='coerce'),
+                    'val': f.get('val')
                 }
                 for f in concept_sliced
             ]
@@ -82,8 +82,8 @@ def get_concept(
         concept_df.sort_values('filed', inplace=True)
         concept_df.drop_duplicates('filed', keep='last', inplace=True)
         concept_df.reset_index(drop=True, inplace=True)
-        concept_df = concept_df.tail(quarters)
         concept_df['val'] = concept_df['val'].astype(float)
+        concept_df = concept_df.tail(quarters)
 
         return SECFiles(
             company=company_name,
