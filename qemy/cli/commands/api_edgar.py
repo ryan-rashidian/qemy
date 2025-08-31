@@ -24,6 +24,8 @@ def cmd_concept(ticker: str, concept: str = 'assets', quarters: int=16):
         concept = concept,
         quarters = quarters
     )
+    files.data['filed'] = files.data['filed'].dt.date
+    files.data['end'] = files.data['end'].dt.date
 
     company = format_text(files.company, theme='title', pos='center')
     concept_df_fmt = format_df(df=files.data, title=f'{company} Filings')
