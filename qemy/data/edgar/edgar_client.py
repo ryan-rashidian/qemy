@@ -78,7 +78,7 @@ class EDGARClient:
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=4
             ).data
-            filed = shares_df['filed'].iloc[-1]
+            filed = shares_df['filed'].iloc[-1].date()
             form = shares_df['form'].iloc[-1]
         except ParseError:
             filed = None
@@ -105,6 +105,7 @@ class EDGARClient:
 
         filing_df = pd.DataFrame(filing)
         filing_df.columns = ['Metric', 'Value']
+
         return filing_df
 
     def get_balance_sheet(self) -> pd.DataFrame:
@@ -120,7 +121,7 @@ class EDGARClient:
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=10
             ).data
-            filed = shares_df['filed'].iloc[-1]
+            filed = shares_df['filed'].iloc[-1].date()
             form = shares_df['form'].iloc[-1]
             shares_outstanding = shares_df['val'].iloc[-1]
         except ParseError:
@@ -163,7 +164,7 @@ class EDGARClient:
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=10
             ).data
-            filed = shares_df['filed'].iloc[-1]
+            filed = shares_df['filed'].iloc[-1].date()
             form = shares_df['form'].iloc[-1]
             shares_outstanding = shares_df['val'].iloc[-1]
         except ParseError:
@@ -206,7 +207,7 @@ class EDGARClient:
                 xbrl_tags=tags.tag_shares_outstanding,
                 quarters=10
             ).data
-            filed = shares_df['filed'].iloc[-1]
+            filed = shares_df['filed'].iloc[-1].date()
             form = shares_df['form'].iloc[-1]
             shares_outstanding = shares_df['val'].iloc[-1]
         except ParseError:
