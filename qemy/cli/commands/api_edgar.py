@@ -5,8 +5,8 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from qemy.cli.fmt import colors
 from qemy.cli.fmt.format import console, format_df, format_text
-from qemy.cli.fmt.layout import concept_layout
 from qemy.cli.fmt.menus import confirm_menu
+from qemy.cli.fmt.panels import description_panel
 from qemy.data import EDGARClient, SECFiles
 from qemy.data import bulk_refresh as _bulk_refresh
 
@@ -15,33 +15,34 @@ def cmd_filing(ticker: str):
     ticker = ticker.upper().strip()
     filing: pd.DataFrame = EDGARClient(ticker).get_filing()
     filing_fmt = format_df(df=filing, title=f'Latest SEC Filing for: {ticker}')
+
     console.print(filing_fmt)
 
-def cmd_concept(ticker: str, concept: str = 'assets', quarters: int=4):
+def cmd_concept(ticker: str, concept: str = 'assets', quarters: int=16):
     ticker = ticker.upper().strip()
     files: SECFiles = EDGARClient(ticker).get_concept(
         concept = concept,
         quarters = quarters
     )
-    company = format_text(files.company, theme='info')
-    concept_df_fmt = format_df(df=files.data, title=f'{company} SEC Filing')
-    description = format_text(files.description, theme='info')
+
+    company = format_text(files.company, theme='title', pos='center')
+    concept_df_fmt = format_df(df=files.data, title=f'{company} Filings')
     label = files.label
     unit = files.units
-    label_full = format_text(f'{label} ({unit})', theme='info')
-    layout = concept_layout(
-        company = company,
-        data = concept_df_fmt,
-        label = label_full,
-        description = description
+    description_pnl = description_panel(
+        description=files.description,
+        label=f'{label}, ({unit})'
     )
-    console.print(layout)
+
+    console.print(description_pnl)
+    console.print(concept_df_fmt)
 
 def cmd_bulk_refresh() -> None:
     """Download SEC bulk data from within Qemy CLI."""
     if not confirm_menu():
         return
 
+    # wrapped with rich loading spinner
     with Progress(
         SpinnerColumn(),
         TextColumn('[progress.description]{task.description}')
