@@ -6,8 +6,7 @@ Format and print markdown text with Rich library.
 from rich.markdown import Markdown
 
 from qemy._config import INFO_DIR
-from qemy.cli.fmt.format import console
-from qemy.cli.fmt.panels import help_panel
+from qemy.cli.fmt import console, help_panel
 from qemy.cli.help.help_register import help_reg
 
 

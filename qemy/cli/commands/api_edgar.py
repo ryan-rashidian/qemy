@@ -3,10 +3,14 @@
 import pandas as pd
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from qemy.cli.fmt import colors
-from qemy.cli.fmt.format import console, format_df, format_text
-from qemy.cli.fmt.menus import confirm_menu
-from qemy.cli.fmt.panels import description_panel
+from qemy.cli.fmt import (
+    colors,
+    confirm_menu,
+    console,
+    description_panel,
+    format_df,
+    format_text,
+)
 from qemy.data import EDGARClient, SECFiles
 from qemy.data import bulk_refresh as _bulk_refresh
 
