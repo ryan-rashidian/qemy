@@ -1,19 +1,19 @@
 """Command registry for Qemy CLI."""
 
 from qemy.cli.commands.api_edgar import (
-    cmd_bulk_refresh,
-    cmd_concept,
-    cmd_filing,
+    cmd_fsync,
+    cmd_fc,
+    cmd_f,
 )
 from qemy.cli.commands.aux import cmd_calc, cmd_clear, cmd_rmenv
-from qemy.cli.commands.core import cmd_score
+from qemy.cli.commands.core import cmd_fscore
 from qemy.cli.commands.helper import cmd_help, cmd_info
 
 cmd_reg = {
-    'f': cmd_filing,
-    'fc': cmd_concept,
-    's': cmd_score,
-    'fsync': cmd_bulk_refresh,
+    'f': cmd_f,
+    'fc': cmd_fc,
+    'fscore': cmd_fscore,
+    'fsync': cmd_fsync,
     'rmenv': cmd_rmenv,
     'calc': cmd_calc,
     'clear': cmd_clear,

@@ -15,7 +15,7 @@ from qemy.data import EDGARClient, SECFiles
 from qemy.data import bulk_refresh as _bulk_refresh
 
 
-def cmd_filing(ticker: str) -> None:
+def cmd_f(ticker: str) -> None:
     """"""
     ticker = ticker.upper().strip()
     filing: pd.DataFrame = EDGARClient(ticker).get_filing()
@@ -23,7 +23,7 @@ def cmd_filing(ticker: str) -> None:
 
     console.print(filing_fmt)
 
-def cmd_concept(
+def cmd_fc(
     ticker: str,
     concept: str = 'assets',
     quarters: str | int = 8
@@ -52,7 +52,7 @@ def cmd_concept(
     console.print(description_pnl)
     console.print(concept_df_fmt)
 
-def cmd_bulk_refresh() -> None:
+def cmd_fsync() -> None:
     """Download SEC bulk data from within Qemy CLI."""
     if not confirm_menu():
         return
