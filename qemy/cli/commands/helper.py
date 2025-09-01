@@ -7,7 +7,7 @@ from rich.markdown import Markdown
 
 from qemy._config import INFO_DIR
 from qemy.cli.fmt import console, help_panel
-from qemy.cli.help.help_register import help_reg
+from qemy.cli.help_register import help_reg
 
 
 def cmd_help(cmd: str='help'):
