@@ -29,3 +29,14 @@ def description_panel(description: str, label: str) -> Panel:
     )
     return panel
 
+def help_panel(txt: str, title: str) -> Panel:
+    txt_fmt = format_text(txt, theme='info')
+    title_fmt = format_text(title, theme='title', pos='center')
+    panel = Panel(
+        txt_fmt,
+        title = title_fmt,
+        border_style = colors.panel_border,
+        padding = 3
+    )
+    return panel
+
