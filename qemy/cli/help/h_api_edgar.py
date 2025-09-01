@@ -60,7 +60,7 @@ Doing this allows will enable Qemy to access SEC filing data locally.
     The benefits of this include:
         - Faster loading times while requesting data
         - Ability to access filing data without requests (offline)
-    
+
 This command will also overwrite previously downloaded data.
 
     Content will be automatically un-zipped into Qemy's root directory.
