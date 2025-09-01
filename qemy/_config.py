@@ -27,7 +27,7 @@ if getattr(sys, 'frozen', False):
 else:
     PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
-INFO_DIR = PROJECT_ROOT / 'qemy' / 'cli' / 'info'
+INFO_DIR = PROJECT_ROOT / 'qemy' / 'cli' / 'md'
 
 EXPORT_CHART_DIR = PROJECT_ROOT / 'exports' / 'charts'
 EXPORT_CHART_DIR.mkdir(parents=True, exist_ok=True)
