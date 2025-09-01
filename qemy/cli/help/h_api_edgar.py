@@ -52,3 +52,25 @@ ________________________
 
 Usage: fc <TICKER> <CONCEPT> <QUARTERS>
 """
+
+help_fsync = """Category: SEC Filings
+Download SEC bulk data from within Qemy CLI.
+Doing this allows will enable Qemy to access SEC filing data locally.
+
+    The benefits of this include:
+        - Faster loading times while requesting data
+        - Ability to access filing data without requests (offline)
+    
+This command will also overwrite previously downloaded data.
+
+    Content will be automatically un-zipped into Qemy's root directory.
+        - Download = ~2GB (zipped)
+        - Size on disk = ~20GB (un-zipped)
+        - Location = /qemy/bulk_data/
+
+It may take a few minutes depending on your connection.
+If the download process is interrupted, run fsync again for a clean install.
+
+According to the SEC website (sec.gov), bulk data is updated daily.
+"""
+
