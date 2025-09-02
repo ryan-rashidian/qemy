@@ -39,7 +39,7 @@ class QemyCLI():
                 try:
                     func(*args)
                 except Exception as e:
-                    print(f'Error:\n{e}')
+                    console.print(f'Error:\n{e}', style='warning')
             else:
-                print(f'Unknown command: {cmd}')
+                console.print(f'Unknown command: {cmd}', style='warning')
 
