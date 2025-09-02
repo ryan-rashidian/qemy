@@ -31,11 +31,30 @@ def format_text(
     theme: str,
     pos: Justify = 'default'
 ) -> Text:
+    """Format string into formatted rich Text object.
+
+    Args:
+        message (str): Raw string
+        theme (str): Custom theme name
+        pos (Justify): Justify constant
+
+    Returns:
+        Text: Formatted rich Text object
+    """
     txt = Text(message, justify=pos)
     txt.stylize(theme)
     return txt
 
 def format_df(df: pd.DataFrame, title: str) -> Table:
+    """Format pandas.DataFrame into formatted rich Table object.
+
+    Args:
+        df (pd.DataFrame): Raw DataFrame
+        title (str): Title string for Table
+
+    Returns:
+        Table: Formatted rich Table object
+    """
     title_fmt = Text(title, justify='center')
     title_fmt.stylize(colors.df_title)
     df = df.map(lambda x: f'{x:,.2f}' if isinstance(x, float) else x)

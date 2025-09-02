@@ -16,7 +16,11 @@ from qemy.data import bulk_refresh as _bulk_refresh
 
 
 def cmd_f(ticker: str) -> None:
-    """"""
+    """Print summary of the latest filing to terminal.
+
+    Args:
+        ticker (str): Company ticker symbol
+    """
     ticker = ticker.upper().strip()
     filing: pd.DataFrame = EDGARClient(ticker).get_filing()
     filing_fmt = format_df(df=filing, title=f'Latest SEC Filing for: {ticker}')
@@ -28,7 +32,13 @@ def cmd_fc(
     concept: str = 'assets',
     quarters: str | int = 8
 ) -> None:
-    """"""
+    """Print historical filing data for given concept to terminal.
+
+    Args:
+        ticker (str): Company ticker symbol
+        concept (str): Filing concept
+        quarters (int): Period of financial quarters (starting with latest)
+    """
     ticker = ticker.upper().strip()
     concept = concept.lower().strip()
     quarters = int(quarters)

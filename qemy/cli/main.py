@@ -1,4 +1,4 @@
-"""Qemy CLI."""
+"""Qemy CLI main module."""
 
 import readline
 
@@ -8,18 +8,21 @@ from qemy.utils.env_setup import setup_wizard
 
 
 def pre_input_hook():
+    """Set terminal prompt indicator as pre-input hook."""
     console.print('>>> ', style='info', end='')
     return
 
 class QemyCLI():
+    """Qemy CLI."""
     def __init__(self):
+        """CLI setup sequence."""
         readline.set_pre_input_hook(pre_input_hook)
         readline.set_history_length(100)
         setup_wizard()
         self.commands = cmd_reg
 
     def run(self):
-        """Main REPL loop."""
+        """Main CLI loop."""
         welcome_panel()
         while True:
             raw = input().strip().lower()
