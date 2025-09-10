@@ -32,11 +32,11 @@ def make_request(
         return response.json()
 
     except requests.exceptions.HTTPError as e:
-        raise ClientRequestError(f'HTTP Error\n{e}')
+        raise ClientRequestError('HTTP Error') from e
     except requests.exceptions.RequestException as e:
-        raise ClientRequestError(f'Request Error\n{e}')
+        raise ClientRequestError('Request Error') from e
     except Exception as e:
-        raise ClientRequestError(f'Unexpected request Error\n{e}')
+        raise ClientRequestError('Unexpected request Error') from e
 
 def download_data():
     pass
