@@ -1,8 +1,0 @@
-#!/bin/bash
-
-orig_dir=$(pwd)
-source ~/path/to/your/venvs/qemyenv/bin/activate # change to your path
-cd ~/path/to/projectroot # change to your path
-python -m qemy.cli
-deactivate 
-cd "$orig_dir"

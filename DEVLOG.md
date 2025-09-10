@@ -2,8 +2,6 @@
 
 ## Known Issues:
 
-- [ ] (Non-Critical) 'Docs are still running on Vista' - Update documentation.
-
 ## Log
 
 ### Note (2025-06-03) - [@ryan-rashidian](https://github.com/ryan-rashidian):

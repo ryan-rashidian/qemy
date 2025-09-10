@@ -1,28 +1,25 @@
 [project]
-name = "qemy"
-version = "0.1.1"
-description = "A Python CLI toolkit for stock market analysis and modeling"
+name = "Qemy"
+version = "0.2.0"
+description = "A Python CLI toolkit for stock market analysis"
 readme = "README.md"
 license = "Apache-2.0"
 authors = [{ name = "Ryan A. Rashidian" }]
 dependencies = [
-    "matplotlib",
     "numpy",
     "pandas",
-    "python-dotenv",
-    "requests",
     "rich",
-    "scikit-learn"
 ]
 
 [project.scripts]
-qemy = "qemy.cli.__main__:main"
+qemy = "qemy.cli:main"
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["src"]
 include = ["qemy"]
 
 [tool.ruff]
 line-length = 79
 target-version = "py313"
 lint.select = ["E", "F", "W", "I", "B"]
+

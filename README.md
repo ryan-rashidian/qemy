@@ -40,13 +40,6 @@ Suggestions are welcome!
 
 ## Features
 
-- CLI: Command line interface entry point.
-- Data: SEC filings, stock market data and macroeconomic indicators.
-- Metrics: Ratios, risk, performance and fundamental metrics.
-- Tools: Plot or export data for analysis.
-- Models: DCF, Monte Carlo, linear regression, and more to come.
-- Plugins: use or [create](CONTRIBUTING.md) your own plugins.
-
 See full [Roadmap](ROADMAP.md)
 
 Note: Filing data is currently limited to US Generally Accepted Accounting Principles (US-GAAP) format for now. Support for International Financial Reporting Standard (IFRS) and currency conversion is planned. 
@@ -61,11 +54,11 @@ Note: Filing data is currently limited to US Generally Accepted Accounting Princ
 git clone https://github.com/ryan-rashidian/qemy.git
 ```
 
-### Install Qemy with dependencies
+### Install Qemy
 
-It's recommended to use a Python venv or Conda.
+It's recommended to use a Python virtual environment.
 
-Navigate to project root, then install Qemy as a Python package:
+Install from project root:
 
 ```bash
 pip install .
@@ -102,16 +95,6 @@ qemy
 ```
 
 from any terminal or shell.
-
-### (Recommended) Download bulk data from SEC
-
-```bash
-qemy> bulk_refresh
-```
-
-This will download and unzip ~18GB of SEC filing data into the project root.
-
-- Bulk data is updated by the SEC on a daily basis. bulk_refresh command can be used to re-download, and replace all previous data from within the CLI. 
 
 ### Use CLI
 
