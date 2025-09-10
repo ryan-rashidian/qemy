@@ -1,8 +1,9 @@
 """Networking utilities for Qemy."""
 
 import requests
+from pathlib import Path
 
-from qemy.exceptions import ClientRequestError
+from qemy.exceptions import ClientRequestError, DownloadError
 
 
 def make_request(
@@ -14,8 +15,8 @@ def make_request(
 
     Args:
         url (str): request URL
-        headers (str): request headers
-        params (str): request parameters
+        headers (dict[str, str]): request headers
+        params (dict[str, str]): request parameters
 
     Returns:
         dict: dictionary of requested data
@@ -34,11 +35,41 @@ def make_request(
 
     except requests.exceptions.HTTPError as e:
         raise ClientRequestError('HTTP Error') from e
+
     except requests.exceptions.RequestException as e:
         raise ClientRequestError('Request Error') from e
+
     except Exception as e:
         raise ClientRequestError('Unexpected request Error') from e
 
-def download_data():
-    pass
+def download_data(
+    url: str,
+    dest_path: Path,
+    headers: dict[str, str] | None = None
+) -> None:
+    """File downloader wrapped with error handling.
+
+    Args:
+        url (str): request URL
+        headers (dict[str, str]): request headers
+        dest_path (pathlib.Path): download path destination
+
+    Raises:
+        DownloadError: if attempted download fails
+    """
+    try:
+        with requests.get(url=url, headers=headers, stream=True) as r:
+            r.raise_for_status()
+            with open(dest_path, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    f.write(chunk)
+
+    except requests.exceptions.HTTPError as e:
+        raise DownloadError('HTTP Error') from e
+
+    except requests.exceptions.RequestException as e:
+        raise DownloadError('Request Error') from e
+
+    except Exception as e:
+        raise DownloadError('Unexpected request Error') from e
 
