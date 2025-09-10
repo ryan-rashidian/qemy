@@ -1,4 +1,4 @@
-"""Qemy Configuration"""
+"""Base URLs and API endpoints for Qemy clients."""
 
 EDGAR_CIK_URL = 'https://www.sec.gov/files/company_tickers.json'
 EDGAR_FACTS_URL = 'https://data.sec.gov/api/xbrl/companyfacts/CIK'
