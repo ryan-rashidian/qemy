@@ -1,10 +1,11 @@
 """API credentials and authentication for Qemy."""
 
 import os
+
 from dotenv import load_dotenv, set_key
 
-from qemy.exceptions import MissingCredentialError
 from qemy.config.paths import DOTENV_PATH
+from qemy.exceptions import MissingCredentialError
 
 if not DOTENV_PATH.exists():
     DOTENV_PATH.touch()

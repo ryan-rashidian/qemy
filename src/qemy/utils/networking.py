@@ -4,6 +4,7 @@ import requests
 
 from qemy.exceptions import ClientRequestError
 
+
 def make_request(
     url: str,
     headers: dict[str, str] | None = None,
