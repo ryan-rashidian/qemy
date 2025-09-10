@@ -8,6 +8,8 @@ authors = [{ name = "Ryan A. Rashidian" }]
 dependencies = [
     "numpy",
     "pandas",
+    "python-dotenv",
+    "requests",
     "rich",
 ]
 
