@@ -1,4 +1,4 @@
-# Development Setup
+# Development Installation
 
 ```bash
 pip install -e .
@@ -16,5 +16,5 @@ FRED_API_KEY=<your_key_here>
 EDGAR_USER_AGENT=<your user agent> # EDGAR_USER_AGENT=john johndoe@example.com
 ```
 
-Make sure .env is included in .gitignore to keep your keys secure.
+For developers: Make sure .env is included in .gitignore to keep your keys secure.
 
