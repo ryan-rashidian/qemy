@@ -4,6 +4,10 @@ class QemyError(Exception):
     """Base class for all Qemy errors."""
     pass
 
+class ClientDataError(QemyError):
+    """Raised when a client fails to read data."""
+    pass
+
 class ClientRequestError(QemyError):
     """Raised when a client request fails or encounters an error."""
     pass
