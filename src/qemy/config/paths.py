@@ -13,4 +13,7 @@ else:
 
 DOTENV_PATH: Path = PROJECT_ROOT / '.env'
 BULK_DATA_DIR: Path = PROJECT_ROOT / 'bulk_data'
+COMPANYFACTS_ZIP: Path = BULK_DATA_DIR / 'companyfacts.zip'
+COMPANYFACTS_UNZIPPED: Path = BULK_DATA_DIR / 'companyfacts'
+COMPANY_TICKERS_JSON: Path = BULK_DATA_DIR / 'company_tickers.json'
 
