@@ -9,7 +9,7 @@ from pathlib import Path
 if getattr(sys, 'frozen', False):
     PROJECT_ROOT: Path = Path(sys.executable).resolve().parent
 else:
-    PROJECT_ROOT: Path = Path(__file__).resolve().parents[2]
+    PROJECT_ROOT: Path = Path(__file__).resolve().parents[3]
 
 DOTENV_PATH: Path = PROJECT_ROOT / '.env'
 BULK_DATA_DIR: Path = PROJECT_ROOT / 'bulk_data'
