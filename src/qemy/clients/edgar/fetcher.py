@@ -57,7 +57,7 @@ class Fetcher:
 
         self.cik_data = make_request(url=EDGAR_CIK_URL, headers=headers)
         self.cik = self._map_cik()
-        ticker_facts_url = f'{EDGAR_FACTS_URL}{self.cik}.json'
+        ticker_facts_url = f'{EDGAR_FACTS_URL}CIK{self.cik}.json'
 
         return make_request(url=ticker_facts_url, headers=headers)
 
@@ -65,7 +65,9 @@ class Fetcher:
         """Load companyfacts JSON file locally."""
         self.cik_data = self._load_json(COMPANY_TICKERS_JSON)
         self.cik = self._map_cik()
-        return self._load_json(COMPANYFACTS_UNZIPPED)
+
+        companyfacts_file = COMPANYFACTS_UNZIPPED / f'CIK{self.cik}.json'
+        return self._load_json(companyfacts_file)
 
     def get_companyfacts(self) -> dict:
         """Returns companyfacts JSON file for initialized ticker."""
