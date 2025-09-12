@@ -3,11 +3,12 @@
 import json
 from pathlib import Path
 
-from qemy.config.paths import COMPANYFACTS_UNZIPPED, COMPANY_TICKERS_JSON
-from qemy.config.urls import EDGAR_CIK_URL, EDGAR_FACTS_URL
 from qemy.config.credentials import require_credential
-from qemy.utils.networking import make_request
+from qemy.config.paths import COMPANY_TICKERS_JSON, COMPANYFACTS_UNZIPPED
+from qemy.config.urls import EDGAR_CIK_URL, EDGAR_FACTS_URL
 from qemy.exceptions import ClientDataError
+from qemy.utils.networking import make_request
+
 
 class Fetcher:
     """companyfacts data fetcher for EDGARClient"""
@@ -47,7 +48,7 @@ class Fetcher:
                     )
 
                 return str(cik).zfill(10)
- 
+
         raise ClientDataError(f'CIK Mapping Error: {self.ticker.upper()}')
 
     def _request_companyfacts(self) -> dict:
