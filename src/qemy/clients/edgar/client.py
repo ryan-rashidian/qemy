@@ -1,4 +1,12 @@
-"""EDGARClient orchestrator for SEC EDGAR data pipeline."""
+"""
+EDGARClient orchestrator for SEC EDGAR data pipeline.
+
+Handles the process of:
+- Fetching data
+- Parsing data
+- Mapping concepts
+- Normalizing data shape
+"""
 
 from qemy.clients.edgar.fetcher import FactsLoader
 from qemy.clients.edgar.schemas import CompanyFacts

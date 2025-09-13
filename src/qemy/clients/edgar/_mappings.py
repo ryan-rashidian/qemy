@@ -1,4 +1,5 @@
-"""Containers of XBRL taxonomy tags for EDGAR API company concepts.
+"""
+Containers of XBRL taxonomy tags for EDGAR API company concepts.
 
 Used to search for concepts by key.
 Tuple order reflects relevance/priority from high[0] -> low[-1]

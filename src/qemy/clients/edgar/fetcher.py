@@ -1,4 +1,8 @@
-"""Fetch companyfacts data."""
+"""
+Companyfacts data fetching.
+
+Load a given companies file from SEC EDGAR companyfacts.
+"""
 
 import json
 from pathlib import Path
@@ -11,7 +15,7 @@ from qemy.utils.networking import make_request
 
 
 class FactsLoader:
-    """companyfacts data fetcher for EDGARClient"""
+    """Companyfacts data fetcher for EDGARClient"""
 
     def __init__(self, ticker: str):
         """Initialize attributes."""

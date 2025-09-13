@@ -1,4 +1,10 @@
-"""Bulk data download manager."""
+"""
+Bulk data download manager.
+
+Download or remove bulk filing data from SEC EDGAR.
+Default path: <project_root>/bulk_data/
+Size: ~20GB
+"""
 
 from json import dump
 from shutil import rmtree
