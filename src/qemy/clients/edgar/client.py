@@ -1,7 +1,7 @@
 """EDGARClient orchestrator for SEC EDGAR data pipeline."""
 
 from qemy.clients.edgar.fetcher import FactsLoader
-from qemy.clients.edgar.models import CompanyFacts
+from qemy.clients.edgar.schemas import CompanyFacts
 
 class EDGARClient:
     """EDGAR client."""
