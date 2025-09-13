@@ -10,7 +10,7 @@ from qemy.exceptions import ClientDataError
 from qemy.utils.networking import make_request
 
 
-class Fetcher:
+class FactsLoader:
     """companyfacts data fetcher for EDGARClient"""
 
     def __init__(self, ticker: str):
