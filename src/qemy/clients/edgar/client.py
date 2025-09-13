@@ -1,5 +1,5 @@
 """
-EDGARClient orchestrator for SEC EDGAR data pipeline.
+EDGAR client orchestrator for SEC EDGAR data pipeline.
 
 Handles the process of:
 - Fetching data
@@ -12,7 +12,7 @@ from qemy.clients.edgar.fetcher import FactsLoader
 from qemy.clients.edgar.schemas import CompanyFacts
 
 class EDGARClient:
-    """EDGAR client."""
+    """EDGAR client orchestrator class."""
 
     def __init__(self, ticker: str):
         """Initialize data pipeline for client."""

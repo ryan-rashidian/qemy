@@ -15,7 +15,7 @@ from qemy.utils.networking import make_request
 
 
 class FactsLoader:
-    """Companyfacts data fetcher for EDGARClient"""
+    """Companyfacts data fetcher for EDGAR client"""
 
     def __init__(self, ticker: str):
         """Initialize attributes."""

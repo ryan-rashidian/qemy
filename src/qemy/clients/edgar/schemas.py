@@ -1,7 +1,8 @@
 """
-Containers representing intermediate structures for SEC filing data.
+Dataclasses representing intermediate structures of SEC filing data.
 
-Using dataclasses for companyfacts and parsed concepts.
+These classes provide containers for companyfacts and concepts.
+Used by EDGARClient and ConceptParser within the EDGAR client.
 """
 
 from dataclasses import dataclass, field
