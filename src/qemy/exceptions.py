@@ -8,6 +8,10 @@ class ClientDataError(QemyError):
     """Raised when a client fails to read data."""
     pass
 
+class ClientParsingError(QemyError):
+    """Raised when a client fails to parse data."""
+    pass
+
 class ClientRequestError(QemyError):
     """Raised when a client request fails or encounters an error."""
     pass
