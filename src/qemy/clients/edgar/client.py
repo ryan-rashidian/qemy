@@ -1,9 +1,16 @@
-"""EDGARClient module."""
+"""EDGARClient orchestrator for SEC EDGAR data pipeline."""
+
+from qemy.clients.edgar.fetcher import FactsLoader
+from qemy.clients.edgar.models import CompanyFacts
 
 class EDGARClient:
-    """Main Client for EDGAR API."""
+    """EDGAR client."""
 
     def __init__(self, ticker: str):
         """Initialize data pipeline for client."""
-        self.ticker = ticker.strip().upper()
+        self.raw_facts: dict = FactsLoader(ticker).get_companyfacts()
+        self.companyfacts = CompanyFacts(
+            ticker = ticker.strip().upper(),
+            entity_name = self.raw_facts.get('entityName', '')
+        )
         
