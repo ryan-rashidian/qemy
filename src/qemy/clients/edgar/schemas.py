@@ -11,7 +11,6 @@ from dataclasses import dataclass, field
 @dataclass
 class Concept:
     """Container for parsed filings and metadata."""
-    tag: str
     label: str
     description: str
     unit: str
@@ -19,8 +18,8 @@ class Concept:
 
     def __repr__(self) -> str:
         return (
-            f"Concept(tag='{self.tag}', label='{self.label}', "
-            f"unit='{self.unit}', filings=#{len(self.filings)} filed)"
+            f"Concept(label='{self.label}', unit='{self.unit}', "
+            f"filings=#{len(self.filings)} filed)"
         )
 
 @dataclass
