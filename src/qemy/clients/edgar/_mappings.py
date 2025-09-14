@@ -293,7 +293,7 @@ filing_tags = {
     'Income Statement': income_statement
 }
 
-# CLI Command mapping
+# Argument mapping
 map_arg = {
     'shares':   ('Balance Sheet', 'Shares Outstanding'),
     'assets':   ('Balance Sheet', 'Assets'),
