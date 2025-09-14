@@ -20,6 +20,10 @@ class DownloadError(QemyError):
     """Raised when an attempted download fails."""
     pass
 
+class InvalidArgumentError(QemyError):
+    """Raised when an invalid argument is passed."""
+    pass
+
 class InvalidSyntaxError(QemyError):
     """Raised when invalid syntax is used in a string."""
     pass
