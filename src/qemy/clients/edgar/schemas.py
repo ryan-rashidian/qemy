@@ -1,5 +1,4 @@
-"""
-Dataclasses representing intermediate structures of SEC filing data.
+"""Dataclasses representing intermediate structures of SEC filing data.
 
 These classes provide containers for companyfacts and concepts.
 Used by EDGARClient and ConceptParser within the EDGAR client.

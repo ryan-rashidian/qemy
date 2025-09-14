@@ -1,5 +1,4 @@
-"""
-Containers of XBRL taxonomy tags for SEC EDGAR company concepts.
+"""Containers of XBRL taxonomy tags for SEC EDGAR company concepts.
 
 Used by EDGAR client to search for concepts by key.
 Tuple order reflects relevance/priority from high[0] -> low[-1]

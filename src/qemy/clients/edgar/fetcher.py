@@ -1,5 +1,4 @@
-"""
-Companyfacts data fetching.
+"""Companyfacts data fetching.
 
 Load a given companies file from SEC EDGAR companyfacts.
 """

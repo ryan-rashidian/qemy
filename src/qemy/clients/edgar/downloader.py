@@ -1,5 +1,4 @@
-"""
-Bulk data download manager for Qemy.
+"""Bulk data download manager for Qemy.
 
 Download or remove bulk filing data from SEC EDGAR.
 Default path: <project_root>/bulk_data/
