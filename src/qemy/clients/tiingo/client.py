@@ -191,3 +191,16 @@ class TiingoClient:
                 ticker: str = entry['ticker']
                 self.quote_data[ticker] = dict(entry)
 
+    def quote_to_dataframe(self) -> dict[str, pd.DataFrame]:
+        """Format Tiingo quote data into pandas DataFrame.
+
+        Returns:
+            dict[str, pd.DataFrame]: Of quote data mapped to tickers
+        """
+        quote_dataframes = {}
+        for ticker, data in self.quote_data:
+            quote_df = pd.DataFrame(data)
+            quote_dataframes[ticker] = quote_df
+
+        return quote_dataframes
+
