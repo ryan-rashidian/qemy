@@ -180,21 +180,14 @@ class TiingoClient:
 
         return price_dataframes
 
-    def get_quote(self) -> dict[str, dict]:
-        """Fetch latest price quote for initialized ticker(s).
-
-        Returns:
-            dict[str, dict]: With tickers mapped to their quote data
-        """
+    def get_quote(self) -> None:
+        """Fetch latest price quote for initialized ticker(s)."""
         url = f"{TIINGO_IEX_URL}{','.join(self.tickers)}"
 
         response = make_request(url=url, headers=self.HEADERS)
 
-        result = {}
         for entry in response:
             if 'ticker' in entry:
                 ticker: str = entry['ticker']
-                result[ticker] = dict(entry)
-
-        return result
+                self.quote_data[ticker] = dict(entry)
 
