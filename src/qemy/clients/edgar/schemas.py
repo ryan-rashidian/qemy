@@ -4,6 +4,8 @@ These classes provide containers for companyfacts and concepts.
 Used by EDGARClient and ConceptParser within the EDGAR client.
 """
 
+import pandas as pd
+
 from dataclasses import dataclass, field
 
 
@@ -20,6 +22,24 @@ class Concept:
             f"Concept(label='{self.label}', unit='{self.unit}', "
             f"filings=#{len(self.filings)} filed)"
         )
+
+    def to_dataframe(self) -> pd.DataFrame:
+        """Format Concept filings into pandas DataFrame.
+
+        Returns:
+            pd.DataFrame: of Concept filings
+        """
+        concept_df = pd.DataFrame(self.filings)
+        concept_df['filed'] = pd.to_datetime(
+            concept_df['filed'],
+            errors='coerce'
+        )
+        concept_df.dropna(subset=['filed'], inplace=True)
+        concept_df.sort_values('filed', inplace=True)
+        concept_df.drop_duplicates('frame', keep='last', inplace=True)
+        concept_df.reset_index(drop=True, inplace=True)
+        concept_df['val'] = concept_df['val'].astype(float)
+        return concept_df
 
 @dataclass
 class CompanyFacts:
