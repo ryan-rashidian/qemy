@@ -17,7 +17,11 @@ class EDGARClient:
     """EDGAR client orchestrator class."""
 
     def __init__(self, ticker: str):
-        """Initialize data pipeline for client."""
+        """Initialize EDGAR data pipeline for given company.
+
+        Args:
+            ticker (str): Company ticker symbol
+        """
         self.raw_facts: dict = FactsLoader(ticker).get_companyfacts()
         self.parser = ConceptParser(self.raw_facts)
         self.companyfacts = CompanyFacts(
@@ -49,12 +53,15 @@ class EDGARClient:
 
         Args:
             concept (str): Key for matching concept tuple
-            quarters (int): Number of fiscal quarters to fetch
         """
         xbrl_mappings = self._get_mappings(concept)
         parsed_data: Concept = self.parser.parse(xbrl_mappings)
         self.companyfacts.concepts[concept] = parsed_data
 
     def fill_concepts(self) -> None:
-        """"""
-        
+        """Fetch and parse all filing data."""
+        for concept in _mappings.map_arg.keys():
+            xbrl_mappings = self._get_mappings(concept)
+            parsed_data: Concept = self.parser.parse(xbrl_mappings)
+            self.companyfacts.concepts[concept] = parsed_data
+
