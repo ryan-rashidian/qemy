@@ -5,6 +5,8 @@ This module handles requests and fetching data from Tiingo API.
 
 from __future__ import annotations
 
+import pandas as pd
+
 from qemy.utils.dates import parse_period
 from qemy.config.credentials import require_credential
 from qemy.utils.networking import make_request
@@ -157,6 +159,25 @@ class TiingoClient:
                 params=params
             )
             self.price_data[ticker] = response
+
+    def prices_to_dataframe(self) -> dict[str, pd.DataFrame]:
+        """Format Tiingo price data into pandas DataFrame.
+
+        Returns:
+            dict[str, pd.DataFrame]: Of price data mapped to tickers
+        """
+        price_dataframes = {}
+        for ticker, data in self.price_data:
+            price_df = pd.DataFrame(data)
+
+            if price_df['date'] in price_df.columns:
+                price_df['date'] = pd.to_datetime(price_df['date'])
+                price_df.set_index('date', inplace=True)
+                price_df.sort_index(inplace=True)
+
+            price_dataframes[ticker] = price_df
+
+        return price_dataframes
 
     def get_quote(self) -> dict[str, dict]:
         """Fetch latest price quote for initialized ticker(s).
