@@ -5,20 +5,22 @@ This module handles requests and fetching data from Tiingo API.
 
 from __future__ import annotations
 
+from qemy.utils.dates import parse_period
 from qemy.config.credentials import require_credential
 from qemy.utils.networking import make_request
 from qemy.exceptions import InvalidArgumentError
-
-# Argument verification sets for Client
-resample_check = {'daily', 'weekly', 'monthly', 'annually'}
-columns_check = {
-    'close', 'high', 'low', 'open', 'volume',
-    'adjClose', 'adjHigh', 'adjLow', 'adjOpen', 'adjVolume',
-    'divCash', 'splitFactor'
-}
+from qemy.config.urls import TIINGO_IEX_URL, TIINGO_URL
 
 class TiingoClient:
     """Client for fetching stock market data from Tiingo API."""
+
+    # Possible arguments for resample and column parameters
+    RESAMPLE_ALLOWED = {'daily', 'weekly', 'monthly', 'annually'}
+    COLUMNS_ALLOWED = {
+        'close', 'high', 'low', 'open', 'volume',
+        'adjClose', 'adjHigh', 'adjLow', 'adjOpen', 'adjVolume',
+        'divCash', 'splitFactor'
+    }
 
     def __init__(self, ticker: str | list[str]):
         """Initialize Client with credentials and request headers.
@@ -86,6 +88,44 @@ class TiingoClient:
         self.tickers = [t for t in self.tickers if t not in remove]
         return self
 
+    def _check_param(self, check_set: set, param: str) -> str:
+        """Verify if param argument is allowed."""
+        if param not in check_set:
+            raise InvalidArgumentError(
+                'Incorrect argument for param.\n'
+                f'Given: {param}\n'
+                f'Accepted: {check_set}'
+            )
+        return param
+
+    def _get_params(
+        self,
+        period: str,
+        resample: str,
+        columns: list[str]
+    ) -> dict:
+        """Get a formatted parameter dictionary for Tiingo requests."""
+        start, end = parse_period(period_str=period)
+        resample_checked = self._check_param(
+            param = resample,
+            check_set = self.RESAMPLE_ALLOWED
+        )
+        columns_checked = []
+        for col in columns:
+            columns_checked.append(self._check_param(
+                param = col,
+                check_set = self.COLUMNS_ALLOWED
+            ))
+
+        return {
+            'startDate': start,
+            'endDate': end,
+            'resampleFreq': resample_checked,
+            'columns': columns_checked
+        }
+
+    def get_prices(self):
+        """"""
 
 
 
