@@ -7,11 +7,12 @@ from __future__ import annotations
 
 import pandas as pd
 
-from qemy.utils.dates import parse_period
 from qemy.config.credentials import require_credential
-from qemy.utils.networking import make_request
-from qemy.exceptions import InvalidArgumentError
 from qemy.config.urls import TIINGO_IEX_URL, TIINGO_URL
+from qemy.exceptions import InvalidArgumentError
+from qemy.utils.dates import parse_period
+from qemy.utils.networking import make_request
+
 
 class TiingoClient:
     """Client for fetching stock market data from Tiingo API."""
@@ -41,7 +42,7 @@ class TiingoClient:
 
         self.price_data = {}
         self.quote_data = {}
-        
+
         credential: str = require_credential(
             service = 'Tiingo',
             env_var = 'TIINGO_API_KEY'

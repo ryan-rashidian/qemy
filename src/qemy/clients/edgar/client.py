@@ -13,6 +13,7 @@ from qemy.clients.edgar.parser import ConceptParser
 from qemy.clients.edgar.schemas import CompanyFacts, Concept
 from qemy.exceptions import InvalidArgumentError
 
+
 class EDGARClient:
     """EDGAR client orchestrator class."""
 

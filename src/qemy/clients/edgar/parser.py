@@ -3,8 +3,9 @@
 Assemble Concept dataclass containers from raw companyfacts data.
 """
 
-from qemy.exceptions import ClientParsingError
 from qemy.clients.edgar.schemas import Concept
+from qemy.exceptions import ClientParsingError
+
 
 class ConceptParser:
     """Concept parser for EDGAR client."""
@@ -55,7 +56,7 @@ class ConceptParser:
 
         Args:
             xbrl_mappings (tuple[str]): Concept mapping container
-            
+
         Returns:
             Concept: Parsed concept data
         """

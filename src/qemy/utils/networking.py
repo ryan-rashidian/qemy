@@ -1,10 +1,11 @@
 """Networking utilities for Qemy."""
 
-import requests
 from pathlib import Path
 
-from qemy.exceptions import ClientRequestError, DownloadError
+import requests
+
 from qemy.config.logger import get_logger
+from qemy.exceptions import ClientRequestError, DownloadError
 
 logger = get_logger(__name__)
 
