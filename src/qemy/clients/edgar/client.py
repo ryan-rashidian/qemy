@@ -30,6 +30,18 @@ class EDGARClient:
             entity_name = self.raw_facts.get('entityName', '')
         )
 
+    def __repr__(self) -> str:
+        return f'EDGARClient({self.companyfacts.ticker})'
+
+    def __str__(self) -> str:
+        return f'[EDGAR Client]: {self.companyfacts.ticker}'
+
+    def __bool__(self) -> bool:
+        return bool(self.raw_facts)
+
+    def __len__(self) -> int:
+        return len(self.companyfacts.concepts)
+
     def _get_mappings(self, concept: str) -> tuple[str]:
         """Get matching tuple for concept mapping.
 
