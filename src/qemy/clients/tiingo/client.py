@@ -14,7 +14,6 @@ from qemy.config.urls import TIINGO_IEX_URL, TIINGO_URL
 class TiingoClient:
     """Client for fetching stock market data from Tiingo API."""
 
-    # Possible arguments for resample and column parameters
     RESAMPLE_ALLOWED = {'daily', 'weekly', 'monthly', 'annually'}
     COLUMNS_ALLOWED = {
         'close', 'high', 'low', 'open', 'volume',
@@ -31,11 +30,15 @@ class TiingoClient:
         Args:
             ticker (str | list[str]): Company ticker symbol(s)
         """
+
         self.tickers = []
         if isinstance(ticker, str):
             self.tickers = [ticker.strip().upper()]
         elif isinstance(ticker, list):
             self.tickers = [t.strip().upper() for t in ticker]
+
+        self.price_data = {}
+        self.quote_data = {}
         
         credential: str = require_credential(
             service = 'Tiingo',
@@ -124,9 +127,52 @@ class TiingoClient:
             'columns': columns_checked
         }
 
-    def get_prices(self):
-        """"""
+    def get_prices(
+        self,
+        period: str,
+        resample: str,
+        columns: list[str]
+    ) -> None:
+        """Fetch historical price data for initialized ticker(s).
 
+        Args:
+            period (str):
+            resample (str):
+            columns (list[str]):
 
+        Raises:
+            InvalidArgumentError: If a parameter string is not valid
+        """
+        for ticker in self.tickers:
+            url = f'{TIINGO_URL}{ticker}/prices'
+            params: dict = self._get_params(
+                period = period,
+                resample = resample,
+                columns = columns
+            )
 
+            response: dict = make_request(
+                url=url,
+                headers=self.HEADERS,
+                params=params
+            )
+            self.price_data[ticker] = response
+
+    def get_quote(self) -> dict[str, dict]:
+        """Fetch latest price quote for initialized ticker(s).
+
+        Returns:
+            dict[str, dict]: With tickers mapped to their quote data
+        """
+        url = f"{TIINGO_IEX_URL}{','.join(self.tickers)}"
+
+        response = make_request(url=url, headers=self.HEADERS)
+
+        result = {}
+        for entry in response:
+            if 'ticker' in entry:
+                ticker: str = entry['ticker']
+                result[ticker] = dict(entry)
+
+        return result
 
