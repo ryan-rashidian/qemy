@@ -50,5 +50,5 @@ class QemyCLI:
             cmd, *args = self.prompt_cmd()
             if not cmd:
                 continue
-            self.handle_cmd(cmd=cmd, *args)
+            self.handle_cmd(cmd, *args)
 
