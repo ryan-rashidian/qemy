@@ -2,6 +2,7 @@
 
 import readline
 
+from qemy.cli import cmd_register
 from qemy.cli.format.fmt import FormatText
 from qemy.cli.cmd_register import cmd_registry
 
@@ -23,11 +24,6 @@ class QemyCLI:
         """Halt main CLI loop."""
         self.running = False
 
-    def prompt_cmd(self) -> list[str]:
-        """Prompt for user input and split commands."""
-        cmd_raw = input().strip().lower()
-        return cmd_raw.split()
-
     def handle_cmd(self, cmd: str, *args: str):
         """Handle execution of CLI commands."""
         if cmd in ('exit', 'quit', 'q'):
@@ -47,8 +43,9 @@ class QemyCLI:
         """Start main CLI loop."""
         self.running = True
         while self.running:
-            cmd, *args = self.prompt_cmd()
-            if not cmd:
+            cmd_raw = input().strip().lower()
+            if not cmd_raw:
                 continue
+            cmd, *args = cmd_raw
             self.handle_cmd(cmd, *args)
 
