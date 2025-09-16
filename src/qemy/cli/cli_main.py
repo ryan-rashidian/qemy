@@ -24,6 +24,13 @@ class QemyCLI:
         """Halt main CLI loop."""
         self.running = False
 
+    def prompt_user(self) -> list[str] | None:
+        """Prompt user for CLI command."""
+        cmd_raw = input().strip().lower()
+        if not cmd_raw:
+            return
+        return cmd_raw.split()
+
     def handle_cmd(self, cmd: str, *args: str):
         """Handle execution of CLI commands."""
         if cmd in ('exit', 'quit', 'q'):
@@ -43,9 +50,9 @@ class QemyCLI:
         """Start main CLI loop."""
         self.running = True
         while self.running:
-            cmd_raw = input().strip().lower()
-            if not cmd_raw:
+            cmd_parts = self.prompt_user()
+            if not cmd_parts:
                 continue
-            cmd, *args = cmd_raw
+            cmd, *args = cmd_parts
             self.handle_cmd(cmd, *args)
 
