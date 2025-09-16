@@ -48,7 +48,7 @@ class FormatText:
 
     def print(self) -> None:
         """Print text string to terminal."""
-        console.print(self.text)
+        console.print(self.text, end='')
 
 class FormatDF:
     """Format pandas DataFrame with Rich."""
