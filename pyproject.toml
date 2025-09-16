@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-qemy = "qemy.cli:main"
+qemy = "qemy.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
