@@ -2,7 +2,6 @@
 
 import readline
 
-from qemy.cli import cmd_register
 from qemy.cli.format.fmt import FormatText
 from qemy.cli.cmd_register import cmd_registry
 
@@ -42,9 +41,9 @@ class QemyCLI:
             try:
                 func(*args)
             except Exception as e:
-                FormatText(f'Error\n{e}').style('warning').print()
+                FormatText(f'Error\n{e}\n').style('warning').print()
         else:
-            FormatText(f'Unknown command: {cmd}').style('warning').print()
+            FormatText(f'Unknown command: {cmd}\n').style('warning').print()
 
     def run(self):
         """Start main CLI loop."""
