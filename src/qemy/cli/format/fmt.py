@@ -4,6 +4,8 @@ Using Rich Python library:
 - https://github.com/Textualize/rich
 """
 
+from __future__ import annotations
+
 import pandas as pd
 
 from typing import Literal
@@ -34,13 +36,15 @@ class FormatText:
         """Initialize text string."""
         self.text = Text(text_str)
 
-    def justify(self, pos: Justify) -> None:
+    def justify(self, pos: Justify) -> FormatText:
         """Justify text position."""
         self.text.justify = pos
+        return self
 
-    def style(self, theme: str) -> None:
+    def style(self, theme: str) -> FormatText:
         """Stylize text string with theme."""
         self.text.stylize(theme)
+        return self
 
     def print(self) -> None:
         """Print text string to terminal."""
