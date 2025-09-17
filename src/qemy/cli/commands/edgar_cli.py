@@ -1,17 +1,16 @@
 """Commands for EDGARClient in Qemy CLI."""
 
-from rich.progress import Progress, BarColumn, SpinnerColumn, TextColumn
+from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 
 from qemy.cli.format import colors
 from qemy.cli.menus import confirm_menu
-
-from qemy.clients import EDGARClient
 from qemy.clients.edgar import (
     delete_bulk_data,
     download_cik_mapping,
     download_companyfacts_zip,
-    unzip_companyfacts
+    unzip_companyfacts,
 )
+
 
 def cmd_fsync() -> None:
     """Download SEC bulk data from within Qemy CLI."""

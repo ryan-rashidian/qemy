@@ -6,10 +6,9 @@ Using Rich Python library:
 
 from __future__ import annotations
 
-import pandas as pd
-
 from typing import Literal
 
+import pandas as pd
 from rich import box
 from rich.console import Console
 from rich.table import Table

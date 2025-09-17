@@ -1,6 +1,7 @@
 """Auxiliary commands for Qemy CLI."""
 
-from qemy.cli.format.fmt import console, FormatText
+from qemy.cli.format.fmt import FormatText, console
+
 
 def cmd_clear() -> None:
     """CLI clear screen command."""

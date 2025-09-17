@@ -4,9 +4,9 @@ These classes provide containers for companyfacts and concepts.
 Used by EDGARClient and ConceptParser within the EDGAR client.
 """
 
-import pandas as pd
-
 from dataclasses import dataclass, field
+
+import pandas as pd
 
 
 @dataclass

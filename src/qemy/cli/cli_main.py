@@ -2,8 +2,9 @@
 
 import readline
 
-from qemy.cli.format.fmt import FormatText
 from qemy.cli.cmd_register import cmd_registry
+from qemy.cli.format.fmt import FormatText
+
 
 def pre_input_hook() -> None:
     """Set terminal prompt indicator as pre-input hook."""
