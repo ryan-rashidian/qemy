@@ -3,7 +3,8 @@ from qemy.clients.edgar.downloader import (
     download_companyfacts_zip,
     download_cik_mapping,
     download_data,
-    refresh_bulk_data
+    refresh_bulk_data,
+    unzip_companyfacts
 )
 
 __all__ = [
@@ -11,6 +12,7 @@ __all__ = [
     'download_companyfacts_zip',
     'download_cik_mapping',
     'download_data',
-    'refresh_bulk_data'
+    'refresh_bulk_data',
+    'unzip_companyfacts'
 ]
 
