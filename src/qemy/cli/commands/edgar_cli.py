@@ -3,6 +3,7 @@
 from rich.progress import Progress, BarColumn, SpinnerColumn, TextColumn
 
 from qemy.cli.format import colors
+from qemy.cli.menus import confirm_menu
 
 from qemy.clients import EDGARClient
 from qemy.clients.edgar import (
@@ -14,6 +15,9 @@ from qemy.clients.edgar import (
 
 def cmd_fsync() -> None:
     """Download SEC bulk data from within Qemy CLI."""
+    if not confirm_menu():
+        return
+
     with Progress(
         SpinnerColumn(),
         TextColumn('[progress.description]{task.description}'),
