@@ -8,6 +8,8 @@ from dataclasses import dataclass, field
 
 import pandas as pd
 
+from qemy.utils.dataframes import normalize_financial_df
+
 
 @dataclass
 class Concept:
@@ -30,16 +32,11 @@ class Concept:
             pd.DataFrame: of Concept filings
         """
         concept_df = pd.DataFrame(self.filings)
-        concept_df['filed'] = pd.to_datetime(
-            concept_df['filed'],
-            errors='coerce'
+        return normalize_financial_df(
+            df = concept_df,
+            value_col = 'val',
+            date_col = 'filed'
         )
-        concept_df.dropna(subset=['filed'], inplace=True)
-        concept_df.sort_values('filed', inplace=True)
-        concept_df.drop_duplicates('frame', keep='last', inplace=True)
-        concept_df.reset_index(drop=True, inplace=True)
-        concept_df['val'] = concept_df['val'].astype(float)
-        return concept_df
 
 @dataclass
 class CompanyFacts:
