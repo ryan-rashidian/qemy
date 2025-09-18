@@ -12,10 +12,10 @@ import pandas as pd
 @dataclass
 class Concept:
     """Container for parsed filings and metadata."""
-    label: str
-    description: str
-    unit: str
-    filings: list[dict]
+    label: str = ''
+    description: str = ''
+    unit: str = ''
+    filings: list[dict] = field(default_factory=list)
 
     def __repr__(self) -> str:
         return (
