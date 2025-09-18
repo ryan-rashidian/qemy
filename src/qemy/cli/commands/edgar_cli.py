@@ -2,8 +2,8 @@
 
 from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 
-from qemy.cli.format.fmt import FormatDF, FormatText
 from qemy.cli.format import colors
+from qemy.cli.format.fmt import FormatDF, FormatText
 from qemy.cli.menus import confirm_menu
 from qemy.clients import EDGARClient
 from qemy.clients.edgar import (
