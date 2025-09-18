@@ -1,5 +1,6 @@
 """Commands for EDGARClient in Qemy CLI."""
 
+
 from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 
 from qemy.cli.format import colors
@@ -12,6 +13,7 @@ from qemy.clients.edgar import (
     download_companyfacts_zip,
     unzip_companyfacts,
 )
+from qemy.clients.edgar.schemas import Concept
 from qemy.exceptions import ClientParsingError
 
 
@@ -25,14 +27,21 @@ def cmd_f(ticker: str) -> None:
     FormatDF(cashflow_statement_df, 'Cash Flow Statement').print()
     FormatDF(income_statement_df, 'Income Statement').print()
 
-# REMINDER: This is an unfinished placeholder
-def cmd_fc(ticker: str, concept: str) -> None:
+def cmd_fc(ticker: str, concept: str, quarters: str='8') -> None:
     """Print historical filing data for given ticker, concept to terminal."""
+    quarters_int = int(quarters)
     try:
         client = EDGARClient(ticker).get_concept(concept)
-        client.companyfacts.concepts.get(concept)
+        concept_data = client.companyfacts.concepts.get(concept, Concept())
+        if not concept_data.filings:
+            FormatText(f'No data for: {concept}\n').style('warning').print()
+
+        concept_df = concept_data.to_dataframe().tail(quarters_int)
+        concept_df.drop(columns=['fy', 'frame', 'end', 'accn'], inplace=True)
+        FormatDF(concept_df, f'{concept}').print()
+
     except ClientParsingError:
-        FormatText(f'{concept} not found.').style('warning').print()
+        FormatText(f'{concept} not found.\n').style('warning').print()
         return
 
 def cmd_fsync() -> None:
