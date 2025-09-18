@@ -9,11 +9,13 @@ Handles the process of:
 
 from __future__ import annotations
 
+import pandas as pd
+
 from qemy.clients.edgar import _mappings
 from qemy.clients.edgar.fetcher import FactsLoader
 from qemy.clients.edgar.parser import ConceptParser
 from qemy.clients.edgar.schemas import CompanyFacts, Concept
-from qemy.exceptions import InvalidArgumentError
+from qemy.exceptions import ClientParsingError, InvalidArgumentError
 
 
 class EDGARClient:
@@ -72,13 +74,65 @@ class EDGARClient:
         xbrl_mappings = self._get_mappings(concept)
         parsed_data: Concept = self.parser.parse(xbrl_mappings)
         self.companyfacts.concepts[concept] = parsed_data
+
         return self
 
     def fill_concepts(self) -> EDGARClient:
         """Fetch and parse all filing data."""
         for concept in _mappings.map_arg.keys():
-            xbrl_mappings = self._get_mappings(concept)
-            parsed_data: Concept = self.parser.parse(xbrl_mappings)
-            self.companyfacts.concepts[concept] = parsed_data
+            try:
+                xbrl_mappings = self._get_mappings(concept)
+                parsed_data: Concept = self.parser.parse(xbrl_mappings)
+                self.companyfacts.concepts[concept] = parsed_data
+
+            except ClientParsingError:
+                self.companyfacts.concepts[concept] = Concept()
+
         return self
+
+    def _get_latest_statement(self, section: str) -> list[tuple]:
+        """Build a statement from parsed concepts"""
+        statement = []
+        filed, form = None, None
+
+        for concept, xbrl_mappings in _mappings.filing_tags[section].items():
+            try:
+                parsed_data: Concept = self.parser.parse(xbrl_mappings)
+                latest_filing: dict = parsed_data.filings[-1]
+                value = latest_filing.get('val')
+                form = latest_filing.get('form')
+                filed = latest_filing.get('filed')
+                statement.append((concept, value))
+
+            except ClientParsingError:
+                statement.append((concept, None))
+
+        statement.append(('Filed', filed))
+        statement.append(('Form', form))
+
+        return statement
+
+    def get_balance_sheet_df(self) -> pd.DataFrame:
+        """Fetch pandas DataFrame of latest balance sheet."""
+        balance_sheet = self._get_latest_statement('Balance Sheet')
+        balance_sheet_df = pd.DataFrame(balance_sheet)
+        balance_sheet_df.columns = ['Metric', 'val']
+
+        return balance_sheet_df
+
+    def get_cashflow_statement_df(self) -> pd.DataFrame:
+        """Fetch pandas DataFrame of lastest cashflow statement."""
+        cashflow_statement = self._get_latest_statement('Cash Flow Statement')
+        cashflow_statement_df = pd.DataFrame(cashflow_statement)
+        cashflow_statement_df.columns = ['Metric', 'val']
+
+        return cashflow_statement_df
+
+    def get_income_statement_df(self) -> pd.DataFrame:
+        """Fetch pandas DataFrame of lastest income stament."""
+        income_statement = self._get_latest_statement('Income Statement')
+        income_statement_df = pd.DataFrame(income_statement)
+        income_statement_df.columns = ['Metric', 'val']
+
+        return income_statement_df
 
