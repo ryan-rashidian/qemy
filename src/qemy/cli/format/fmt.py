@@ -45,6 +45,10 @@ class FormatText:
         self.text.stylize(theme)
         return self
 
+    def get_text(self) -> Text:
+        """Get formatted Rich Text Object."""
+        return self.text
+
     def print(self) -> None:
         """Print text string to terminal."""
         console.print(self.text, end='')
@@ -53,12 +57,18 @@ class FormatDF:
     """Format pandas DataFrame with Rich."""
 
     def __init__(self, df: pd.DataFrame, title: str):
-        """Initialize pandas DataFrame."""
+        """Initialize formatter.
+
+        Args:
+            df (pd.DataFrame): target DataFrame
+            title (str): title string for formatted Table
+        """
         self.df = df.map(lambda x: f'{x:,.2f}' if isinstance(x, float) else x)
+
+        formatter = FormatText(title).justify('center')
+        title_fmt = formatter.style('title').get_text()
         self.table = Table(
-            title = title,
-            title_justify = 'center',
-            title_style = 'title',
+            title = title_fmt,
             border_style = colors.df_border,
             row_styles = colors.row_style,
             box = box.ROUNDED,
@@ -86,6 +96,11 @@ class FormatDF:
 
         for _, row in self.df.iterrows():
             self.table.add_row(*[str(x) for x in row.values])
+
+    def get_table(self) -> Table:
+        """Get formatted Rich Table object."""
+        self._df_to_table()
+        return self.table
 
     def print(self) -> None:
         """Print formatted Rich Table to terminal."""
