@@ -7,6 +7,8 @@ Handles the process of:
 - Normalizing data shape
 """
 
+from __future__ import annotations
+
 from qemy.clients.edgar import _mappings
 from qemy.clients.edgar.fetcher import FactsLoader
 from qemy.clients.edgar.parser import ConceptParser
@@ -61,7 +63,7 @@ class EDGARClient:
         except KeyError as e:
             raise InvalidArgumentError(f'{concept} is undefined') from e
 
-    def get_concept(self, concept: str) -> None:
+    def get_concept(self, concept: str) -> EDGARClient:
         """Fetches parsed filing data for given concept.
 
         Args:
@@ -70,11 +72,13 @@ class EDGARClient:
         xbrl_mappings = self._get_mappings(concept)
         parsed_data: Concept = self.parser.parse(xbrl_mappings)
         self.companyfacts.concepts[concept] = parsed_data
+        return self
 
-    def fill_concepts(self) -> None:
+    def fill_concepts(self) -> EDGARClient:
         """Fetch and parse all filing data."""
         for concept in _mappings.map_arg.keys():
             xbrl_mappings = self._get_mappings(concept)
             parsed_data: Concept = self.parser.parse(xbrl_mappings)
             self.companyfacts.concepts[concept] = parsed_data
+        return self
 
