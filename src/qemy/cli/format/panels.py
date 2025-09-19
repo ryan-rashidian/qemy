@@ -3,7 +3,7 @@
 from rich.panel import Panel
 
 from qemy.cli.format import colors
-from qemy.cli.format.fmt import console, FormatText
+from qemy.cli.format.fmt import FormatText, console
 
 
 def welcome_panel() -> None:

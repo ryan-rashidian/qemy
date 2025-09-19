@@ -3,8 +3,8 @@
 import readline
 
 from qemy.cli.cmd_register import cmd_registry
-from qemy.cli.format.panels import welcome_panel
 from qemy.cli.format.fmt import FormatText
+from qemy.cli.format.panels import welcome_panel
 
 
 def pre_input_hook() -> None:
