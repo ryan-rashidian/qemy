@@ -3,6 +3,7 @@
 import readline
 
 from qemy.cli.cmd_register import cmd_registry
+from qemy.cli.format.panels import welcome_panel
 from qemy.cli.format.fmt import FormatText
 
 
@@ -49,6 +50,7 @@ class QemyCLI:
     def run(self):
         """Start main CLI loop."""
         self.running = True
+        welcome_panel()
         while self.running:
             cmd_parts = self.prompt_user()
             if not cmd_parts:
