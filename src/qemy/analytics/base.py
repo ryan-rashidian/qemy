@@ -7,12 +7,6 @@ import pandas as pd
 from qemy.clients import EDGARClient
 
 
-class AnalysisBase:
-    """Base class for Qemy Analytics."""
-
-    def __init__(self):
-        """Initialize base."""
-
 class EDGARMetrics:
     """Base class for EDGAR Metrics."""
 
@@ -27,21 +21,26 @@ class EDGARMetrics:
         df_concept = self.client.get_concept(
             concept = concept_fmt
         ).companyfacts.concepts[concept].to_dataframe()
+
         if 'val' in df_concept.columns:
             df_concept.rename(
                 columns = {'val': f'val_{concept_fmt}'},
                 inplace = True
             )
+
         return df_concept
 
     def merge_concept_dfs(self, *dataframes: pd.DataFrame) -> pd.DataFrame:
         """Merge concept dataframes."""
+        on_columns = [
+            'accn', 'fp', 'fy', 'filed', 'form', 'start', 'end', 'frame'
+        ]
         df_merged = reduce(
             lambda df_left, df_right: pd.merge(
                 df_left,
                 df_right,
-                on=['filed', 'form'],
-                how='outer'
+                on = on_columns,
+                how = 'outer'
             ),
             dataframes
         )
@@ -50,12 +49,12 @@ class EDGARMetrics:
 
         return df_merged
 
-class ModelsBase(AnalysisBase):
+class ModelsBase:
     """Base class for Models."""
 
-class RatiosBase(AnalysisBase):
+class RatiosBase:
     """Base class for Ratios."""
 
-class ScoresBase(AnalysisBase):
+class ScoresBase:
     """Base class for Scores."""
 
