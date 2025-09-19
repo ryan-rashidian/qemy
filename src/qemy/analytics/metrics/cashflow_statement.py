@@ -8,8 +8,9 @@ from qemy.analytics.base import EDGARMetrics
 class FreeCashFlow(EDGARMetrics):
     """Calculate Free Cash Flow."""
 
-    def __init__(self):
+    def __init__(self, ticker: str):
         """Initialize combined concept DataFrame."""
+        super().__init__(ticker)
         df_ocf: pd.DataFrame = self.get_concept_df('ocf')
         df_capex: pd.DataFrame = self.get_concept_df('capex')
         self.df_combined = self.merge_concept_dfs(*[df_ocf, df_capex])
