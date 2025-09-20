@@ -18,8 +18,12 @@ class DCFModel(EDGARAnalytics):
         super().__init__(ticker)
 
         self.companyanalytics = CompanyAnalytics(
-            ticker = self.ticker,
+            ticker = self.ticker.upper(),
             entity_name = self.client.companyfacts.entity_name
+        )
+        self.companyanalytics.description = (
+            "Estimate a company's intrinsic value by projecting future cash "
+            'flows and discounting them back to present value.'
         )
 
         try:

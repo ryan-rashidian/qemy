@@ -14,6 +14,7 @@ class CompanyAnalytics:
     """Container for company analytics results."""
     ticker: str
     entity_name: str = ''
+    description: str = ''
     results: dict[str, float] = field(default_factory=dict)
 
 class EDGARAnalytics:
