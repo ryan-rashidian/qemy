@@ -4,7 +4,7 @@ from typing import cast
 
 import pandas as pd
 
-from qemy.analytics.base import CompanyAnalytics, EDGARAnalytics
+from qemy.analytics.base import ResultsScalar, EDGARAnalytics
 from qemy.analytics.metrics.balance_sheet import NetDebt
 from qemy.analytics.metrics.cashflow_statement import FreeCashFlow
 from qemy.exceptions import AnalyticsModelError
@@ -17,7 +17,7 @@ class DCFModel(EDGARAnalytics):
         """Initialize DCF component metrics."""
         super().__init__(ticker)
 
-        self.companyanalytics = CompanyAnalytics(
+        self.companyanalytics = ResultsScalar(
             ticker = self.ticker.upper(),
             entity_name = self.client.companyfacts.entity_name
         )
@@ -93,7 +93,7 @@ class DCFModel(EDGARAnalytics):
         years: int = 5,
         discount_rate: float = 0.08,
         terminal_growth: float = 0.03
-    ) -> CompanyAnalytics:
+    ) -> ResultsScalar:
         """Calculate DCF valuation per share.
 
         - Calculate Free Cash Flow (FCF) baseline and growth
@@ -109,7 +109,7 @@ class DCFModel(EDGARAnalytics):
             terminal_growth (float): Long term growth rate
 
         Returns:
-            float: Estimated DCF valuation per share
+            CompanyAnalytics: Container with results + metadata
         """
         # Project FCF
         projected = self._project_fcf(years=years)
