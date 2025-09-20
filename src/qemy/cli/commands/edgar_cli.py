@@ -5,6 +5,7 @@ from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 
 from qemy.cli.format import colors
 from qemy.cli.format.fmt import FormatDF, FormatText
+from qemy.cli.format.panels import info_panel
 from qemy.cli.menus import confirm_menu
 from qemy.clients import EDGARClient
 from qemy.clients.edgar import (
@@ -35,6 +36,14 @@ def cmd_fc(ticker: str, concept: str, quarters: str='8') -> None:
         concept_data = client.companyfacts.concepts.get(concept, Concept())
         if not concept_data.filings:
             FormatText(f'No data for: {concept}\n').style('warning').print()
+
+        description = concept_data.description
+        label = concept_data.label
+        unit = concept_data.unit
+        company = client.companyfacts.entity_name
+        ticker_fmt = client.companyfacts.ticker
+        title = f'{company} ({ticker_fmt}): {label} ({unit})'
+        info_panel(txt=description, title=title)
 
         concept_df = concept_data.to_dataframe().tail(quarters_int)
         concept_df.drop(columns=['fy', 'frame', 'end', 'accn'], inplace=True)
