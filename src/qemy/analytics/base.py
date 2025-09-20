@@ -10,9 +10,6 @@ from qemy.exceptions import ClientParsingError
 
 class EDGARMetrics:
     """Base class for EDGAR Metrics."""
-    ON_COLUMNS = [
-        'accn', 'fp', 'fy', 'filed', 'form', 'start', 'end', 'frame'
-    ]
 
     def __init__(self, ticker: str):
         """Initialize Client for EDGAR Metrics."""
@@ -46,8 +43,10 @@ class EDGARMetrics:
                 concept = concept_fmt
             ).companyfacts.concepts[concept].to_dataframe()
         except ClientParsingError:
-            columns = pd.Index(self.ON_COLUMNS + ['val'])
+            column_template = ['fp', 'fy', 'filed', 'form', 'frame', 'val']
+            columns = pd.Index(column_template)
             df_concept = pd.DataFrame(columns=columns)
+            df_concept['val'] = df_concept['val'].astype(float)
 
         if 'val' in df_concept.columns:
             df_concept.rename(
@@ -59,17 +58,17 @@ class EDGARMetrics:
 
     def merge_concept_dfs(self, *dataframes: pd.DataFrame) -> pd.DataFrame:
         """Merge concept dataframes."""
-        df_merged = reduce(
-            lambda df_left, df_right: pd.merge(
-                df_left,
-                df_right,
-                on = self.ON_COLUMNS,
-                how = 'outer'
-            ),
-            dataframes
-        )
 
+        def merge(left: pd.DataFrame, right: pd.DataFrame) -> pd.DataFrame:
+            """Merge on common columns"""
+            common = [c for c in left.columns if c in right.columns]
+            return pd.merge(left, right, on=common, how='outer')
+
+        df_merged = reduce(merge, dataframes)
         df_merged.fillna(0, inplace=True)
+
+        if 'accn' in df_merged.columns:
+            df_merged.drop_duplicates('accn', keep='last', inplace=True)
 
         return df_merged
 
