@@ -15,7 +15,16 @@ class CompanyAnalytics:
     ticker: str
     entity_name: str = ''
     description: str = ''
+
+@dataclass
+class ResultsScalar(CompanyAnalytics):
+    """Company analytics with scalar results."""
     results: dict[str, float] = field(default_factory=dict)
+
+@dataclass
+class ResultsDataFrame(CompanyAnalytics):
+    """Company analytics with DataFrame results."""
+    results_df: pd.DataFrame = field(default_factory=pd.DataFrame)
 
 class EDGARAnalytics:
     """Base class for EDGAR Metrics."""
@@ -80,13 +89,4 @@ class EDGARAnalytics:
             df_merged.drop_duplicates('accn', keep='last', inplace=True)
 
         return df_merged
-
-class ModelsBase:
-    """Base class for Models."""
-
-class RatiosBase:
-    """Base class for Ratios."""
-
-class ScoresBase:
-    """Base class for Scores."""
 
