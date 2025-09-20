@@ -44,6 +44,25 @@ def title_panel(txt: str, title: str) -> None:
 
     console.print(panel)
 
+def result_panel(txt: str, title: str) -> None:
+    """Qemy CLI result panel.
+
+    Args:
+        txt (str): Body of the panel
+        title (str): Title of the panel
+    """
+    txt_fmt = FormatText(txt).justify('center').style('data').get_text()
+    title_fmt = FormatText(title).justify('center').style('title').get_text()
+
+    panel = Panel(
+        txt_fmt,
+        title = title_fmt,
+        border_style = colors.panel_border,
+        padding = 3
+    )
+
+    console.print(panel)
+
 def welcome_panel() -> None:
     """Qemy CLI welcome panel."""
     welcome_text = FormatText(
