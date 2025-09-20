@@ -2,10 +2,10 @@
 
 import pandas as pd
 
-from qemy.analytics.base import EDGARMetrics
+from qemy.analytics.base import EDGARAnalytics
 
 
-class FreeCashFlow(EDGARMetrics):
+class FreeCashFlow(EDGARAnalytics):
     """Calculate Free Cash Flow."""
 
     def __init__(self, ticker: str):

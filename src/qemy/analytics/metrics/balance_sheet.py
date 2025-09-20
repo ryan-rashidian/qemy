@@ -2,10 +2,10 @@
 
 import pandas as pd
 
-from qemy.analytics.base import EDGARMetrics
+from qemy.analytics.base import EDGARAnalytics
 
 
-class NetDebt(EDGARMetrics):
+class NetDebt(EDGARAnalytics):
     """Net Debt Metric."""
 
     def __init__(self, ticker: str):

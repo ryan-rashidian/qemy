@@ -8,7 +8,7 @@ from qemy.clients import EDGARClient
 from qemy.exceptions import ClientParsingError
 
 
-class EDGARMetrics:
+class EDGARAnalytics:
     """Base class for EDGAR Metrics."""
 
     def __init__(self, ticker: str):
