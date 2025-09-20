@@ -32,3 +32,11 @@ class MissingCredentialError(QemyError):
     """Raised when a required API credential is missing."""
     pass
 
+class AnalyticsMetricError(QemyError):
+    """Raised when a metric calculation fails."""
+    pass
+
+class AnalyticsModelError(QemyError):
+    """Raised when a model calculation fails."""
+    pass
+
