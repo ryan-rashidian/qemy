@@ -1,5 +1,6 @@
 """Base classes for Qemy Analytics."""
 
+from dataclasses import dataclass, field
 from functools import reduce
 
 import pandas as pd
@@ -7,6 +8,13 @@ import pandas as pd
 from qemy.clients import EDGARClient
 from qemy.exceptions import ClientParsingError
 
+
+@dataclass
+class CompanyAnalytics:
+    """Container for company analytics results."""
+    ticker: str
+    entity_name: str = ''
+    results: dict[str, float] = field(default_factory=dict)
 
 class EDGARAnalytics:
     """Base class for EDGAR Metrics."""
