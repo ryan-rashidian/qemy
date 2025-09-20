@@ -23,8 +23,8 @@ def normalize_financial_df(
     df.sort_values(date_col, inplace=True)
 
     # Handle duplicates if frame exists
-    if 'frame' in df.columns:
-        df.drop_duplicates('frame', keep='last', inplace=True)
+    if 'accn' in df.columns:
+        df.drop_duplicates('accn', keep='last', inplace=True)
 
     df.reset_index(drop=True, inplace=True)
     df[value_col] = df[value_col].astype(float)
