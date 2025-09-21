@@ -1,5 +1,7 @@
 """Utility wrappers for pandas DataFrames in Qemy."""
 
+from typing import cast
+
 import pandas as pd
 
 
@@ -34,4 +36,12 @@ def normalize_financial_df(
     df = df.reindex(columns=column_order)
 
     return df
+
+def rolling_mean(series: pd.Series, window: int) -> pd.Series:
+    """Calculate a rolling mean as a Series."""
+    return cast(pd.Series, series.rolling(window=window).mean())
+
+def rolling_median(series: pd.Series, window: int) -> pd.Series:
+    """Calculate a rolling median as a Series."""
+    return cast(pd.Series, series.rolling(window=window).median())
 
