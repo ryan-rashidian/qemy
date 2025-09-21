@@ -1,4 +1,4 @@
-"""Commands built-in Qemy Models."""
+"""Commands for built-in Qemy Models."""
 
 from qemy.analytics.base import CompanyAnalytics
 from qemy.analytics.models.dcf import DCFModel
