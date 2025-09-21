@@ -5,7 +5,7 @@ from typing import cast
 import pandas as pd
 
 from qemy.analytics.base import EDGARAnalytics, ResultsDataFrame
-from qemy.utils.dataframes import rolling_mean
+from qemy.utils.dataframes import divide_safe, rolling_mean
 
 
 class RatioAssetTurnover(EDGARAnalytics):
@@ -34,9 +34,10 @@ class RatioAssetTurnover(EDGARAnalytics):
 
         series_assets = cast(pd.Series, df_results['val_assets'])
         df_results['avg_assets'] = rolling_mean(series_assets, 4)
-        df_results['val'] = (
-            df_results['val_revenue'] / df_results['avg_assets']
-        )
+        df_results['val'] = divide_safe(
+            numerator = cast(pd.Series, df_results['val_revenue']),
+            denominator = cast(pd.Series, df_results['avg_assets'])
+        ).fillna(0)
 
         df_results.drop(
             ['avg_assets', 'val_assets', 'val_revenue'],
@@ -72,7 +73,10 @@ class RatioCurrent(EDGARAnalytics):
         """Calculate Current Ratio."""
         df_results = self.df_merged.copy()
 
-        df_results['val'] = df_results['val_assets'] / df_results['val_liab']
+        df_results['val'] = divide_safe(
+            numerator = cast(pd.Series, df_results['val_assets']),
+            denominator = cast(pd.Series, df_results['val_liab'])
+        ).fillna(0)
 
         df_results.drop(
             ['val_assets', 'val_liab'],
@@ -108,7 +112,10 @@ class RatioROA(EDGARAnalytics):
         """Calculate Return on Assets Ratio."""
         df_results = self.df_merged.copy()
 
-        df_results['val'] = df_results['val_netinc'] / df_results['val_assets']
+        df_results['val'] = divide_safe(
+            numerator = cast(pd.Series, df_results['val_netinc']),
+            denominator = cast(pd.Series, df_results['val_assets'])
+        ).fillna(0)
 
         df_results.drop(
             ['val_netinc', 'val_assets'],
