@@ -4,6 +4,7 @@ from typing import cast
 
 import pandas as pd
 
+from qemy.utils.dataframes import rolling_median
 from qemy.analytics.base import ResultsScalar, EDGARAnalytics
 from qemy.analytics.metrics.balance_sheet import NetDebt
 from qemy.analytics.metrics.cashflow_statement import FreeCashFlow
@@ -48,9 +49,9 @@ class DCFModel(EDGARAnalytics):
 
     def _fcf_baseline(self) -> float:
         """Calculate Free Cash Flow 5-year rolling average."""
-        series_fcf_rolling_avg = self.series_fcf.rolling(window=5).median()
+        series_fcf_rolling_avg = rolling_median(self.series_fcf, 5)
 
-        return cast(pd.Series, series_fcf_rolling_avg).iloc[-1]
+        return series_fcf_rolling_avg.iloc[-1]
 
     def _fcf_growth(self) -> float:
         """Calculate CAGR from historical Free Cash Flow values."""
