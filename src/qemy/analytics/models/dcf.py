@@ -29,7 +29,9 @@ class DCFModel(EDGARAnalytics):
 
         try:
             # Free Cash Flow
-            df_fcf: pd.DataFrame = FreeCashFlow(self.ticker).get_fcf()
+            df_fcf: pd.DataFrame = FreeCashFlow(
+                self.ticker
+            ).calculate().results_df
             # Keep FY (fiscal year) filing rows only
             df_fcf_fiscal_year = df_fcf[df_fcf['fp'] == 'FY']
             self.series_fcf = cast(pd.Series, df_fcf_fiscal_year['val'])
@@ -37,7 +39,7 @@ class DCFModel(EDGARAnalytics):
             # Current Net Debt
             self.netdebt: float = NetDebt(
                 self.ticker
-            ).get_netdebt()['val'].iloc[-1]
+            ).calculate().results_df['val'].iloc[-1]
 
             # Current Shares Outstanding
             self.shares: float = self.get_concept_df(
