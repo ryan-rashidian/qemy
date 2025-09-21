@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from qemy.analytics.base import EDGARAnalytics
+from qemy.analytics.base import ResultsDataFrame, EDGARAnalytics
 
 
 class FreeCashFlow(EDGARAnalytics):
@@ -11,16 +11,29 @@ class FreeCashFlow(EDGARAnalytics):
     def __init__(self, ticker: str):
         """Initialize combined concept DataFrame."""
         super().__init__(ticker)
+
+        self.companyanalytics = ResultsDataFrame(
+            ticker = self.ticker.upper(),
+            entity_name= self.client.companyfacts.entity_name
+        )
+        self.companyanalytics.description = (
+            'Profit a company makes from sales after paying '
+            'cost of goods and services (COGS).'
+        )
+
         df_ocf: pd.DataFrame = self.get_concept_df('ocf')
         df_capex: pd.DataFrame = self.get_concept_df('capex')
-        self.df_combined = self.merge_concept_dfs(*[df_ocf, df_capex])
+        self.df_merged = self.merge_concept_dfs(*[df_ocf, df_capex])
 
-    def get_fcf(self) -> pd.DataFrame:
+    def calculate(self) -> ResultsDataFrame:
         """Get Free Cash Flow DataFrame."""
-        self.df_combined['val'] = (
-            self.df_combined['val_ocf'] - self.df_combined['val_capex']
-        )
-        df_fcf = self.df_combined.drop(['val_ocf', 'val_capex'], axis=1)
+        df_results = self.df_merged.copy()
 
-        return df_fcf.sort_values('filed')
+        df_results['val'] = df_results['val_ocf'] - df_results['val_capex']
+
+        df_results.drop(['val_ocf', 'val_capex'], axis=1, inplace=True)
+        df_results.sort_values('filed', inplace=True)
+        self.companyanalytics.results_df = df_results
+
+        return self.companyanalytics
 

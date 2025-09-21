@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from qemy.analytics.base import EDGARAnalytics
+from qemy.analytics.base import ResultsDataFrame, EDGARAnalytics
 
 
 class NetDebt(EDGARAnalytics):
@@ -12,25 +12,40 @@ class NetDebt(EDGARAnalytics):
         """Initialize."""
         super().__init__(ticker)
 
+        self.companyanalytics = ResultsDataFrame(
+            ticker = self.ticker.upper(),
+            entity_name= self.client.companyfacts.entity_name
+        )
+        self.companyanalytics.description = (
+            'Profit a company makes from sales after paying '
+            'cost of goods and services (COGS).'
+        )
+
         df_debt = self.get_concept_df_safe('debt')
         df_debt_short = self.get_concept_df_safe('sdebt')
         df_debt_long = self.get_concept_df_safe('ldebt')
         df_cash = self.get_concept_df_safe('cash')
         dfs = [df_cash, df_debt, df_debt_short, df_debt_long]
-        self.df_combined = self.merge_concept_dfs(*dfs)
+        self.df_merged = self.merge_concept_dfs(*dfs)
 
-    def get_netdebt(self) -> pd.DataFrame:
+    def calculate(self) -> ResultsDataFrame:
         """Calculate Net Debt metric."""
-        self.df_combined['val'] = (
-            self.df_combined['val_debt']
-            + self.df_combined['val_sdebt']
-            + self.df_combined['val_ldebt']
-            - self.df_combined['val_cash']
-        )
-        df_netdebt = self.df_combined.drop(
-            ['val_debt', 'val_sdebt', 'val_ldebt', 'val_cash'],
-            axis = 1
+        df_results = self.df_merged.copy()
+
+        df_results['val'] = (
+            df_results['val_debt']
+            + df_results['val_sdebt']
+            + df_results['val_ldebt']
+            - df_results['val_cash']
         )
 
-        return df_netdebt
+        df_results.drop(
+            ['val_debt', 'val_sdebt', 'val_ldebt', 'val_cash'],
+            axis = 1,
+            inplace = True
+        )
+        df_results.sort_values('filed', inplace=True)
+        self.companyanalytics.results_df = df_results
+
+        return self.companyanalytics
 
