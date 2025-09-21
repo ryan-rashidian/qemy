@@ -9,6 +9,7 @@ from qemy.cli.commands import (
     cmd_fsync,
     cmd_m,
     cmd_rmenv,
+    cmd_score
 )
 
 cmd_registry = {
@@ -20,6 +21,7 @@ cmd_registry = {
     'fc': cmd_fc,
     'fsync': cmd_fsync,
     'm': cmd_m,
-    'rmenv': cmd_rmenv
+    'rmenv': cmd_rmenv,
+    'score': cmd_score
 }
 
