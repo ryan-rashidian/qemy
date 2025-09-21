@@ -5,6 +5,11 @@ from typing import cast
 import pandas as pd
 
 
+def divide_safe(numerator: pd.Series, denominator: pd.Series) -> pd.Series:
+    """Divide two Series on index with placeholders for divide errors."""
+    result = cast(pd.Series, numerator / denominator)
+    return result.replace([float('inf'), float('-inf')], pd.NA)
+
 def normalize_financial_df(
     df: pd.DataFrame,
     value_col: str = 'val',
