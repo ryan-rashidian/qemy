@@ -29,19 +29,21 @@ class RatioAssetTurnover(EDGARAnalytics):
 
     def calculate(self) -> ResultsDataFrame:
         """Calculate Asset Turnover Ratio."""
-        df = self.df_merged.copy()
+        df_results = self.df_merged.copy()
 
-        series_assets = cast(pd.Series, df['val_assets'])
-        df['avg_assets'] = rolling_mean(series_assets, 4)
-        df['val'] = df['val_revenue'] / df['avg_assets']
+        series_assets = cast(pd.Series, df_results['val_assets'])
+        df_results['avg_assets'] = rolling_mean(series_assets, 4)
+        df_results['val'] = (
+            df_results['val_revenue'] / df_results['avg_assets']
+        )
 
-        df.drop(
+        df_results.drop(
             ['avg_assets', 'val_assets', 'val_revenue'],
             axis = 1,
             inplace = True
         )
-        df.sort_values('filed', inplace=True)
-        self.companyanalytics.results_df = df
+        df_results.sort_values('filed', inplace=True)
+        self.companyanalytics.results_df = df_results
 
         return self.companyanalytics
 
@@ -63,20 +65,21 @@ class RatioCurrent(EDGARAnalytics):
 
         df_assets: pd.DataFrame = self.get_concept_df('assets')
         df_liab: pd.DataFrame = self.get_concept_df('liab')
-        self.df_combined = self.merge_concept_dfs(*[df_assets, df_liab])
+        self.df_merged = self.merge_concept_dfs(*[df_assets, df_liab])
 
     def calculate(self) -> ResultsDataFrame:
         """Calculate Current Ratio."""
-        self.df_combined['val'] = (
-            self.df_combined['val_assets'] / self.df_combined['val_liab']
-        )
-        self.df_combined.drop(
+        df_results = self.df_merged.copy()
+
+        df_results['val'] = df_results['val_assets'] / df_results['val_liab']
+
+        df_results.drop(
             ['val_assets', 'val_liab'],
             axis = 1,
             inplace = True
         )
-        self.df_combined.sort_values('filed', inplace=True)
-        self.companyanalytics.results_df = self.df_combined
+        df_results.sort_values('filed', inplace=True)
+        self.companyanalytics.results_df = df_results
 
         return self.companyanalytics
 
@@ -98,20 +101,21 @@ class RatioROA(EDGARAnalytics):
 
         df_netinc: pd.DataFrame = self.get_concept_df('netinc')
         df_assets: pd.DataFrame = self.get_concept_df('assets')
-        self.df_combined = self.merge_concept_dfs(*[df_netinc, df_assets])
+        self.df_merged = self.merge_concept_dfs(*[df_netinc, df_assets])
 
     def calculate(self) -> ResultsDataFrame:
         """Calculate Return on Assets Ratio."""
-        self.df_combined['val'] = (
-            self.df_combined['val_netinc'] / self.df_combined['val_assets']
-        )
-        self.df_combined.drop(
+        df_results = self.df_merged.copy()
+
+        df_results['val'] = df_results['val_netinc'] / df_results['val_assets']
+
+        df_results.drop(
             ['val_netinc', 'val_assets'],
             axis = 1,
             inplace = True
         )
-        self.df_combined.sort_values('filed', inplace=True)
-        self.companyanalytics.results_df = self.df_combined
+        df_results.sort_values('filed', inplace=True)
+        self.companyanalytics.results_df = df_results
 
         return self.companyanalytics
 
