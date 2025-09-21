@@ -4,6 +4,7 @@ import pandas as pd
 
 from qemy.analytics.base import EDGARAnalytics, ResultsDataFrame
 
+
 class GrossMargin(EDGARAnalytics):
     """Gross Margin calculator."""
 

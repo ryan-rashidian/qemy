@@ -4,11 +4,11 @@ from typing import cast
 
 import pandas as pd
 
-from qemy.utils.dataframes import rolling_median
-from qemy.analytics.base import ResultsScalar, EDGARAnalytics
+from qemy.analytics.base import EDGARAnalytics, ResultsScalar
 from qemy.analytics.metrics.balance_sheet import NetDebt
 from qemy.analytics.metrics.cashflow_statement import FreeCashFlow
 from qemy.exceptions import AnalyticsModelError
+from qemy.utils.dataframes import rolling_median
 
 
 class DCFModel(EDGARAnalytics):

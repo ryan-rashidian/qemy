@@ -5,6 +5,7 @@ from qemy.analytics.scores.f_score import PiotroskiFScore
 from qemy.cli.format.fmt import FormatText
 from qemy.cli.format.panels import info_panel, result_panel
 
+
 def _score_piotroski_f(ticker: str) -> None:
     """Use Qemy PiotroskiFScore from within Qemy CLI."""
     results: CompanyAnalytics = PiotroskiFScore(ticker).calculate()

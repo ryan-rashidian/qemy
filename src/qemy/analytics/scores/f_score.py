@@ -2,13 +2,14 @@
 
 import pandas as pd
 
-from qemy.analytics.base import CompanyAnalytics, ResultsScalar, EDGARAnalytics
+from qemy.analytics.base import CompanyAnalytics, EDGARAnalytics, ResultsScalar
+from qemy.analytics.metrics.income_statment import GrossMargin
 from qemy.analytics.ratios.ratios import (
     RatioAssetTurnover,
     RatioCurrent,
-    RatioROA
+    RatioROA,
 )
-from qemy.analytics.metrics.income_statment import GrossMargin
+
 
 class PiotroskiFScore(EDGARAnalytics):
     """Piotroski F-Score Calculator."""

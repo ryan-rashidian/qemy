@@ -4,8 +4,9 @@ from typing import cast
 
 import pandas as pd
 
-from qemy.utils.dataframes import rolling_mean
 from qemy.analytics.base import EDGARAnalytics, ResultsDataFrame
+from qemy.utils.dataframes import rolling_mean
+
 
 class RatioAssetTurnover(EDGARAnalytics):
     """Asset Turnover Ratio Calculator."""
