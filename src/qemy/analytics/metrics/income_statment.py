@@ -33,9 +33,12 @@ class GrossMargin(EDGARAnalytics):
         self.df_combined['val'] = (
             self.df_combined['val_gprofit'] / self.df_combined['val_revenue']
         )
-        self.df_combined.drop(['val_gprofit', 'val_revenue'], axis=1)
+        self.df_combined.drop(
+            ['val_gprofit', 'val_revenue'],
+            axis = 1,
+            inplace = True
+        )
         self.df_combined.sort_values('filed', inplace=True)
-
         self.companyanalytics.results_df = self.df_combined
 
         return self.companyanalytics
