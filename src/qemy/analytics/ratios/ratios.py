@@ -1,8 +1,49 @@
 """Financial Ratio Metrics."""
 
+from typing import cast
+
 import pandas as pd
 
+from qemy.utils.dataframes import rolling_mean
 from qemy.analytics.base import EDGARAnalytics, ResultsDataFrame
+
+class RatioAssetTurnover(EDGARAnalytics):
+    """Asset Turnover Ratio Calculator."""
+
+    def __init__(self, ticker: str):
+        """Initialize calculation components and results container."""
+        super().__init__(ticker)
+
+        self.companyanalytics = ResultsDataFrame(
+            ticker = self.ticker.upper(),
+            entity_name = self.client.companyfacts.entity_name
+        )
+        self.companyanalytics.description = (
+            'Asset Turnover Ratio measures of how efficiently a company '
+            'uses its assets to generate revenue.'
+        )
+
+        df_assets: pd.DataFrame = self.get_concept_df('assets')
+        df_revenue: pd.DataFrame = self.get_concept_df('revenue')
+        self.df_merged = self.merge_concept_dfs(*[df_assets, df_revenue])
+
+    def calculate(self) -> ResultsDataFrame:
+        """Calculate Asset Turnover Ratio."""
+        df = self.df_merged.copy()
+
+        series_assets = cast(pd.Series, df['val_assets'])
+        df['avg_assets'] = rolling_mean(series_assets, 4)
+        df['val'] = df['val_revenue'] / df['avg_assets']
+
+        df.drop(
+            ['avg_assets', 'val_assets', 'val_revenue'],
+            axis = 1,
+            inplace = True
+        )
+        df.sort_values('filed', inplace=True)
+        self.companyanalytics.results_df = df
+
+        return self.companyanalytics
 
 class RatioCurrent(EDGARAnalytics):
     """Current Ratio calculator."""
