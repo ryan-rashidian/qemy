@@ -1,5 +1,6 @@
 """Base classes for Qemy Analytics."""
 
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from functools import reduce
 
@@ -26,13 +27,18 @@ class ResultsDataFrame(CompanyAnalytics):
     """Company analytics with DataFrame results."""
     results_df: pd.DataFrame = field(default_factory=pd.DataFrame)
 
-class EDGARAnalytics:
+class EDGARAnalytics(ABC):
     """Base class for EDGAR Metrics."""
 
     def __init__(self, ticker: str):
         """Initialize Client for EDGAR Metrics."""
         self.ticker = ticker.strip()
         self.client = EDGARClient(self.ticker)
+
+    @abstractmethod
+    def calculate(self):
+        """Perform the metric calculation and return result."""
+        pass
 
     def get_concept_df(self, concept: str) -> pd.DataFrame:
         """Return pandas DataFrame of a concept."""
