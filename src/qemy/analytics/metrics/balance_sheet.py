@@ -21,10 +21,10 @@ class NetDebt(EDGARAnalytics):
             'cost of goods and services (COGS).'
         )
 
-        df_debt = self.get_concept_df_safe('debt')
-        df_debt_short = self.get_concept_df_safe('sdebt')
-        df_debt_long = self.get_concept_df_safe('ldebt')
-        df_cash = self.get_concept_df_safe('cash')
+        df_debt: pd.DataFrame = self.get_concept_df_safe('debt')
+        df_debt_short: pd.DataFrame = self.get_concept_df_safe('sdebt')
+        df_debt_long: pd.DataFrame = self.get_concept_df_safe('ldebt')
+        df_cash: pd.DataFrame = self.get_concept_df_safe('cash')
         dfs = [df_cash, df_debt, df_debt_short, df_debt_long]
         self.df_merged = self.merge_concept_dfs(*dfs)
 
@@ -45,6 +45,7 @@ class NetDebt(EDGARAnalytics):
             inplace = True
         )
         df_results.sort_values('filed', inplace=True)
+        df_results['val'] = df_results['val'].astype(float).fillna(0)
         self.companyanalytics.results_df = df_results
 
         return self.companyanalytics

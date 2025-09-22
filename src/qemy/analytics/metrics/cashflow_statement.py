@@ -33,6 +33,7 @@ class FreeCashFlow(EDGARAnalytics):
 
         df_results.drop(['val_ocf', 'val_capex'], axis=1, inplace=True)
         df_results.sort_values('filed', inplace=True)
+        df_results['val'] = df_results['val'].astype(float).fillna(0)
         self.companyanalytics.results_df = df_results
 
         return self.companyanalytics

@@ -39,7 +39,7 @@ class GrossMargin(EDGARAnalytics):
         df_results['val'] = divide_safe(
             numerator = cast(pd.Series, df_results['val_gprofit']),
             denominator = cast(pd.Series, df_results['val_revenue'])
-        ).fillna(0)
+        )
 
         df_results.drop(
             ['val_gprofit', 'val_revenue'],
@@ -47,6 +47,7 @@ class GrossMargin(EDGARAnalytics):
             inplace = True
         )
         df_results.sort_values('filed', inplace=True)
+        df_results['val'] = df_results['val'].astype(float).fillna(0)
         self.companyanalytics.results_df = df_results
 
         return self.companyanalytics

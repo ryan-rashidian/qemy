@@ -37,7 +37,7 @@ class RatioAssetTurnover(EDGARAnalytics):
         df_results['val'] = divide_safe(
             numerator = cast(pd.Series, df_results['val_revenue']),
             denominator = cast(pd.Series, df_results['avg_assets'])
-        ).fillna(0)
+        )
 
         df_results.drop(
             ['avg_assets', 'val_assets', 'val_revenue'],
@@ -45,6 +45,7 @@ class RatioAssetTurnover(EDGARAnalytics):
             inplace = True
         )
         df_results.sort_values('filed', inplace=True)
+        df_results['val'] = df_results['val'].astype(float).fillna(0)
         self.companyanalytics.results_df = df_results
 
         return self.companyanalytics
@@ -76,7 +77,7 @@ class RatioCurrent(EDGARAnalytics):
         df_results['val'] = divide_safe(
             numerator = cast(pd.Series, df_results['val_assets']),
             denominator = cast(pd.Series, df_results['val_liab'])
-        ).fillna(0)
+        )
 
         df_results.drop(
             ['val_assets', 'val_liab'],
@@ -84,6 +85,7 @@ class RatioCurrent(EDGARAnalytics):
             inplace = True
         )
         df_results.sort_values('filed', inplace=True)
+        df_results['val'] = df_results['val'].astype(float).fillna(0)
         self.companyanalytics.results_df = df_results
 
         return self.companyanalytics
@@ -115,7 +117,7 @@ class RatioROA(EDGARAnalytics):
         df_results['val'] = divide_safe(
             numerator = cast(pd.Series, df_results['val_netinc']),
             denominator = cast(pd.Series, df_results['val_assets'])
-        ).fillna(0)
+        )
 
         df_results.drop(
             ['val_netinc', 'val_assets'],
@@ -123,6 +125,7 @@ class RatioROA(EDGARAnalytics):
             inplace = True
         )
         df_results.sort_values('filed', inplace=True)
+        df_results['val'] = df_results['val'].astype(float).fillna(0)
         self.companyanalytics.results_df = df_results
 
         return self.companyanalytics
