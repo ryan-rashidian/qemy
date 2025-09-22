@@ -4,8 +4,8 @@ from typing import cast
 
 import pandas as pd
 
-from qemy.utils.dataframes import divide_safe
 from qemy.analytics.base import EDGARAnalytics, ResultsDataFrame
+from qemy.utils.dataframes import divide_safe
 
 
 class GrossMargin(EDGARAnalytics):

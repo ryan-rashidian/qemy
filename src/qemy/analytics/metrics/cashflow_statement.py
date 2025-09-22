@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from qemy.analytics.base import ResultsDataFrame, EDGARAnalytics
+from qemy.analytics.base import EDGARAnalytics, ResultsDataFrame
 
 
 class FreeCashFlow(EDGARAnalytics):
