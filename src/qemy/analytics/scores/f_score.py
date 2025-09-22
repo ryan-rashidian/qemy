@@ -33,7 +33,7 @@ class PiotroskiFScore(EDGARAnalytics):
         """Net Income"""
         try:
             df_netinc: pd.DataFrame = self.get_concept_df('netinc')
-            self.netinc = df_netinc['val'].iloc[-1]
+            self.netinc = df_netinc['val_netinc'].iloc[-1]
 
         except Exception:
             return 0
@@ -44,7 +44,7 @@ class PiotroskiFScore(EDGARAnalytics):
         """Operating Cash Flow"""
         try:
             df_ocf: pd.DataFrame = self.get_concept_df('ocf')
-            self.ocf = df_ocf['val'].iloc[-1]
+            self.ocf = df_ocf['val_ocf'].iloc[-1]
 
         except Exception:
             return 0
@@ -71,8 +71,8 @@ class PiotroskiFScore(EDGARAnalytics):
         """Long Term Debt"""
         try:
             df_ldebt: pd.DataFrame = self.get_concept_df('ldebt')
-            current_ldebt = df_ldebt['val'].iloc[-1]
-            previous_ldebt = df_ldebt['val'].iloc[-1]
+            current_ldebt = df_ldebt['val_ldebt'].iloc[-1]
+            previous_ldebt = df_ldebt['val_ldebt'].iloc[-5]
 
         except Exception:
             return 1
@@ -97,8 +97,8 @@ class PiotroskiFScore(EDGARAnalytics):
         """Shares Outstanding"""
         try:
             df_shares: pd.DataFrame = self.get_concept_df('shares')
-            current_shares = df_shares['val'].iloc[-1]
-            previous_shares = df_shares['val'].iloc[-1]
+            current_shares = df_shares['val_shares'].iloc[-1]
+            previous_shares = df_shares['val_shares'].iloc[-5]
 
         except Exception:
             return 0
