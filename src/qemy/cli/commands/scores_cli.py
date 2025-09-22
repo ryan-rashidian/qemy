@@ -12,16 +12,30 @@ def _score_piotroski_f(ticker: str) -> None:
 
     company_name = results.entity_name
     ticker_fmt = results.ticker
-    result_data = results.results['f_score']
+    result_data = results.results
 
-    info_description = results.description
     info_title = 'Piotroski F-Score'
+    info_description = results.description
 
-    title = f'{company_name} ({ticker_fmt}): F-Score'
-    description = f'Score: {result_data:.0f}'
+    components_title = 'Components:'
+    components_description = (
+        f"Net Income = {result_data['netinc']}\n"
+        f"Operating Cash Flow = {result_data['ocf']}\n"
+        f"Accruals = {result_data['accruals']}\n"
+        f"Return on Assets = {result_data['roa']}\n"
+        f"Long Term Debt = {result_data['ldebt']}\n"
+        f"Current Ratio = {result_data['cratio']}\n"
+        f"Shares Outstanding = {result_data['shares']}\n"
+        f"Gross Margin = {result_data['gmargin']}\n"
+        f"Asset Turnover = {result_data['asset_turnover']}"
+    )
+
+    results_title = f'{company_name} ({ticker_fmt}): F-Score'
+    results_description = f"{result_data['f_score']}"
 
     info_panel(txt=info_description, title=info_title)
-    result_panel(txt=description, title=title)
+    info_panel(txt=components_description, title=components_title)
+    result_panel(txt=results_description, title=results_title)
 
 def cmd_score(score_type: str, *args: str) -> None:
     """Main score selection command for Qemy CLI."""
