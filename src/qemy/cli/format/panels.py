@@ -20,7 +20,7 @@ def info_panel(txt: str, title: str) -> None:
         txt_fmt,
         title = title_fmt,
         border_style = colors.panel_border,
-        padding = 3
+        padding = 1
     )
 
     console.print(panel)
@@ -39,7 +39,7 @@ def title_panel(txt: str, title: str) -> None:
         txt_fmt,
         title = title_fmt,
         border_style = colors.panel_border,
-        padding = 3
+        padding = 1
     )
 
     console.print(panel)
@@ -58,7 +58,7 @@ def result_panel(txt: str, title: str) -> None:
         txt_fmt,
         title = title_fmt,
         border_style = colors.panel_border,
-        padding = 3
+        padding = 1
     )
 
     console.print(panel)
