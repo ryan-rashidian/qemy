@@ -146,17 +146,27 @@ class PiotroskiFScore(EDGARAnalytics):
         fscore_gmargin = self._fscore_gmargin()
         fscore_asset_turnover = self._fscore_asset_turnover()
 
-        f_score = (
-            fscore_netinc
-            + fscore_ocf
-            + fscore_accruals
-            + fscore_roa
-            + fscore_ldebt
-            + fscore_cratio
-            + fscore_shares
-            + fscore_gmargin
-            + fscore_asset_turnover
-        )
+        self.companyanalytics.results['netinc'] = fscore_netinc
+        self.companyanalytics.results['ocf'] = fscore_ocf
+        self.companyanalytics.results['accruals'] = fscore_accruals
+        self.companyanalytics.results['roa'] = fscore_roa
+        self.companyanalytics.results['ldebt'] = fscore_ldebt
+        self.companyanalytics.results['cratio'] = fscore_cratio
+        self.companyanalytics.results['shares'] = fscore_shares
+        self.companyanalytics.results['gmargin'] = fscore_gmargin
+        self.companyanalytics.results['asset_turnover'] = fscore_asset_turnover
+
+        f_score = sum([
+            fscore_netinc,
+            fscore_ocf,
+            fscore_accruals,
+            fscore_roa,
+            fscore_ldebt,
+            fscore_cratio,
+            fscore_shares,
+            fscore_gmargin,
+            fscore_asset_turnover
+        ])
         self.companyanalytics.results['f_score'] = f_score
 
         return self.companyanalytics
