@@ -36,7 +36,7 @@ class EDGARAnalytics(ABC):
         self.client = EDGARClient(self.ticker)
 
     @abstractmethod
-    def calculate(self):
+    def calculate(self) -> CompanyAnalytics:
         """Perform the metric calculation and return result."""
         pass
 
