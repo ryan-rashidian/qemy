@@ -1,14 +1,23 @@
 """Auxiliary commands for Qemy CLI."""
 
 from qemy.cli.format.fmt import FormatText, console
+from qemy.cli.commands.help import help_text
 from qemy.cli.menus import confirm_menu
 from qemy.config.credentials import remove_credential, write_credential
 
 
+@help_text("""Category: [Auxiliary]
+Description: Clear terminal.
+""")
 def cmd_clear() -> None:
     """CLI clear screen command."""
     console.clear()
 
+@help_text("""Category: [Auxiliary]
+Description: Calculator with Python syntax.
+
+Usage: >>> calc <EXPRESSION>
+""")
 def cmd_calc(*expr_args: str) -> None:
     """CLI calculator using Python builtins."""
     expr = ''.join(expr_args)
@@ -34,6 +43,12 @@ def _env_var_mapper(client: str) -> str | None:
 
     return env_var
 
+@help_text("""Category: [Auxiliary]
+Description: Activate a Qemy Client with API credentials.
+
+Clients: EDGAR, FRED, TIINGO
+Usage: >>> env <CLIENT>
+""")
 def cmd_env(client: str) -> None:
     """Add selected user credentials from Qemy CLI."""
     client = client.lower()
@@ -53,6 +68,12 @@ def cmd_env(client: str) -> None:
     FormatText('This was a triumph.\n').style('info').print()
     FormatText("Note: 'Huge success.'\n").style('info').print()
 
+@help_text("""Category: [Auxiliary]
+Description: Deactivate a Qemy Client and remove API credentials.
+
+Clients: EDGAR, FRED, TIINGO
+Usage: >>> rmenv <CLIENT>
+""")
 def cmd_rmenv(client: str) -> None:
     """Remove selected user credential from Qemy APIs."""
     client = client.lower()
