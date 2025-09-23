@@ -12,5 +12,6 @@ def get_logger(name: str) -> logging.Logger:
 
 def set_log_level(level: int) -> None:
     """Set global logging level."""
-    logging.basicConfig(level=level, force=True)
+    root = logging.getLogger()
+    root.setLevel(level)
 
