@@ -91,13 +91,14 @@ def cmd_fsync() -> None:
     if not confirm_menu():
         return
 
+    color = colors.load_spinner
     with Progress(
         SpinnerColumn(),
         TextColumn('[progress.description]{task.description}'),
         BarColumn()
     ) as progress:
         task = progress.add_task(
-            f'{colors.load_spinner}[Downloading SEC bulk data...]',
+            f'[{color}]Downloading SEC bulk data...[/{colors}]',
             total = 4
         )
 
