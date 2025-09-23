@@ -12,12 +12,32 @@ Available commands for Qemy CLI are listed below.
 ---
 
 ### General (No dependencies):
+- `calc`: Calculator
+- `clear`: Clear terminal
+- `env`: Activate Client
+- `rmenv`: Deactivate Client
+- `q`, `quit`, `exit`: Exit Qemy
+- `?`, `help`: Help command
 
+---
+### Selectors:
+- `m`: Model selector
+- `s`: Score selector
+
+---
 ### [EDGAR] Client:
+- `f`: Filing summary
+- `fc`: Filing concept
+- `fsync`: Bulk filing download
+- `m dcf`: DCF Model
+- `s fscore`: Piotroski F Score
 
+---
 ### [FRED] Client:
 
+---
 ### [TIINGO] Client:
 
+---
 ### 2 or more Clients:
 
