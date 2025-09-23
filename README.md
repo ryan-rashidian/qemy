@@ -31,7 +31,7 @@ Suggestions are welcome!
 
 - [Features](#features)
 - [Installation](#installation)
-- [Setup API Keys](#setup-api-keys)
+- [Activate Clients](#activate-clients)
 - [Usage](#usage)
 - [Legal / Attribution](#legal--attribution)
 - [License](#license)
@@ -40,9 +40,11 @@ Suggestions are welcome!
 
 ## Features
 
-See full [Roadmap](ROADMAP.md)
-
-Note: Filing data is currently limited to US Generally Accepted Accounting Principles (US-GAAP) format for now. Support for International Financial Reporting Standard (IFRS) and currency conversion is planned. 
+- Command-line interface application
+- Clients for financial and economic data
+- Financial modeling and metric calculation
+- PLANNED: Graphing and data visualization
+- PLANNED: SDK for creating plugins
 
 ---
 
@@ -64,19 +66,23 @@ Install from project root:
 pip install .
 ```
 
-[Developer Installation and Launch Script](docs/dev_setup.md)
+[Developer Installation](docs/install.md)
 
 ---
 
-## Setup API Keys
+## Enable Clients
 
-API keys available free of charge. Sign up required for Tiingo API and Fred API:
+Clients can be enabled in the CLI using the `env` command. Some functionality and CLI commands will not be available until dependent Clients are enabled.
+
+Clients: SEC EDGAR API, FRED API, Tiingo API
+
+### API Keys and user credentials
+
+Sign up required for FRED API and Tiingo API:
 
 - https://fred.stlouisfed.org/docs/api/fred/
 - https://www.tiingo.com/
 - https://www.sec.gov/search-filings/edgar-application-programming-interfaces (No sign up or API key required for EDGAR API. Users will be prompted for a "User Agent" during the setup wizard.)
-
-Run the CLI and Qemy will guide you through an API key setup wizard on first launch.
 
 - Refer to "Usage" below for info related to API usage and data limitations.
 
