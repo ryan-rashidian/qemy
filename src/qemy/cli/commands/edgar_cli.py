@@ -2,6 +2,7 @@
 
 from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 
+from qemy.cli.commands.help import help_text
 from qemy.cli.format import colors
 from qemy.cli.format.fmt import FormatDF, FormatText
 from qemy.cli.format.panels import info_panel, title_panel
@@ -17,6 +18,11 @@ from qemy.clients.edgar.schemas import Concept
 from qemy.exceptions import ClientParsingError
 
 
+@help_text("""Category: [EDGAR]
+Description: Fetch a summary of the latest SEC 10K/10Q filing.
+
+Usage: >>> f <TICKER>
+""")
 def cmd_f(ticker: str) -> None:
     """Print a summary of the latest filing for a given ticker."""
     client = EDGARClient(ticker)
@@ -35,6 +41,14 @@ def cmd_f(ticker: str) -> None:
     FormatDF(cashflow_statement_df, 'Cash Flow Statement').print()
     FormatDF(income_statement_df, 'Income Statement').print()
 
+@help_text("""Category: [EDGAR]
+Description: Fetch historical SEC 10K/10Q filing data for a CONCEPT.
+CONCEPT: These are synonymous with a 'metric' or 'field'
+    - for e.g. 'assets', 'shares', 'debt' are all examples of a CONCEPT
+    - type `fconcepts` to get a list of possible concepts with descriptions
+
+Usage: >>> fc <TICKER> <CONCEPT> <QUARTERS>
+""")
 def cmd_fc(ticker: str, concept: str, quarters: str='8') -> None:
     """Print historical filing data for given ticker, concept to terminal."""
     quarters_int = int(quarters)
@@ -61,6 +75,17 @@ def cmd_fc(ticker: str, concept: str, quarters: str='8') -> None:
         FormatText(f'{concept} not found.\n').style('warning').print()
         return
 
+@help_text("""Category: [EDGAR]
+Description: Download SEC bulk filing data for use within Qemy CLI.
+- Overwrites previous downloads
+- Files are downloaded into the root directory of Qemy
+    <QEMY_ROOT>/bulk_data/
+- Required space: 20GB
+- Filing data is refreshed by the SEC daily
+
+Usage: >>> fsync
+       Are you sure? (y/n): y
+""")
 def cmd_fsync() -> None:
     """Download SEC bulk data from within Qemy CLI."""
     if not confirm_menu():
