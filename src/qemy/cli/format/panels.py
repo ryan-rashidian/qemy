@@ -1,7 +1,7 @@
 """Rich panel renders for Qemy CLI."""
 
-from rich.panel import Panel
 from rich.markdown import Markdown
+from rich.panel import Panel
 
 from qemy.cli.format import colors
 from qemy.cli.format.fmt import FormatText, console

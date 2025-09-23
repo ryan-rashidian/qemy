@@ -1,7 +1,7 @@
 """Auxiliary commands for Qemy CLI."""
 
-from qemy.cli.format.fmt import FormatText, console
 from qemy.cli.commands.help import help_text
+from qemy.cli.format.fmt import FormatText, console
 from qemy.cli.menus import confirm_menu
 from qemy.config.credentials import remove_credential, write_credential
 
