@@ -42,12 +42,12 @@ def _score_piotroski_f(ticker: str) -> None:
 Description: Select and execute an analytics scores.
     - type `scores` to get a list of possible scores with descriptions
 
-Usage: >>> m <SCORE> *<SCORE_PARAMETERS>
+Usage: >>> s <SCORE> *<SCORE_PARAMETERS>
 """)
-def cmd_score(score_type: str, *args: str) -> None:
+def cmd_s(score_type: str, *args: str) -> None:
     """Main score selection command for Qemy CLI."""
     score_type = score_type.strip().lower()
-    if score_type == 'f':
+    if score_type == 'fscore':
         _score_piotroski_f(*args)
     else:
         FormatText(

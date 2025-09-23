@@ -10,7 +10,7 @@ from qemy.cli.commands import (
     cmd_help,
     cmd_m,
     cmd_rmenv,
-    cmd_score,
+    cmd_s,
 )
 
 cmd_registry = {
@@ -24,6 +24,6 @@ cmd_registry = {
     'help': cmd_help, '?': cmd_help,
     'm': cmd_m,
     'rmenv': cmd_rmenv,
-    'score': cmd_score
+    's': cmd_s
 }
 
