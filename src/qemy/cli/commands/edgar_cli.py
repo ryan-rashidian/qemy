@@ -18,7 +18,7 @@ from qemy.clients.edgar.schemas import Concept
 from qemy.exceptions import ClientParsingError
 
 
-@help_text("""Category: [EDGAR]
+@help_text("""\nCategory: [EDGAR]
 Description: Fetch a summary of the latest SEC 10K/10Q filing.
 
 Usage: >>> f <TICKER>
@@ -41,7 +41,7 @@ def cmd_f(ticker: str) -> None:
     FormatDF(cashflow_statement_df, 'Cash Flow Statement').print()
     FormatDF(income_statement_df, 'Income Statement').print()
 
-@help_text("""Category: [EDGAR]
+@help_text("""\nCategory: [EDGAR]
 Description: Fetch historical SEC 10K/10Q filing data for a CONCEPT.
 CONCEPT: These are synonymous with a 'metric' or 'field'
     - for e.g. 'assets', 'shares', 'debt' are all examples of a CONCEPT
@@ -75,7 +75,7 @@ def cmd_fc(ticker: str, concept: str, quarters: str='8') -> None:
         FormatText(f'{concept} not found.\n').style('warning').print()
         return
 
-@help_text("""Category: [EDGAR]
+@help_text("""\nCategory: [EDGAR]
 Description: Download SEC bulk filing data for use within Qemy CLI.
 - Overwrites previous downloads
 - Files are downloaded into the root directory of Qemy

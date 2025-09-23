@@ -38,7 +38,7 @@ def _score_piotroski_f(ticker: str) -> None:
     info_panel(txt=components_description, title=components_title)
     result_panel(txt=results_description, title=results_title)
 
-@help_text("""Category: [Selector]
+@help_text("""\nCategory: [Selector]
 Description: Select and execute an analytics scores.
     - type `scores` to get a list of possible scores with descriptions
 

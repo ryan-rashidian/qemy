@@ -37,7 +37,7 @@ def _model_dcf(
     info_panel(txt=info_description, title=info_title)
     result_panel(txt=description, title=title)
 
-@help_text("""Category: [Selector]
+@help_text("""\nCategory: [Selector]
 Description: Select and execute an analytics model.
     - type `models` to get a list of possible models with descriptions
 

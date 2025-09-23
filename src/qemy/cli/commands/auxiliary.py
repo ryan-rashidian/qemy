@@ -6,14 +6,14 @@ from qemy.cli.menus import confirm_menu
 from qemy.config.credentials import remove_credential, write_credential
 
 
-@help_text("""Category: [Auxiliary]
+@help_text("""\nCategory: [Auxiliary]
 Description: Clear terminal.
 """)
 def cmd_clear() -> None:
     """CLI clear screen command."""
     console.clear()
 
-@help_text("""Category: [Auxiliary]
+@help_text("""\nCategory: [Auxiliary]
 Description: Calculator with Python syntax.
 
 Usage: >>> calc <EXPRESSION>
@@ -43,7 +43,7 @@ def _env_var_mapper(client: str) -> str | None:
 
     return env_var
 
-@help_text("""Category: [Auxiliary]
+@help_text("""\nCategory: [Auxiliary]
 Description: Activate a Qemy Client with API credentials.
 
 Clients: EDGAR, FRED, TIINGO
@@ -68,7 +68,7 @@ def cmd_env(client: str) -> None:
     FormatText('This was a triumph.\n').style('info').print()
     FormatText("Note: 'Huge success.'\n").style('info').print()
 
-@help_text("""Category: [Auxiliary]
+@help_text("""\nCategory: [Auxiliary]
 Description: Deactivate a Qemy Client and remove API credentials.
 
 Clients: EDGAR, FRED, TIINGO
