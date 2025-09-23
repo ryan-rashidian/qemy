@@ -2,6 +2,7 @@
 
 from qemy.analytics.base import CompanyAnalytics
 from qemy.analytics.scores.f_score import PiotroskiFScore
+from qemy.cli.commands.help import help_text
 from qemy.cli.format.fmt import FormatText
 from qemy.cli.format.panels import info_panel, result_panel
 
@@ -37,6 +38,12 @@ def _score_piotroski_f(ticker: str) -> None:
     info_panel(txt=components_description, title=components_title)
     result_panel(txt=results_description, title=results_title)
 
+@help_text("""Category: [Selector]
+Description: Select and execute an analytics scores.
+    - type `scores` to get a list of possible scores with descriptions
+
+Usage: >>> m <SCORE> *<SCORE_PARAMETERS>
+""")
 def cmd_score(score_type: str, *args: str) -> None:
     """Main score selection command for Qemy CLI."""
     score_type = score_type.strip().lower()
