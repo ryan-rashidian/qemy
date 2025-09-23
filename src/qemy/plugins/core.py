@@ -11,7 +11,7 @@ class PluginRegistry:
     def __init__(self):
         """"""
         self.plugins: dict[str, Callable] = {}
-        
+
     def register(self, name: str, func: Callable) -> None:
         """"""
         self.plugins[name] = func

@@ -2,8 +2,8 @@
 
 import logging
 
-from qemy.config.logger import set_log_level
 from qemy.cli.cli_main import QemyCLI
+from qemy.config.logger import set_log_level
 
 
 def main() -> None:
