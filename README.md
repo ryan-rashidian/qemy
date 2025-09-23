@@ -82,7 +82,7 @@ Sign up required for FRED API and Tiingo API:
 
 - https://fred.stlouisfed.org/docs/api/fred/
 - https://www.tiingo.com/
-- https://www.sec.gov/search-filings/edgar-application-programming-interfaces (No sign up or API key required for EDGAR API. Users will be prompted for a "User Agent" during the setup wizard.)
+- https://www.sec.gov/search-filings/edgar-application-programming-interfaces (No sign up or API key required. EDGAR API verifies requests with a "User-Agent" identification alias.)
 
 - Refer to "Usage" below for info related to API usage and data limitations.
 
