@@ -2,6 +2,7 @@
 
 from qemy.analytics.base import CompanyAnalytics
 from qemy.analytics.models.dcf import DCFModel
+from qemy.cli.commands.help import help_text
 from qemy.cli.format.fmt import FormatText
 from qemy.cli.format.panels import info_panel, result_panel
 
@@ -36,8 +37,14 @@ def _model_dcf(
     info_panel(txt=info_description, title=info_title)
     result_panel(txt=description, title=title)
 
+@help_text("""Category: [Selector]
+Description: Select and execute an analytics model.
+    - type `models` to get a list of possible models with descriptions
+
+Usage: >>> m <MODEL> *<MODEL_PARAMETERS>
+""")
 def cmd_m(model: str, *args: str) -> None:
-    """Main model selection command for Qemy CLI."""
+    """Model selection command for Qemy CLI."""
     model = model.strip().lower()
     if model == 'dcf':
         _model_dcf(*args)
