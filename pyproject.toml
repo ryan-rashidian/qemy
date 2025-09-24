@@ -6,7 +6,6 @@ readme = "README.md"
 license = "Apache-2.0"
 authors = [{ name = "Ryan A. Rashidian" }]
 dependencies = [
-    "numpy",
     "pandas",
     "python-dotenv",
     "requests",
