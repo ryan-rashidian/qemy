@@ -31,7 +31,7 @@ Suggestions are welcome!
 
 - [Features](#features)
 - [Installation](#installation)
-- [Activate Clients](#activate-clients)
+- [Enable Clients](#enable-clients)
 - [Usage](#usage)
 - [Legal / Attribution](#legal--attribution)
 - [License](#license)
