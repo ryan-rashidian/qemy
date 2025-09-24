@@ -43,14 +43,7 @@ class TiingoClient:
         self.price_data = {}
         self.quote_data = {}
 
-        credential: str = require_credential(
-            service = 'Tiingo',
-            env_var = 'TIINGO_API_KEY'
-        )
-        self.HEADERS: dict[str, str] = {
-            'Content-Type': 'application/json',
-            'Authorization': credential
-        }
+        self.HEADERS: dict[str, str] = {'Content-Type': 'application/json'}
 
     def __repr__(self) -> str:
         return f"TiingoClient(ticker={self.tickers})"
@@ -104,13 +97,17 @@ class TiingoClient:
             )
         return param
 
-    def _get_params(
+    def _get_price_params(
         self,
         period: str,
         resample: str,
         columns: list[str]
     ) -> dict:
         """Get a formatted parameter dictionary for Tiingo requests."""
+        credential: str = require_credential(
+            service = 'Tiingo',
+            env_var = 'TIINGO_API_KEY'
+        )
         start, end = parse_period(period_str=period)
         resample_checked = self._check_param(
             param = resample,
@@ -127,37 +124,44 @@ class TiingoClient:
             'startDate': start,
             'endDate': end,
             'resampleFreq': resample_checked,
-            'columns': columns_checked
+            'columns': ','.join(columns_checked),
+            'token': credential
         }
 
     def get_prices(
         self,
         period: str,
-        resample: str,
-        columns: list[str]
+        resample: str = 'daily',
+        columns: list[str] | None = None
     ) -> None:
         """Fetch historical price data for initialized ticker(s).
 
         Args:
-            period (str):
-            resample (str):
-            columns (list[str]):
+            period (str): Date window starting from current
+                - e.g '2D', '3M', '2Y', '2W'
+            resample (str): Frequency of data sampling
+                - e.g. 'daily', 'weekly', 'monthly'
+            columns (list[str]): Data fields for request
+                - e.g. 'close', 'volume', 'open'
 
         Raises:
             InvalidArgumentError: If a parameter string is not valid
         """
+        if columns is None:
+            columns = list(self.COLUMNS_ALLOWED)
+
         for ticker in self.tickers:
             url = f'{TIINGO_URL}{ticker}/prices'
-            params: dict = self._get_params(
+            params: dict = self._get_price_params(
                 period = period,
                 resample = resample,
                 columns = columns
             )
 
             response: dict = make_request(
-                url=url,
-                headers=self.HEADERS,
-                params=params
+                url = url,
+                headers = self.HEADERS,
+                params = params
             )
             self.price_data[ticker] = response
 
@@ -183,8 +187,17 @@ class TiingoClient:
     def get_quote(self) -> None:
         """Fetch latest price quote for initialized ticker(s)."""
         url = f"{TIINGO_IEX_URL}{','.join(self.tickers)}"
+        credential: str = require_credential(
+            service = 'Tiingo',
+            env_var = 'TIINGO_API_KEY'
+        )
+        params = {'token': credential}
 
-        response = make_request(url=url, headers=self.HEADERS)
+        response = make_request(
+            url = url,
+            headers = self.HEADERS,
+            params = params
+        )
 
         for entry in response:
             if 'ticker' in entry:
