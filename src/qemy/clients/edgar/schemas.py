@@ -20,10 +20,10 @@ class Concept:
     filings: list[dict] = field(default_factory=list)
 
     def __repr__(self) -> str:
-        return (
-            f"Concept(label='{self.label}', unit='{self.unit}', "
-            f"filings=#{len(self.filings)} filed)"
-        )
+        return f"Concept(label='{self.label}', unit='{self.unit}')"
+
+    def __len__(self) -> int:
+        return len(self.filings)
 
     def to_dataframe(self) -> pd.DataFrame:
         """Format Concept filings into pandas DataFrame.
@@ -48,7 +48,9 @@ class CompanyFacts:
     def __repr__(self) -> str:
         return (
             f"CompanyFacts(ticker='{self.ticker}', "
-            f"entity_name='{self.entity_name}', "
-            f'concepts=#{len(self.concepts)} concepts)'
+            f"entity_name='{self.entity_name}')"
         )
+
+    def __len__(self) -> int:
+        return len(self.concepts)
 
