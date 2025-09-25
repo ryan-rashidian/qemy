@@ -28,6 +28,10 @@ class InvalidSyntaxError(QemyError):
     """Raised when invalid syntax is used in a string."""
     pass
 
+class JSONDecodingError(QemyError):
+    """Raised when a JSON file cannot be properly decoded or validated."""
+    pass
+
 class MissingCredentialError(QemyError):
     """Raised when a required API credential is missing."""
     pass
