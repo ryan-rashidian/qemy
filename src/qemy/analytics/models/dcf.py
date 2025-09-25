@@ -20,7 +20,7 @@ class DCFModel(EDGARAnalytics):
 
         self.companyanalytics = ResultsScalar(
             ticker = self.ticker.upper(),
-            entity_name = self.client.companyfacts.entity_name
+            name = self.client.companyfacts.name
         )
         self.companyanalytics.description = (
             "Estimate a company's intrinsic value by projecting future cash "

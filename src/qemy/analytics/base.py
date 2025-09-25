@@ -14,7 +14,7 @@ from qemy.exceptions import ClientParsingError
 class CompanyAnalytics:
     """Container for company analytics results."""
     ticker: str
-    entity_name: str = ''
+    name: str = ''
     description: str = ''
 
 @dataclass

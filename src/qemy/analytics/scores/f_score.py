@@ -20,7 +20,7 @@ class PiotroskiFScore(EDGARAnalytics):
 
         self.companyanalytics = ResultsScalar(
             ticker = self.ticker.upper(),
-            entity_name = self.client.companyfacts.entity_name
+            name = self.client.companyfacts.name
         )
         self.companyanalytics.description = (
             "Piotroski F-Score is a 0-9 score that measures a company's "

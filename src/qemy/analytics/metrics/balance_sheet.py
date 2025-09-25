@@ -14,7 +14,7 @@ class NetDebt(EDGARAnalytics):
 
         self.companyanalytics = ResultsDataFrame(
             ticker = self.ticker.upper(),
-            entity_name= self.client.companyfacts.entity_name
+            name= self.client.companyfacts.name
         )
         self.companyanalytics.description = (
             'Profit a company makes from sales after paying '
