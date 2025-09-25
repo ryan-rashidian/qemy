@@ -1,4 +1,4 @@
-Qemy - command-line market analysis
+Qemy - command-line market analysis toolkit
 Copyright 2025 Ryan A. Rashidian
 
 Qemy™ is a trademark of Ryan A. Rashidian. All rights reserved.
@@ -17,6 +17,9 @@ This product includes third-party software licensed under the following licenses
 - pandas: Licensed under the BSD 3-Clause License.
   https://pandas.pydata.org/docs/getting_started/overview.html#license
 
+- pydantic: Licensed under the MIT License.
+  https://github.com/pydantic/pydantic/blob/main/LICENSE
+
 - python-dotenv: Licensed under the BSD 3-Clause License.
   https://github.com/theskumar/python-dotenv/blob/master/LICENSE
 
@@ -25,9 +28,6 @@ This product includes third-party software licensed under the following licenses
 
 - rich: Licensed under the MIT License.
   https://github.com/Textualize/rich/blob/master/LICENSE
-
-- scikit-learn: Licensed under the BSD 3-Clause License.
-  https://github.com/scikit-learn/scikit-learn/blob/main/COPYING
 
 ---
 
