@@ -71,22 +71,24 @@ class EDGARClient:
         Args:
             concept (str): Key for matching concept tuple
         """
-        xbrl_mappings = self._get_mappings(concept)
-        parsed_data: Concept = self.parser.parse(xbrl_mappings)
-        self.companyfacts.concepts[concept] = parsed_data
+        if concept not in self.companyfacts.concepts:
+            xbrl_mappings = self._get_mappings(concept)
+            parsed_data: Concept = self.parser.parse(xbrl_mappings)
+            self.companyfacts.concepts[concept] = parsed_data
 
         return self
 
     def fill_concepts(self) -> EDGARClient:
         """Fetch and parse all filing data."""
         for concept in _mappings.map_arg.keys():
-            try:
-                xbrl_mappings = self._get_mappings(concept)
-                parsed_data: Concept = self.parser.parse(xbrl_mappings)
-                self.companyfacts.concepts[concept] = parsed_data
+            if concept not in self.companyfacts.concepts:
+                try:
+                    xbrl_mappings = self._get_mappings(concept)
+                    parsed_data: Concept = self.parser.parse(xbrl_mappings)
+                    self.companyfacts.concepts[concept] = parsed_data
 
-            except ClientParsingError:
-                self.companyfacts.concepts[concept] = Concept()
+                except ClientParsingError:
+                    self.companyfacts.concepts[concept] = Concept()
 
         return self
 
