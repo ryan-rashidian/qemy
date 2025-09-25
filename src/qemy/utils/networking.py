@@ -13,7 +13,7 @@ def make_request(
     url: str,
     headers: dict[str, str] | None = None,
     params: dict[str, str] | None = None
-) -> dict:
+) -> str:
     """Make a request wrapped with error handling.
 
     Args:
@@ -22,20 +22,16 @@ def make_request(
         params (dict[str, str]): request parameters
 
     Returns:
-        dict: dictionary of requested data
+        str: encoded JSON text as string
 
     Raises:
         ClientRequestError: if request fails
-
-    Note:
-        `requests.get` accepts None for `headers` and `params`,
-        which means they are ignored if not provided.
     """
     try:
         response = requests.get(url=url, headers=headers, params=params)
         response.raise_for_status()
         logger.debug(f'Request complete: {url}')
-        return response.json()
+        return response.text
 
     except requests.exceptions.HTTPError as e:
         logger.error('HTTP Error')
