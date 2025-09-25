@@ -7,6 +7,7 @@ license = "Apache-2.0"
 authors = [{ name = "Ryan A. Rashidian" }]
 dependencies = [
     "pandas",
+    "pydantic",
     "python-dotenv",
     "requests",
     "rich",
@@ -17,7 +18,6 @@ qemy = "qemy.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["qemy"]
 
 [tool.ruff]
 line-length = 79
