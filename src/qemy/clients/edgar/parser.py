@@ -27,10 +27,10 @@ class ConceptParser:
             ClientParsingError: If no matches are found
         """
         for map in xbrl_mappings:
-            if map not in self.raw_facts['facts']['us-gaap']:
+            if map not in self.raw_facts:
                 continue
 
-            return self.raw_facts['facts']['us-gaap'][map]
+            return self.raw_facts[map]
 
         raise ClientParsingError('Mapping: No matches found.')
 
