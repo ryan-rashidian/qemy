@@ -6,7 +6,7 @@ from functools import reduce
 
 import pandas as pd
 
-from qemy.clients import EDGARClient
+from qemy.clients import EDGARClient, FREDClient, TiingoClient
 from qemy.exceptions import ClientParsingError
 
 
@@ -28,16 +28,16 @@ class ResultsDataFrame(CompanyAnalytics):
     results_df: pd.DataFrame = field(default_factory=pd.DataFrame)
 
 class EDGARAnalytics(ABC):
-    """Base class for EDGAR Metrics."""
+    """Base class for EDGAR Analytics."""
 
     def __init__(self, ticker: str):
-        """Initialize Client for EDGAR Metrics."""
+        """Initialize Client for EDGAR Analytics."""
         self.ticker = ticker.strip()
         self.client = EDGARClient(self.ticker)
 
     @abstractmethod
     def calculate(self) -> CompanyAnalytics:
-        """Perform the metric calculation and return result."""
+        """Perform the analytic calculation and return result."""
         pass
 
     def get_concept_df(self, concept: str) -> pd.DataFrame:
@@ -95,4 +95,40 @@ class EDGARAnalytics(ABC):
             df_merged.drop_duplicates('accn', keep='last', inplace=True)
 
         return df_merged
+
+@dataclass
+class ObservationAnalytics:
+    """Container for FREDAnalytics results."""
+
+class FREDAnalytics(ABC):
+    """Base class for FRED Analytics."""
+
+    def __init__(self):
+        """Initialize Client for FRED Analytics."""
+        self.client = FREDClient()
+
+    @abstractmethod
+    def calculate(self) -> ObservationAnalytics:
+        """Perform the analytic calculation and return result."""
+        pass
+
+@dataclass
+class SecuritiesAnalytics:
+    """Container for TiingoAnalytics results."""
+
+class TiingoAnalytics(ABC):
+    """Base class for Tiingo Analytics."""
+
+    def __init__(self, tickers: list[str]):
+        """Initialize Client for Tiingo Analytics."""
+        self.tickers = []
+        for ticker in tickers:
+            self.tickers.append(ticker.strip().upper())
+            
+        self.client = TiingoClient(self.tickers)
+
+    @abstractmethod
+    def calculate(self) -> SecuritiesAnalytics:
+        """Perform the analytic calculation and return result."""
+        pass
 
