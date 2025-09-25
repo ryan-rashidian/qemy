@@ -3,7 +3,6 @@
 Load a given companies file from SEC EDGAR companyfacts.
 """
 
-import json
 from pathlib import Path
 
 from qemy.config.credentials import require_credential
@@ -12,15 +11,17 @@ from qemy.config.urls import EDGAR_CIK_URL, EDGAR_FACTS_URL
 from qemy.exceptions import ClientDataError
 from qemy.utils.networking import make_request
 
+from qemy.clients.edgar.schemas import (
+    CompanyCIK, CompanyFacts, decode_cik_json, decode_companyfacts_json
+)
+
 
 class FactsLoader:
     """Companyfacts data fetcher for EDGAR client"""
 
     def __init__(self, ticker: str):
-        """Initialize attributes."""
+        """Initialize company ticker."""
         self.ticker = ticker.lower().strip()
-        self.cik_data = {}
-        self.cik = None
 
     @property
     def needs_request(self) -> bool:
@@ -28,52 +29,39 @@ class FactsLoader:
         required_paths = [COMPANY_TICKERS_JSON, COMPANYFACTS_UNZIPPED]
         return not all(path.exists() for path in required_paths)
 
-    def _load_json(self, path: Path) -> dict:
-        """Load JSON file with error handling."""
-        try:
-            with open(path, 'r') as f:
-                return json.load(f)
-
-        except json.JSONDecodeError as e:
-            raise ClientDataError(f'Corrupted: {path.resolve()}') from e
-
-        except Exception as e:
-            raise ClientDataError(f'Error reading: {path.resolve()}') from e
-
-    def _map_cik(self) -> str:
-        """Map company ticker to matching CIK number."""
-        for entry in self.cik_data.values():
-            if entry.get('ticker', '').lower() == self.ticker:
-                cik = entry.get('cik_str')
-                if cik is None:
-                    raise ClientDataError(
-                        f'Missing CIK: {self.ticker.upper()}'
-                    )
-
-                return str(cik).zfill(10)
-
-        raise ClientDataError(f'CIK Mapping Error: {self.ticker.upper()}')
-
-    def _request_companyfacts(self) -> dict:
+    def _request_companyfacts(self) -> CompanyFacts:
         """Request companyfacts JSON file from SEC EDGAR API."""
         cred = require_credential(service='EDGAR', env_var='EDGAR_USER_AGENT')
         headers = {'User-Agent': cred}
 
-        self.cik_data = make_request(url=EDGAR_CIK_URL, headers=headers)
-        self.cik = self._map_cik()
-        ticker_facts_url = f'{EDGAR_FACTS_URL}CIK{self.cik}.json'
+        cik_json: str = make_request(url=EDGAR_CIK_URL, headers=headers)
+        cik_data: CompanyCIK = decode_cik_json(cik_json, ticker=self.ticker)
+        cik = str(cik_data.cik).zfill(10)
+        cik_facts_url = f'{EDGAR_FACTS_URL}CIK{cik}.json'
 
-        return make_request(url=ticker_facts_url, headers=headers)
+        companyfacts_json: str = make_request(url=cik_facts_url, headers=headers)
+        return decode_companyfacts_json(companyfacts_json)
 
-    def _load_companyfacts(self) -> dict:
+    def _load_json(self, path: Path) -> str:
+        """Load JSON file with error handling."""
+        try:
+            with open(path, 'r') as f:
+                return f.read()
+
+        except Exception as e:
+            raise ClientDataError(f'Error reading: {path.resolve()}') from e
+
+    def _load_companyfacts(self) -> CompanyFacts:
         """Load companyfacts JSON file locally."""
-        self.cik_data = self._load_json(COMPANY_TICKERS_JSON)
-        self.cik = self._map_cik()
+        cik_json = self._load_json(COMPANY_TICKERS_JSON)
+        cik_data: CompanyCIK = decode_cik_json(cik_json, ticker=self.ticker)
+        cik = str(cik_data.cik).zfill(10)
+        companyfacts_file = COMPANYFACTS_UNZIPPED / f'CIK{cik}.json'
 
-        companyfacts_file = COMPANYFACTS_UNZIPPED / f'CIK{self.cik}.json'
-        return self._load_json(companyfacts_file)
+        companyfacts_json: str = self._load_json(companyfacts_file)
+        return decode_companyfacts_json(companyfacts_json)
 
-    def get_companyfacts(self) -> dict:
+    def get_companyfacts(self) -> CompanyFacts:
         """Returns companyfacts JSON file for initialized ticker."""
         if self.needs_request:
             return self._request_companyfacts()
