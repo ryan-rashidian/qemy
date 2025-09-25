@@ -14,7 +14,9 @@ import pandas as pd
 from qemy.clients.edgar import _mappings
 from qemy.clients.edgar.fetcher import FactsLoader
 from qemy.clients.edgar.parser import ConceptParser
-from qemy.clients.edgar.schemas import CompanyFacts, Concept
+from qemy.clients.edgar.schemas import (
+    CompanyFacts, Concept, Facts, ParsedCompanyFacts
+)
 from qemy.exceptions import ClientParsingError, InvalidArgumentError
 
 
@@ -27,11 +29,12 @@ class EDGARClient:
         Args:
             ticker (str): Company ticker symbol
         """
-        self.raw_facts: dict = FactsLoader(ticker).get_companyfacts()
-        self.parser = ConceptParser(self.raw_facts)
-        self.companyfacts = CompanyFacts(
+        raw_companyfacts: CompanyFacts = FactsLoader(ticker).get_companyfacts()
+        self.raw_facts: Facts = raw_companyfacts.facts
+        self.parser = ConceptParser(self.raw_facts.concepts)
+        self.companyfacts = ParsedCompanyFacts(
             ticker = ticker.strip().upper(),
-            entity_name = self.raw_facts.get('entityName', '')
+            name = raw_companyfacts.name
         )
 
     def __repr__(self) -> str:
