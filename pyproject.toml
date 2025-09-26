@@ -1,7 +1,7 @@
 [project]
 name = "Qemy"
 version = "0.2.0"
-description = "A Python CLI toolkit for stock market analysis"
+description = "A Python CLI toolkit for market and economic analysis"
 readme = "README.md"
 license = "Apache-2.0"
 authors = [{ name = "Ryan A. Rashidian" }]

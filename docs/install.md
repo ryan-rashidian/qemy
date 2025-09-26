@@ -2,8 +2,8 @@
 
 ```bash
 pip install -e .
-# or
-pip install -r requirements-dev.txt
+# Or for a minimal /src/ dev environment:
+pip install -r requirements.txt
 ```
 
 ## Optional - Manually Create .env
