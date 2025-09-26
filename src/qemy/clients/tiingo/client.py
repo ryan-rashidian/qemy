@@ -5,6 +5,8 @@ This module handles requests and fetching data from Tiingo API.
 
 from __future__ import annotations
 
+from typing import Self
+
 import pandas as pd
 
 from qemy.clients.tiingo.schemas import (
@@ -43,7 +45,7 @@ class TiingoClient:
             self.tickers = [t.strip().upper() for t in ticker]
 
         self.price_data = {}
-        self.quote_data = {}
+        self.quote_data = []
 
         self.HEADERS: dict[str, str] = {'Content-Type': 'application/json'}
 
@@ -76,14 +78,14 @@ class TiingoClient:
         new_tickers = [t for t in self.tickers if t not in remove]
         return TiingoClient(new_tickers)
 
-    def __iadd__(self, other: list) -> TiingoClient:
+    def __iadd__(self, other: list) -> Self:
         """Add a list of tickers to Client in-place."""
         for ticker in other:
             if ticker.strip().upper() not in self.tickers:
                 self.tickers.append(ticker.strip.upper())
         return self
 
-    def __isub__(self, other: list) -> TiingoClient:
+    def __isub__(self, other: list) -> Self:
         """Subtract a list of tickers from Client in-place."""
         remove = set(ticker.strip().upper() for ticker in other)
         self.tickers = [t for t in self.tickers if t not in remove]
@@ -123,11 +125,11 @@ class TiingoClient:
             'token': credential
         }
 
-    def get_prices(
+    def fetch_prices(
         self,
         period: str,
         resample: str = 'daily',
-    ) -> None:
+    ) -> Self:
         """Fetch historical price data for initialized ticker(s).
 
         Args:
@@ -153,8 +155,10 @@ class TiingoClient:
                 headers = self.HEADERS,
                 params = params
             )
-            price_data: PriceData = decode_prices_json(price_json)
+            price_data: list[PriceData] = decode_prices_json(price_json)
             self.price_data[ticker] = price_data
+
+        return self
 
     def prices_to_dataframe(self) -> dict[str, pd.DataFrame]:
         """Format Tiingo price data into pandas DataFrame.
@@ -163,10 +167,11 @@ class TiingoClient:
             dict[str, pd.DataFrame]: Of price data mapped to tickers
         """
         price_dataframes = {}
-        for ticker, data in self.price_data:
-            price_df = pd.DataFrame(data)
 
-            if price_df['date'] in price_df.columns:
+        for ticker, price_data in self.price_data.items():
+            price_df = pd.DataFrame([dict(entry) for entry in price_data])
+
+            if 'date' in price_df.columns:
                 price_df['date'] = pd.to_datetime(price_df['date'])
                 price_df.set_index('date', inplace=True)
                 price_df.sort_index(inplace=True)
@@ -175,7 +180,7 @@ class TiingoClient:
 
         return price_dataframes
 
-    def get_quote(self) -> None:
+    def fetch_quote(self) -> Self:
         """Fetch latest price quote for initialized ticker(s)."""
         url = f"{TIINGO_IEX_URL}{','.join(self.tickers)}"
         credential: str = require_credential(
@@ -189,18 +194,15 @@ class TiingoClient:
             headers = self.HEADERS,
             params = params
         )
-        self.quote_data: dict[str, QuoteData] = decode_quotes_json(quote_json)
+        self.quote_data: list[QuoteData] = decode_quotes_json(quote_json)
 
-    def quote_to_dataframe(self) -> dict[str, pd.DataFrame]:
+        return self
+
+    def quote_to_dataframe(self) -> pd.DataFrame:
         """Format Tiingo quote data into pandas DataFrame.
 
         Returns:
-            dict[str, pd.DataFrame]: Of quote data mapped to tickers
+            pd.DataFrame: Of quote data
         """
-        quote_dataframes = {}
-        for ticker, data in self.quote_data:
-            quote_df = pd.DataFrame(data)
-            quote_dataframes[ticker] = quote_df
-
-        return quote_dataframes
+        return pd.DataFrame([dict(entry) for entry in self.quote_data])
 
