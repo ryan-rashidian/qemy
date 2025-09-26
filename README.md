@@ -1,4 +1,4 @@
-# Qemy: A developer-first CLI toolkit for financial data, modeling, and analytics
+# Qemy: A Python CLI toolkit for financial and economic research.
 
 ![Header Screenshot](assets/qemy_welcome.png)
 
@@ -7,14 +7,13 @@
 ![Last Commit](https://img.shields.io/github/last-commit/ryan-rashidian/qemy)
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue)
 
-Qemy is a modular, open-source financial research toolkit built in Python. It features clean access to financial and economic data, a flexible plugin system for running your own models and analysis, and a built in command-line interface - all in one place.
+Qemy is an open source Python toolkit for financial and economic research. It provides:
+- Clean data access
+- A flexible plugin system
+- Built in command-line interface 
+All in one package.
 
-Project Goal: 
-
-A developer-first alternative to traditional financial platforms - minimalist, hackable, and designed for users who value customization, experimentation, and seamless integration of their own tools.
-
-**Work in Progress**
-- Features may change, break, or get replaced as the project evolves.
+**Work in Progress!: Features may change, break, or get replaced as the project evolves.**
 
 Suggestions are welcome!
 
