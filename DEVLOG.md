@@ -2,7 +2,8 @@
 
 ## Known Issues:
 
-[ ] - EDGAR Client only parses GAAP filings
+- [ ] EDGAR Client only parses GAAP filings for now, should be extended.
+- [ ] EDGAR filing data needs to be normalized by period somehow. Right now, there might be missing quarters in concept data, reducing the meaning and consistency of positions. For example: if `slice[-1]` is a Q3-2025 filing, you cannot reliably expect `slice[-5]` to be Q3-2024. - This can throw off downstream calculations, and enforcing some sort of reliable shape with placeholders, or a new `datetime.date`/fiscal-period based system is needed.
 
 
 ## Log
@@ -17,5 +18,5 @@
 
 ### Note (2025-09-23) - [@ryan-rashidian](https://github.com/ryan-rashidian):
 
-- The project is settling on a decent structure and conventions. I'm still figuring out details for implementing plugins, but i have a few ideas.
+- The project is settling on a decent structure and conventions. I'm still figuring out the details for implementing plugins, but have a few ideas.
 
