@@ -11,7 +11,7 @@ def _score_piotroski_f(ticker: str) -> None:
     """Use Qemy PiotroskiFScore from within Qemy CLI."""
     results: CompanyAnalytics = PiotroskiFScore(ticker).calculate()
 
-    company_name = results.entity_name
+    company_name = results.name
     ticker_fmt = results.ticker
     result_data = results.results
 

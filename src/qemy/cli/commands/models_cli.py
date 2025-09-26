@@ -24,7 +24,7 @@ def _model_dcf(
         terminal_growth = terminal_growth_f
     )
 
-    company_name = results.entity_name
+    company_name = results.name
     ticker_fmt = results.ticker
     result_data = results.results['evps']
 

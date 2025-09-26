@@ -28,7 +28,7 @@ def cmd_f(ticker: str) -> None:
     client = EDGARClient(ticker)
 
     description = 'Latest Filings Summary'
-    company = client.companyfacts.entity_name
+    company = client.companyfacts.name
     ticker_fmt = client.companyfacts.ticker
     title = f'{company} ({ticker_fmt})'
 
@@ -61,7 +61,7 @@ def cmd_fc(ticker: str, concept: str, quarters: str='8') -> None:
         description = concept_data.description
         label = concept_data.label
         unit = concept_data.unit
-        company = client.companyfacts.entity_name
+        company = client.companyfacts.name
         ticker_fmt = client.companyfacts.ticker
         title = f'{company} ({ticker_fmt}): {label} ({unit})'
 
