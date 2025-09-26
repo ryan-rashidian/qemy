@@ -20,10 +20,15 @@ class PriceData(BaseModel):
     open: float = Field(alias='adjOpen')
     volume: int = Field(alias='adjVolume')
 
-def decode_prices_json(json_str: str) -> PriceData:
+def decode_prices_json(json_str: str) -> list[PriceData]:
     """Decode price data JSON text into pydantic based container."""
     try:
-        return PriceData.model_validate_json(json_str)
+        prices_raw: list[dict] = json.loads(json_str)
+    except json.JSONDecodeError as e:
+        raise JSONDecodingError('Error decoding prices JSON') from e
+
+    try:
+        return [PriceData.model_validate(price) for price in prices_raw]
     except ValidationError as e:
         raise JSONDecodingError('Error validating prices JSON') from e
 
@@ -33,20 +38,15 @@ class QuoteData(BaseModel):
     timestamp: datetime
     quote: float = Field(alias='tngoLast')
 
-def decode_quotes_json(json_str: str) -> dict[str, QuoteData]:
+def decode_quotes_json(json_str: str) -> list[QuoteData]:
     """Decode price data JSON text into pydantic based container."""
     try:
-        quotes_raw: dict[str, dict] = json.loads(json_str)
+        quotes_raw: list[dict] = json.loads(json_str)
     except json.JSONDecodeError as e:
         raise JSONDecodingError('Error decoding quotes JSON') from e
 
-    quotes = {}
     try:
-        for ticker, data in quotes_raw.items():
-            valid_data = QuoteData.model_validate(data)
-            quotes[ticker] = valid_data
-        return quotes
-
+        return [QuoteData.model_validate(quote) for quote in quotes_raw]
     except ValidationError as e:
         raise JSONDecodingError('Error validating quotes JSON') from e
 
