@@ -8,9 +8,6 @@ This product includes software developed by Ryan A. Rashidian.
 
 This product includes third-party software licensed under the following licenses:
 
-- matplotlib: Licensed under the PSF license (Python Software Foundation License).
-  https://matplotlib.org/stable/users/license.html
-
 - numpy: Licensed under the BSD 3-Clause License.
   https://numpy.org/doc/stable/license.html
 
