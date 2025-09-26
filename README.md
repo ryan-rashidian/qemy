@@ -11,6 +11,7 @@ Qemy is an open source Python toolkit for financial and economic research. It pr
 - Clean data access
 - A flexible plugin system
 - Built in command-line interface 
+
 All in one package.
 
 **Work in Progress!: Features may change, break, or get replaced as the project evolves.**
