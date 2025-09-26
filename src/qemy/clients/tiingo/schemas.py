@@ -3,8 +3,8 @@
 Used by TiingoClient.
 """
 
-from datetime import date, datetime
 import json
+from datetime import date, datetime
 
 from pydantic import BaseModel, Field, ValidationError
 

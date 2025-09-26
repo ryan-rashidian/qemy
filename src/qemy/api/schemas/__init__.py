@@ -1,5 +1,8 @@
 from qemy.clients.edgar.schemas import (
-    CompanyCIK, CompanyFacts, Concept, ParsedCompanyFacts
+    CompanyCIK,
+    CompanyFacts,
+    Concept,
+    ParsedCompanyFacts,
 )
 
 __all__ = [

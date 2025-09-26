@@ -15,7 +15,10 @@ from qemy.clients.edgar import _mappings
 from qemy.clients.edgar.fetcher import FactsLoader
 from qemy.clients.edgar.parser import ConceptParser
 from qemy.clients.edgar.schemas import (
-    CompanyFacts, Concept, Facts, ParsedCompanyFacts
+    CompanyFacts,
+    Concept,
+    Facts,
+    ParsedCompanyFacts,
 )
 from qemy.exceptions import ClientParsingError, InvalidArgumentError
 

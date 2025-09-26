@@ -7,15 +7,17 @@ from __future__ import annotations
 
 import pandas as pd
 
+from qemy.clients.tiingo.schemas import (
+    PriceData,
+    QuoteData,
+    decode_prices_json,
+    decode_quotes_json,
+)
 from qemy.config.credentials import require_credential
 from qemy.config.urls import TIINGO_IEX_URL, TIINGO_URL
 from qemy.exceptions import InvalidArgumentError
 from qemy.utils.dates import parse_period
 from qemy.utils.networking import make_request
-
-from qemy.clients.tiingo.schemas import (
-    PriceData, QuoteData, decode_prices_json, decode_quotes_json
-)
 
 
 class TiingoClient:

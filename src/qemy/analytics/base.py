@@ -124,7 +124,7 @@ class TiingoAnalytics(ABC):
         self.tickers = []
         for ticker in tickers:
             self.tickers.append(ticker.strip().upper())
-            
+
         self.client = TiingoClient(self.tickers)
 
     @abstractmethod

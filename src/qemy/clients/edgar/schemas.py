@@ -4,14 +4,14 @@ These classes provide containers for companyfacts and concepts.
 Used by EDGARClient and ConceptParser within the EDGAR client.
 """
 
-from dataclasses import dataclass, field
 import json
+from dataclasses import dataclass, field
 
 import pandas as pd
 from pydantic import BaseModel, Field, ValidationError
 
-from qemy.utils.dataframes import normalize_financial_df
 from qemy.exceptions import InvalidArgumentError, JSONDecodingError
+from qemy.utils.dataframes import normalize_financial_df
 
 
 class CompanyCIK(BaseModel):
@@ -50,7 +50,7 @@ class Facts(BaseModel):
 
 class CompanyFacts(BaseModel):
     """Container for pre-parsed data from EDGAR API.
-    
+
     Ensures type and shape of EDGAR API JSON reponse with pydantic.
     """
     cik: int

@@ -5,14 +5,13 @@ This module handles requests and fetching data from FRED API.
 
 from __future__ import annotations
 
+from qemy.clients.fred.schemas import Observations, decode_observations_json
 from qemy.config.credentials import require_credential
 from qemy.config.logger import get_logger
 from qemy.config.urls import FRED_URL
 from qemy.exceptions import ClientDataError
 from qemy.utils.dates import parse_period
 from qemy.utils.networking import make_request
-
-from qemy.clients.fred.schemas import Observations, decode_observations_json
 
 logger = get_logger(__name__)
 

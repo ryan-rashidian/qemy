@@ -5,15 +5,17 @@ Load a given companies file from SEC EDGAR companyfacts.
 
 from pathlib import Path
 
+from qemy.clients.edgar.schemas import (
+    CompanyCIK,
+    CompanyFacts,
+    decode_cik_json,
+    decode_companyfacts_json,
+)
 from qemy.config.credentials import require_credential
 from qemy.config.paths import COMPANY_TICKERS_JSON, COMPANYFACTS_UNZIPPED
 from qemy.config.urls import EDGAR_CIK_URL, EDGAR_FACTS_URL
 from qemy.exceptions import ClientDataError
 from qemy.utils.networking import make_request
-
-from qemy.clients.edgar.schemas import (
-    CompanyCIK, CompanyFacts, decode_cik_json, decode_companyfacts_json
-)
 
 
 class FactsLoader:
@@ -39,7 +41,10 @@ class FactsLoader:
         cik = str(cik_data.cik).zfill(10)
         cik_facts_url = f'{EDGAR_FACTS_URL}CIK{cik}.json'
 
-        companyfacts_json: str = make_request(url=cik_facts_url, headers=headers)
+        companyfacts_json: str = make_request(
+            url=cik_facts_url,
+            headers=headers
+        )
         return decode_companyfacts_json(companyfacts_json)
 
     def _load_json(self, path: Path) -> str:
