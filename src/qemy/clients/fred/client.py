@@ -12,6 +12,8 @@ from qemy.exceptions import ClientDataError
 from qemy.utils.dates import parse_period
 from qemy.utils.networking import make_request
 
+from qemy.clients.fred.schemas import Observations, decode_observations_json
+
 logger = get_logger(__name__)
 
 class FREDClient:
@@ -71,12 +73,14 @@ class FREDClient:
             'limit': limit
         }
 
-        fred_data: dict = make_request(url=FRED_URL, params=params)
-        if not fred_data:
+        fred_json: str = make_request(url=FRED_URL, params=params)
+        if not fred_json:
             logger.error(f'No data found for: {seried_id}')
             raise ClientDataError(f'No data found for: {seried_id}')
 
+        fred_data: Observations = decode_observations_json(fred_json)
         logger.debug(f'[FRED] Add: {seried_id} Period: {period}')
+
         self.observations[seried_id] = fred_data
 
     def get_cpi(
