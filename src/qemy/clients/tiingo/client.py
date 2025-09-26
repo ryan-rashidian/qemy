@@ -13,16 +13,16 @@ from qemy.exceptions import InvalidArgumentError
 from qemy.utils.dates import parse_period
 from qemy.utils.networking import make_request
 
+from qemy.clients.tiingo.schemas import (
+    PriceData, QuoteData, decode_prices_json, decode_quotes_json
+)
+
 
 class TiingoClient:
     """Client for fetching stock market data from Tiingo API."""
 
     RESAMPLE_ALLOWED = {'daily', 'weekly', 'monthly', 'annually'}
-    COLUMNS_ALLOWED = {
-        'close', 'high', 'low', 'open', 'volume',
-        'adjClose', 'adjHigh', 'adjLow', 'adjOpen', 'adjVolume',
-        'divCash', 'splitFactor'
-    }
+    PRICE_COLUMNS = ['adjClose', 'adjHigh', 'adjLow', 'adjOpen', 'adjVolume']
 
     def __init__(self, ticker: str | list[str]):
         """Initialize Client with credentials and request headers.
@@ -101,7 +101,6 @@ class TiingoClient:
         self,
         period: str,
         resample: str,
-        columns: list[str]
     ) -> dict:
         """Get a formatted parameter dictionary for Tiingo requests."""
         credential: str = require_credential(
@@ -113,18 +112,12 @@ class TiingoClient:
             param = resample,
             check_set = self.RESAMPLE_ALLOWED
         )
-        columns_checked = []
-        for col in columns:
-            columns_checked.append(self._check_param(
-                param = col,
-                check_set = self.COLUMNS_ALLOWED
-            ))
 
         return {
             'startDate': start,
             'endDate': end,
             'resampleFreq': resample_checked,
-            'columns': ','.join(columns_checked),
+            'columns': ','.join(self.PRICE_COLUMNS),
             'token': credential
         }
 
@@ -132,7 +125,6 @@ class TiingoClient:
         self,
         period: str,
         resample: str = 'daily',
-        columns: list[str] | None = None
     ) -> None:
         """Fetch historical price data for initialized ticker(s).
 
@@ -147,23 +139,20 @@ class TiingoClient:
         Raises:
             InvalidArgumentError: If a parameter string is not valid
         """
-        if columns is None:
-            columns = list(self.COLUMNS_ALLOWED)
-
         for ticker in self.tickers:
             url = f'{TIINGO_URL}{ticker}/prices'
             params: dict = self._get_price_params(
                 period = period,
                 resample = resample,
-                columns = columns
             )
 
-            response: dict = make_request(
+            price_json: str = make_request(
                 url = url,
                 headers = self.HEADERS,
                 params = params
             )
-            self.price_data[ticker] = response
+            price_data: PriceData = decode_prices_json(price_json)
+            self.price_data[ticker] = price_data
 
     def prices_to_dataframe(self) -> dict[str, pd.DataFrame]:
         """Format Tiingo price data into pandas DataFrame.
@@ -193,16 +182,12 @@ class TiingoClient:
         )
         params = {'token': credential}
 
-        response = make_request(
+        quote_json: str = make_request(
             url = url,
             headers = self.HEADERS,
             params = params
         )
-
-        for entry in response:
-            if 'ticker' in entry:
-                ticker: str = entry['ticker']
-                self.quote_data[ticker] = dict(entry)
+        self.quote_data: dict[str, QuoteData] = decode_quotes_json(quote_json)
 
     def quote_to_dataframe(self) -> dict[str, pd.DataFrame]:
         """Format Tiingo quote data into pandas DataFrame.
