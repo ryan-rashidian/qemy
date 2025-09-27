@@ -43,7 +43,7 @@ class EDGARAnalytics(ABC):
     def get_concept_df(self, concept: str) -> pd.DataFrame:
         """Return pandas DataFrame of a concept."""
         concept_fmt = concept.strip().lower()
-        df_concept = self.client.get_concept(
+        df_concept = self.client.fetch_concept(
             concept = concept_fmt
         ).companyfacts.concepts[concept].to_dataframe()
 
@@ -63,7 +63,7 @@ class EDGARAnalytics(ABC):
         concept_fmt = concept.strip().lower()
 
         try:
-            df_concept = self.client.get_concept(
+            df_concept = self.client.fetch_concept(
                 concept = concept_fmt
             ).companyfacts.concepts[concept].to_dataframe()
         except ClientParsingError:

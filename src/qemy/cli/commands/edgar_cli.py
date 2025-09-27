@@ -53,7 +53,7 @@ def cmd_fc(ticker: str, concept: str, quarters: str='8') -> None:
     """Print historical filing data for given ticker, concept to terminal."""
     quarters_int = int(quarters)
     try:
-        client = EDGARClient(ticker).get_concept(concept)
+        client = EDGARClient(ticker).fetch_concept(concept)
         concept_data = client.companyfacts.concepts.get(concept, Concept())
         if not concept_data.filings:
             FormatText(f'No data for: {concept}\n').style('warning').print()
