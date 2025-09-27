@@ -113,11 +113,16 @@ def cmd_f(ticker: str) -> None:
     while True:
         info_panel(txt=choices, title=info_title)
         choice = input(f'({ticker_fmt}) ').strip()
-        if choice == '1': _f_concept(client)
-        elif choice == '2': _f_balance_sheet(client)
-        elif choice == '3': _f_cashflow_statement(client)
-        elif choice == '4': _f_income_statement(client)
-        elif choice == '5': break
+        if choice == '1':
+            _f_concept(client)
+        elif choice == '2':
+            _f_balance_sheet(client)
+        elif choice == '3':
+            _f_cashflow_statement(client)
+        elif choice == '4':
+            _f_income_statement(client)
+        elif choice == '5':
+            break
 
 @help_text("""\nCategory: [EDGAR]
 Description: Download SEC bulk filing data for use within Qemy CLI.
