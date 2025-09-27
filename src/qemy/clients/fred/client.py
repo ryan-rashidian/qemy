@@ -3,7 +3,9 @@
 This module handles requests and fetching data from FRED API.
 """
 
-from __future__ import annotations
+from typing import Self
+
+import pandas as pd
 
 from qemy.clients.fred.schemas import Observations, decode_observations_json
 from qemy.config.credentials import require_credential
@@ -63,7 +65,7 @@ class FREDClient:
             'series_id': seried_id,
             'api_key': api_key,
             'file_type': 'json',
-            'sort_order': 'desc',
+            'sort_order': 'asc',
             'observation_start': start_date,
             'observation_end': end_date,
             'frequency': frequency,
@@ -82,11 +84,21 @@ class FREDClient:
 
         self.observations[seried_id] = fred_data
 
-    def get_cpi(
+    def to_dataframe(self) -> dict[str, pd.DataFrame]:
+        """Get pandas DataFrame of fetched observations."""
+        obs_dataframes = {}
+
+        for series_id, observations in self.observations.items():
+            df_obs = pd.DataFrame([dict(obs) for obs in observations.obs_data])
+            obs_dataframes[series_id] = df_obs
+
+        return obs_dataframes
+
+    def fetch_cpi(
         self,
         period: str = '1y',
         units: str = 'pc1'
-    ) -> FREDClient:
+    ) -> Self:
         """Fetch observations for: Consumer Price Index."""
         self._fetch_series(
             seried_id = 'CPIAUCSL',
@@ -96,11 +108,11 @@ class FREDClient:
         )
         return self
 
-    def get_gdp(
+    def fetch_gdp(
         self,
         period: str = '1y',
         units: str = 'pc1'
-    ) -> FREDClient:
+    ) -> Self:
         """Fetch observations for: Gross Domestic Product."""
         self._fetch_series(
             seried_id = 'GDP',
@@ -110,11 +122,11 @@ class FREDClient:
         )
         return self
 
-    def get_industrial_production(
+    def fetch_industrial_production(
         self,
         period: str = '1y',
         units: str = 'pc1'
-    ) -> FREDClient:
+    ) -> Self:
         """Fetch observations for: Industrial Production Index."""
         self._fetch_series(
             seried_id = 'INDPRO',
@@ -124,11 +136,11 @@ class FREDClient:
         )
         return self
 
-    def get_interest_rate(
+    def fetch_interest_rate(
         self,
         period: str = '1y',
         units: str = 'pc1'
-    ) -> FREDClient:
+    ) -> Self:
         """Fetch observations for: Federal Interest Rate."""
         self._fetch_series(
             seried_id = 'DFF',
@@ -138,11 +150,11 @@ class FREDClient:
         )
         return self
 
-    def get_jobless_claims(
+    def fetch_jobless_claims(
         self,
         period: str = '1y',
         units: str = 'pc1'
-    ) -> FREDClient:
+    ) -> Self:
         """Fetch observations for: Jobless Claims."""
         self._fetch_series(
             seried_id = 'ICSA',
@@ -152,11 +164,11 @@ class FREDClient:
         )
         return self
 
-    def get_net_exports(
+    def fetch_net_exports(
         self,
         period: str = '1y',
         units: str = 'lin'
-    ) -> FREDClient:
+    ) -> Self:
         """Fetch observations for: Net Exports."""
         self._fetch_series(
             seried_id = 'NETEXC',
@@ -166,11 +178,11 @@ class FREDClient:
         )
         return self
 
-    def get_nf_payrolls(
+    def fetch_nf_payrolls(
         self,
         period: str = '1y',
         units: str = 'pc1'
-    ) -> FREDClient:
+    ) -> Self:
         """Fetch observations for: Nonfarm Payrolls."""
         self._fetch_series(
             seried_id = 'PAYEMS',
@@ -180,11 +192,11 @@ class FREDClient:
         )
         return self
 
-    def get_sentiment(
+    def fetch_sentiment(
         self,
         period: str = '1y',
         units: str = 'pch'
-    ) -> FREDClient:
+    ) -> Self:
         """Fetch observations for: Consumer Sentiment Index."""
         self._fetch_series(
             seried_id = 'UMCSENT',
@@ -194,11 +206,11 @@ class FREDClient:
         )
         return self
 
-    def get_tbill_yield(
+    def fetch_tbill_yield(
         self,
         period: str = '1y',
         units: str = 'lin'
-    ) -> FREDClient:
+    ) -> Self:
         """Fetch observations for: 1-Year T-Bill Yield."""
         self._fetch_series(
             seried_id = 'GS1',
@@ -208,11 +220,11 @@ class FREDClient:
         )
         return self
 
-    def get_unemployment(
+    def fetch_unemployment(
         self,
         period: str = '1y',
         units: str = 'pc1'
-    ) -> FREDClient:
+    ) -> Self:
         """Fetch observations for: Unemployment Rate."""
         self._fetch_series(
             seried_id = 'UNRATE',
