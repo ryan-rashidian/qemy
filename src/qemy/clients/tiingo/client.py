@@ -160,7 +160,7 @@ class TiingoClient:
 
         return self
 
-    def prices_to_dataframe(self) -> dict[str, pd.DataFrame]:
+    def to_dataframe_prices(self) -> dict[str, pd.DataFrame]:
         """Format Tiingo price data into pandas DataFrame.
 
         Returns:
@@ -198,7 +198,7 @@ class TiingoClient:
 
         return self
 
-    def quote_to_dataframe(self) -> pd.DataFrame:
+    def to_dataframe_quote(self) -> pd.DataFrame:
         """Format Tiingo quote data into pandas DataFrame.
 
         Returns:
