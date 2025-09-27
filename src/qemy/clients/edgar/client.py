@@ -7,7 +7,7 @@ Handles the process of:
 - Normalizing data shape
 """
 
-from __future__ import annotations
+from typing import Self
 
 import pandas as pd
 
@@ -71,11 +71,11 @@ class EDGARClient:
         except KeyError as e:
             raise InvalidArgumentError(f'{concept} is undefined') from e
 
-    def get_concept(self, concept: str) -> EDGARClient:
+    def fetch_concept(self, concept: str) -> Self:
         """Fetches parsed filing data for given concept.
 
         Args:
-            concept (str): Key for matching concept tuple
+            concept (str): Key for matching concept mapper
         """
         if concept not in self.companyfacts.concepts:
             xbrl_mappings = self._get_mappings(concept)
@@ -84,7 +84,7 @@ class EDGARClient:
 
         return self
 
-    def fill_concepts(self) -> EDGARClient:
+    def fetch_all_concepts(self) -> Self:
         """Fetch and parse all filing data."""
         for concept in _mappings.map_arg.keys():
             if concept not in self.companyfacts.concepts:
@@ -121,7 +121,7 @@ class EDGARClient:
         return statement
 
     def get_balance_sheet_df(self) -> pd.DataFrame:
-        """Fetch pandas DataFrame of latest balance sheet."""
+        """Get pandas DataFrame of latest balance sheet."""
         balance_sheet = self._get_latest_statement('Balance Sheet')
         balance_sheet_df = pd.DataFrame(balance_sheet)
         balance_sheet_df.columns = ['Metric', 'val']
@@ -129,7 +129,7 @@ class EDGARClient:
         return balance_sheet_df
 
     def get_cashflow_statement_df(self) -> pd.DataFrame:
-        """Fetch pandas DataFrame of lastest cashflow statement."""
+        """Get pandas DataFrame of lastest cashflow statement."""
         cashflow_statement = self._get_latest_statement('Cash Flow Statement')
         cashflow_statement_df = pd.DataFrame(cashflow_statement)
         cashflow_statement_df.columns = ['Metric', 'val']
@@ -137,7 +137,7 @@ class EDGARClient:
         return cashflow_statement_df
 
     def get_income_statement_df(self) -> pd.DataFrame:
-        """Fetch pandas DataFrame of lastest income stament."""
+        """Get pandas DataFrame of lastest income stament."""
         income_statement = self._get_latest_statement('Income Statement')
         income_statement_df = pd.DataFrame(income_statement)
         income_statement_df.columns = ['Metric', 'val']
