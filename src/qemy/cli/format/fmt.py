@@ -13,13 +13,13 @@ from rich.table import Table
 from rich.text import Text
 from rich.theme import Theme
 
-from qemy.cli.format import colors
+from qemy.cli.format.colors import colors
 
 custom_themes = Theme({
-    'info': colors.info,
-    'data': colors.data,
-    'warning': colors.warning,
-    'title': colors.title
+    'info': colors['info'],
+    'data': colors['data'],
+    'warning': colors['warning'],
+    'title': colors['title']
 })
 
 console = Console(theme=custom_themes)
@@ -67,8 +67,8 @@ class FormatDF:
         title_fmt = formatter.style('title').get_text()
         self.table = Table(
             title = title_fmt,
-            border_style = colors.df_border,
-            row_styles = colors.row_style,
+            border_style = colors['table_border'],
+            row_styles = colors['table_row_style'],
             box = box.ROUNDED,
             expand = True
         )
@@ -80,15 +80,15 @@ class FormatDF:
             if col == 'val':
                 self.table.add_column(
                     header = Text(col, justify='center'),
-                    header_style = colors.value_col_header,
-                    style = colors.value_col,
+                    header_style = colors['table_value_col_header'],
+                    style = colors['table_value_col'],
                     justify = 'right'
                 )
             else:
                 self.table.add_column(
                     header = Text(col, justify='center'),
-                    header_style = colors.default_col_header,
-                    style = colors.default_col,
+                    header_style = colors['table_default_col_header'],
+                    style = colors['table_default_col'],
                     justify = 'left'
                 )
 
