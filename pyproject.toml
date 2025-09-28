@@ -19,6 +19,9 @@ qemy = "qemy.__main__:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+qemy = ["cli/format/colors.toml"]
+
 [tool.ruff]
 line-length = 79
 target-version = "py313"
