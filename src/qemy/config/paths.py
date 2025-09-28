@@ -20,3 +20,5 @@ COMPANY_TICKERS_JSON: Path = BULK_DATA_DIR / 'company_tickers.json'
 
 PLUGINS_DIR: Path = PROJECT_ROOT / 'plugins'
 
+CLI_COLORS_PATH: Path = PROJECT_ROOT / 'qemy_colors.toml'
+
