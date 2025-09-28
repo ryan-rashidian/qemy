@@ -1,28 +1,16 @@
-"""Color registery for Qemy CLI.
+"""Initialize CLI colors from TOML."""
 
-List of standard colors, and string syntax available at:
-https://rich.readthedocs.io/en/stable/appendix/colors.html
-"""
+import importlib.resources as res
+import tomllib
+import shutil
 
-# Themes
-info = 'magenta'
-data = 'green'
-warning = 'bold red'
-title = 'bold magenta underline'
+from qemy.config.paths import CLI_COLORS_PATH
 
-# DataFrame
-df_title = 'bold magenta underline'
-df_border = 'magenta'
-row_style = ['dim', '']
-value_col = 'green'
-value_col_header = 'bold green'
-default_col = 'magenta'
-default_col_header = 'bold magenta'
+if not CLI_COLORS_PATH.exists():
+    with res.files('qemy.cli.format').joinpath('colors.toml').open('rb') as f:
+        with CLI_COLORS_PATH.open('wb') as out:
+            shutil.copyfileobj(f, out)
 
-# Panels
-panel_text = 'bold magenta'
-panel_border = 'magenta'
-
-# Misc.
-load_spinner = 'magenta'
+with CLI_COLORS_PATH.open('rb') as f:
+    colors: dict = tomllib.load(f)
 
