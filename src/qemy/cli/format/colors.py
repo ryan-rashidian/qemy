@@ -1,8 +1,8 @@
 """Initialize CLI colors from TOML."""
 
 import importlib.resources as res
-import tomllib
 import shutil
+import tomllib
 
 from qemy.config.paths import CLI_COLORS_PATH
 
