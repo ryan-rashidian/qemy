@@ -62,6 +62,7 @@ class FormatDF:
             title (str): title string for formatted Table
         """
         self.df = df.map(lambda x: f'{x:,.2f}' if isinstance(x, float) else x)
+        self.df = df.map(lambda x: f'{x:,d}' if isinstance(x, int) else x)
 
         formatter = FormatText(title).justify('center')
         title_fmt = formatter.style('title').get_text()
