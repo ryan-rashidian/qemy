@@ -3,7 +3,7 @@
 from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 
 from qemy.cli.commands.help import help_text
-from qemy.cli.format.colors import colors
+from qemy.cli.format import colors
 from qemy.cli.format.fmt import FormatDF, FormatText
 from qemy.cli.format.panels import info_panel, title_panel
 from qemy.cli.menus import confirm_menu
@@ -140,7 +140,7 @@ def cmd_fsync() -> None:
     if not confirm_menu():
         return
 
-    color = colors['misc']['load_spinner']
+    color = colors.misc_load_spinner
     with Progress(
         SpinnerColumn(),
         TextColumn('[progress.description]{task.description}'),
