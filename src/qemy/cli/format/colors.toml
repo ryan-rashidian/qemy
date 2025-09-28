@@ -1,24 +1,24 @@
 # Qemy CLI colors
 # https://rich.readthedocs.io/en/stable/appendix/colors.html
 
-# Theme:
+[theme]
 info = "magenta"
 data = "green"
 warning = "bold red"
 title = "bold magenta underline"
 
-# Tables:
-table_border = "magenta"
-table_row_style = ["dim", ""]
-table_value_col = "green"
-table_value_col_header = "bold green"
-table_default_col = "magenta"
-table_default_col_header = "bold magenta"
+[table]
+border = "magenta"
+row_style = ["dim", ""]
+value_col = "green"
+value_col_header = "bold green"
+default_col = "magenta"
+default_col_header = "bold magenta"
 
-# Panels:
-panel_text = "bold magenta"
-panel_border = "magenta"
+[panel]
+text = "bold magenta"
+border = "magenta"
 
-# Miscellaneous:
+[misc]
 load_spinner = "magenta"
 

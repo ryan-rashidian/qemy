@@ -15,7 +15,7 @@ def info_panel(txt: str, title: str) -> None:
     panel = Panel(
         txt_fmt,
         title = title_fmt,
-        border_style = colors['panel_border'],
+        border_style = colors['panel']['border'],
         padding = 1
     )
 
@@ -29,7 +29,7 @@ def title_panel(txt: str, title: str) -> None:
     panel = Panel(
         txt_fmt,
         title = title_fmt,
-        border_style = colors['panel_border'],
+        border_style = colors['panel']['border'],
         padding = 1
     )
 
@@ -42,7 +42,7 @@ def markdown_panel(txt: str, title: str) -> None:
     panel = Panel(
         md_txt,
         title = title_fmt,
-        border_style = colors['panel_border'],
+        border_style = colors['panel']['border'],
         padding = 1
     )
 
@@ -56,7 +56,7 @@ def result_panel(txt: str, title: str) -> None:
     panel = Panel(
         txt_fmt,
         title = title_fmt,
-        border_style = colors['panel_border'],
+        border_style = colors['panel']['border'],
         padding = 1
     )
 
@@ -66,13 +66,13 @@ def welcome_panel() -> None:
     """Qemy CLI welcome panel."""
     welcome_text = FormatText(
         'Qemy CLI 0.2.0'
-    ).justify('center').style(colors['panel_text']).get_text()
+    ).justify('center').style(colors['panel']['text']).get_text()
 
     panel = Panel(
         welcome_text,
         title = 'Welcome.',
         subtitle = "Type 'help' or '?' for info",
-        border_style = colors['panel_border'],
+        border_style = colors['panel']['border'],
         padding = 3
     )
 

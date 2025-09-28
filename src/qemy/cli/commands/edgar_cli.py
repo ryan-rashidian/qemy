@@ -140,7 +140,7 @@ def cmd_fsync() -> None:
     if not confirm_menu():
         return
 
-    color = colors['load_spinner']
+    color = colors['misc']['load_spinner']
     with Progress(
         SpinnerColumn(),
         TextColumn('[progress.description]{task.description}'),

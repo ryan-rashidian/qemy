@@ -16,10 +16,10 @@ from rich.theme import Theme
 from qemy.cli.format.colors import colors
 
 custom_themes = Theme({
-    'info': colors['info'],
-    'data': colors['data'],
-    'warning': colors['warning'],
-    'title': colors['title']
+    'info': colors['theme']['info'],
+    'data': colors['theme']['data'],
+    'warning': colors['theme']['warning'],
+    'title': colors['theme']['title']
 })
 
 console = Console(theme=custom_themes)
@@ -67,8 +67,8 @@ class FormatDF:
         title_fmt = formatter.style('title').get_text()
         self.table = Table(
             title = title_fmt,
-            border_style = colors['table_border'],
-            row_styles = colors['table_row_style'],
+            border_style = colors['table']['border'],
+            row_styles = colors['table']['row_style'],
             box = box.ROUNDED,
             expand = True
         )
@@ -80,15 +80,15 @@ class FormatDF:
             if col == 'val':
                 self.table.add_column(
                     header = Text(col, justify='center'),
-                    header_style = colors['table_value_col_header'],
-                    style = colors['table_value_col'],
+                    header_style = colors['table']['value_col_header'],
+                    style = colors['table']['value_col'],
                     justify = 'right'
                 )
             else:
                 self.table.add_column(
                     header = Text(col, justify='center'),
-                    header_style = colors['table_default_col_header'],
-                    style = colors['table_default_col'],
+                    header_style = colors['table']['default_col_header'],
+                    style = colors['table']['default_col'],
                     justify = 'left'
                 )
 
