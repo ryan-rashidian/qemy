@@ -20,7 +20,10 @@ qemy = "qemy.__main__:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-qemy = ["cli/format/colors.toml"]
+qemy = [
+    "cli/format/colors.toml",
+    "cli/man/help.md"
+]
 
 [tool.ruff]
 line-length = 79
