@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from qemy.analytics.base import CompanyAnalytics, EDGARAnalytics, ResultsScalar
+from qemy.analytics.base import CompanyResults, EDGARAnalytics, ResultsScalar
 from qemy.analytics.metrics.income_statment import GrossMargin
 from qemy.analytics.ratios.ratios import (
     RatioAssetTurnover,
@@ -58,7 +58,7 @@ class PiotroskiFScore(EDGARAnalytics):
     def _fscore_roa(self) -> int:
         """Return on Assets"""
         try:
-            roa_results: CompanyAnalytics = RatioROA(self.ticker).calculate()
+            roa_results: CompanyResults = RatioROA(self.ticker).calculate()
             current_roa = roa_results.results_df['val'].iloc[-1]
             previous_roa = roa_results.results_df['val'].iloc[-5]
 
@@ -82,7 +82,7 @@ class PiotroskiFScore(EDGARAnalytics):
     def _fscore_cratio(self) -> int:
         """Current Ratio"""
         try:
-            cratio_results: CompanyAnalytics = RatioCurrent(
+            cratio_results: CompanyResults = RatioCurrent(
                 self.ticker
             ).calculate()
             current_cratio = cratio_results.results_df['val'].iloc[-1]
@@ -108,7 +108,7 @@ class PiotroskiFScore(EDGARAnalytics):
     def _fscore_gmargin(self) -> int:
         """Gross Margin"""
         try:
-            gmargin_results: CompanyAnalytics = GrossMargin(
+            gmargin_results: CompanyResults = GrossMargin(
                 self.ticker
             ).calculate()
             current_gmargin = gmargin_results.results_df['val'].iloc[-1]
@@ -122,7 +122,7 @@ class PiotroskiFScore(EDGARAnalytics):
     def _fscore_asset_turnover(self) -> int:
         """Asset Turnover"""
         try:
-            at_results: CompanyAnalytics = RatioAssetTurnover(
+            at_results: CompanyResults = RatioAssetTurnover(
                 self.ticker
             ).calculate()
 

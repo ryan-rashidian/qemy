@@ -1,6 +1,6 @@
 """Commands for built-in Qemy Models."""
 
-from qemy.analytics.base import CompanyAnalytics
+from qemy.analytics.base import CompanyResults
 from qemy.analytics.models.dcf import DCFModel
 from qemy.cli.commands.help import help_text
 from qemy.cli.format.fmt import FormatText
@@ -18,7 +18,7 @@ def _model_dcf(
     discount_rate_f = float(discount_rate)
     terminal_growth_f = float(terminal_growth)
 
-    results: CompanyAnalytics = DCFModel(ticker).calculate(
+    results: CompanyResults = DCFModel(ticker).calculate(
         years = years_int,
         discount_rate = discount_rate_f,
         terminal_growth = terminal_growth_f

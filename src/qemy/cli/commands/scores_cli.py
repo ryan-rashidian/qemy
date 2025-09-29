@@ -1,6 +1,6 @@
 """Commands for Qemy Analytics Scores."""
 
-from qemy.analytics.base import CompanyAnalytics
+from qemy.analytics.base import CompanyResults
 from qemy.analytics.scores.f_score import PiotroskiFScore
 from qemy.cli.commands.help import help_text
 from qemy.cli.format.fmt import FormatText
@@ -9,7 +9,7 @@ from qemy.cli.format.panels import info_panel, result_panel
 
 def _score_piotroski_f(ticker: str) -> None:
     """Use Qemy PiotroskiFScore from within Qemy CLI."""
-    results: CompanyAnalytics = PiotroskiFScore(ticker).calculate()
+    results: CompanyResults = PiotroskiFScore(ticker).calculate()
 
     company_name = results.name
     ticker_fmt = results.ticker
