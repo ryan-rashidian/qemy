@@ -11,19 +11,19 @@ from qemy.exceptions import ClientParsingError
 
 
 @dataclass
-class CompanyAnalytics:
+class CompanyResults:
     """Container for company analytics results."""
     ticker: str
     name: str = ''
     description: str = ''
 
 @dataclass
-class ResultsScalar(CompanyAnalytics):
+class ResultsScalar(CompanyResults):
     """Company analytics with scalar results."""
     results: dict[str, float] = field(default_factory=dict)
 
 @dataclass
-class ResultsDataFrame(CompanyAnalytics):
+class ResultsDataFrame(CompanyResults):
     """Company analytics with DataFrame results."""
     results_df: pd.DataFrame = field(default_factory=pd.DataFrame)
 
@@ -36,7 +36,7 @@ class EDGARAnalytics(ABC):
         self.client = EDGARClient(self.ticker)
 
     @abstractmethod
-    def calculate(self) -> CompanyAnalytics:
+    def calculate(self) -> CompanyResults:
         """Perform the analytic calculation and return result."""
         pass
 
@@ -97,7 +97,7 @@ class EDGARAnalytics(ABC):
         return df_merged
 
 @dataclass
-class ObservationAnalytics:
+class ObservationResults:
     """Container for FREDAnalytics results."""
 
 class FREDAnalytics(ABC):
@@ -108,13 +108,16 @@ class FREDAnalytics(ABC):
         self.client = FREDClient()
 
     @abstractmethod
-    def calculate(self) -> ObservationAnalytics:
+    def calculate(self) -> ObservationResults:
         """Perform the analytic calculation and return result."""
         pass
 
 @dataclass
-class SecuritiesAnalytics:
+class SecuritiesResults:
     """Container for TiingoAnalytics results."""
+    ticker: str
+    description: str = ''
+    results_df: pd.DataFrame = field(default_factory=pd.DataFrame)
 
 class TiingoAnalytics(ABC):
     """Base class for Tiingo Analytics."""
@@ -128,7 +131,7 @@ class TiingoAnalytics(ABC):
         self.client = TiingoClient(self.tickers)
 
     @abstractmethod
-    def calculate(self) -> SecuritiesAnalytics:
+    def calculate(self) -> SecuritiesResults:
         """Perform the analytic calculation and return result."""
         pass
 
