@@ -1,6 +1,6 @@
 """Help and info commands for Qemy CLI."""
 
-from importlib import resources
+import importlib.resources as res
 
 from qemy.cli.format.fmt import FormatText
 from qemy.cli.format.panels import info_panel, markdown_panel
@@ -16,7 +16,7 @@ def help_text(txt: str):
 
 def _load_markdown(filename: str) -> str:
     """Load markdown files into Python."""
-    return resources.files('qemy.cli.markdown').joinpath(filename).read_text()
+    return res.files('qemy.cli.man').joinpath(filename).read_text()
 
 def cmd_help(cmd: str='help') -> None:
     """Help command for Qemy CLI."""
